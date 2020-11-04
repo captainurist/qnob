@@ -1,0 +1,10 @@
+.vs
+bin/debug
+bin/release
+bin/temp
+*.pdb
+qnob.mak
+qnob.vcxproj.filters
+winbuild/qnob.vcxproj.user
+winbuild/qnob.pro.user
+.qmake.stash
