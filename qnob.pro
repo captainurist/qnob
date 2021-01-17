@@ -13,6 +13,7 @@ HEADERS += \
     src/com/com_exception.h \
     src/knob/knob.h \
     src/knob/volume_knob.h \
+    src/platform/platform.h \
     src/trigger/trigger.h \
     src/trigger/hotkey_trigger.h \
     src/utility/debug.h \

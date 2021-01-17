@@ -8,3 +8,4 @@ qnob.vcxproj.filters
 winbuild/qnob.vcxproj.user
 winbuild/qnob.pro.user
 .qmake.stash
+qnob.pro.user
