@@ -9,7 +9,7 @@
 
 template<class T>
 class ComPtr {
-    static_assert(std::is_base_of_v<IUnknown, T>, "T must be derived from IUnknown.");
+    //static_assert(std::is_base_of_v<IUnknown, T>, "T must be derived from IUnknown."); // TODO
 public:
     ComPtr() {}
 

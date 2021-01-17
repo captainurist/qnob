@@ -8,20 +8,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += \
-    src/com/com.h \
-    src/com/com_ptr.h \
-    src/com/com_exception.h \
     src/knob/knob.h \
     src/knob/volume_knob.h \
     src/platform/platform.h \
+    src/platform/volume_control.h \
+    src/platform/win/com.h \
+    src/platform/win/com_ptr.h \
+    src/platform/win/com_exception.h \
+    src/platform/win/win_platform.h \
+    src/platform/win/win_volume_control.h \
     src/trigger/trigger.h \
     src/trigger/hotkey_trigger.h \
     src/utility/debug.h \
 
 SOURCES += \
-    src/com/com.cpp \
-    src/com/com_exception.cpp \
     src/knob/volume_knob.cpp \
+    src/platform/win/com.cpp \
+    src/platform/win/com_exception.cpp \
+    src/platform/win/win_platform.cpp \
+    src/platform/win/win_volume_control.cpp \
     src/trigger/hotkey_trigger.cpp \
     src/utility/debug.cpp \
     src/main.cpp \

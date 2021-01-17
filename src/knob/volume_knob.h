@@ -19,7 +19,4 @@ public:
 
     virtual bool enabled() const override;
     virtual void setEnabled(bool value) override;
-
-private:
-    QScopedPointer<VolumeKnobPrivate> d;
 };
