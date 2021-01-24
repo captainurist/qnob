@@ -1,14 +1,16 @@
-#ifndef PLATFORM_H
-#define PLATFORM_H
+#pragma once
 
-#include "volume_control.h"
+#include <QtGui/QKeySequence>
 
-class Platform
-{
+#include "platform_volume_control.h"
+#include "platform_shortcut_notifier.h"
+
+class Platform {
 public:
     virtual ~Platform() {}
 
-    virtual VolumeControl* volumeControl() const = 0;
+    virtual PlatformVolumeControl* volumeControl() const = 0;
+    virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const = 0;
 
     static Platform* instance();
 };
@@ -17,4 +19,3 @@ inline Platform* qPlatform() {
     return Platform::instance();
 }
 
-#endif // PLATFORM_H

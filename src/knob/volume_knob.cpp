@@ -1,11 +1,11 @@
 #include "volume_knob.h"
 
+#include <platform/platform.h>
+
 VolumeKnob::VolumeKnob(QObject* parent) : 
-    Knob(parent),
-    d(new VolumeKnobPrivate)
+    Knob(parent)
 {
-    d->q = this;
-    d->init();
+    m_volumeControl = qPlatform()->volumeControl();
 }
 
 VolumeKnob::~VolumeKnob() 
@@ -15,19 +15,19 @@ QByteArray VolumeKnob::id() const {
     return "volume";
 }
 
-int VolumeKnob::value() const {
-    return d->value();
+double VolumeKnob::value() const {
+    return m_volumeControl->volume();
 }
 
-void VolumeKnob::setValue(int value) {
-    d->setValue(value);
+void VolumeKnob::setValue(double value) {
+    m_volumeControl->setVolume(value);
 }
 
 bool VolumeKnob::enabled() const {
-    return d->enabled();
+    return !m_volumeControl->isMuted();
 }
 
 void VolumeKnob::setEnabled(bool value) {
-    d->setEnabled(value);
+    m_volumeControl->setMuted(!value);
 }
 

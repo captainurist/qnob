@@ -1,9 +1,8 @@
-#ifndef VOLUME_CONTROL_H
-#define VOLUME_CONTROL_H
+#pragma once
 
-class VolumeControl {
+class PlatformVolumeControl {
 public:
-    virtual ~VolumeControl() {}
+    virtual ~PlatformVolumeControl() {}
 
     virtual float volume() const = 0;
     virtual void setVolume(float volume) = 0;
@@ -14,4 +13,3 @@ public:
     // volumeChanged
 };
 
-#endif // VOLUME_CONTROL_H

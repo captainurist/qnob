@@ -1,6 +1,6 @@
 #pragma once
 
-#include "platform/volume_control.h"
+#include "platform/platform_volume_control.h"
 
 #include "com_ptr.h"
 
@@ -8,8 +8,7 @@ struct IMMDeviceEnumerator;
 struct IMMDevice;
 struct IAudioEndpointVolume;
 
-class WinVolumeControl: public VolumeControl
-{
+class WinVolumeControl: public PlatformVolumeControl {
 public:
     WinVolumeControl();
     virtual ~WinVolumeControl();

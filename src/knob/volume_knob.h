@@ -4,7 +4,7 @@
 
 #include <QtCore/QScopedPointer>
 
-class VolumeKnobPrivate;
+class PlatformVolumeControl;
 
 class VolumeKnob : public Knob {
     Q_OBJECT
@@ -14,9 +14,12 @@ public:
 
     virtual QByteArray id() const override;
 
-    virtual int value() const override;
-    virtual void setValue(int value) override;
+    virtual double value() const override;
+    virtual void setValue(double value) override;
 
     virtual bool enabled() const override;
     virtual void setEnabled(bool value) override;
+
+private:
+    PlatformVolumeControl* m_volumeControl;
 };

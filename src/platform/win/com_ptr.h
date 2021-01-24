@@ -14,19 +14,19 @@ public:
     ComPtr() {}
 
     ComPtr(T* ptr) {
-        ptr_ = ptr;
+        m_ptr = ptr;
     }
 
     ComPtr(const ComPtr& other) {
-        ptr_ = other.ptr_;
+        m_ptr = other.m_ptr;
 
-        if (ptr_)
-            ptr_->AddRef();
+        if (m_ptr)
+            m_ptr->AddRef();
     }
 
     ComPtr(ComPtr&& other) {
-        ptr_ = other.ptr_;
-        other.ptr_ = nullptr;
+        m_ptr = other.m_ptr;
+        other.m_ptr = nullptr;
     }
 
     ~ComPtr() {
@@ -46,35 +46,35 @@ public:
     }
 
     T* operator->() const {
-        return ptr_;
+        return m_ptr;
     }
 
     T& operator*() const {
-        return *ptr_;
+        return *m_ptr;
     }
 
     operator bool() const {
-        return ptr_;
+        return m_ptr;
     }
 
     template<class OtherT>
     ComPtr<OtherT> cast() {
-        if (!ptr_)
+        if (!m_ptr)
             return ComPtr<OtherT>();
 
         OtherT* result = nullptr;
-        if (!SUCCEEDED(ptr_->QueryInterface(IID_PPV_ARGS(&result))))
+        if (!SUCCEEDED(m_ptr->QueryInterface(IID_PPV_ARGS(&result))))
             return ComPtr<OtherT>();
 
         return result;
     }
 
     void reset() {
-        if (!ptr_)
+        if (!m_ptr)
             return;
 
-        ptr_->Release();
-        ptr_ = nullptr;
+        m_ptr->Release();
+        m_ptr = nullptr;
     }
 
     CLSID staticId() const {
@@ -82,11 +82,11 @@ public:
     }
 
     T** mutablePtr() {
-        return &ptr_;
+        return &m_ptr;
     }
 
     void** mutableVoidPtr() {
-        return reinterpret_cast<void**>(&ptr_);
+        return reinterpret_cast<void**>(&m_ptr);
     }
 
     friend void** IID_PPV_ARGS_Helper(ComPtr* pp) {
@@ -94,6 +94,6 @@ public:
     }
 
 private:
-    T* ptr_ = nullptr;
+    T* m_ptr = nullptr;
 };
 

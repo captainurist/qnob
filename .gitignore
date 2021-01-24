@@ -9,3 +9,7 @@ winbuild/qnob.vcxproj.user
 winbuild/qnob.pro.user
 .qmake.stash
 qnob.pro.user
+qnob.mak.Debug
+qnob.mak.Release
+x64/Debug/qnob.log
+x64/Debug/qnob.vcxprojAssemblyReference.cache

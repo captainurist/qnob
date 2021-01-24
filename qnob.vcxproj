@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\knob\knob.h" />
+    <ClInclude Include="src\knob\volume_knob.h" />
+    <ClInclude Include="src\platform\platform.h" />
+    <ClInclude Include="src\platform\platform_shortcut_notifier.h" />
+    <ClInclude Include="src\platform\platform_volume_control.h" />
+    <ClInclude Include="src\platform\win\com.h" />
+    <ClInclude Include="src\platform\win\com_exception.h" />
+    <ClInclude Include="src\platform\win\com_ptr.h" />
+    <ClInclude Include="src\platform\win\win_error.h" />
+    <ClInclude Include="src\platform\win\win_platform.h" />
+    <ClInclude Include="src\platform\win\win_shortcut_dispatcher.h" />
+    <ClInclude Include="src\platform\win\win_volume_control.h" />
+    <ClInclude Include="src\trigger\hotkey_trigger.h" />
+    <ClInclude Include="src\trigger\trigger.h" />
+    <ClInclude Include="src\utility\debug.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\knob\volume_knob.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\platform\win\com.cpp" />
+    <ClCompile Include="src\platform\win\com_exception.cpp" />
+    <ClCompile Include="src\platform\win\win_error.cpp" />
+    <ClCompile Include="src\platform\win\win_platform.cpp" />
+    <ClCompile Include="src\platform\win\win_shortcut_dispatcher.cpp" />
+    <ClCompile Include="src\platform\win\win_volume_control.cpp" />
+    <ClCompile Include="src\trigger\hotkey_trigger.cpp" />
+    <ClCompile Include="src\utility\debug.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{DEEA4098-57E7-48D8-BB2C-BF460EFB86D9}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeBuildCommandLine>
+qmake -o $(ProjectName).mak $(ProjectName).pro
+jom $(Configuration) -f $(ProjectName).mak</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>
+qmake -o $(ProjectName).mak $(ProjectName).pro
+jom $(Configuration)-clean -f $(ProjectName).mak
+jom $(Configuration) -f $(ProjectName).mak</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>
+qmake -o $(ProjectName).mak $(ProjectName).pro
+jom $(Configuration)-clean -f $(ProjectName).mak</NMakeCleanCommandLine>
+    <NMakeOutput>bin/$(Configuration)/$(ProjectName).exe</NMakeOutput>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);$(QTDIR)/bin;</ExecutablePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(QTDIR)/include;$(ProjectDir)src;</IncludePath>
+    <NMakeIncludeSearchPath>$(QTDIR)\include;$(ProjectDir)src</NMakeIncludeSearchPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <NMakePreprocessorDefinitions>NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeBuildCommandLine>
+qmake -o $(ProjectName).mak $(ProjectName).pro
+jom $(Configuration) -f $(ProjectName).mak</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>
+qmake -o $(ProjectName).mak $(ProjectName).pro
+jom $(Configuration)-clean -f $(ProjectName).mak
+jom $(Configuration) -f $(ProjectName).mak</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>
+qmake -o $(ProjectName).mak $(ProjectName).pro
+jom $(Configuration)-clean -f $(ProjectName).mak</NMakeCleanCommandLine>
+    <NMakeOutput>bin/$(Configuration)/$(ProjectName).exe</NMakeOutput>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);$(QTDIR)/bin;</ExecutablePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(QTDIR)/include;$(ProjectDir)src;</IncludePath>
+    <NMakeIncludeSearchPath>$(QTDIR)\include;$(ProjectDir)src</NMakeIncludeSearchPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
