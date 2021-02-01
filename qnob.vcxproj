@@ -11,6 +11,35 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_array.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_array.hpp" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_common.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_date_time.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_default_formatter.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_default_formatter.hpp" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_formatter.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_instantiations.hpp" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_json_formatter.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_json_formatter.hpp" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_node.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_node.hpp" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_node_view.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_parser.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_parser.hpp" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_parse_error.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_preprocessor.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_print_to_stream.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_table.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_table.hpp" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_utf8.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_utf8_streams.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_utf8_streams.hpp" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_value.h" />
+    <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_version.h" />
+    <ClInclude Include="src\config\flat_config.h" />
+    <ClInclude Include="src\config\knob_config.h" />
+    <ClInclude Include="src\config\knob_config_parser.h" />
     <ClInclude Include="src\knob\knob.h" />
     <ClInclude Include="src\knob\volume_knob.h" />
     <ClInclude Include="src\platform\platform.h" />
@@ -23,11 +52,17 @@
     <ClInclude Include="src\platform\win\win_platform.h" />
     <ClInclude Include="src\platform\win\win_shortcut_dispatcher.h" />
     <ClInclude Include="src\platform\win\win_volume_control.h" />
+    <ClInclude Include="src\config\config_exception.h" />
     <ClInclude Include="src\trigger\hotkey_trigger.h" />
     <ClInclude Include="src\trigger\trigger.h" />
     <ClInclude Include="src\utility\debug.h" />
+    <ClInclude Include="src\utility\exception.h" />
+    <ClInclude Include="src\utility\source_location.h" />
+    <ClInclude Include="src\utility\qt_stl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\config\flat_config.cpp" />
+    <ClCompile Include="src\config\knob_config_parser.cpp" />
     <ClCompile Include="src\knob\volume_knob.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\platform\win\com.cpp" />
@@ -36,8 +71,12 @@
     <ClCompile Include="src\platform\win\win_platform.cpp" />
     <ClCompile Include="src\platform\win\win_shortcut_dispatcher.cpp" />
     <ClCompile Include="src\platform\win\win_volume_control.cpp" />
+    <ClCompile Include="src\config\config_exception.cpp" />
     <ClCompile Include="src\trigger\hotkey_trigger.cpp" />
     <ClCompile Include="src\utility\debug.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="qnob.pro" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -75,8 +114,9 @@ qmake -o $(ProjectName).mak $(ProjectName).pro
 jom $(Configuration)-clean -f $(ProjectName).mak</NMakeCleanCommandLine>
     <NMakeOutput>bin/$(Configuration)/$(ProjectName).exe</NMakeOutput>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);$(QTDIR)/bin;</ExecutablePath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(QTDIR)/include;$(ProjectDir)src;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(QTDIR)/include;$(ProjectDir)src;$(ProjectDir)3rdparty/tomlplusplus/include</IncludePath>
     <NMakeIncludeSearchPath>$(QTDIR)\include;$(ProjectDir)src</NMakeIncludeSearchPath>
+    <AdditionalOptions>/std:c++latest</AdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <NMakePreprocessorDefinitions>NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
@@ -92,8 +132,9 @@ qmake -o $(ProjectName).mak $(ProjectName).pro
 jom $(Configuration)-clean -f $(ProjectName).mak</NMakeCleanCommandLine>
     <NMakeOutput>bin/$(Configuration)/$(ProjectName).exe</NMakeOutput>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);$(QTDIR)/bin;</ExecutablePath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(QTDIR)/include;$(ProjectDir)src;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(QTDIR)/include;$(ProjectDir)src;$(ProjectDir)3rdparty/tomlplusplus/include</IncludePath>
     <NMakeIncludeSearchPath>$(QTDIR)\include;$(ProjectDir)src</NMakeIncludeSearchPath>
+    <AdditionalOptions>/std:c++latest</AdditionalOptions>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
