@@ -1,0 +1,41 @@
+# "volume" is a default id!
+
+[shortcut.0]
+trigger = "Ctrl+Shift+1"
+target = "volume"
+action = "changeValue"
+arg = 0.05
+
+[shortcut.1]
+trigger = "Ctrl+Shift+2"
+target = "volume"
+action = "toggle"
+
+#[osd.0]
+#target = "volume" # type derived from id -- which is a knob!
+#skin = "osd_mac_volume.toml"
+
+#[sound.0]
+#target = "volume"
+#sound = "mac_volume.wav"
+
+#[trayicon.volume_icon]
+#target = "volume"
+#overrides = "win_sound_icon"
+
+#[trayevent.0]
+#trigger = "Mouse Wheel Up"
+#source = "volume_icon"
+#target = "volume"
+#action = "changeValue"
+#arg = 0.05
+
+#[win_hide_volume_osd.0]
+# no params!
+
+
+
+
+
+
+
