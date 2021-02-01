@@ -1,11 +1,16 @@
 QT += widgets
 
+CONFIG += c++latest
+CONFIG += strict_c++
+
 DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 DEFINES += QT_NO_CAST_FROM_ASCII
 DEFINES += QT_NO_CAST_TO_ASCII
 
 HEADERS += \
+    src/config/flat_config.h \
+    src/config/config_exception.h \
     src/knob/knob.h \
     src/knob/volume_knob.h \
     src/platform/platform.h \
@@ -22,7 +27,9 @@ HEADERS += \
     src/trigger/hotkey_trigger.h \
     src/utility/debug.h \
 
+
 SOURCES += \
+    src/config/flat_config.cpp \
     src/knob/volume_knob.cpp \
     src/platform/win/com.cpp \
     src/platform/win/com_exception.cpp \
@@ -34,11 +41,16 @@ SOURCES += \
     src/utility/debug.cpp \
     src/main.cpp \
 
+
 LIBS += \
     -lole32 \
     -luser32 \
 
-INCLUDEPATH += src
+
+INCLUDEPATH += \
+    src \
+    3rdparty/tomlplusplus/include \
+
 
 UI_DIR    = src/ui
 MOC_DIR   = bin/temp/moc
