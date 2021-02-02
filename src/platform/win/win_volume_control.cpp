@@ -11,13 +11,13 @@ static const CLSID CLSID_MMDeviceEnumerator = {0xBCDE0395, 0xE52F, 0x467C, {0x8E
 
 
 WinVolumeControl::WinVolumeControl() {
-    if (!SUCCEEDED(CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&enumerator))))
+    if (!SUCCEEDED(CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_enumerator))))
         return;
 
-    if (!SUCCEEDED(enumerator->GetDefaultAudioEndpoint(eRender, eMultimedia, defaultDevice.mutablePtr())))
+    if (!SUCCEEDED(m_enumerator->GetDefaultAudioEndpoint(eRender, eMultimedia, m_defaultDevice.mutablePtr())))
         return;
 
-    if (!SUCCEEDED(defaultDevice->Activate(volumeControl.staticId(), CLSCTX_INPROC_SERVER, nullptr, volumeControl.mutableVoidPtr())))
+    if (!SUCCEEDED(m_defaultDevice->Activate(m_volumeControl.staticId(), CLSCTX_INPROC_SERVER, nullptr, m_volumeControl.mutableVoidPtr())))
         return;
 
 }
@@ -26,38 +26,38 @@ WinVolumeControl::~WinVolumeControl() {
 }
 
 float WinVolumeControl::volume() const {
-    if (!volumeControl)
+    if (!m_volumeControl)
         return 0;
 
     float result;
-    if (!SUCCEEDED(volumeControl->GetMasterVolumeLevelScalar(&result)))
+    if (!SUCCEEDED(m_volumeControl->GetMasterVolumeLevelScalar(&result)))
         return 0;
 
     return result;
 }
 
 void WinVolumeControl::setVolume(float volume) {
-    if (!volumeControl)
+    if (!m_volumeControl)
         return;
 
-    volumeControl->SetMasterVolumeLevelScalar(qBound(0.0f, volume, 1.0f), &GUID_QnobAudioEvent);
+    m_volumeControl->SetMasterVolumeLevelScalar(qBound(0.0f, volume, 1.0f), &GUID_QnobAudioEvent);
 }
 
 bool WinVolumeControl::isMuted() const {
-    if (!volumeControl)
+    if (!m_volumeControl)
         return true;
 
     BOOL muted = FALSE;
-    if(!SUCCEEDED(volumeControl->GetMute(&muted)))
+    if(!SUCCEEDED(m_volumeControl->GetMute(&muted)))
         return false;
 
     return muted;
 }
 
 void WinVolumeControl::setMuted(bool muted) {
-    if (!volumeControl)
+    if (!m_volumeControl)
         return;
 
-    volumeControl->SetMute(muted, &GUID_QnobAudioEvent);
+    m_volumeControl->SetMute(muted, &GUID_QnobAudioEvent);
 }
 
