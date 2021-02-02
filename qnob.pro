@@ -17,7 +17,6 @@ HEADERS += \
     src/platform/platform_shortcut_notifier.h \
     src/platform/platform_volume_control.h \
     src/platform/win/com.h \
-    src/platform/win/com_exception.h \
     src/platform/win/com_ptr.h \
     src/platform/win/win_error.h \
     src/platform/win/win_platform.h \
@@ -32,7 +31,6 @@ SOURCES += \
     src/config/flat_config.cpp \
     src/knob/volume_knob.cpp \
     src/platform/win/com.cpp \
-    src/platform/win/com_exception.cpp \
     src/platform/win/win_error.cpp \
     src/platform/win/win_platform.cpp \
     src/platform/win/win_shortcut_dispatcher.cpp \
