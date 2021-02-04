@@ -7,7 +7,6 @@ struct ConfigLocation {
     int column;
 };
 
-
 class ConfigException: public Exception {
 public:
     ConfigException(const ConfigLocation& location, const QString& message) :

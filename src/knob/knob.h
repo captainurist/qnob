@@ -1,13 +1,11 @@
 #pragma once
 
-#include <QtCore/QObject>
+#include <core/entity.h>
 
-class Knob : public QObject {
+class Knob : public Entity {
     Q_OBJECT
 public:
-    Knob(QObject* parent = nullptr) : QObject(parent) {}
-
-    virtual QByteArray id() const = 0;
+    Knob(const QString& id) : Entity(id) {}
 
     virtual double value() const = 0;
     virtual void setValue(double value) = 0;

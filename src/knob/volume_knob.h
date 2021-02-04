@@ -9,10 +9,8 @@ class PlatformVolumeControl;
 class VolumeKnob : public Knob {
     Q_OBJECT
 public:
-    VolumeKnob(QObject* parent = nullptr);
+    VolumeKnob();
     virtual ~VolumeKnob();
-
-    virtual QByteArray id() const override;
 
     virtual double value() const override;
     virtual void setValue(double value) override;

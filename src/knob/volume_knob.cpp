@@ -2,18 +2,14 @@
 
 #include <platform/platform.h>
 
-VolumeKnob::VolumeKnob(QObject* parent) : 
-    Knob(parent)
+VolumeKnob::VolumeKnob() :
+    Knob(QStringLiteral("volume"))
 {
     m_volumeControl = qPlatform()->volumeControl();
 }
 
-VolumeKnob::~VolumeKnob() 
+VolumeKnob::~VolumeKnob()
 {}
-
-QByteArray VolumeKnob::id() const {
-    return "volume";
-}
 
 double VolumeKnob::value() const {
     return m_volumeControl->volume();

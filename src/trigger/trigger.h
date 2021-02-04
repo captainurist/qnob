@@ -1,11 +1,11 @@
 #pragma once
 
-#include <QtCore/QObject>
+#include <core/entity.h>
 
-class Trigger : public QObject {
+class Trigger : public Entity {
     Q_OBJECT
 public:
-    Trigger(QObject* parent = nullptr) : QObject(parent) {}
+    Trigger(const QString& id) : Entity(id) {}
 
 signals:
     void triggered();

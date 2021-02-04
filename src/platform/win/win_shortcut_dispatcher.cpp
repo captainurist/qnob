@@ -347,9 +347,9 @@ WinShortcutDispatcher::~WinShortcutDispatcher() {}
 PlatformShortcutNotifier* WinShortcutDispatcher::createShortcutNotifier(const QKeySequence& shortcut) {
     if (shortcut.isEmpty()) {
         qWarning() << "Creating global shortcut for an empty key sequence.";
-        return new PlatformShortcutNotifier(); /* Never fires! */
+        return nullptr;
     }
-    
+
     if (shortcut.count() > 1)
         qWarning() << "Creating global shortcut only for the 1st key in sequence:" << shortcut;
 
@@ -361,9 +361,9 @@ PlatformShortcutNotifier* WinShortcutDispatcher::createShortcutNotifier(const QK
 
     if (!RegisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), m_nextId, nativeMods, nativeKey)) {
         qWarning() << "RegisterHotKey failed:" << GetLastErrorAsString();
-        return new PlatformShortcutNotifier(); /* Never fires! */
+        return nullptr;
     }
-    
+
     WinShortcutNotifier* notifier = new WinShortcutNotifier(this, m_nextId);
     m_notifierById[m_nextId] = notifier;
     m_nextId++;

@@ -4,6 +4,8 @@
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
 
+#include <algorithm>
+
 #include "com_ptr.h"
 
 static const GUID GUID_QnobAudioEvent = {0x3bd43a3e, 0xd585, 0x4354, {0xcb, 0xf3, 0x55, 0xba, 0x11, 0xfc, 0x84, 0x12}};
@@ -40,7 +42,7 @@ void WinVolumeControl::setVolume(float volume) {
     if (!m_volumeControl)
         return;
 
-    m_volumeControl->SetMasterVolumeLevelScalar(qBound(0.0f, volume, 1.0f), &GUID_QnobAudioEvent);
+    m_volumeControl->SetMasterVolumeLevelScalar(std::clamp(0.0f, volume, 1.0f), &GUID_QnobAudioEvent);
 }
 
 bool WinVolumeControl::isMuted() const {

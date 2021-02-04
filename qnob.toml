@@ -1,17 +1,19 @@
 # "volume" is a default id!
 
-[shortcut.0]
+[0]
+type = "shortcut"
 trigger = "Ctrl+Shift+1"
 target = "volume"
 action = "changeValue"
 arg = 0.05
 
-[shortcut.1]
+[1]
+type = "shortcut"
 trigger = "Ctrl+Shift+2"
 target = "volume"
 action = "toggle"
 
-#[osd.0]
+#[0]
 #target = "volume" # type derived from id -- which is a knob!
 #skin = "osd_mac_volume.toml"
 

@@ -1,9 +1,11 @@
-#include "flat_config.h"
+#include "full_config.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QCoreApplication>
 
 #include <toml++/toml.h>
+
+#include <utility/map_access.h>
 
 #include "config_exception.h"
 
@@ -20,7 +22,7 @@ ConfigLocation location(const toml::node& node) {
 QVariant getValue(const toml::node& node) {
     switch (node.type()) {
     case toml::node_type::string:
-        return QVariant(QByteArray::fromStdString(node.as_string()->get()));
+        return QVariant(QString::fromUtf8(node.as_string()->get()));
     case toml::node_type::integer:
         return QVariant(node.as_integer()->get());
     case toml::node_type::floating_point:
@@ -34,13 +36,13 @@ QVariant getValue(const toml::node& node) {
 
 }
 
-FlatConfig FlatConfig::fromTomlFile(const QString& path) {
+FullConfig FullConfig::loadFromTomlFile(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         qthrow Exception(ConfigError::tr("Could not open config file '%1'.").arg(path));
 
     if (file.size() > 1024 * 1024 * 1024)
-        qthrow Exception(ConfigError::tr("Config file '%1' too large (exceeds 1Mb).").arg(path));
+        qthrow Exception(ConfigError::tr("Config file '%1' is too large (exceeds 1Mb).").arg(path));
 
     QByteArray bytes = file.readAll();
 
@@ -55,22 +57,21 @@ FlatConfig FlatConfig::fromTomlFile(const QString& path) {
         );
     }
 
-    FlatConfig result;
+    FullConfig result;
     for (auto section : table) {
         if (!section.second.is_table())
             qthrow ConfigException(location(section.second), ConfigError::tr("Values outside of sections are not allowed."));
 
-        for (auto instance : *section.second.as_table()) {
-            if (!instance.second.is_table())
-                qthrow ConfigException(location(instance.second), ConfigError::tr("Section format is [type.id], found only [type] instead."));
+        EntityConfig entity;
+        entity.id = QString::fromUtf8(section.first);
+        for (auto line : *section.second.as_table())
+            entity.data[QString::fromUtf8(line.first)] = getValue(line.second);
 
-            FlatConfigRecord record;
-            record.type = QByteArray::fromStdString(section.first);
-            record.id = QByteArray::fromStdString(instance.first);
-            for (auto field : *instance.second.as_table())
-                record.data[QByteArray::fromStdString(field.first)] = getValue(field.second);
-            result.records.push_back(record);
-        }
+        entity.type = value(entity.data, QStringLiteral("type")).toString();
+        if (entity.type.isEmpty())
+            qthrow ConfigException(location(section.second), ConfigError::tr("Type is not specified for section '%1'.").arg(entity.id));
+
+        result.records.push_back(entity);
     }
 
     return result;

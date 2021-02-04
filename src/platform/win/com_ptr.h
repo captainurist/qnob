@@ -5,8 +5,6 @@
 
 #include <combaseapi.h>
 
-#include "com_exception.h"
-
 template<class T>
 class ComPtr {
     //static_assert(std::is_base_of_v<IUnknown, T>, "T must be derived from IUnknown."); // TODO

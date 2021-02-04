@@ -9,8 +9,16 @@ DEFINES += QT_NO_CAST_FROM_ASCII
 DEFINES += QT_NO_CAST_TO_ASCII
 
 HEADERS += \
-    src/config/flat_config.h \
     src/config/config_exception.h \
+    src/config/entity_config.h \
+    src/config/full_config.h \
+    src/core/entity.h \
+    src/core/entity_creation_exception.h \
+    src/core/entity_factory.h \
+    src/core/entity_factory_pool.h \
+    src/core/entity_pool.h \
+    src/core/entity_pool_builder.h \
+    src/core/entity_resolver.h \
     src/knob/knob.h \
     src/knob/volume_knob.h \
     src/platform/platform.h \
@@ -24,11 +32,15 @@ HEADERS += \
     src/platform/win/win_volume_control.h \
     src/trigger/trigger.h \
     src/trigger/hotkey_trigger.h \
+    src/trigger/hotkey_trigger_factory.h \
     src/utility/debug.h \
 
 
 SOURCES += \
-    src/config/flat_config.cpp \
+    src/config/full_config.cpp \
+    src/core/entity_factory_pool.cpp \
+    src/core/entity_pool.cpp \
+    src/core/entity_pool_builder.cpp \
     src/knob/volume_knob.cpp \
     src/platform/win/com.cpp \
     src/platform/win/win_error.cpp \
@@ -36,6 +48,7 @@ SOURCES += \
     src/platform/win/win_shortcut_dispatcher.cpp \
     src/platform/win/win_volume_control.cpp \
     src/trigger/hotkey_trigger.cpp \
+    src/trigger/hotkey_trigger_factory.cpp \
     src/utility/debug.cpp \
     src/main.cpp \
 
