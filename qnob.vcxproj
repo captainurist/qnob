@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\config\full_config.cpp" />
+    <ClCompile Include="src\core\entity\entity_factory.cpp" />
     <ClCompile Include="src\core\entity\entity_factory_pool.cpp" />
     <ClCompile Include="src\core\entity\entity_pool.cpp" />
     <ClCompile Include="src\core\entity\entity_pool_builder.cpp" />

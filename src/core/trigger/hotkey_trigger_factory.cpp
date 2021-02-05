@@ -17,7 +17,7 @@ HotkeyTriggerFactory::HotkeyTriggerFactory() :
 Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, EntityResolver* resolver) {
     QKeySequence shortcut = QKeySequence::fromString(requireData<QString>(config, QStringLiteral("trigger")));
     if (shortcut.isEmpty())
-        qthrow EntityCreationException(config.id, tr("TODO"));
+        qthrow EntityCreationException(config.id, EntityCreationException::tr("TODO"));
 
     Entity* target = resolver->resolveEntity(requireData<QString>(config, QStringLiteral("target")));
     QString action = requireData<QString>(config, QStringLiteral("action"));
@@ -27,41 +27,9 @@ Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, EntityRes
     call.bind(target, action.toUtf8(), args);
 
     HotkeyTrigger* result = new HotkeyTrigger(shortcut, config.id);
-    connect(result, &Trigger::triggered, target, [=]() mutable {
+    QObject::connect(result, &Trigger::triggered, target, [=]() mutable {
         call.invoke();
     });
     return result;
-}
-
-template<class T>
-static T HotkeyTriggerFactory::requireData(const EntityConfig& config, const QString& key) {
-    return requireDataInternal<T>(config, key);
-}
-
-template<class T>
-static T HotkeyTriggerFactory::requireDataOr(const EntityConfig& config, const QString& key, const T& defaultValue) {
-    return requireDataInternal<T>(config, key, &defaultValue);
-}
-
-template<class T>
-static T HotkeyTriggerFactory::requireDataInternal(const EntityConfig& config, const QString& key, const T* defaultValue) {
-    if (!config.data.contains(key)) {
-        if (defaultValue) {
-            return *defaultValue;
-        } else {
-            qthrow EntityCreationException(config.id, tr("Required parameter '%1' is not defined.").arg(key));
-        }
-    }
-
-    QVariant result = value(config.data, key);
-    if constexpr (std::is_same_v<T, QVariant>)
-        return result;
-
-    if (result.typeId() != qMetaTypeId<T>()) {
-        // TODO
-        qthrow EntityCreationException(config.id, tr("Invalid parameter '%1' type - expected '%2', got '%3'.").arg(key));
-    }
-
-    return result.value<T>();
 }
 

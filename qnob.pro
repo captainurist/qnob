@@ -42,6 +42,7 @@ HEADERS += \
 
 SOURCES += \
     src/config/full_config.cpp \
+    src/core/entity/entity_factory.cpp \
     src/core/entity/entity_factory_pool.cpp \
     src/core/entity/entity_pool.cpp \
     src/core/entity/entity_pool_builder.cpp \
