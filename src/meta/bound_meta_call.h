@@ -5,6 +5,11 @@
 
 #include "meta_method_invoker.h"
 
+/**
+ * Basically a closure around a call to a Qt meta method.
+ *
+ * Does type conversion & all the necessary checks. In case of problems throws `MetaCallException`.
+ */
 class BoundMetaCall {
 public:
     BoundMetaCall() {}
