@@ -5,5 +5,6 @@ void Knob::toggle() {
 }
 
 void Knob::changeValue(double delta) {
+    setEnabled(true);
     setValue(value() + delta);
 }
