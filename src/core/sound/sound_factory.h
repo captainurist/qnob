@@ -2,9 +2,9 @@
 
 #include <core/entity/entity_factory.h>
 
-class HotkeyTriggerFactory : public EntityFactory {
+class SoundFactory : public EntityFactory {
 public:
-    HotkeyTriggerFactory();
+    SoundFactory();
 
     virtual Entity* createEntity(const EntityConfig& config, EntityResolver* resolver) override;
 };

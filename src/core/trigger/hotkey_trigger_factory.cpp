@@ -26,7 +26,7 @@ Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, EntityRes
     BoundMetaCall call;
     call.bind(target, action.toUtf8(), args);
 
-    HotkeyTrigger* result = new HotkeyTrigger(shortcut, config.id);
+    HotkeyTrigger* result = new HotkeyTrigger(config.id, shortcut);
     QObject::connect(result, &Trigger::triggered, target, [=]() mutable {
         call.invoke();
     });

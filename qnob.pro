@@ -22,6 +22,8 @@ HEADERS += \
     src/core/entity/entity_resolver.h \
     src/core/knob/knob.h \
     src/core/knob/volume_knob.h \
+    src/core/sound/sound.h \
+    src/core/sound/sound_factory.h \
     src/core/trigger/trigger.h \
     src/core/trigger/hotkey_trigger.h \
     src/core/trigger/hotkey_trigger_factory.h \
@@ -48,6 +50,8 @@ SOURCES += \
     src/core/entity/entity_pool_builder.cpp \
     src/core/knob/knob.cpp \
     src/core/knob/volume_knob.cpp \
+    src/core/sound/sound.cpp \
+    src/core/sound/sound_factory.cpp \
     src/core/trigger/hotkey_trigger.cpp \
     src/core/trigger/hotkey_trigger_factory.cpp \
     src/meta/bound_meta_call.cpp \

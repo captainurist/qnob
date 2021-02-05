@@ -10,7 +10,7 @@ class PlatformShortcutNotifier;
 class HotkeyTrigger : public Trigger {
     Q_OBJECT
 public:
-    HotkeyTrigger(const QKeySequence& shortcut, const QString& id);
+    HotkeyTrigger(const QString& id, const QKeySequence& shortcut);
     virtual ~HotkeyTrigger();
 
 private:

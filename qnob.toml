@@ -14,13 +14,15 @@ target = "volume"
 action = "rotate"
 args = [0.05]
 
+[2]
+type = "sound"
+target = "volume"
+path = "mac_volume.wav"
+
 #[0]
 #target = "volume" # type derived from id -- which is a knob!
 #skin = "osd_mac_volume.toml"
 
-#[sound.0]
-#target = "volume"
-#sound = "mac_volume.wav"
 
 #[trayicon.volume_icon]
 #target = "volume"

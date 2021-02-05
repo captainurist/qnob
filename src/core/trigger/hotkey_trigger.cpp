@@ -2,7 +2,7 @@
 
 #include <platform/platform.h>
 
-HotkeyTrigger::HotkeyTrigger(const QKeySequence& shortcut, const QString& id):
+HotkeyTrigger::HotkeyTrigger(const QString& id, const QKeySequence& shortcut):
     Trigger(id)
 {
     m_notifier.reset(qPlatform()->createShortcutNotifier(shortcut));

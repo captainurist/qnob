@@ -19,6 +19,7 @@ public:
     Q_INVOKABLE void rotate(double delta);
 
 signals:
+    void touched();
     void valueChanged(double value);
     void enabledChanged(bool value);
 };
