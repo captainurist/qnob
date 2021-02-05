@@ -7,6 +7,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 DEFINES += QT_NO_CAST_FROM_ASCII
 DEFINES += QT_NO_CAST_TO_ASCII
+DEFINES += QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
 
 HEADERS += \
     src/config/config_exception.h \
@@ -41,6 +42,7 @@ SOURCES += \
     src/core/entity_factory_pool.cpp \
     src/core/entity_pool.cpp \
     src/core/entity_pool_builder.cpp \
+    src/knob/knob.cpp \
     src/knob/volume_knob.cpp \
     src/platform/win/com.cpp \
     src/platform/win/win_error.cpp \
@@ -50,6 +52,9 @@ SOURCES += \
     src/trigger/hotkey_trigger.cpp \
     src/trigger/hotkey_trigger_factory.cpp \
     src/utility/debug.cpp \
+    src/utility/bound_meta_call.cpp \
+    src/utility/meta_object_extension.cpp \
+    src/utility/meta_method_invoker.cpp \
     src/main.cpp \
 
 

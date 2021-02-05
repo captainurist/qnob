@@ -22,13 +22,19 @@ ConfigLocation location(const toml::node& node) {
 QVariant getValue(const toml::node& node) {
     switch (node.type()) {
     case toml::node_type::string:
-        return QVariant(QString::fromUtf8(node.as_string()->get()));
+        return QVariant::fromValue<QString>(QString::fromUtf8(node.as_string()->get()));
     case toml::node_type::integer:
-        return QVariant(node.as_integer()->get());
+        return QVariant::fromValue<int64_t>(node.as_integer()->get());
     case toml::node_type::floating_point:
-        return QVariant(node.as_floating_point()->get());
+        return QVariant::fromValue<double>(node.as_floating_point()->get());
     case toml::node_type::boolean:
-        return QVariant(node.as_boolean()->get());
+        return QVariant::fromValue<bool>(node.as_boolean()->get());
+    case toml::node_type::array: {
+        QVariantList result;
+        for (const toml::node& element : *node.as_array())
+            result.push_back(getValue(element));
+        return QVariant::fromValue<QVariantList>(result);
+    }
     default:
         qthrow ConfigException(location(node), ConfigError::tr("Expected a value."));
     }

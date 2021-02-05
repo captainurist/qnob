@@ -351,7 +351,7 @@ PlatformShortcutNotifier* WinShortcutDispatcher::createShortcutNotifier(const QK
     }
 
     if (shortcut.count() > 1)
-        qWarning() << "Creating global shortcut only for the 1st key in sequence:" << shortcut;
+        qWarning() << "Creating global shortcut only for the 1st key in sequence" << shortcut;
 
     Qt::Key key = shortcut[0].key();
     Qt::KeyboardModifiers mods = shortcut[0].keyboardModifiers();
@@ -360,7 +360,7 @@ PlatformShortcutNotifier* WinShortcutDispatcher::createShortcutNotifier(const QK
     convertToNativeKey(key, mods, &nativeKey, &nativeMods);
 
     if (!RegisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), m_nextId, nativeMods, nativeKey)) {
-        qWarning() << "RegisterHotKey failed:" << GetLastErrorAsString();
+        qWarning() << "RegisterHotKey for" << shortcut << "failed:" << GetLastErrorAsString();
         return nullptr;
     }
 
