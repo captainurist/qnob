@@ -17,7 +17,6 @@ Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, EntityRes
         qthrow EntityCreationException(config.id, tr("TODO"));
 
     Entity* target = resolver->resolveEntity(requireData<QString>(config, QStringLiteral("target")));
-
     QString action = requireData<QString>(config, QStringLiteral("action"));
     QVariantList args = requireDataOr<QVariantList>(config, QStringLiteral("args"), QVariantList());
 

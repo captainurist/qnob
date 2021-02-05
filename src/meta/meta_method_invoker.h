@@ -3,6 +3,7 @@
 #include <array>
 
 #include <QtCore/QVariant>
+#include <QtCore/QMetaMethod>
 
 
 class MetaMethodInvoker {

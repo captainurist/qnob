@@ -48,6 +48,7 @@
     <ClInclude Include="src\core\entity_resolver.h" />
     <ClInclude Include="src\knob\knob.h" />
     <ClInclude Include="src\knob\volume_knob.h" />
+    <ClInclude Include="src\meta\meta_call_exception.h" />
     <ClInclude Include="src\platform\platform.h" />
     <ClInclude Include="src\platform\platform_shortcut_notifier.h" />
     <ClInclude Include="src\platform\platform_volume_control.h" />
