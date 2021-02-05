@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utility/exception.h>
+#include <util/exception.h>
 
 class EntityCreationException : public Exception {
     Q_DECLARE_TR_FUNCTIONS(EntityCreationException)

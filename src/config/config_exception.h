@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utility/exception.h>
+#include <util/exception.h>
 
 struct ConfigLocation {
     int line;

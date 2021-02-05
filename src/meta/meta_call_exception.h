@@ -2,7 +2,7 @@
 
 #include <QtCore/QMetaObject>
 
-#include <utility/exception.h>
+#include <util/exception.h>
 
 class MetaCallException : public Exception {
     Q_DECLARE_TR_FUNCTIONS(MetaCallException)

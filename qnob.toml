@@ -4,14 +4,14 @@
 type = "shortcut"
 trigger = "Ctrl+Shift+1"
 target = "volume"
-action = "changeValue"
+action = "rotate"
 args = [-0.05]
 
 [1]
 type = "shortcut"
 trigger = "Ctrl+Shift+3"
 target = "volume"
-action = "changeValue"
+action = "rotate"
 args = [0.05]
 
 #[0]

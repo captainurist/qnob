@@ -5,7 +5,7 @@
 #include <cassert>
 
 #include <config/full_config.h>
-#include <utility/map_access.h>
+#include <util/map_access.h>
 
 #include "entity_factory_pool.h"
 #include "entity_factory.h"

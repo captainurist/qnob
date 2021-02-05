@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include <utility/map_access.h>
+#include <util/map_access.h>
 
 #include "entity.h"
 

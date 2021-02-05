@@ -3,9 +3,9 @@
 #include <type_traits>
 
 #include <config/entity_config.h>
-#include <core/entity_creation_exception.h>
-#include <core/entity_resolver.h>
-#include <utility/map_access.h>
+#include <core/entity/entity_creation_exception.h>
+#include <core/entity/entity_resolver.h>
+#include <util/map_access.h>
 #include <meta/bound_meta_call.h>
 
 #include "hotkey_trigger.h"

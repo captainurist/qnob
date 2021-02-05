@@ -8,7 +8,7 @@
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMutex>
 
-#include <utility/map_access.h>
+#include <util/map_access.h>
 
 namespace {
 

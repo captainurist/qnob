@@ -1,7 +1,5 @@
 #include "bound_meta_call.h"
 
-#include <utility/exception.h>
-
 #include "meta_object_extension.h"
 #include "meta_call_exception.h"
 

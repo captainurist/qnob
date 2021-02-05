@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/entity.h>
+#include <core/entity/entity.h>
 
 class Trigger : public Entity {
     Q_OBJECT

@@ -4,7 +4,7 @@ void Knob::toggle() {
     setEnabled(!enabled());
 }
 
-void Knob::changeValue(double delta) {
+void Knob::rotate(double delta) {
     setEnabled(true);
     setValue(value() + delta);
 }

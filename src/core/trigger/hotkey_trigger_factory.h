@@ -2,7 +2,7 @@
 
 #include <QtCore/QString>
 
-#include <core/entity_factory.h>
+#include <core/entity/entity_factory.h>
 
 class HotkeyTriggerFactory : public EntityFactory {
     Q_OBJECT

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/entity.h>
+#include <core/entity/entity.h>
 
 class Knob : public Entity {
     Q_OBJECT
@@ -16,7 +16,7 @@ public:
     /* Functions available through actions. */
 
     Q_INVOKABLE void toggle();
-    Q_INVOKABLE void changeValue(double delta);
+    Q_INVOKABLE void rotate(double delta);
 
 signals:
     void valueChanged(double value);

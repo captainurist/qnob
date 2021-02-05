@@ -1,6 +1,9 @@
 #pragma once
 
-class PlatformVolumeControl {
+#include <QtCore/QObject>
+
+class PlatformVolumeControl: public QObject {
+    Q_OBJECT
 public:
     virtual ~PlatformVolumeControl() {}
 
@@ -9,7 +12,7 @@ public:
     virtual bool isMuted() const = 0;
     virtual void setMuted(bool muted) = 0;
 
-    // TODO
-    // volumeChanged
+signals:
+    void volumeChanged(float volume);
 };
 

@@ -13,15 +13,18 @@ HEADERS += \
     src/config/config_exception.h \
     src/config/entity_config.h \
     src/config/full_config.h \
-    src/core/entity.h \
-    src/core/entity_creation_exception.h \
-    src/core/entity_factory.h \
-    src/core/entity_factory_pool.h \
-    src/core/entity_pool.h \
-    src/core/entity_pool_builder.h \
-    src/core/entity_resolver.h \
-    src/knob/knob.h \
-    src/knob/volume_knob.h \
+    src/core/entity/entity.h \
+    src/core/entity/entity_creation_exception.h \
+    src/core/entity/entity_factory.h \
+    src/core/entity/entity_factory_pool.h \
+    src/core/entity/entity_pool.h \
+    src/core/entity/entity_pool_builder.h \
+    src/core/entity/entity_resolver.h \
+    src/core/knob/knob.h \
+    src/core/knob/volume_knob.h \
+    src/core/trigger/trigger.h \
+    src/core/trigger/hotkey_trigger.h \
+    src/core/trigger/hotkey_trigger_factory.h \
     src/meta/bound_meta_call.h \
     src/meta/meta_object_extension.h \
     src/meta/meta_method_invoker.h \
@@ -34,19 +37,18 @@ HEADERS += \
     src/platform/win/win_platform.h \
     src/platform/win/win_shortcut_dispatcher.h \
     src/platform/win/win_volume_control.h \
-    src/trigger/trigger.h \
-    src/trigger/hotkey_trigger.h \
-    src/trigger/hotkey_trigger_factory.h \
-    src/utility/debug.h \
+    src/util/debug.h \
 
 
 SOURCES += \
     src/config/full_config.cpp \
-    src/core/entity_factory_pool.cpp \
-    src/core/entity_pool.cpp \
-    src/core/entity_pool_builder.cpp \
-    src/knob/knob.cpp \
-    src/knob/volume_knob.cpp \
+    src/core/entity/entity_factory_pool.cpp \
+    src/core/entity/entity_pool.cpp \
+    src/core/entity/entity_pool_builder.cpp \
+    src/core/knob/knob.cpp \
+    src/core/knob/volume_knob.cpp \
+    src/core/trigger/hotkey_trigger.cpp \
+    src/core/trigger/hotkey_trigger_factory.cpp \
     src/meta/bound_meta_call.cpp \
     src/meta/meta_object_extension.cpp \
     src/meta/meta_method_invoker.cpp \
@@ -55,9 +57,7 @@ SOURCES += \
     src/platform/win/win_platform.cpp \
     src/platform/win/win_shortcut_dispatcher.cpp \
     src/platform/win/win_volume_control.cpp \
-    src/trigger/hotkey_trigger.cpp \
-    src/trigger/hotkey_trigger_factory.cpp \
-    src/utility/debug.cpp \
+    src/util/debug.cpp \
     src/main.cpp \
 
 
