@@ -20,7 +20,11 @@ public:
         if (const MetaObjectExtension* result = value_ptr(m_extensionByMetaObject, metaObject))
             return result;
 
-        return &m_extensionByMetaObject.emplace(std::piecewise_construct, std::forward_as_tuple(metaObject), std::forward_as_tuple(metaObject)).first->second;
+        return &m_extensionByMetaObject.emplace(
+            std::piecewise_construct,
+            std::forward_as_tuple(metaObject),
+            std::forward_as_tuple(metaObject)
+        ).first->second;
     }
 
 private:
@@ -40,6 +44,9 @@ MetaObjectExtension::MetaObjectExtension(const QMetaObject* metaObject) {
     for (int i = 0; i < metaObject->methodCount(); i++) {
         QMetaMethod method = metaObject->method(i);
         QByteArray name = method.name();
+
+        if (name.startsWith("_q_"))
+            continue; /* Don't bother exposing reserved names. */
 
         if (names.contains(name)) {
             m_methodByName.erase(name);
