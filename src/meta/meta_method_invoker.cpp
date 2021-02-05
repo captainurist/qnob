@@ -1,22 +1,38 @@
 #include "meta_method_invoker.h"
 
-#include <QtCore/QMetaMethod>
+#include <cassert>
 
-#include <utility/exception.h>
+#include "meta_call_exception.h"
 
 void MetaMethodInvoker::prepareInvocation(const QMetaMethod& method, QVariantList* args, CallContext* ctx) {
+    assert(method.isValid());
+
     int parameterCount = method.parameterCount();
-    if (parameterCount != args->size())
-        qthrow Exception(QString());
+    if (parameterCount != args->size()) {
+        qthrow MetaCallException(
+            method.enclosingMetaObject(),
+            method.name(),
+            MetaCallException::tr("Argument count mismatch (%1 != %2).").arg(parameterCount).arg(args->size())
+        );
+    }
+
     if (parameterCount >= ctx->size())
-        qthrow Exception(QString());
+        qthrow MetaCallException(method.enclosingMetaObject(), method.name(), MetaCallException::tr("Method has too many arguments."));
 
     for (int i = 0; i < parameterCount; i++) {
         int expectedTypeId = method.parameterType(i);
 
         QVariant& arg = (*args)[i];
-        if (expectedTypeId != arg.typeId() && !arg.convert(QMetaType(expectedTypeId)))
-            qthrow Exception(QString());
+        if (expectedTypeId != arg.typeId() && !arg.convert(QMetaType(expectedTypeId))) {
+            qthrow MetaCallException(
+                method.enclosingMetaObject(),
+                method.name(),
+                MetaCallException::tr("Type mismatch in argument #%1: expected %2, got %3.")
+                    .arg(i + 1)
+                    .arg(QLatin1String(QMetaType(expectedTypeId).name()))
+                    .arg(QLatin1String(arg.typeName()))
+            );
+        }
 
         (*ctx)[i + 1] = arg.data();
     }
