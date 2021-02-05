@@ -1,8 +1,8 @@
 #include "bound_meta_call.h"
 
-#include <utility/meta_object_extension.h>
-
 #include <utility/exception.h>
+
+#include "meta_object_extension.h"
 
 void BoundMetaCall::bind(QObject* target, QByteArray method, const QVariantList& args) {
     m_target = nullptr;

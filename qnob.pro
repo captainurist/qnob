@@ -22,6 +22,9 @@ HEADERS += \
     src/core/entity_resolver.h \
     src/knob/knob.h \
     src/knob/volume_knob.h \
+    src/meta/bound_meta_call.h \
+    src/meta/meta_object_extension.h \
+    src/meta/meta_method_invoker.h \
     src/platform/platform.h \
     src/platform/platform_shortcut_notifier.h \
     src/platform/platform_volume_control.h \
@@ -44,6 +47,9 @@ SOURCES += \
     src/core/entity_pool_builder.cpp \
     src/knob/knob.cpp \
     src/knob/volume_knob.cpp \
+    src/meta/bound_meta_call.cpp \
+    src/meta/meta_object_extension.cpp \
+    src/meta/meta_method_invoker.cpp \
     src/platform/win/com.cpp \
     src/platform/win/win_error.cpp \
     src/platform/win/win_platform.cpp \
@@ -52,9 +58,6 @@ SOURCES += \
     src/trigger/hotkey_trigger.cpp \
     src/trigger/hotkey_trigger_factory.cpp \
     src/utility/debug.cpp \
-    src/utility/bound_meta_call.cpp \
-    src/utility/meta_object_extension.cpp \
-    src/utility/meta_method_invoker.cpp \
     src/main.cpp \
 
 

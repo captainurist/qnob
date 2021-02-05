@@ -6,7 +6,7 @@
 #include <core/entity_creation_exception.h>
 #include <core/entity_resolver.h>
 #include <utility/map_access.h>
-#include <utility/bound_meta_call.h>
+#include <meta/bound_meta_call.h>
 
 #include "hotkey_trigger.h"
 
