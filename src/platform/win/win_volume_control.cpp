@@ -42,7 +42,7 @@ void WinVolumeControl::setVolume(float volume) {
     if (!m_volumeControl)
         return;
 
-    m_volumeControl->SetMasterVolumeLevelScalar(std::clamp(0.0f, volume, 1.0f), &GUID_QnobAudioEvent);
+    m_volumeControl->SetMasterVolumeLevelScalar(std::clamp(volume, 0.0f, 1.0f), &GUID_QnobAudioEvent);
 }
 
 bool WinVolumeControl::isMuted() const {
