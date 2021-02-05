@@ -13,14 +13,6 @@
 #include "entity_creation_exception.h"
 #include "entity.h"
 
-namespace {
-
-struct BuilderError {
-    Q_DECLARE_TR_FUNCTIONS(BuilderError)
-};
-
-}
-
 EntityPoolBuilder::EntityPoolBuilder(EntityFactoryPool* factoryPool, EntityPool* entityPool) {
     m_factoryPool = factoryPool;
     m_entityPool = entityPool;
@@ -56,7 +48,7 @@ void EntityPoolBuilder::createEntity(size_t index) {
 
     EntityFactory* factory = m_factoryPool->factory(config.type);
     if (!factory)
-        qthrow EntityCreationException(config.id, BuilderError::tr("Unknown entity type '%1'.").arg(config.type));
+        qthrow EntityCreationException(config.id, EntityCreationException::tr("Unknown entity type '%1'.").arg(config.type));
 
     m_idStack.push_back(config.id);
     m_idsInFlight.insert(config.id);
@@ -67,7 +59,7 @@ void EntityPoolBuilder::createEntity(size_t index) {
 
 Entity* EntityPoolBuilder::resolveEntity(const QString& id) {
     if (m_idsInFlight.contains(id))
-        qthrow EntityCreationException(m_idStack.back(), BuilderError::tr("Cyclical dependency detected."));
+        qthrow EntityCreationException(m_idStack.back(), EntityCreationException::tr("Cyclical dependency detected."));
 
     if (Entity* result = m_entityPool->entity(id))
         return result;
@@ -76,7 +68,7 @@ Entity* EntityPoolBuilder::resolveEntity(const QString& id) {
     if (index == -1) {
         qthrow EntityCreationException(
             m_idStack.back(),
-            BuilderError::tr("Entity refers to an unknown entity '%1'.").arg(id)
+            EntityCreationException::tr("Entity refers to an unknown entity '%1'.").arg(id)
         );
     }
 

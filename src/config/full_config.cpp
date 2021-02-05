@@ -11,10 +11,6 @@
 
 namespace {
 
-struct ConfigError {
-    Q_DECLARE_TR_FUNCTIONS(ConfigError)
-};
-
 ConfigLocation location(const toml::node& node) {
     return { node.source().begin.line, node.source().begin.column };
 }
@@ -36,7 +32,7 @@ QVariant getValue(const toml::node& node) {
         return QVariant::fromValue<QVariantList>(result);
     }
     default:
-        qthrow ConfigException(location(node), ConfigError::tr("Expected a value."));
+        qthrow ConfigException(location(node), ConfigException::tr("Expected a value."));
     }
 }
 
@@ -45,10 +41,10 @@ QVariant getValue(const toml::node& node) {
 FullConfig FullConfig::loadFromTomlFile(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        qthrow Exception(ConfigError::tr("Could not open config file '%1'.").arg(path));
+        qthrow Exception(ConfigException::tr("Could not open config file '%1'.").arg(path));
 
     if (file.size() > 1024 * 1024 * 1024)
-        qthrow Exception(ConfigError::tr("Config file '%1' is too large (exceeds 1Mb).").arg(path));
+        qthrow Exception(ConfigException::tr("Config file '%1' is too large (exceeds 1Mb).").arg(path));
 
     QByteArray bytes = file.readAll();
 
@@ -59,14 +55,14 @@ FullConfig FullConfig::loadFromTomlFile(const QString& path) {
         std::string_view description = e.description();
         qthrow ConfigException(
             { e.source().begin.line, e.source().begin.column },
-            ConfigError::tr("Toml parse error: %1.").arg(QString::fromLatin1(description.data(), description.size()))
+            ConfigException::tr("Toml parse error: %1.").arg(QString::fromLatin1(description.data(), description.size()))
         );
     }
 
     FullConfig result;
     for (auto section : table) {
         if (!section.second.is_table())
-            qthrow ConfigException(location(section.second), ConfigError::tr("Values outside of sections are not allowed."));
+            qthrow ConfigException(location(section.second), ConfigException::tr("Values outside of sections are not allowed."));
 
         EntityConfig entity;
         entity.id = QString::fromUtf8(section.first);
@@ -75,7 +71,7 @@ FullConfig FullConfig::loadFromTomlFile(const QString& path) {
 
         entity.type = value(entity.data, QStringLiteral("type")).toString();
         if (entity.type.isEmpty())
-            qthrow ConfigException(location(section.second), ConfigError::tr("Type is not specified for section '%1'.").arg(entity.id));
+            qthrow ConfigException(location(section.second), ConfigException::tr("Type is not specified for section '%1'.").arg(entity.id));
 
         result.records.push_back(entity);
     }

@@ -1,10 +1,9 @@
 #pragma once
 
-#include <QtCore/QString>
-
 #include <utility/exception.h>
 
 class EntityCreationException : public Exception {
+    Q_DECLARE_TR_FUNCTIONS(EntityCreationException)
 public:
     EntityCreationException(const QString& id, const QString& message) :
         Exception(message),

@@ -8,6 +8,7 @@ struct ConfigLocation {
 };
 
 class ConfigException: public Exception {
+    Q_DECLARE_TR_FUNCTIONS(ConfigException)
 public:
     ConfigException(const ConfigLocation& location, const QString& message) :
         Exception(message),

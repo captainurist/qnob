@@ -3,6 +3,7 @@
 #include <exception>
 
 #include <QtCore/QString>
+#include <QtCore/QCoreApplication>
 
 #include "source_location.h"
 
@@ -11,6 +12,7 @@
  * Base class for all qnob exceptions.
  */
 class Exception : public std::exception {
+    Q_DECLARE_TR_FUNCTIONS(Exception)
 public:
     Exception(const QString& message) {
         m_message = message;
