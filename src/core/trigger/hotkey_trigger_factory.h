@@ -7,6 +7,8 @@
 class HotkeyTriggerFactory : public EntityFactory {
     Q_OBJECT
 public:
+    HotkeyTriggerFactory();
+
     virtual Entity* createEntity(const EntityConfig& config, EntityResolver* resolver) override;
 
 private:

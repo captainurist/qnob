@@ -10,6 +10,7 @@ EntityPool::~EntityPool() {}
 
 void EntityPool::addEntity(Entity* entity) {
     assert(!m_entityById.contains(entity->id()));
+
     m_entityById[entity->id()].reset(entity);
 }
 

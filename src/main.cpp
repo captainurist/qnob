@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     pool.addEntity(new VolumeKnob());
 
     EntityFactoryPool factoryPool;
-    factoryPool.registerFactory(QLatin1String("shortcut"), new HotkeyTriggerFactory()); // TODO: ID inside!
+    factoryPool.registerFactory(new HotkeyTriggerFactory());
 
     EntityPoolBuilder builder(&factoryPool, &pool);
     builder.addEntities(config);

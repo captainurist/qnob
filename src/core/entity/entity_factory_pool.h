@@ -17,10 +17,9 @@ public:
      *
      * Note that this pool takes ownership of the provided factory.
      *
-     * \param id                        Type id that the provided entity factory will handle.
      * \param factory                   Entity factory.
      */
-    void registerFactory(const QString& id, EntityFactory* factory);
+    void registerFactory(EntityFactory* factory);
 
     EntityFactory* factory(const QString& id) const;
 

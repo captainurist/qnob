@@ -10,6 +10,9 @@
 
 #include "hotkey_trigger.h"
 
+HotkeyTriggerFactory::HotkeyTriggerFactory() :
+    EntityFactory(QStringLiteral("shortcut"))
+{}
 
 Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, EntityResolver* resolver) {
     QKeySequence shortcut = QKeySequence::fromString(requireData<QString>(config, QStringLiteral("trigger")));
