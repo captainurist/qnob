@@ -5,7 +5,7 @@
 VolumeKnob::VolumeKnob() :
     Knob(lit("volume"))
 {
-    m_volumeControl = qPlatform()->volumeControl();
+    m_volumeControl = platform()->volumeControl();
 }
 
 VolumeKnob::~VolumeKnob()

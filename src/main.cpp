@@ -13,8 +13,11 @@
 
 #include <config/full_config.h>
 
+#include <platform/platform_initializer.h>
+
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+    PlatformInitializer platform;
 
     FullConfig config = FullConfig::loadFromTomlFile(QLatin1String("qnob.toml"));
 

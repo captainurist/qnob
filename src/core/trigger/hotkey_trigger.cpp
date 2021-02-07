@@ -5,7 +5,7 @@
 HotkeyTrigger::HotkeyTrigger(const QString& id, const QKeySequence& shortcut):
     Trigger(id)
 {
-    m_notifier.reset(qPlatform()->createShortcutNotifier(shortcut));
+    m_notifier.reset(platform()->createShortcutNotifier(shortcut));
     if (!m_notifier)
         return;
 

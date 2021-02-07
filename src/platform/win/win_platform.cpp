@@ -21,7 +21,6 @@ PlatformShortcutNotifier* WinPlatform::createShortcutNotifier(const QKeySequence
     return m_shortcutDispatcher->createShortcutNotifier(shortcut);
 }
 
-Platform* Platform::instance() {
-    static WinPlatform platform;
-    return &platform;
+Platform* createPlatform() {
+    return new WinPlatform();
 }

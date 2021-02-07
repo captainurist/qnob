@@ -23,7 +23,7 @@ public:
     static Platform* instance();
 };
 
-inline Platform* qPlatform() {
+inline Platform* platform() {
     return Platform::instance();
 }
 
