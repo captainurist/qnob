@@ -1,7 +1,7 @@
 #include "sound_factory.h"
 
 #include <config/entity_config.h>
-#include <core/entity/entity_resolver.h>
+#include <core/entity/factory_resolver.h>
 
 #include "sound.h"
 
@@ -9,7 +9,7 @@ SoundFactory::SoundFactory():
     EntityFactory(lit("sound"))
 {}
 
-Entity* SoundFactory::createEntity(const EntityConfig& config, EntityResolver* resolver) {
+Entity* SoundFactory::createEntity(const EntityConfig& config, FactoryResolver* resolver) {
     QString path = requireData<QString>(config, lit("path"));
 
     Entity* target = resolver->resolveEntity(requireData<QString>(config, lit("target")));

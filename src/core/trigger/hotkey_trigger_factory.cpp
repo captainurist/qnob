@@ -4,7 +4,7 @@
 
 #include <config/entity_config.h>
 #include <core/entity/entity_creation_exception.h>
-#include <core/entity/entity_resolver.h>
+#include <core/entity/factory_resolver.h>
 #include <util/map_access.h>
 #include <meta/bound_meta_call.h>
 
@@ -14,7 +14,7 @@ HotkeyTriggerFactory::HotkeyTriggerFactory() :
     EntityFactory(lit("shortcut"))
 {}
 
-Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, EntityResolver* resolver) {
+Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, FactoryResolver* resolver) {
     QKeySequence shortcut = QKeySequence::fromString(requireData<QString>(config, lit("trigger")));
     if (shortcut.isEmpty())
         qthrow EntityCreationException(config.id, EntityCreationException::tr("TODO"));

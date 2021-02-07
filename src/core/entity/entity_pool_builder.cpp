@@ -1,6 +1,7 @@
 #include "entity_pool_builder.h"
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QFileInfo>
 
 #include <cassert>
 
@@ -24,6 +25,7 @@ void EntityPoolBuilder::addEntities(const FullConfig& fullConfig) {
     if (fullConfig.records.empty())
         return;
 
+    m_dir = QFileInfo(fullConfig.path).absolutePath();
     m_configs = fullConfig.records;
     m_entities.resize(m_configs.size());
 
@@ -77,4 +79,12 @@ Entity* EntityPoolBuilder::resolveEntity(const QString& id) {
 
     assert(m_entities[index]);
     return m_entities[index].get();
+}
+
+QString EntityPoolBuilder::resolvePath(const QString& path) {
+    QFileInfo info(path);
+    if (info.isAbsolute())
+        return path;
+
+    return m_dir + path;
 }

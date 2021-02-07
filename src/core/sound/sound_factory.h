@@ -6,5 +6,5 @@ class SoundFactory : public EntityFactory {
 public:
     SoundFactory();
 
-    virtual Entity* createEntity(const EntityConfig& config, EntityResolver* resolver) override;
+    virtual Entity* createEntity(const EntityConfig& config, FactoryResolver* resolver) override;
 };

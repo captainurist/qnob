@@ -4,13 +4,13 @@
 
 class Entity;
 class EntityConfig;
-class EntityResolver;
+class FactoryResolver;
 
 class EntityFactory {
 public:
     EntityFactory(const QString& id) : m_id(id) {}
 
-    virtual Entity* createEntity(const EntityConfig& config, EntityResolver* resolver) = 0;
+    virtual Entity* createEntity(const EntityConfig& config, FactoryResolver* resolver) = 0;
 
     const QString& id() const {
         return m_id;

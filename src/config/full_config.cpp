@@ -60,6 +60,8 @@ FullConfig FullConfig::loadFromTomlFile(const QString& path) {
     }
 
     FullConfig result;
+    result.path = path;
+
     for (auto section : table) {
         if (!section.second.is_table())
             qthrow ConfigException(location(section.second), ConfigException::tr("Values outside of sections are not allowed."));

@@ -8,14 +8,14 @@
 #include <QtCore/QHashFunctions>
 #include <QtCore/QByteArray>
 
-#include "entity_resolver.h"
+#include "factory_resolver.h"
 
 class EntityPool;
 class EntityFactoryPool;
 class EntityConfig;
 class FullConfig;
 
-class EntityPoolBuilder: private EntityResolver {
+class EntityPoolBuilder: private FactoryResolver {
 public:
     EntityPoolBuilder(EntityFactoryPool* factoryPool, EntityPool* entityPool);
     ~EntityPoolBuilder();
@@ -25,10 +25,12 @@ public:
 private:
     void createEntity(size_t index);
     virtual Entity* resolveEntity(const QString& id) override;
+    virtual QString resolvePath(const QString& path) override;
 
 private:
     EntityFactoryPool* m_factoryPool;
     EntityPool* m_entityPool;
+    QString m_dir;
     std::vector<EntityConfig> m_configs;
     std::vector<std::unique_ptr<Entity>> m_entities;
     std::unordered_map<QString, int> m_indexById;

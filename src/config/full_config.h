@@ -6,6 +6,7 @@
 
 class FullConfig {
 public:
+    QString path;
     std::vector<EntityConfig> records;
 
     /**
