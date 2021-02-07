@@ -86,5 +86,5 @@ QString EntityPoolBuilder::resolvePath(const QString& path) {
     if (info.isAbsolute())
         return path;
 
-    return m_dir + path;
+    return m_dir + QLatin1Char('/') + path;
 }
