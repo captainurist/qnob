@@ -20,8 +20,15 @@ public:
     QVariantList requireList(const QString& key) const;
     QVariantList requireListOr(const QString& key, const QVariantList& defaultValue) const;
 
-    Entity* requireEntity(const QString& key) const;
     QString requirePath(const QString& key) const;
+
+    Entity* requireEntity(const QString& key) const;
+
+    template<class T>
+    T* requireEntity(const QString& key) const {
+        Entity* result = requireEntity(key);
+        return dynamic_cast<T*>(result); // TODO
+    }
 
 private:
     template<class T>

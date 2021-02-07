@@ -16,14 +16,20 @@ HEADERS += \
     src/config/entity_config.h \
     src/config/full_config.h \
     src/core/entity/entity.h \
+    src/core/entity/entity_creation_context.h \
     src/core/entity/entity_creation_exception.h \
     src/core/entity/entity_factory.h \
     src/core/entity/entity_factory_pool.h \
     src/core/entity/entity_pool.h \
     src/core/entity/entity_pool_builder.h \
-    src/core/entity/entity_resolver.h \
+    src/core/entity/factory_resolver.h \
     src/core/knob/knob.h \
     src/core/knob/volume_knob.h \
+    src/core/osd/osd.h \
+    src/core/osd/osd_factory.h \
+    src/core/osd/osd_window.h \
+    src/core/skin/skin.h \
+    src/core/skin/skin_factory.h \
     src/core/sound/sound.h \
     src/core/sound/sound_factory.h \
     src/core/trigger/trigger.h \
@@ -33,6 +39,7 @@ HEADERS += \
     src/meta/meta_object_extension.h \
     src/meta/meta_method_invoker.h \
     src/platform/platform.h \
+    src/platform/platform_initializer.h \
     src/platform/platform_shortcut_notifier.h \
     src/platform/platform_volume_control.h \
     src/platform/win/com.h \
@@ -46,12 +53,17 @@ HEADERS += \
 
 SOURCES += \
     src/config/full_config.cpp \
-    src/core/entity/entity_factory.cpp \
+    src/core/entity/entity_creation_context.cpp \
     src/core/entity/entity_factory_pool.cpp \
     src/core/entity/entity_pool.cpp \
     src/core/entity/entity_pool_builder.cpp \
     src/core/knob/knob.cpp \
     src/core/knob/volume_knob.cpp \
+    src/core/osd/osd.cpp \
+    src/core/osd/osd_factory.cpp \
+    src/core/osd/osd_window.cpp \
+    src/core/skin/skin.cpp \
+    src/core/skin/skin_factory.cpp \
     src/core/sound/sound.cpp \
     src/core/sound/sound_factory.cpp \
     src/core/trigger/hotkey_trigger.cpp \
@@ -59,6 +71,7 @@ SOURCES += \
     src/meta/bound_meta_call.cpp \
     src/meta/meta_object_extension.cpp \
     src/meta/meta_method_invoker.cpp \
+    src/platform/platform_initializer.cpp \
     src/platform/win/com.cpp \
     src/platform/win/win_error.cpp \
     src/platform/win/win_platform.cpp \
