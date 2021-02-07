@@ -20,7 +20,7 @@ QVariant getValue(const toml::node& node) {
     case toml::node_type::string:
         return QVariant::fromValue<QString>(QString::fromUtf8(node.as_string()->get()));
     case toml::node_type::integer:
-        return QVariant::fromValue<int64_t>(node.as_integer()->get());
+        return QVariant::fromValue<qint64>(node.as_integer()->get());
     case toml::node_type::floating_point:
         return QVariant::fromValue<double>(node.as_floating_point()->get());
     case toml::node_type::boolean:

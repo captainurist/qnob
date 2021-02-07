@@ -17,15 +17,14 @@ public:
     }
 
 protected:
-    template<class T>
-    static T requireData(const EntityConfig& config, const QString& key) {
-        return requireDataInternal<T>(config, key);
-    }
+    static QString requireString(const EntityConfig& config, const QString& key);
+    static QString requireStringOr(const EntityConfig& config, const QString& key, const QString& defaultValue);
+    static qint64 requireInt(const EntityConfig& config, const QString& key);
+    static qint64 requireIntOr(const EntityConfig& config, const QString& key, qint64 defaultValue);
+    static QVariantList requireList(const EntityConfig& config, const QString& key);
+    static QVariantList requireListOr(const EntityConfig& config, const QString& key, const QVariantList& defaultValue);
 
-    template<class T>
-    static T requireDataOr(const EntityConfig& config, const QString& key, const T& defaultValue) {
-        return requireDataInternal<T>(config, key, &defaultValue);
-    }
+    static QString requirePath(const EntityConfig& config, FactoryResolver* resolver, const QString& key);
 
 private:
     template<class T>

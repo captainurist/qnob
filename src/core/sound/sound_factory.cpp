@@ -10,9 +10,9 @@ SoundFactory::SoundFactory():
 {}
 
 Entity* SoundFactory::createEntity(const EntityConfig& config, FactoryResolver* resolver) {
-    QString path = requireData<QString>(config, lit("path"));
+    QString path = requirePath(config, resolver, lit("path"));
 
-    Entity* target = resolver->resolveEntity(requireData<QString>(config, lit("target")));
+    Entity* target = resolver->resolveEntity(requireString(config, lit("target")));
 
     Sound* result = new Sound(config.id, path);
 

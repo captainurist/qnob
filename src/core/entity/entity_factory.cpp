@@ -4,11 +4,44 @@
 
 #include <QtCore/QMetaType>
 #include <QtCore/QVariant>
+#include <QtCore/QFileInfo>
 
 #include <config/entity_config.h>
 #include <util/map_access.h>
 
 #include "entity_creation_exception.h"
+#include "factory_resolver.h"
+
+QString EntityFactory::requireString(const EntityConfig& config, const QString& key) {
+    return requireDataInternal<QString>(config, key);
+}
+
+QString EntityFactory::requireStringOr(const EntityConfig& config, const QString& key, const QString& defaultValue) {
+    return requireDataInternal<QString>(config, key, &defaultValue);
+}
+
+qint64 EntityFactory::requireInt(const EntityConfig& config, const QString& key) {
+    return requireDataInternal<qint64>(config, key);
+}
+
+qint64 EntityFactory::requireIntOr(const EntityConfig& config, const QString& key, qint64 defaultValue) {
+    return requireDataInternal<qint64>(config, key, &defaultValue);
+}
+
+QVariantList EntityFactory::requireList(const EntityConfig& config, const QString& key) {
+    return requireDataInternal<QVariantList>(config, key);
+}
+
+QVariantList EntityFactory::requireListOr(const EntityConfig& config, const QString& key, const QVariantList& defaultValue) {
+    return requireDataInternal<QVariantList>(config, key, &defaultValue);
+}
+
+QString EntityFactory::requirePath(const EntityConfig& config, FactoryResolver* resolver, const QString& key) {
+    QString path = resolver->resolvePath(requireString(config, key));
+    if (!QFileInfo::exists(path))
+        qthrow EntityCreationException(config.id, EntityCreationException::tr("File '%1' doesn't exist.").arg(path));
+    return path;
+}
 
 template<class T>
 static T EntityFactory::requireDataInternal(const EntityConfig& config, const QString& key, const T* defaultValue) {
@@ -36,14 +69,3 @@ static T EntityFactory::requireDataInternal(const EntityConfig& config, const QS
 
     return result.value<T>();
 }
-
-/* We only need a couple instantiations, so here they are. */
-#define EF_INSTANTIATE(TYPE) \
-template TYPE EntityFactory::requireDataInternal<TYPE>(const EntityConfig&, const QString&, const TYPE*);
-
-EF_INSTANTIATE(bool)
-EF_INSTANTIATE(int64_t)
-EF_INSTANTIATE(double)
-EF_INSTANTIATE(QString)
-EF_INSTANTIATE(QVariant)
-EF_INSTANTIATE(QVariantList)
