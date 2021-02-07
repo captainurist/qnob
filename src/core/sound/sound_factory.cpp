@@ -9,12 +9,11 @@ SoundFactory::SoundFactory():
     EntityFactory(lit("sound"))
 {}
 
-Entity* SoundFactory::createEntity(const EntityConfig& config, FactoryResolver* resolver) {
-    QString path = requirePath(config, resolver, lit("path"));
+Entity* SoundFactory::createEntity(const EntityCreationContext& ctx) {
+    QString path = ctx.requirePath(lit("path"));
+    Entity* target = ctx.requireEntity(lit("target"));
 
-    Entity* target = resolver->resolveEntity(requireString(config, lit("target")));
-
-    Sound* result = new Sound(config.id, path);
+    Sound* result = new Sound(ctx.id(), path);
 
     QObject::connect(target, SIGNAL(touched()), result, SLOT(play()));
 

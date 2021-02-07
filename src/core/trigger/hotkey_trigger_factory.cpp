@@ -14,20 +14,20 @@ HotkeyTriggerFactory::HotkeyTriggerFactory() :
     EntityFactory(lit("shortcut"))
 {}
 
-Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, FactoryResolver* resolver) {
-    QString shortcutString = requireString(config, lit("trigger"));
+Entity* HotkeyTriggerFactory::createEntity(const EntityCreationContext& ctx) {
+    QString shortcutString = ctx.requireString(lit("trigger"));
     QKeySequence shortcut = QKeySequence::fromString(shortcutString);
     if (shortcut.isEmpty())
-        qthrow EntityCreationException(config.id, EntityCreationException::tr("String '%1' does not define a valid key sequence.").arg(shortcutString));
+        qthrow EntityCreationException(ctx.id(), EntityCreationException::tr("String '%1' does not define a valid key sequence.").arg(shortcutString));
 
-    Entity* target = resolver->resolveEntity(requireString(config, lit("target")));
-    QString action = requireString(config, lit("action"));
-    QVariantList args = requireListOr(config, lit("args"), QVariantList());
+    Entity* target = ctx.requireEntity(lit("target"));
+    QString action = ctx.requireString(lit("action"));
+    QVariantList args = ctx.requireListOr(lit("args"), QVariantList());
 
     BoundMetaCall call;
     call.bind(target, action.toUtf8(), args);
 
-    HotkeyTrigger* result = new HotkeyTrigger(config.id, shortcut);
+    HotkeyTrigger* result = new HotkeyTrigger(ctx.id(), shortcut);
     QObject::connect(result, &Trigger::triggered, target, [=]() mutable {
         call.invoke();
     });

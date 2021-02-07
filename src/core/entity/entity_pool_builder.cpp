@@ -54,7 +54,7 @@ void EntityPoolBuilder::createEntity(size_t index) {
 
     m_idStack.push_back(config.id);
     m_idsInFlight.insert(config.id);
-    m_entities[index].reset(factory->createEntity(config, this));
+    m_entities[index].reset(factory->createEntity({ &config, this }));
     m_idsInFlight.erase(config.id);
     m_idStack.pop_back();
 }
