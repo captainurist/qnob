@@ -9,6 +9,7 @@
 #include <core/knob/volume_knob.h>
 #include <core/trigger/hotkey_trigger_factory.h>
 #include <core/sound/sound_factory.h>
+#include <core/skin/skin_factory.h>
 
 #include <config/full_config.h>
 
@@ -23,6 +24,7 @@ int main(int argc, char *argv[]) {
     EntityFactoryPool factoryPool;
     factoryPool.registerFactory(new HotkeyTriggerFactory());
     factoryPool.registerFactory(new SoundFactory());
+    factoryPool.registerFactory(new SkinFactory());
 
     EntityPoolBuilder builder(&factoryPool, &pool);
     builder.addEntities(config);
