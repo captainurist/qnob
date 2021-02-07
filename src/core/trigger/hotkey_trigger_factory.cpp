@@ -15,9 +15,10 @@ HotkeyTriggerFactory::HotkeyTriggerFactory() :
 {}
 
 Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, FactoryResolver* resolver) {
-    QKeySequence shortcut = QKeySequence::fromString(requireData<QString>(config, lit("trigger")));
+    QString shortcutString = requireData<QString>(config, lit("trigger"));
+    QKeySequence shortcut = QKeySequence::fromString(shortcutString);
     if (shortcut.isEmpty())
-        qthrow EntityCreationException(config.id, EntityCreationException::tr("TODO"));
+        qthrow EntityCreationException(config.id, EntityCreationException::tr("String '%1' does not define a valid key sequence.").arg(shortcutString));
 
     Entity* target = resolver->resolveEntity(requireData<QString>(config, lit("target")));
     QString action = requireData<QString>(config, lit("action"));
