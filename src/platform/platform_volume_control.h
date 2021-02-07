@@ -13,6 +13,6 @@ public:
     virtual void setMuted(bool muted) = 0;
 
 signals:
-    void volumeChanged(float volume);
+    void stateChanged();
 };
 

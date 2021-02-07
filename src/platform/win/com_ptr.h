@@ -59,6 +59,10 @@ public:
         return m_ptr;
     }
 
+    T* get() const {
+        return m_ptr;
+    }
+
     template<class OtherT>
     ComPtr<OtherT> cast() {
         if (!m_ptr)
@@ -77,6 +81,12 @@ public:
 
         m_ptr->Release();
         m_ptr = nullptr;
+    }
+
+    void reset(T* ptr) {
+        reset();
+
+        m_ptr = ptr;
     }
 
     CLSID staticId() const {
