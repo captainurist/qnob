@@ -1,13 +1,17 @@
 #pragma once
 
 #include <utility> /* For std::swap */
-#include <type_traits>
 
 #include <combaseapi.h>
 
+
+/**
+ * A simple shared pointer for COM objects. Automatically calls `AddRef` / `Release` when needed.
+ *
+ * Note that this pointer can also be used with `IID_PPV_ARGS` macro, just as a normal pointer.
+ */
 template<class T>
 class ComPtr {
-    //static_assert(std::is_base_of_v<IUnknown, T>, "T must be derived from IUnknown."); // TODO
 public:
     ComPtr() {}
 
