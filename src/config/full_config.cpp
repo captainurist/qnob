@@ -69,7 +69,7 @@ FullConfig FullConfig::loadFromTomlFile(const QString& path) {
         for (auto line : *section.second.as_table())
             entity.data[QString::fromUtf8(line.first)] = getValue(line.second);
 
-        entity.type = value(entity.data, QStringLiteral("type")).toString();
+        entity.type = value(entity.data, lit("type")).toString();
         if (entity.type.isEmpty())
             qthrow ConfigException(location(section.second), ConfigException::tr("Type is not specified for section '%1'.").arg(entity.id));
 

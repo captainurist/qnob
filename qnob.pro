@@ -9,6 +9,8 @@ DEFINES += QT_NO_CAST_FROM_ASCII
 DEFINES += QT_NO_CAST_TO_ASCII
 DEFINES += QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
 
+DEFINES += lit=QStringLiteral
+
 HEADERS += \
     src/config/config_exception.h \
     src/config/entity_config.h \

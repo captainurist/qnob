@@ -3,7 +3,7 @@
 #include <platform/platform.h>
 
 VolumeKnob::VolumeKnob() :
-    Knob(QStringLiteral("volume"))
+    Knob(lit("volume"))
 {
     m_volumeControl = qPlatform()->volumeControl();
 }

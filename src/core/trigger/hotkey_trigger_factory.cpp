@@ -11,17 +11,17 @@
 #include "hotkey_trigger.h"
 
 HotkeyTriggerFactory::HotkeyTriggerFactory() :
-    EntityFactory(QStringLiteral("shortcut"))
+    EntityFactory(lit("shortcut"))
 {}
 
 Entity* HotkeyTriggerFactory::createEntity(const EntityConfig& config, EntityResolver* resolver) {
-    QKeySequence shortcut = QKeySequence::fromString(requireData<QString>(config, QStringLiteral("trigger")));
+    QKeySequence shortcut = QKeySequence::fromString(requireData<QString>(config, lit("trigger")));
     if (shortcut.isEmpty())
         qthrow EntityCreationException(config.id, EntityCreationException::tr("TODO"));
 
-    Entity* target = resolver->resolveEntity(requireData<QString>(config, QStringLiteral("target")));
-    QString action = requireData<QString>(config, QStringLiteral("action"));
-    QVariantList args = requireDataOr<QVariantList>(config, QStringLiteral("args"), QVariantList());
+    Entity* target = resolver->resolveEntity(requireData<QString>(config, lit("target")));
+    QString action = requireData<QString>(config, lit("action"));
+    QVariantList args = requireDataOr<QVariantList>(config, lit("args"), QVariantList());
 
     BoundMetaCall call;
     call.bind(target, action.toUtf8(), args);
