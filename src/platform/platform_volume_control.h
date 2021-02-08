@@ -13,6 +13,9 @@ public:
     virtual void setMuted(bool muted) = 0;
 
 signals:
-    void stateChanged();
+    /**
+     * Emitted whenever volume control state is changed externally.
+     */
+    void notificationReceived();
 };
 

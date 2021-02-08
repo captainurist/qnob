@@ -4,62 +4,20 @@
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
 
-#include <algorithm>
+#include <algorithm> /* For std::clamp. */
 
 #include "com_ptr.h"
+#include "win_volume_event_handler.h"
 
 static const GUID GUID_QnobAudioEvent = {0x3bd43a3e, 0xd585, 0x4354, {0xcb, 0xf3, 0x55, 0xba, 0x11, 0xfc, 0x84, 0x12}};
 static const CLSID CLSID_MMDeviceEnumerator = {0xBCDE0395, 0xE52F, 0x467C, {0x8E, 0x3D, 0xC4, 0x57, 0x92, 0x91, 0x69, 0x2E}};
 
-class WinVolumeHandler : public IAudioEndpointVolumeCallback {
-public:
-    WinVolumeHandler(WinVolumeControl* owner) :
-        m_owner(owner),
-        m_refCount(1)
-    {}
-
-    IFACEMETHODIMP QueryInterface(REFIID iid, void** object) override {
-        if (iid == __uuidof(IUnknown)) {
-            *object = static_cast<IUnknown*>(this);
-        } else if (iid == __uuidof(IAudioEndpointVolumeCallback)) {
-            *object = static_cast<IAudioEndpointVolumeCallback*>(this);
-        } else {
-            *object = nullptr;
-            return E_NOINTERFACE;
-        }
-
-        AddRef();
-        return S_OK;
-    }
-
-    IFACEMETHODIMP_(ULONG) AddRef() override {
-        return InterlockedIncrement(&m_refCount);
-    }
-
-    IFACEMETHODIMP_(ULONG) Release() override {
-        ULONG result = InterlockedDecrement(&m_refCount);
-        if (result == 0)
-            delete this;
-        return result;
-    }
-
-    IFACEMETHODIMP OnNotify(PAUDIO_VOLUME_NOTIFICATION_DATA data) override {
-        if (data->guidEventContext == GUID_QnobAudioEvent)
-            return S_OK; /* Our own event got back to us. */
-
-        emit m_owner->stateChanged();
-
-        return S_OK;
-    }
-
-private:
-    WinVolumeControl* m_owner;
-    ULONG m_refCount;
-};
-
-
-WinVolumeControl::WinVolumeControl() {
-    m_handler.reset(new WinVolumeHandler(this));
+WinVolumeControl::WinVolumeControl():
+    m_eventHandler(new WinVolumeEventHandler(GUID_QnobAudioEvent))
+{
+    /* Event handler will emit this one from another thread, so to make things simpler we just pass the event
+     * through the event loop. */
+    connect(m_eventHandler.get(), &WinVolumeEventHandler::notificationReceived, this, &WinVolumeControl::notificationReceived);
 
     if (!SUCCEEDED(CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_enumerator))))
         return;
@@ -70,11 +28,11 @@ WinVolumeControl::WinVolumeControl() {
     if (!SUCCEEDED(m_defaultDevice->Activate(m_volumeControl.staticId(), CLSCTX_INPROC_SERVER, nullptr, m_volumeControl.mutableVoidPtr())))
         return;
 
-    m_volumeControl->RegisterControlChangeNotify(m_handler.get());
+    m_volumeControl->RegisterControlChangeNotify(m_eventHandler.get());
 }
 
 WinVolumeControl::~WinVolumeControl() {
-    // TODO: clean up, owner = nullptr
+    // TODO: unregister everything
 }
 
 float WinVolumeControl::volume() const {

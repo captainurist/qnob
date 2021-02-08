@@ -7,7 +7,7 @@
 struct IMMDeviceEnumerator;
 struct IMMDevice;
 struct IAudioEndpointVolume;
-class WinVolumeHandler;
+class WinVolumeEventHandler;
 
 class WinVolumeControl: public PlatformVolumeControl {
 public:
@@ -23,6 +23,6 @@ private:
     ComPtr<IMMDeviceEnumerator> m_enumerator;
     ComPtr<IMMDevice> m_defaultDevice;
     ComPtr<IAudioEndpointVolume> m_volumeControl;
-    ComPtr<WinVolumeHandler> m_handler;
+    ComPtr<WinVolumeEventHandler> m_eventHandler;
 };
 
