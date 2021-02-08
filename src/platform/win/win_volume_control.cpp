@@ -32,7 +32,8 @@ WinVolumeControl::WinVolumeControl():
 }
 
 WinVolumeControl::~WinVolumeControl() {
-    // TODO: unregister everything
+    if (m_volumeControl)
+        m_volumeControl->UnregisterControlChangeNotify(m_eventHandler.get());
 }
 
 float WinVolumeControl::volume() const {
