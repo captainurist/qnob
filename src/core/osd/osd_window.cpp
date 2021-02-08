@@ -4,12 +4,14 @@
 #include <QtCore/QDebug>
 
 OsdWindow::OsdWindow() {
-    setGeometry(100, 100, 300, 200);
     setFlag(Qt::WindowStaysOnTopHint);
     setFlag(Qt::FramelessWindowHint);
     setFlag(Qt::WindowTransparentForInput);
     setFlag(Qt::Tool);
-    setOpacity(0.5);
+
+    QSurfaceFormat format;
+    format.setAlphaBufferSize(8);
+    setFormat(format);
 }
 
 void OsdWindow::setPicture(const DeferredPicture& picture) {
@@ -23,6 +25,11 @@ const DeferredPicture& OsdWindow::picture() const {
 
 void OsdWindow::paintEvent(QPaintEvent* paintEvent) {
     QPainter painter(this);
+
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.fillRect(QRect(QPoint(), size()), Qt::transparent);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
     m_picture.play(&painter);
     painter.end();
 }

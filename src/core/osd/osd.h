@@ -5,6 +5,7 @@
 #include <core/entity/entity.h>
 
 class OsdWindow;
+class OsdFsm;
 class DeferredPicture;
 
 class Osd : public Entity {
@@ -15,12 +16,16 @@ public:
     void show(int showMs, int fadeMs);
     void hide();
 
+    QSize size() const;
     void resize(QSize size);
-    void move(QPoint point);
+
+    QPoint position() const;
+    void setPosition(QPoint point);
 
     void update(const DeferredPicture& picture);
 
 private:
     std::unique_ptr<OsdWindow> m_window;
+    std::unique_ptr<OsdFsm> m_fsm;
 };
 

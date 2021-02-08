@@ -20,9 +20,12 @@ Entity* OsdFactory::createEntity(const EntityCreationContext& ctx) {
     Skin* skin = ctx.requireEntity<Skin>(lit("skin"));
 
     Osd* result = new Osd(ctx.id());
+    result->resize(skin->size());
+    //result->setPosition()
 
-    QObject::connect(knob, &Knob::touched, result, [=] {
-        result->update(skin->picture({ knob->enabled(), knob->value() }));
+    QObject::connect(knob, &Knob::activated, result, [=] {
+        result->update(skin->picture(knob->state()));
+        result->show(500, 500);
     });
 
     return result;

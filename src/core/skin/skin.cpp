@@ -24,6 +24,10 @@ DeferredPicture Skin::picture(const KnobState& state) const {
     return [=](QPainter* painter) {
         if (state.enabled) {
             painter->drawPixmap(0, 0, m_data.background);
+
+            QRect sourceRect(0, 0, m_data.progress.width() * state.value, m_data.progress.height());
+            if (sourceRect.width() > 0)
+                painter->drawPixmap(m_data.offset, m_data.progress, sourceRect);
         } else {
             painter->drawPixmap(0, 0, m_data.disabled);
         }
