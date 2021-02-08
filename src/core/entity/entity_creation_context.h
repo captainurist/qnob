@@ -26,13 +26,17 @@ public:
 
     template<class T>
     T* requireEntity(const QString& key) const {
-        Entity* result = requireEntity(key);
-        return dynamic_cast<T*>(result); // TODO
+        T* result = dynamic_cast<T*>(requireEntity(key));
+        if (!result)
+            throwBadEntityCast(key, QMetaType::fromType<T>());
+        return result;
     }
 
 private:
     template<class T>
     T requireDataInternal(const QString& key, const T* defaultValue = nullptr) const;
+
+    [[noreturn]] void throwBadEntityCast(const QString& key, const QMetaType& type) const;
 
 private:
     const EntityConfig* m_config;

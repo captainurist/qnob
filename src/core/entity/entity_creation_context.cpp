@@ -77,3 +77,10 @@ T EntityCreationContext::requireDataInternal(const QString& key, const T* defaul
 
     return result.value<T>();
 }
+
+void EntityCreationContext::throwBadEntityCast(const QString& key, const QMetaType& type) const {
+    qthrow EntityCreationException(
+        id(),
+        EntityCreationException::tr("Invalid type of '%1' entity - expected '%2'.").arg(key).arg(QLatin1String(type.name()))
+    );
+}
