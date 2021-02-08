@@ -9,6 +9,7 @@
 #include <QtGui/QWindow>
 
 #include <platform/platform_shortcut_notifier.h>
+#include <util/map_access.h>
 
 #include "win_error.h"
 
@@ -374,7 +375,7 @@ void WinShortcutDispatcher::dispatchEvent(void* message) {
     MSG* msg = static_cast<MSG*>(message);
     assert(msg->message == WM_HOTKEY);
 
-    WinShortcutNotifier* notifier = m_notifierById.value(msg->wParam);
+    WinShortcutNotifier* notifier = value(m_notifierById, msg->wParam);
     if (!notifier) {
         qWarning() << "Received hotkey message w/o notifier, lParam = " << msg->lParam << ", wParam = " << msg->wParam;
         return;
@@ -387,7 +388,7 @@ void WinShortcutDispatcher::removeShortcutNotifier(int id) {
     if(!UnregisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), id))
         qWarning() << "UnregisterHotKey failed:" << GetLastErrorAsString();
 
-    m_notifierById.remove(id);
+    m_notifierById.erase(id);
 }
 
 void WinShortcutDispatcher::convertToNativeKey(Qt::Key key, Qt::KeyboardModifiers mods, quint32* outKey, quint32* outMods) const {
@@ -405,7 +406,7 @@ void WinShortcutDispatcher::convertToNativeKey(Qt::Key key, Qt::KeyboardModifier
     if (mods & Qt::KeypadModifier)
         qtKey |= Qt::KeypadModifier;
 
-    *outKey = m_winKeyByQtKey.value(qtKey, 0);
+    *outKey = value(m_winKeyByQtKey, qtKey, 0);
     *outMods = winMods;
 }
 

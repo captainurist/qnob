@@ -1,12 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <unordered_map>
+
 #include <QtCore/QObject>
-#include <QtCore/QHash>
-#include <QtCore/QScopedPointer>
 #include <QtGui/QKeySequence>
 
 class PlatformShortcutNotifier;
 class WinShortcutEventHandler;
+class WinShortcutNotifier;
 
 class WinShortcutDispatcher: public QObject {
     Q_OBJECT;
@@ -25,8 +27,8 @@ private:
     void convertToNativeKey(Qt::Key key, Qt::KeyboardModifiers mods, quint32* outKey, quint32* outMods) const;
 
 private:
-    QHash<quint32, quint32> m_winKeyByQtKey;
-    QScopedPointer<WinShortcutEventHandler> m_eventHandler;
-    QHash<int, WinShortcutNotifier*> m_notifierById;
+    std::unordered_map<quint32, quint32> m_winKeyByQtKey;
+    std::unique_ptr<WinShortcutEventHandler> m_eventHandler;
+    std::unordered_map<int, WinShortcutNotifier*> m_notifierById;
     int m_nextId = 1;
 };

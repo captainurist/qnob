@@ -1,8 +1,8 @@
 #pragma once
 
-#include <platform/platform.h>
+#include <memory>
 
-#include <QtCore/QScopedPointer>
+#include <platform/platform.h>
 
 class Com;
 class WinVolumeControl;
@@ -17,8 +17,8 @@ public:
     virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const override;
 
 private:
-    QScopedPointer<Com> m_com;
-    QScopedPointer<WinVolumeControl> m_volumeControl;
-    QScopedPointer<WinShortcutDispatcher> m_shortcutDispatcher;
+    std::unique_ptr<Com> m_com;
+    std::unique_ptr<WinVolumeControl> m_volumeControl;
+    std::unique_ptr<WinShortcutDispatcher> m_shortcutDispatcher;
 };
 
