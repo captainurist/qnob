@@ -6,7 +6,8 @@
 #include <core/entity/entity_pool.h>
 #include <core/entity/entity_pool_builder.h>
 
-#include <core/knob/volume_knob.h>
+#include <core/knob/knob.h>
+#include <core/knob/volume_shaft.h>
 #include <core/trigger/hotkey_trigger_factory.h>
 #include <core/sound/sound_factory.h>
 #include <core/skin/skin_factory.h>
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
     FullConfig config = FullConfig::loadFromTomlFile(QLatin1String("qnob.toml"));
 
     EntityPool pool;
-    pool.addEntity(new VolumeKnob());
+    pool.addEntity(new Knob(lit("volume"), new VolumeShaft()));
 
     EntityFactoryPool factoryPool;
     factoryPool.registerFactory(new HotkeyTriggerFactory());
