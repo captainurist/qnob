@@ -49,9 +49,11 @@
     <ClInclude Include="src\core\entity\factory_resolver.h" />
     <ClInclude Include="src\core\knob\knob.h" />
     <ClInclude Include="src\core\knob\knob_state.h" />
-    <ClInclude Include="src\core\knob\volume_knob.h" />
+    <ClInclude Include="src\core\knob\shaft.h" />
+    <ClInclude Include="src\core\knob\volume_shaft.h" />
     <ClInclude Include="src\core\osd\osd.h" />
     <ClInclude Include="src\core\osd\osd_factory.h" />
+    <ClInclude Include="src\core\osd\osd_fsm.h" />
     <ClInclude Include="src\core\osd\osd_window.h" />
     <ClInclude Include="src\core\skin\skin.h" />
     <ClInclude Include="src\core\skin\skin_factory.h" />
@@ -73,6 +75,7 @@
     <ClInclude Include="src\core\trigger\hotkey_trigger_factory.h" />
     <ClInclude Include="src\core\trigger\trigger.h" />
     <ClInclude Include="src\meta\bound_meta_call.h" />
+    <ClInclude Include="src\platform\win\win_volume_event_handler.h" />
     <ClInclude Include="src\util\debug.h" />
     <ClInclude Include="src\util\deferred_picture.h" />
     <ClInclude Include="src\util\exception.h" />
@@ -89,9 +92,10 @@
     <ClCompile Include="src\core\entity\entity_pool.cpp" />
     <ClCompile Include="src\core\entity\entity_pool_builder.cpp" />
     <ClCompile Include="src\core\knob\knob.cpp" />
-    <ClCompile Include="src\core\knob\volume_knob.cpp" />
+    <ClCompile Include="src\core\knob\volume_shaft.cpp" />
     <ClCompile Include="src\core\osd\osd.cpp" />
     <ClCompile Include="src\core\osd\osd_factory.cpp" />
+    <ClCompile Include="src\core\osd\osd_fsm.cpp" />
     <ClCompile Include="src\core\osd\osd_window.cpp" />
     <ClCompile Include="src\core\skin\skin.cpp" />
     <ClCompile Include="src\core\skin\skin_factory.cpp" />
@@ -107,6 +111,7 @@
     <ClCompile Include="src\core\trigger\hotkey_trigger.cpp" />
     <ClCompile Include="src\core\trigger\hotkey_trigger_factory.cpp" />
     <ClCompile Include="src\meta\bound_meta_call.cpp" />
+    <ClCompile Include="src\platform\win\win_volume_event_handler.cpp" />
     <ClCompile Include="src\util\debug.cpp" />
     <ClCompile Include="src\meta\meta_method_invoker.cpp" />
     <ClCompile Include="src\meta\meta_object_extension.cpp" />

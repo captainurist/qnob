@@ -24,8 +24,10 @@ HEADERS += \
     src/core/entity/entity_pool_builder.h \
     src/core/entity/factory_resolver.h \
     src/core/knob/knob.h \
-    src/core/knob/volume_knob.h \
+    src/core/knob/shaft.h \
+    src/core/knob/volume_shaft.h \
     src/core/osd/osd.h \
+    src/core/osd/osd_fsm.h \
     src/core/osd/osd_factory.h \
     src/core/osd/osd_window.h \
     src/core/skin/skin.h \
@@ -48,6 +50,7 @@ HEADERS += \
     src/platform/win/win_platform.h \
     src/platform/win/win_shortcut_dispatcher.h \
     src/platform/win/win_volume_control.h \
+    src/platform/win/win_volume_event_handler.h \
     src/util/debug.h \
 
 
@@ -58,9 +61,10 @@ SOURCES += \
     src/core/entity/entity_pool.cpp \
     src/core/entity/entity_pool_builder.cpp \
     src/core/knob/knob.cpp \
-    src/core/knob/volume_knob.cpp \
+    src/core/knob/volume_shaft.cpp \
     src/core/osd/osd.cpp \
     src/core/osd/osd_factory.cpp \
+    src/core/osd/osd_fsm.cpp \
     src/core/osd/osd_window.cpp \
     src/core/skin/skin.cpp \
     src/core/skin/skin_factory.cpp \
@@ -77,6 +81,7 @@ SOURCES += \
     src/platform/win/win_platform.cpp \
     src/platform/win/win_shortcut_dispatcher.cpp \
     src/platform/win/win_volume_control.cpp \
+    src/platform/win/win_volume_event_handler.cpp \
     src/util/debug.cpp \
     src/main.cpp \
 
