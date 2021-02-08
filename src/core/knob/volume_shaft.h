@@ -1,16 +1,14 @@
 #pragma once
 
-#include "knob.h"
-
-#include <QtCore/QScopedPointer>
+#include "shaft.h"
 
 class PlatformVolumeControl;
 
-class VolumeKnob : public Knob {
+class VolumeShaft : public Shaft {
     Q_OBJECT
 public:
-    VolumeKnob();
-    virtual ~VolumeKnob();
+    VolumeShaft();
+    virtual ~VolumeShaft();
 
     virtual double value() const override;
     virtual void setValue(double value) override;
