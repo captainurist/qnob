@@ -5,6 +5,7 @@
 #include <QtCore/QDebug>
 #include <QtGui/QPainter>
 #include <QtGui/QRasterWindow>
+#include <QtGui/QScreen>
 
 #include "osd_window.h"
 #include "osd_fsm.h"
@@ -34,17 +35,62 @@ QSize Osd::size() const {
 }
 
 void Osd::resize(QSize size) {
+    if (size == m_window->size())
+        return;
+
     m_window->resize(size);
+    updatePosition();
 }
 
-QPoint Osd::position() const {
-    return m_window->position();
+Qt::Alignment Osd::alignment() const {
+    return m_alignment;
 }
 
-void Osd::setPosition(QPoint point) {
-    m_window->setPosition(point);
+void Osd::setAlignment(Qt::Alignment alignment) {
+    if (m_alignment == alignment)
+        return;
+
+    m_alignment = alignment;
+    updatePosition();
+}
+
+QPoint Osd::offset() const {
+    return m_offset;
+}
+
+void Osd::setOffset(const QPoint& offset) {
+    if (m_offset == offset)
+        return;
+
+    m_offset = offset;
+    updatePosition();
 }
 
 void Osd::update(const DeferredPicture& picture) {
     m_window->setPicture(picture);
+}
+
+void Osd::updatePosition() {
+    QSize screenSize = m_window->screen()->size();
+    QSize windowSize = m_window->size();
+
+    QPoint position;
+
+    if (m_alignment & Qt::AlignLeft) {
+        position.setX(0);
+    } else if (m_alignment & Qt::AlignRight) {
+        position.setX(screenSize.width() - windowSize.width());
+    } else {
+        position.setX((screenSize.width() - windowSize.width()) / 2);
+    }
+
+    if (m_alignment & Qt::AlignTop) {
+        position.setY(0);
+    } else if (m_alignment & Qt::AlignBottom) {
+        position.setY(screenSize.height() - windowSize.height());
+    } else {
+        position.setY((screenSize.height() - windowSize.height()) / 2);
+    }
+
+    m_window->setPosition(position + m_offset);
 }

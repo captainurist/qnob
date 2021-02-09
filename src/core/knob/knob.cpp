@@ -18,8 +18,12 @@ KnobState Knob::state() const {
     result.enabled = m_shaft->enabled();
     result.value = m_shaft->value();
 
-    if (result.value == 0.0)
+    if (result.value < 0.001) {
         result.enabled = false;
+        result.value = 0.0;
+    } else if (result.value > 0.999) {
+        result.value = 1.0;
+    }
 
     return result;
 }

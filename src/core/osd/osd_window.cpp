@@ -12,6 +12,8 @@ OsdWindow::OsdWindow() {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
     setFormat(format);
+
+    resize(0, 0);
 }
 
 void OsdWindow::setPicture(const DeferredPicture& picture) {
@@ -23,7 +25,7 @@ const DeferredPicture& OsdWindow::picture() const {
     return m_picture;
 }
 
-void OsdWindow::paintEvent(QPaintEvent* paintEvent) {
+void OsdWindow::paintEvent(QPaintEvent* /*paintEvent*/) {
     QPainter painter(this);
 
     painter.setCompositionMode(QPainter::CompositionMode_Source);

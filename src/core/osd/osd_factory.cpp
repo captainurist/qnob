@@ -21,7 +21,8 @@ Entity* OsdFactory::createEntity(const EntityCreationContext& ctx) {
 
     Osd* result = new Osd(ctx.id());
     result->resize(skin->size());
-    //result->setPosition()
+    result->setAlignment(Qt::AlignBottom);
+    result->setOffset({ 0, -100 });
 
     QObject::connect(knob, &Knob::activated, result, [=] {
         result->update(skin->picture(knob->state()));
