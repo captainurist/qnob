@@ -20,6 +20,10 @@ public:
     virtual void setMuted(bool muted) override;
 
 private:
+    void initializeDefaultDevice();
+    void deinitializeDefaultDevice();
+
+private:
     ComPtr<IMMDeviceEnumerator> m_enumerator;
     ComPtr<IMMDevice> m_defaultDevice;
     ComPtr<IAudioEndpointVolume> m_volumeControl;

@@ -17,9 +17,29 @@ WinVolumeControl::WinVolumeControl():
 {
     /* Event handler will emit this one from another thread, so to make things simpler we just pass the event
      * through the event loop. */
-    connect(m_eventHandler.get(), &WinVolumeEventHandler::notificationReceived, this, &WinVolumeControl::notificationReceived);
+    connect(m_eventHandler.get(), &WinVolumeEventHandler::volumeChangedExternally, this, &WinVolumeControl::notificationReceived);
+    connect(m_eventHandler.get(), &WinVolumeEventHandler::defaultDeviceChanged, this, [&] {
+        deinitializeDefaultDevice();
+        initializeDefaultDevice();
+    });
 
     if (!SUCCEEDED(CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_enumerator))))
+        return;
+
+    m_enumerator->RegisterEndpointNotificationCallback(m_eventHandler.get());
+
+    initializeDefaultDevice();
+}
+
+WinVolumeControl::~WinVolumeControl() {
+    if (m_enumerator)
+        m_enumerator->UnregisterEndpointNotificationCallback(m_eventHandler.get());
+
+    deinitializeDefaultDevice();
+}
+
+void WinVolumeControl::initializeDefaultDevice() {
+    if (!m_enumerator)
         return;
 
     if (!SUCCEEDED(m_enumerator->GetDefaultAudioEndpoint(eRender, eMultimedia, m_defaultDevice.mutablePtr())))
@@ -31,10 +51,11 @@ WinVolumeControl::WinVolumeControl():
     m_volumeControl->RegisterControlChangeNotify(m_eventHandler.get());
 }
 
-WinVolumeControl::~WinVolumeControl() {
+void WinVolumeControl::deinitializeDefaultDevice() {
     if (m_volumeControl)
         m_volumeControl->UnregisterControlChangeNotify(m_eventHandler.get());
 }
+
 
 float WinVolumeControl::volume() const {
     if (!m_volumeControl)
