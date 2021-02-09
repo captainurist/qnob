@@ -3,6 +3,8 @@
 #include <QtCore/QObject>
 
 class QVariantAnimation;
+class QPauseAnimation;
+class QSequentialAnimationGroup;
 
 class OsdFsm : public QObject {
     Q_OBJECT
@@ -22,7 +24,8 @@ signals:
 
 private:
     double m_value = 0.0;
-    QVariantAnimation* m_showAnimation;
+    QPauseAnimation* m_waitAnimation;
     QVariantAnimation* m_fadeAnimation;
+    QSequentialAnimationGroup* m_groupAnimation;
 };
 

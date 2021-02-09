@@ -2,44 +2,45 @@
 
 #include <QtCore/QTimerEvent>
 #include <QtCore/QVariantAnimation>
+#include <QtCore/QPauseAnimation>
+#include <QtCore/QSequentialAnimationGroup>
 
 OsdFsm::OsdFsm() {
-    auto setVariantValue = [&](const QVariant& value) {
-        setValue(value.toDouble());
-    };
-
-    m_showAnimation = new QVariantAnimation(this);
-    m_showAnimation->setStartValue(1.0);
-    m_showAnimation->setEndValue(1.0);
-    connect(m_showAnimation, &QVariantAnimation::valueChanged, this, setVariantValue);
+    m_waitAnimation = new QPauseAnimation(this);
 
     m_fadeAnimation = new QVariantAnimation(this);
     m_fadeAnimation->setStartValue(1.0);
     m_fadeAnimation->setEndValue(0.0);
-    connect(m_fadeAnimation, &QVariantAnimation::valueChanged, this, setVariantValue);
-    connect(m_fadeAnimation, &QAbstractAnimation::finished, this, &OsdFsm::finished);
+    connect(m_fadeAnimation, &QVariantAnimation::valueChanged, this, [&](const QVariant& value) {
+        setValue(value.toDouble());
+    });
 
-    connect(m_showAnimation, &QAbstractAnimation::finished, m_fadeAnimation, [&] { m_fadeAnimation->start(); });
+    m_groupAnimation = new QSequentialAnimationGroup(this);
+    m_groupAnimation->addAnimation(m_waitAnimation);
+    m_groupAnimation->addAnimation(m_fadeAnimation);
+    connect(m_groupAnimation, &QAbstractAnimation::finished, this, &OsdFsm::finished);
 }
 
 void OsdFsm::start(int waitMs, int fadeMs) {
-    if(m_showAnimation->state() == QAbstractAnimation::Stopped && m_fadeAnimation->state() == QAbstractAnimation::Stopped)
+    if(m_groupAnimation->state() == QAbstractAnimation::Stopped)
         emit started();
 
-    m_showAnimation->stop();
-    m_fadeAnimation->stop();
+    m_groupAnimation->stop();
     setValue(1.0);
 
-    m_showAnimation->setDuration(waitMs);
+    m_waitAnimation->setDuration(waitMs);
     m_fadeAnimation->setDuration(fadeMs);
-
-    m_showAnimation->start();
+    m_groupAnimation->start();
 }
 
 void OsdFsm::stop() {
-    m_showAnimation->stop();
-    m_fadeAnimation->stop();
+    if (m_groupAnimation->state() == QAbstractAnimation::Stopped)
+        return;
+
+    m_groupAnimation->stop();
     setValue(0.0);
+
+    emit finished();
 }
 
 double OsdFsm::value() const {
