@@ -5,14 +5,14 @@
 #include <core/knob/knob_state.h>
 #include <util/deferred_picture.h>
 
-#include <QtGui/QPicture>
+#include "skin_data.h"
 
 Skin::Skin(const QString& id, const SkinData& data) :
     Entity(id),
-    m_data(data)
+    m_data(new SkinData(data))
 {
-    m_size.setWidth(std::max(m_data.background.width(), m_data.disabled.width()));
-    m_size.setHeight(std::max(m_data.background.height(), m_data.disabled.height()));
+    m_size.setWidth(std::max(m_data->background.width(), m_data->disabled.width()));
+    m_size.setHeight(std::max(m_data->background.height(), m_data->disabled.height()));
 }
 
 QSize Skin::size() const {
@@ -20,16 +20,15 @@ QSize Skin::size() const {
 }
 
 DeferredPicture Skin::picture(const KnobState& state) const {
-    // TODO: `this` is still by ref? uuuh
-    return [=](QPainter* painter) {
+    return [data=m_data, state](QPainter* painter) {
         if (state.enabled) {
-            painter->drawPixmap(0, 0, m_data.background);
+            painter->drawPixmap(0, 0, data->background);
 
-            QRect sourceRect(0, 0, m_data.progress.width() * state.value, m_data.progress.height());
+            QRect sourceRect(0, 0, data->progress.width() * state.value, data->progress.height());
             if (sourceRect.width() > 0)
-                painter->drawPixmap(m_data.offset, m_data.progress, sourceRect);
+                painter->drawPixmap(data->offset, data->progress, sourceRect);
         } else {
-            painter->drawPixmap(0, 0, m_data.disabled);
+            painter->drawPixmap(0, 0, data->disabled);
         }
     };
 }

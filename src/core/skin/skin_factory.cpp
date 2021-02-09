@@ -5,6 +5,7 @@
 #include <core/entity/entity_creation_exception.h>
 
 #include "skin.h"
+#include "skin_data.h"
 
 SkinFactory::SkinFactory():
     EntityFactory(lit("skin"))

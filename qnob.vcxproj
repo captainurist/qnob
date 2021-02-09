@@ -56,6 +56,7 @@
     <ClInclude Include="src\core\osd\osd_fsm.h" />
     <ClInclude Include="src\core\osd\osd_window.h" />
     <ClInclude Include="src\core\skin\skin.h" />
+    <ClInclude Include="src\core\skin\skin_data.h" />
     <ClInclude Include="src\core\skin\skin_factory.h" />
     <ClInclude Include="src\core\sound\sound.h" />
     <ClInclude Include="src\core\sound\sound_factory.h" />
