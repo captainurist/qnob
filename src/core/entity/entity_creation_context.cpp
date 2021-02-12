@@ -5,6 +5,7 @@
 #include <config/entity_config.h>
 #include <core/entity/entity_creation_exception.h>
 #include <core/entity/factory_resolver.h>
+#include <meta/human_readable_name.h>
 #include <util/map_access.h>
 
 EntityCreationContext::EntityCreationContext(const EntityConfig* config, FactoryResolver* resolver):
@@ -70,7 +71,7 @@ T EntityCreationContext::requireDataInternal(const QString& key, const T* defaul
             id(),
             EntityCreationException::tr("Invalid parameter '%1' type - expected '%2', got '%3'.")
                 .arg(key)
-                .arg(QLatin1String(QMetaType::fromType<T>().name()))
+                .arg(humanReadableName<T>())
                 .arg(QLatin1String(result.metaType().name()))
         );
     }
