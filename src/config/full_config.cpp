@@ -62,18 +62,18 @@ FullConfig FullConfig::loadFromTomlFile(const QString& path) {
     FullConfig result;
     result.path = path;
 
-    for (auto section : table) {
-        if (!section.second.is_table())
-            qthrow ConfigException(location(section.second), ConfigException::tr("Values outside of sections are not allowed."));
+    for (auto [id, section] : table) {
+        if (!section.is_table())
+            qthrow ConfigException(location(section), ConfigException::tr("Values outside of sections are not allowed."));
 
         EntityConfig entity;
-        entity.id = QString::fromUtf8(section.first);
-        for (auto line : *section.second.as_table())
-            entity.data[QString::fromUtf8(line.first)] = getValue(line.second);
+        entity.id = QString::fromUtf8(id);
+        for (auto [key, value] : *section.as_table())
+            entity.data[QString::fromUtf8(key)] = getValue(value);
 
         entity.type = value(entity.data, lit("type")).toString();
         if (entity.type.isEmpty())
-            qthrow ConfigException(location(section.second), ConfigException::tr("Type is not specified for section '%1'.").arg(entity.id));
+            qthrow ConfigException(location(section), ConfigException::tr("Type is not specified for section '%1'.").arg(entity.id));
 
         result.records.push_back(entity);
     }
