@@ -2,24 +2,30 @@
 
 [0]
 type = "shortcut"
-trigger = "Ctrl+Shift+1"
+trigger = "Pause"
+target = "volume"
+action = "rotate"
+args = [+0.05]
+
+[1]
+type = "shortcut"
+trigger = "Scroll Lock"
 target = "volume"
 action = "rotate"
 args = [-0.05]
 
-[1]
-type = "shortcut"
-trigger = "Ctrl+Shift+3"
-target = "volume"
-action = "rotate"
-args = [0.05]
-
 [2]
-type = "sound"
+type = "shortcut"
+trigger = "Print Screen"
 target = "volume"
-path = "resource/mac/volume.wav"
+action = "toggle"
 
 [3]
+type = "sound"
+target = "volume"
+path = ":/resource/mac/volume.wav"
+
+[4]
 type = "osd"
 target = "volume"
 skin = "mac_volume"
@@ -29,9 +35,9 @@ offset_y = -100
 
 [mac_volume]
 type = "skin"
-background = "resource/mac/volume.png"
-progress = "resource/mac/meter.png"
-disabled = "resource/mac/mute.png"
+background = ":/resource/mac/volume.png"
+progress = ":/resource/mac/meter.png"
+disabled = ":/resource/mac/mute.png"
 x = 33
 y = 165
 units = 16

@@ -20,24 +20,30 @@
 #include <core/osd/osd_window.h>
 
 int main(int argc, char *argv[]) {
-    QApplication application(argc, argv);
-    QApplication::setQuitOnLastWindowClosed(false);
+    try {
+        QApplication application(argc, argv);
+        QApplication::setQuitOnLastWindowClosed(false);
 
-    PlatformInitializer platform;
+        PlatformInitializer platform;
 
-    FullConfig config = FullConfig::loadFromTomlFile(QLatin1String("qnob.toml"));
+        FullConfig config = FullConfig::loadFromTomlFile(QLatin1String("qnob.toml"));
 
-    EntityPool pool;
-    pool.addEntity(new Knob(lit("volume"), new VolumeShaft()));
+        EntityPool pool;
+        pool.addEntity(new Knob(lit("volume"), new VolumeShaft()));
 
-    EntityFactoryPool factoryPool;
-    factoryPool.registerFactory(new HotkeyTriggerFactory());
-    factoryPool.registerFactory(new SoundFactory());
-    factoryPool.registerFactory(new SkinFactory());
-    factoryPool.registerFactory(new OsdFactory());
+        EntityFactoryPool factoryPool;
+        factoryPool.registerFactory(new HotkeyTriggerFactory());
+        factoryPool.registerFactory(new SoundFactory());
+        factoryPool.registerFactory(new SkinFactory());
+        factoryPool.registerFactory(new OsdFactory());
 
-    EntityPoolBuilder builder(&factoryPool, &pool);
-    builder.addEntities(config);
+        EntityPoolBuilder builder(&factoryPool, &pool);
+        builder.addEntities(config);
 
-    return application.exec();
+        return application.exec();
+    } catch (Exception e) {
+        qCritical() << e.message();
+        return 1;
+    }
+
 }

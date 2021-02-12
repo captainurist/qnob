@@ -1,0 +1,10 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>resource/mac/brightness.png</file>
+    <file>resource/mac/eject.png</file>
+    <file>resource/mac/meter.png</file>
+    <file>resource/mac/mute.png</file>
+    <file>resource/mac/volume.png</file>
+    <file>resource/mac/volume.wav</file>
+</qresource>
+</RCC>

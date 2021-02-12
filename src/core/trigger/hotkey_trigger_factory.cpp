@@ -17,7 +17,7 @@ HotkeyTriggerFactory::HotkeyTriggerFactory() :
 Entity* HotkeyTriggerFactory::createEntity(const EntityCreationContext& ctx) {
     QString shortcutString = ctx.requireString(lit("trigger"));
     QKeySequence shortcut = QKeySequence::fromString(shortcutString);
-    if (shortcut.isEmpty())
+    if (shortcut.isEmpty() || shortcut[0].key() == Qt::Key_unknown)
         qthrow EntityCreationException(ctx.id(), EntityCreationException::tr("String '%1' does not define a valid key sequence.").arg(shortcutString));
 
     Entity* target = ctx.requireEntity(lit("target"));

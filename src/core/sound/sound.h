@@ -10,5 +10,5 @@ public:
     Q_SLOT void play();
 
 private:
-    QString m_path;
+    QByteArray m_data;
 };

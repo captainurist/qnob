@@ -106,6 +106,10 @@ INCLUDEPATH += \
     3rdparty/tomlplusplus/include \
 
 
+RESOURCES += \
+    qnob.qrc \
+
+
 UI_DIR    = src/ui
 MOC_DIR   = bin/temp/moc
 RCC_DIR   = bin/temp/rcc
