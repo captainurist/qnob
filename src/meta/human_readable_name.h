@@ -13,3 +13,8 @@ template<>                                                                      
 QString humanReadableName<TYPE>() {                                                                                     \
     return QLatin1String(NAME);                                                                                         \
 }
+
+/**
+ * Creates a human-readable name from a `type_info` object. Note that this function is not supposed to be fast.
+ */
+QString humanReadableName(const std::type_info& typeInfo);

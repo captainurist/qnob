@@ -17,6 +17,10 @@ const QString& EntityCreationContext::id() const {
     return m_config->id;
 }
 
+bool EntityCreationContext::has(const QString& key) const {
+    return m_config->data.contains(key);
+}
+
 QString EntityCreationContext::requireString(const QString& key) const {
     return requireDataInternal<QString>(key);
 }
@@ -79,9 +83,16 @@ T EntityCreationContext::requireDataInternal(const QString& key, const T* defaul
     return result.value<T>();
 }
 
-void EntityCreationContext::throwBadEntityCast(const QString& key, const QMetaType& type) const {
+void EntityCreationContext::throwBadEntityCast(const QString& key, const std::type_info& typeInfo) const {
     qthrow EntityCreationException(
         id(),
-        EntityCreationException::tr("Invalid type of '%1' entity - expected '%2'.").arg(key).arg(QLatin1String(type.name()))
+        EntityCreationException::tr("Invalid type of '%1' entity - expected '%2'.").arg(key).arg(humanReadableName(typeInfo))
     );
+}
+
+void EntityCreationContext::throwDeserializationError(const QString& key, const Exception& reason) const {
+    qthrow EntityCreationException(
+        id(),
+        reason.message()
+    ); // TODO: chaining!
 }

@@ -21,8 +21,11 @@ path = "resource/mac/volume.wav"
 
 [3]
 type = "osd"
-target = "volume" # type derived from id -- which is a knob!
+target = "volume"
 skin = "mac_volume"
+position = "bottom"
+offset_x = 0
+offset_y = -100
 
 [mac_volume]
 type = "skin"

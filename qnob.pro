@@ -38,6 +38,7 @@ HEADERS += \
     src/core/trigger/hotkey_trigger.h \
     src/core/trigger/hotkey_trigger_factory.h \
     src/meta/bound_meta_call.h \
+    src/meta/human_readable_name.h \
     src/meta/meta_object_extension.h \
     src/meta/meta_method_invoker.h \
     src/platform/platform.h \
@@ -51,7 +52,13 @@ HEADERS += \
     src/platform/win/win_shortcut_dispatcher.h \
     src/platform/win/win_volume_control.h \
     src/platform/win/win_volume_event_handler.h \
+    src/serialization/alignment.h \
+    src/serialization/deserialization_exception.h \
+    src/serialization/enum_serialization.h \
+    src/serialization/serialization_exception.h \
+    src/serialization/serialization_fwd.h \
     src/util/debug.h \
+    src/util/pod_pool.h \
 
 
 SOURCES += \
@@ -73,6 +80,7 @@ SOURCES += \
     src/core/trigger/hotkey_trigger.cpp \
     src/core/trigger/hotkey_trigger_factory.cpp \
     src/meta/bound_meta_call.cpp \
+    src/meta/human_readable_name.cpp \
     src/meta/meta_object_extension.cpp \
     src/meta/meta_method_invoker.cpp \
     src/platform/platform_initializer.cpp \
@@ -82,7 +90,9 @@ SOURCES += \
     src/platform/win/win_shortcut_dispatcher.cpp \
     src/platform/win/win_volume_control.cpp \
     src/platform/win/win_volume_event_handler.cpp \
+    src/serialization/alignment.cpp \
     src/util/debug.cpp \
+    src/util/pod_pool.cpp \
     src/main.cpp \
 
 
