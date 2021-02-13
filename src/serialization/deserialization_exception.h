@@ -2,7 +2,7 @@
 
 #include <typeinfo>
 
-#include <meta/human_readable_name.h>
+#include <util/human_readable_name.h>
 #include <util/exception.h>
 
 class DeserializationException : public Exception {

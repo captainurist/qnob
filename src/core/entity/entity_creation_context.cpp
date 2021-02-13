@@ -5,7 +5,7 @@
 #include <config/entity_config.h>
 #include <core/entity/entity_creation_exception.h>
 #include <core/entity/factory_resolver.h>
-#include <meta/human_readable_name.h>
+#include <util/human_readable_name.h>
 #include <util/map_access.h>
 
 EntityCreationContext::EntityCreationContext(const EntityConfig* config, FactoryResolver* resolver):
@@ -90,9 +90,9 @@ void EntityCreationContext::throwBadEntityCast(const QString& key, const std::ty
     );
 }
 
-void EntityCreationContext::throwDeserializationError(const QString& key, const Exception& reason) const {
+void EntityCreationContext::throwDeserializationError(const QString& key) const {
     qthrow EntityCreationException(
         id(),
-        reason.message()
-    ); // TODO: chaining!
+        EntityCreationException::tr("Invalid parameter '%1' value.").arg(key)
+    );
 }

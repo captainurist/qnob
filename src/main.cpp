@@ -1,5 +1,6 @@
 #include <fstream>
 
+#include <QtCore/QThread>
 #include <QtWidgets/QApplication>
 
 #include <core/entity/entity_factory_pool.h>
@@ -23,6 +24,7 @@ int main(int argc, char *argv[]) {
     try {
         QApplication application(argc, argv);
         QApplication::setQuitOnLastWindowClosed(false);
+        QThread::currentThread()->setObjectName(lit("main"));
 
         PlatformInitializer platform;
 
@@ -41,9 +43,8 @@ int main(int argc, char *argv[]) {
         builder.addEntities(config);
 
         return application.exec();
-    } catch (Exception e) {
-        qCritical() << e.message();
+    } catch (const Exception& e) {
+        qCritical() << e;
         return 1;
     }
-
 }

@@ -44,8 +44,8 @@ public:
         T result;
         try {
             deserialize(string, &result);
-        } catch (const Exception& e) {
-            throwDeserializationError(key, e);
+        } catch (const Exception&) {
+            throwDeserializationError(key); /* Exception will auto-chain! */
         }
         return result;
     }
@@ -62,7 +62,7 @@ private:
     T requireDataInternal(const QString& key, const T* defaultValue = nullptr) const;
 
     [[noreturn]] void throwBadEntityCast(const QString& key, const std::type_info& typeInfo) const;
-    [[noreturn]] void throwDeserializationError(const QString& key, const Exception& reason) const;
+    [[noreturn]] void throwDeserializationError(const QString& key) const;
 
 private:
     const EntityConfig* m_config;

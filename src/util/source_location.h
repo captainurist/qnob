@@ -7,6 +7,14 @@
 
 #include <cstdint>
 
+namespace detail {
+constexpr const char* rootRelativeFilePath(const char* fileName) {
+    const char absoluteCurrentFilePath[] = __FILE__;
+    const char relativeCurrentFilePath[] = "src/util/source_location.h";
+    return fileName + sizeof(absoluteCurrentFilePath) - sizeof(relativeCurrentFilePath);
+}
+}
+
 namespace std {
 
 struct source_location {
@@ -48,6 +56,6 @@ private:
 
 }
 
-#define __LOCATION__ std::source_location(__FILE__, __FUNCTION__, __LINE__, 0)
+#define __LOCATION__ std::source_location(detail::rootRelativeFilePath(__FILE__), __FUNCTION__, __LINE__, 0)
 
 #endif // _MSC_VER

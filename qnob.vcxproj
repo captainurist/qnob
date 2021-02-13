@@ -93,7 +93,7 @@
     <ClInclude Include="src\util\source_location.h" />
     <ClInclude Include="src\util\pod_pool.h" />
     <ClInclude Include="src\util\string_pool.h" />
-    <ClInclude Include="src\meta\human_readable_name.h" />
+    <ClInclude Include="src\util\human_readable_name.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\config\full_config.cpp" />
@@ -112,7 +112,7 @@
     <ClCompile Include="src\core\sound\sound.cpp" />
     <ClCompile Include="src\core\sound\sound_factory.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\meta\human_readable_name.cpp" />
+    <ClCompile Include="src\util\human_readable_name.cpp" />
     <ClCompile Include="src\platform\platform_initializer.cpp" />
     <ClCompile Include="src\platform\win\com.cpp" />
     <ClCompile Include="src\platform\win\win_error.cpp" />
@@ -127,6 +127,7 @@
     <ClCompile Include="src\util\debug.cpp" />
     <ClCompile Include="src\meta\meta_method_invoker.cpp" />
     <ClCompile Include="src\meta\meta_object_extension.cpp" />
+    <ClCompile Include="src\util\exception.cpp" />
     <ClCompile Include="src\util\pod_pool.cpp" />
   </ItemGroup>
   <ItemGroup>
