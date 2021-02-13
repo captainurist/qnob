@@ -41,12 +41,15 @@ HEADERS += \
     src/meta/meta_object_extension.h \
     src/meta/meta_method_invoker.h \
     src/platform/platform.h \
+    src/platform/platform_brightness_control.h \
     src/platform/platform_initializer.h \
     src/platform/platform_shortcut_notifier.h \
     src/platform/platform_volume_control.h \
     src/platform/win/com.h \
     src/platform/win/com_ptr.h \
+    src/platform/win/win_brightness_control.h \
     src/platform/win/win_error.h \
+    src/platform/win/win_physical_monitor.h \
     src/platform/win/win_platform.h \
     src/platform/win/win_shortcut_dispatcher.h \
     src/platform/win/win_volume_control.h \
@@ -85,7 +88,9 @@ SOURCES += \
     src/meta/meta_method_invoker.cpp \
     src/platform/platform_initializer.cpp \
     src/platform/win/com.cpp \
+    src/platform/win/win_brightness_control.cpp \
     src/platform/win/win_error.cpp \
+    src/platform/win/win_physical_monitor.cpp \
     src/platform/win/win_platform.cpp \
     src/platform/win/win_shortcut_dispatcher.cpp \
     src/platform/win/win_volume_control.cpp \
@@ -101,6 +106,7 @@ SOURCES += \
 LIBS += \
     -lole32 \
     -luser32 \
+    -ldxva2 \
 
 
 INCLUDEPATH += \

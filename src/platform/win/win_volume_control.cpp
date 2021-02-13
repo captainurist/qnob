@@ -16,8 +16,7 @@ static const CLSID CLSID_MMDeviceEnumerator = {0xBCDE0395, 0xE52F, 0x467C, {0x8E
 WinVolumeControl::WinVolumeControl():
     m_eventHandler(new WinVolumeEventHandler(GUID_QnobAudioEvent))
 {
-    /* Event handler will emit this one from another thread, so to make things simpler we just pass the event
-     * through the event loop. */
+    /* WinVolumeEventHandler emits these signals from another thread. */
     connect(m_eventHandler.get(), &WinVolumeEventHandler::volumeChangedExternally, this, &WinVolumeControl::notificationReceived);
     connect(m_eventHandler.get(), &WinVolumeEventHandler::defaultDeviceChanged, this, [&] {
         deinitializeDefaultDevice();
