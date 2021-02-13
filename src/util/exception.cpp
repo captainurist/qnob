@@ -9,24 +9,24 @@ static QString currentThreadOutputName() {
     if (QString result = QThread::currentThread()->objectName(); !result.isEmpty())
         return QLatin1Char('\'') + result + QLatin1Char('\'');
 
-    return lit("0x%1").arg(reinterpret_cast<std::intptr_t>(QThread::currentThreadId()), 8, 16, QLatin1Char('0'));
+    return lit("0x%1").arg(reinterpret_cast<std::intptr_t>(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
 }
 
 static void printException(QDebug& stream, const std::exception& e) {
     stream
         << humanReadableName(typeid(e))
-        << " in thread "
-        << currentThreadOutputName()
         << ": "
         << e.what()
         << Qt::endl;
 }
 
-static void printException(QDebug& stream, const Exception& e) {
+static void printException(QDebug& stream, const Exception& e, bool printThread) {
+    stream << humanReadableName(typeid(e));
+
+    if (printThread)
+        stream << " in thread " << currentThreadOutputName();
+
     stream
-        << humanReadableName(typeid(e))
-        << " in thread "
-        << currentThreadOutputName()
         << ": "
         << e.message()
         << Qt::endl;
@@ -47,7 +47,7 @@ static void printException(QDebug& stream, const Exception& e) {
         std::rethrow_exception(e.cause());
     } catch (const Exception& cause) {
         stream << Qt::endl << "Caused by ";
-        printException(stream, cause);
+        printException(stream, cause, false);
     } catch (const std::exception& cause) {
         stream << Qt::endl << "Caused by ";
         printException(stream, cause);
@@ -60,7 +60,7 @@ QDebug&& operator<<(QDebug&& stream, const Exception& e) {
     QDebugStateSaver saver(stream);
     stream.noquote().nospace();
 
-    printException(stream, e);
+    printException(stream, e, true);
 
     return std::forward<QDebug>(stream);
 }
