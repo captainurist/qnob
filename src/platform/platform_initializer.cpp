@@ -6,7 +6,7 @@
 
 static Platform* g_platform = nullptr;
 
-Platform* createPlatform(); /* Defined in platform-specific file. */
+Platform* createPlatform(); /* Defined in a platform-specific source file. */
 
 PlatformInitializer::PlatformInitializer() {
     assert(!g_platform);

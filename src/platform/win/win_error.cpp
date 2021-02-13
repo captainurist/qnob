@@ -2,6 +2,10 @@
 
 #include <Windows.h>
 
+#include <type_traits>
+
+#include <QtCore/QDebug>
+
 QString GetLastErrorAsString() {
     DWORD errorMessageID = GetLastError();
     if (errorMessageID == 0)
@@ -15,5 +19,51 @@ QString GetLastErrorAsString() {
 
     LocalFree(messageBuffer);
 
+    while (result.endsWith(QLatin1Char('\n')) || result.endsWith(QLatin1Char('\r')))
+        result.chop(1);
+
     return result;
 }
+
+static QByteArray extractFunctionName(const char* expr) {
+    QByteArray result = expr;
+
+    qsizetype pos = result.indexOf('(');
+    if (pos == -1)
+        return result;
+    result.resize(pos);
+
+    pos = result.indexOf('>');
+    if (pos == -1)
+        return result;
+    result = result.mid(pos + 1);
+
+    return result;
+}
+
+bool detail::checkAndLog(BOOL result, const char* expr, const std::source_location& location) {
+    if (result)
+        return true;
+
+    QString lastErrorString = GetLastErrorAsString();
+
+    QMessageLogger(location.file_name(), location.line(), location.function_name()).warning().noquote().nospace()
+        << extractFunctionName(expr)
+        << " failed: "
+        << (lastErrorString.isEmpty() ? lit("<unknown error>") : lastErrorString);
+
+    return false;
+}
+
+bool detail::checkAndLog(HRESULT result, const char* expr, const std::source_location& location) {
+    if (SUCCEEDED(result))
+        return true;
+
+    QMessageLogger(location.file_name(), location.line(), location.function_name()).warning().noquote().nospace()
+        << extractFunctionName(expr)
+        << " failed with HRESULT=0x"
+        << lit("%1").arg(static_cast<std::make_unsigned_t<HRESULT>>(result), sizeof(result) * 2, 16, QLatin1Char('0'));
+
+    return false;
+}
+

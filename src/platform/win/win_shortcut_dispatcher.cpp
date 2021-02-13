@@ -346,10 +346,8 @@ WinShortcutDispatcher::WinShortcutDispatcher(QObject* parent): QObject(parent) {
 WinShortcutDispatcher::~WinShortcutDispatcher() {}
 
 PlatformShortcutNotifier* WinShortcutDispatcher::createShortcutNotifier(const QKeySequence& shortcut) {
-    if (shortcut.isEmpty()) {
-        qWarning() << "Creating global shortcut for an empty key sequence.";
+    if (shortcut.isEmpty())
         return nullptr;
-    }
 
     if (shortcut.count() > 1)
         qWarning() << "Creating global shortcut only for the 1st key in sequence" << shortcut;
@@ -360,10 +358,8 @@ PlatformShortcutNotifier* WinShortcutDispatcher::createShortcutNotifier(const QK
     quint32 nativeMods = 0;
     convertToNativeKey(key, mods, &nativeKey, &nativeMods);
 
-    if (!RegisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), m_nextId, nativeMods, nativeKey)) {
-        qWarning() << "RegisterHotKey for" << shortcut << "failed:" << GetLastErrorAsString();
+    if (!succeeded(RegisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), m_nextId, nativeMods, nativeKey)))
         return nullptr;
-    }
 
     WinShortcutNotifier* notifier = new WinShortcutNotifier(this, m_nextId);
     m_notifierById[m_nextId] = notifier;
@@ -385,8 +381,7 @@ void WinShortcutDispatcher::dispatchEvent(void* message) {
 }
 
 void WinShortcutDispatcher::removeShortcutNotifier(int id) {
-    if(!UnregisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), id))
-        qWarning() << "UnregisterHotKey failed:" << GetLastErrorAsString();
+    succeeded(UnregisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), id));
 
     m_notifierById.erase(id);
 }
