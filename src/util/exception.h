@@ -53,6 +53,8 @@ public:
         return m_message;
     }
 
+    // TODO: actually fix all places where message is passed! To comply with the comment above.
+
     /**
      * \returns                         Source location where this exception was thrown from.
      */
