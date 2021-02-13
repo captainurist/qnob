@@ -74,5 +74,5 @@ const MetaObjectExtension* MetaObjectExtension::forObject(QObject* object) {
 }
 
 QMetaMethod MetaObjectExtension::methodByName(const QByteArray& name) const {
-    return value(m_methodByName, name);
+    return value_or(m_methodByName, name);
 }

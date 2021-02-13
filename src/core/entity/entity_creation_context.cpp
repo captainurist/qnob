@@ -66,7 +66,7 @@ T EntityCreationContext::requireDataInternal(const QString& key, const T* defaul
         }
     }
 
-    QVariant result = value(m_config->data, key);
+    QVariant result = value_or(m_config->data, key);
     if constexpr (std::is_same_v<T, QVariant>)
         return result;
 

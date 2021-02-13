@@ -16,7 +16,7 @@ public:
     QString name(const std::type_info& typeInfo) {
         QMutexLocker locker(&m_mutex);
 
-        QString result = value(m_valueByType, typeInfo);
+        QString result = value_or(m_valueByType, typeInfo);
         if (!result.isEmpty())
             return result;
 

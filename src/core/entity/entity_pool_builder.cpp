@@ -66,7 +66,7 @@ Entity* EntityPoolBuilder::resolveEntity(const QString& id) {
     if (Entity* result = m_entityPool->entity(id))
         return result;
 
-    int index = value(m_indexById, id, -1);
+    int index = value_or(m_indexById, id, -1);
     if (index == -1) {
         qthrow EntityCreationException(
             m_idStack.back(),

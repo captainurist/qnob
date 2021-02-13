@@ -375,7 +375,7 @@ void WinShortcutDispatcher::dispatchEvent(void* message) {
     MSG* msg = static_cast<MSG*>(message);
     assert(msg->message == WM_HOTKEY);
 
-    WinShortcutNotifier* notifier = value(m_notifierById, msg->wParam);
+    WinShortcutNotifier* notifier = value_or(m_notifierById, msg->wParam);
     if (!notifier) {
         qWarning() << "Received hotkey message w/o notifier, lParam = " << msg->lParam << ", wParam = " << msg->wParam;
         return;
@@ -406,7 +406,7 @@ void WinShortcutDispatcher::convertToNativeKey(Qt::Key key, Qt::KeyboardModifier
     if (mods & Qt::KeypadModifier)
         qtKey |= Qt::KeypadModifier;
 
-    *outKey = value(m_winKeyByQtKey, qtKey, 0);
+    *outKey = value_or(m_winKeyByQtKey, qtKey, 0);
     *outMods = winMods;
 }
 
