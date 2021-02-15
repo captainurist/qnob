@@ -47,6 +47,7 @@
     <ClInclude Include="src\core\entity\entity_pool_builder.h" />
     <ClInclude Include="src\core\entity\entity_creation_exception.h" />
     <ClInclude Include="src\core\entity\factory_resolver.h" />
+    <ClInclude Include="src\core\knob\brightness_shaft.h" />
     <ClInclude Include="src\core\knob\knob.h" />
     <ClInclude Include="src\core\knob\knob_state.h" />
     <ClInclude Include="src\core\knob\shaft.h" />
@@ -104,6 +105,7 @@
     <ClCompile Include="src\core\entity\entity_factory_pool.cpp" />
     <ClCompile Include="src\core\entity\entity_pool.cpp" />
     <ClCompile Include="src\core\entity\entity_pool_builder.cpp" />
+    <ClCompile Include="src\core\knob\brightness_shaft.cpp" />
     <ClCompile Include="src\core\knob\knob.cpp" />
     <ClCompile Include="src\core\knob\volume_shaft.cpp" />
     <ClCompile Include="src\core\osd\osd.cpp" />

@@ -1,34 +1,56 @@
 # "volume" is a default id!
 
-[0]
+[vol_up]
 type = "shortcut"
 trigger = "Pause"
 target = "volume"
 action = "rotate"
 args = [+0.05]
 
-[1]
+[vol_down]
 type = "shortcut"
 trigger = "Scroll Lock"
 target = "volume"
 action = "rotate"
 args = [-0.05]
 
-[2]
+[mute]
 type = "shortcut"
 trigger = "Print Screen"
 target = "volume"
 action = "toggle"
 
-[3]
+[br_up]
+type = "shortcut"
+trigger = "Ctrl+Shift+Up"
+target = "brightness"
+action = "rotate"
+args = [+0.05]
+
+[br_down]
+type = "shortcut"
+trigger = "Ctrl+Shift+Down"
+target = "brightness"
+action = "rotate"
+args = [-0.05]
+
+[sfx]
 type = "sound"
 target = "volume"
 path = ":/resource/mac/volume.wav"
 
-[4]
+[vol_osd]
 type = "osd"
 target = "volume"
 skin = "mac_volume"
+position = "bottom"
+offset_x = 0
+offset_y = -100
+
+[br_osd]
+type = "osd"
+target = "brightness"
+skin = "mac_brightness"
 position = "bottom"
 offset_x = 0
 offset_y = -100
@@ -42,6 +64,14 @@ x = 33
 y = 165
 units = 16
 
+[mac_brightness]
+type = "skin"
+background = ":/resource/mac/brightness.png"
+progress = ":/resource/mac/meter.png"
+disabled = ":/resource/mac/brightness.png"
+x = 33
+y = 165
+units = 16
 
 #[trayicon.volume_icon]
 #target = "volume"

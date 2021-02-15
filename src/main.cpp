@@ -8,6 +8,7 @@
 #include <core/entity/entity_pool_builder.h>
 
 #include <core/knob/knob.h>
+#include <core/knob/brightness_shaft.h>
 #include <core/knob/volume_shaft.h>
 #include <core/trigger/hotkey_trigger_factory.h>
 #include <core/sound/sound_factory.h>
@@ -32,6 +33,7 @@ int main(int argc, char *argv[]) {
 
         EntityPool pool;
         pool.addEntity(new Knob(lit("volume"), new VolumeShaft()));
+        pool.addEntity(new Knob(lit("brightness"), new BrightnessShaft()));
 
         EntityFactoryPool factoryPool;
         factoryPool.registerFactory(new HotkeyTriggerFactory());

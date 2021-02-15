@@ -5,25 +5,30 @@
 #include <memory>
 #include <vector>
 
-class WinPhysicalMonitorPrivate;
+// TODO: WM_DISPLAYCHANGE is sent when # of monitors is changed.
 
+/**
+ * A thin wrapper around high-level monitor configuration API.
+ *
+ * Note that all functions in this class log on error, so the callee doesn't need to do this.
+ */
 class WinPhysicalMonitor {
 public:
-    WinPhysicalMonitor() = default;
-    WinPhysicalMonitor(const WinPhysicalMonitor& other) = default;
+    WinPhysicalMonitor(const PHYSICAL_MONITOR& physicalMonitor);
+    ~WinPhysicalMonitor();
 
-    static std::vector<WinPhysicalMonitor> enumerateMonitors();
+    static std::vector<std::unique_ptr<WinPhysicalMonitor>> enumerateMonitors();
 
-    bool supportsBrightness() const;
+    void readCapabilities(DWORD* capabilities, DWORD* colorTemperatures);
 
-    // TODO: what about the functions that take 40ms? they break all my APIs T_T
+    /* Note: functions below take up to 50ms to complete as noted in the corresponding API docs. */
 
-protected:
-    WinPhysicalMonitor(PHYSICAL_MONITOR* monitor, std::shared_ptr<WinPhysicalMonitorPrivate> d);
+    bool readBrightness(DWORD* minimum, DWORD* current, DWORD* maximum);
+    bool setBrightness(DWORD brightness);
+
+    bool readContrast(DWORD* minimum, DWORD* current, DWORD* maximum);
+    bool setContrast(DWORD contrast);
 
 private:
-    // TODO: wrong, should store PHYSICAL_MONITOR right in d!
-
-    PHYSICAL_MONITOR* m_monitor = nullptr;
-    std::shared_ptr<WinPhysicalMonitorPrivate> m_d;
+    PHYSICAL_MONITOR m_physicalMonitor;
 };

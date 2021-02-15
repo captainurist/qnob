@@ -2,28 +2,46 @@
 
 #include <highlevelmonitorconfigurationapi.h>
 
-/*
-BOOL CALLBACK EnumDisplayMonitorsProc(HMONITOR handle, HDC / *hdc* /, LPRECT / *rect* /, LPARAM data) {
-    reinterpret_cast<WinBrightnessControl*>(data)->monitorProc(handle);
-    return TRUE;
-}
-*/
+#include "win_physical_monitor.h"
+
+class WinBrightnessControlPrivate {
+public:
+    std::unique_ptr<WinPhysicalMonitor> monitor;
+    DWORD minBrightness;
+    DWORD maxBrightness;
+    DWORD currentBrightness;
+
+    float mapToFloat(DWORD brightness) const {
+        return 1.0f * (brightness - minBrightness) / maxBrightness;
+    }
+
+    DWORD mapFromFloat(float brightness) const {
+        return minBrightness + std::clamp(brightness, 0.0f, 1.0f) * (maxBrightness - minBrightness);
+    }
+};
 
 WinBrightnessControl::WinBrightnessControl() {
-    //EnumDisplayMonitors(nullptr, nullptr, EnumDisplayMonitorsProc, reinterpret_cast<LPARAM>(this));
+    for (auto& physicalMonitor : WinPhysicalMonitor::enumerateMonitors()) {
+        WinBrightnessControlPrivate& monitorData = m_monitorData.emplace_back();
+
+        monitorData.monitor = std::move(physicalMonitor);
+        monitorData.monitor->readBrightness(&monitorData.minBrightness, &monitorData.currentBrightness, &monitorData.maxBrightness);
+    }
 }
 
 WinBrightnessControl::~WinBrightnessControl() {
-
 }
 
 float WinBrightnessControl::brightness() const {
-    return 0.0f;
+    return m_monitorData[0].mapToFloat(m_monitorData[0].currentBrightness);
 }
 
 void WinBrightnessControl::setBrightness(float brightness) {
-    /*for(size_t i = 0; i < m_monitorHandles.size(); i++)
-        SetMonitorBrightness(m_monitorHandles[i], );*/
+    for (auto& monitorData : m_monitorData) {
+        DWORD physicalBrightness = monitorData.mapFromFloat(brightness);
+        monitorData.monitor->setBrightness(physicalBrightness);
+        monitorData.currentBrightness = physicalBrightness;
+    }
 }
 
 float WinBrightnessControl::contrast() const {
@@ -34,7 +52,4 @@ void WinBrightnessControl::setContrast(float contrast) {
 
 }
 
-void WinBrightnessControl::monitorProc(HMONITOR handle) {
-    m_monitorHandles.push_back(handle);
-}
 

@@ -25,6 +25,7 @@ HEADERS += \
     src/core/entity/factory_resolver.h \
     src/core/knob/knob.h \
     src/core/knob/shaft.h \
+    src/core/knob/brightness_shaft.h \
     src/core/knob/volume_shaft.h \
     src/core/osd/osd.h \
     src/core/osd/osd_fsm.h \
@@ -72,6 +73,7 @@ SOURCES += \
     src/core/entity/entity_pool.cpp \
     src/core/entity/entity_pool_builder.cpp \
     src/core/knob/knob.cpp \
+    src/core/knob/brightness_shaft.cpp \
     src/core/knob/volume_shaft.cpp \
     src/core/osd/osd.cpp \
     src/core/osd/osd_factory.cpp \

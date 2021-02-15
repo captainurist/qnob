@@ -2,7 +2,7 @@
 
 #include <platform/platform_brightness_control.h>
 
-#include <Windows.h>
+class WinBrightnessControlPrivate;
 
 class WinBrightnessControl : public PlatformBrightnessControl {
     Q_OBJECT
@@ -17,11 +17,6 @@ public:
     virtual void setContrast(float contrast) override;
 
 private:
-    void monitorProc(HMONITOR handle);
-
-    friend BOOL CALLBACK EnumDisplayMonitorsProc(HMONITOR handle, HDC hdc, LPRECT rect, LPARAM data);
-
-private:
-    std::vector<HMONITOR> m_monitorHandles;
+    std::vector<WinBrightnessControlPrivate> m_monitorData;
 };
 
