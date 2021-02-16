@@ -21,6 +21,7 @@ HEADERS += \
     src/core/entity/entity_creation_exception.h \
     src/core/entity/entity_factory.h \
     src/core/entity/entity_factory_pool.h \
+    src/core/entity/entity_parsers.h \
     src/core/entity/entity_pool.h \
     src/core/entity/entity_pool_builder.h \
     src/core/entity/factory_resolver.h \
@@ -71,6 +72,7 @@ SOURCES += \
     src/config/full_config.cpp \
     src/core/entity/entity_creation_context.cpp \
     src/core/entity/entity_factory_pool.cpp \
+    src/core/entity/entity_parsers.cpp \
     src/core/entity/entity_pool.cpp \
     src/core/entity/entity_pool_builder.cpp \
     src/core/knob/knob.cpp \

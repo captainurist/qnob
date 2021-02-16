@@ -9,7 +9,4 @@ public:
     SkinFactory();
 
     virtual Entity* createEntity(const EntityCreationContext& ctx) override;
-
-private:
-    static QPixmap requireImage(const EntityCreationContext& ctx, const QString& key);
 };

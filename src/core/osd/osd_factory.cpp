@@ -17,12 +17,12 @@ OsdFactory::OsdFactory():
 {}
 
 Entity* OsdFactory::createEntity(const EntityCreationContext& ctx) {
-    Knob* knob = ctx.requireEntity<Knob>(lit("target"));
-    Skin* skin = ctx.requireEntity<Skin>(lit("skin"));
+    Knob* knob = ctx.require<Knob*>(lit("target"));
+    Skin* skin = ctx.require<Skin*>(lit("skin"));
 
-    Qt::Alignment alignment = ctx.requireSerializableOr<Qt::Alignment>(lit("position"), Qt::AlignBottom);
-    int offsetX = ctx.requireIntOr(lit("offset_x"), 0);
-    int offsetY = ctx.requireIntOr(lit("offset_y"), 0);
+    Qt::Alignment alignment = ctx.requireOr<Qt::Alignment>(lit("position"), Qt::AlignBottom);
+    int offsetX = ctx.requireOr<qint64>(lit("offset_x"), 0);
+    int offsetY = ctx.requireOr<qint64>(lit("offset_y"), 0);
 
     Osd* result = new Osd(ctx.id());
     result->resize(skin->size());

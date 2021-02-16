@@ -7,7 +7,7 @@ class QString;
 template<class T>
 struct is_serializable : std::false_type {};
 
-template<class T> requires (std::declval<decltype(serialize(std::declval<T>(), std::declval<QString*>()))>(), true)
+template<class T> requires requires (T a, QString* b) { serialize(a, b); }
 struct is_serializable<T> : std::true_type {};
 
 template<class T>
@@ -16,7 +16,7 @@ inline constexpr bool is_serializable_v = is_serializable<T>::value;
 template<class T>
 struct is_deserializable : std::false_type {};
 
-template<class T> requires (std::declval<decltype(deserialize(std::declval<QString>(), std::declval<T*>()))>(), true)
+template<class T> requires requires (QString a, T* b) { deserialize(a, b); }
 struct is_deserializable<T> : std::true_type {};
 
 template<class T>

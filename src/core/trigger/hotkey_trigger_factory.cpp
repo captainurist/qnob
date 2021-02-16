@@ -15,14 +15,10 @@ HotkeyTriggerFactory::HotkeyTriggerFactory() :
 {}
 
 Entity* HotkeyTriggerFactory::createEntity(const EntityCreationContext& ctx) {
-    QString shortcutString = ctx.requireString(lit("trigger"));
-    QKeySequence shortcut = QKeySequence::fromString(shortcutString);
-    if (shortcut.isEmpty() || shortcut[0].key() == Qt::Key_unknown)
-        qthrow EntityCreationException(ctx.id(), EntityCreationException::tr("String '%1' does not define a valid key sequence.").arg(shortcutString));
-
-    Entity* target = ctx.requireEntity(lit("target"));
-    QString action = ctx.requireString(lit("action"));
-    QVariantList args = ctx.requireListOr(lit("args"), QVariantList());
+    QKeySequence shortcut = ctx.require<QKeySequence>(lit("trigger"));
+    Entity* target = ctx.require<Entity*>(lit("target"));
+    QString action = ctx.require<QString>(lit("action"));
+    QVariantList args = ctx.requireOr<QVariantList>(lit("args"), QVariantList());
 
     BoundMetaCall call;
     call.bind(target, action.toUtf8(), args);

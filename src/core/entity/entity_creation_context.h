@@ -1,70 +1,51 @@
 #pragma once
 
-#include <typeinfo>
-
 #include <QtCore/QString>
 #include <QtCore/QVariant>
 
-#include <util/exception.h>
+#include "factory_resolver.h"
 
-class Entity;
 class EntityConfig;
-class FactoryResolver;
 
 class EntityCreationContext {
 public:
     EntityCreationContext(const EntityConfig* config, FactoryResolver* resolver);
 
     const QString& id() const;
+    FactoryResolver* resolver() const;
 
     bool has(const QString& key) const;
+    QVariant require(const QString& key) const;
+    QVariant requireOr(const QString& key, const QVariant& defaultValue) const;
 
-    QString requireString(const QString& key) const;
-    QString requireStringOr(const QString& key, const QString& defaultValue) const;
-    qint64 requireInt(const QString& key) const;
-    qint64 requireIntOr(const QString& key, qint64 defaultValue) const;
-    QVariantList requireList(const QString& key) const;
-    QVariantList requireListOr(const QString& key, const QVariantList& defaultValue) const;
-
-    QString requirePath(const QString& key) const;
-
-    Entity* requireEntity(const QString& key) const;
-
-    template<class T>
-    T* requireEntity(const QString& key) const {
-        T* result = dynamic_cast<T*>(requireEntity(key));
-        if (!result)
-            throwBadEntityCast(key, typeid(T));
-        return result;
+    template<class T, class ValidationTag = nullptr_t>
+    T require(const QString& key) const {
+        return parseInternal<T, ValidationTag>(key, require(key));
     }
 
-    template<class T>
-    T requireSerializable(const QString& key) const {
-        QString string = requireString(key);
+    template<class T, class ValidationTag = nullptr_t>
+    T requireOr(const QString& key, const T& defaultValue) const {
+        QVariant tmp = requireOr(key, QVariant());
+        return tmp.isNull() ? defaultValue : parseInternal<T, ValidationTag>(key, tmp);
+    }
+
+private:
+    template<class T, class ValidationTag>
+    T parseInternal(const QString& key, const QVariant& value) const {
         T result;
         try {
-            deserialize(string, &result);
-        } catch (const Exception&) {
-            throwDeserializationError(key); /* Exception will auto-chain! */
+            parseConfigValue(this, value, &result, ValidationTag());
+        } catch (...) {
+            throwCreationException(key);
         }
         return result;
     }
 
-    template<class T>
-    T requireSerializableOr(const QString& key, const T& defaultValue) const {
-        if (!has(key))
-            return defaultValue;
-        return requireSerializable<T>(key);
-    }
-
-private:
-    template<class T>
-    T requireDataInternal(const QString& key, const T* defaultValue = nullptr) const;
-
-    [[noreturn]] void throwBadEntityCast(const QString& key, const std::type_info& typeInfo) const;
-    [[noreturn]] void throwDeserializationError(const QString& key) const;
+    [[noreturn]] void throwCreationException(const QString& key) const;
 
 private:
     const EntityConfig* m_config;
     FactoryResolver* m_resolver;
 };
+
+#include "entity_parsers.h"

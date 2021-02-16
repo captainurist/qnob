@@ -11,8 +11,8 @@ SoundFactory::SoundFactory():
 {}
 
 Entity* SoundFactory::createEntity(const EntityCreationContext& ctx) {
-    QString path = ctx.requirePath(lit("path"));
-    Knob* target = ctx.requireEntity<Knob>(lit("target"));
+    QString path = ctx.require<QString, AsPath>(lit("path"));
+    Knob* target = ctx.require<Knob*>(lit("target"));
 
     Sound* result = new Sound(ctx.id(), path);
 
