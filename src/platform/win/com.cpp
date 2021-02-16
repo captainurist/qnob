@@ -2,8 +2,10 @@
 
 #include <combaseapi.h>
 
+#include "win_error.h"
+
 Com::Com() {
-    initialized_ = SUCCEEDED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE));
+    initialized_ = succeeded(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE));
 }
 
 Com::~Com() {
