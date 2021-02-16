@@ -12,8 +12,7 @@
 
 #include <util/string_pool.h>
 
-#include "deserialization_exception.h"
-#include "serialization_exception.h"
+#include "serialization_exceptions.h"
 
 QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH_BY_VALUE(Qt::Alignment) // TODO: this does not belong here.
 
@@ -47,14 +46,14 @@ public:
     void deserialize(QStringView string, T* target) const {
         auto pos = m_enumByString.find(string);
         if (pos == m_enumByString.end())
-            qthrow DeserializationException(string.toString(), typeid(T));
+            throwDeserializationException(string, typeid(T));
         *target = pos->second;
     }
 
     void serialize(T value, QString* target) const {
         auto pos = m_stringByEnum.find(value);
         if (pos == m_stringByEnum.end())
-            qthrow SerializationException(value);
+            throwSerializationException(typeid(value));
         *target += pos->second;
     }
 

@@ -9,6 +9,9 @@
 
 class QDebug;
 
+// TODO: do we even need i18n in exceptions?
+// TODO: and actually most of the fields in derived classes are also not needed...
+
 /**
  * Custom exception that supports source location & QString-based exception messages.
  * Base class for all qnob exceptions.

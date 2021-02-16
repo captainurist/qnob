@@ -56,10 +56,10 @@ HEADERS += \
     src/platform/win/win_volume_control.h \
     src/platform/win/win_volume_event_handler.h \
     src/serialization/alignment.h \
-    src/serialization/deserialization_exception.h \
     src/serialization/enum_serialization.h \
-    src/serialization/serialization_exception.h \
+    src/serialization/serialization_exceptions.h \
     src/serialization/serialization_fwd.h \
+    src/util/bad_cast_exception.h \
     src/util/debug.h \
     src/util/exception.h \
     src/util/human_readable_name.h \
@@ -98,6 +98,8 @@ SOURCES += \
     src/platform/win/win_volume_control.cpp \
     src/platform/win/win_volume_event_handler.cpp \
     src/serialization/alignment.cpp \
+    src/serialization/serialization_exceptions.cpp \
+    src/util/bad_cast_exception.cpp \
     src/util/debug.cpp \
     src/util/exception.cpp \
     src/util/human_readable_name.cpp \
