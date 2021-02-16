@@ -36,6 +36,6 @@ QVariant EntityCreationContext::requireOr(const QString& key, const QVariant& de
 void EntityCreationContext::throwCreationException(const QString& key) const {
     qthrow EntityCreationException(
         id(),
-        EntityCreationException::tr("Invalid parameter '%1' value.").arg(key)
+        EntityCreationException::tr("Parameter '%1' has invalid value.").arg(key)
     );
 }
