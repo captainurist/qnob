@@ -76,16 +76,12 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, De
 
 template<class List, class ValidationTag>
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, List* to, ValidationTag tag)
-    requires requires (List a, typename List::value_type b) { a.push_back(b); }
+    requires requires (List a) { a.emplace_back(); }
 {
     QVariantList variantList;
-    parseConfigValue(ctx, from, &variantList, nullptr_t);
+    parseConfigValue(ctx, from, &variantList, nullptr);
 
-    List result;
-    for (const QVariant& variantElement : variantList) {
-        typename List::value_type element;
-        parseConfigValue(ctx, variantElement, &element, tag);
-        result.push_back(element);
-    }
-    return result;
+    to->clear();
+    for (const QVariant& variantElement : variantList)
+        parseConfigValue(ctx, variantElement, &to->emplace_back(), tag);
 }

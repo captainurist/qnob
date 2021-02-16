@@ -12,11 +12,15 @@ SoundFactory::SoundFactory():
 
 Entity* SoundFactory::createEntity(const EntityCreationContext& ctx) {
     QString path = ctx.require<QString, AsPath>(lit("path"));
-    Knob* target = ctx.require<Knob*>(lit("target"));
+    Knob* target = ctx.requireOr<Knob*>(lit("target"), nullptr);
+    std::vector<Knob*> targets = ctx.requireOr<std::vector<Knob*>>(lit("targets"), std::vector<Knob*>());
+    if (target)
+        targets.push_back(target);
 
     Sound* result = new Sound(ctx.id(), path);
 
-    QObject::connect(target, &Knob::activated, result, &Sound::play);
+    for (Knob* knob : targets)
+        QObject::connect(knob, &Knob::activated, result, &Sound::play);
 
     return result;
 }

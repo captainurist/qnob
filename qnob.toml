@@ -36,7 +36,7 @@ args = [-0.05]
 
 [sfx]
 type = "sound"
-target = "volume"
+targets = ["volume", "brightness"]
 path = ":/resource/mac/volume.wav"
 
 [vol_osd]
