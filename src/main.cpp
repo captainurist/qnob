@@ -19,8 +19,6 @@
 
 #include <platform/platform_initializer.h>
 
-#include <core/osd/osd_window.h>
-
 int main(int argc, char *argv[]) {
     try {
         QApplication application(argc, argv);
