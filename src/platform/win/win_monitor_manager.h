@@ -10,7 +10,4 @@ public:
     WinMonitorManager();
 
     virtual std::vector<std::unique_ptr<PlatformMonitor>> enumerateMonitors() override;
-
-private:
-    std::shared_ptr<QThread> m_sharedThread;
 };

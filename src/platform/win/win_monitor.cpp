@@ -11,19 +11,21 @@
 #include "win_ddc_monitor_client.h"
 #include "win_ddc_monitor_server.h"
 
-WinMonitor::WinMonitor(std::shared_ptr<QThread> sharedThread, std::unique_ptr<WinDdcMonitor> monitor) :
-    m_sharedThread(sharedThread)
-{
-    /* Thise call doesn't take forever to complete, so we do them in main thread, and cache the results. */
+WinMonitor::WinMonitor(std::unique_ptr<WinDdcMonitor> monitor) {
+    /* These call doesn't take forever to complete, so we do them in main thread, and cache the results. */
     DWORD colorTemperatures;
     monitor->readCapabilities(&m_capabilities, &colorTemperatures);
     m_name = monitor->name();
+
+    /* Then set up a processing thread. */
+    m_thread.reset(new QThread());
+    m_thread->start();
 
     /* Then we can do the actual client-server initialization. */
     std::shared_ptr<WinDdcMonitorQueue> queue = std::make_shared<WinDdcMonitorQueue>();
     m_client.reset(new WinDdcMonitorClient(queue));
     m_server = new WinDdcMonitorServer(std::move(monitor), queue);
-    m_server->moveToThread(m_sharedThread.get());
+    m_server->moveToThread(m_thread.get());
 
     connect(m_client.get(), &WinDdcMonitorClient::queueChanged, m_server, &WinDdcMonitorServer::processQueue);
     connect(m_server, &WinDdcMonitorServer::readCompleted, this, &WinMonitor::handleReadCompleted);
@@ -35,9 +37,13 @@ WinMonitor::WinMonitor(std::shared_ptr<QThread> sharedThread, std::unique_ptr<Wi
 }
 
 WinMonitor::~WinMonitor() {
-    /* Fire deleteLater for the server. Our destructor might then stop the shared thread, but deleteLater event will
+    /* Fire deleteLater for the server. We'll then be stopping the thread, but deleteLater event will
      * already be in the thread's event queue at this point, and will be processed. */
     m_server->deleteLater();
+
+    /* Clean up the thread. */
+    m_thread->quit();
+    m_thread->wait(); /* This is where m_server gets deleted. */
 }
 
 QString WinMonitor::name() const {

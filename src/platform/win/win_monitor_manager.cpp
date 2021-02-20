@@ -5,18 +5,11 @@
 
 #include <QtCore/QThread>
 
-WinMonitorManager::WinMonitorManager() {
-    m_sharedThread.reset(new QThread(), [](QThread* thread) {
-        thread->quit();
-        thread->wait();
-        thread->deleteLater();
-    });
-    m_sharedThread->start();
-}
+WinMonitorManager::WinMonitorManager() {}
 
 std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonitors() {
     std::vector<std::unique_ptr<PlatformMonitor>> result;
     for (std::unique_ptr<WinDdcMonitor>& monitor : WinDdcMonitor::enumerateMonitors())
-        result.emplace_back(new WinMonitor(m_sharedThread, std::move(monitor)));
+        result.emplace_back(new WinMonitor(std::move(monitor)));
     return result;
 }

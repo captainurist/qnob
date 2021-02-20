@@ -14,7 +14,7 @@ class WinDdcMonitorServer;
 class WinMonitor: public PlatformMonitor {
     Q_OBJECT
 public:
-    WinMonitor(std::shared_ptr<QThread> sharedThread, std::unique_ptr<WinDdcMonitor> monitor);
+    WinMonitor(std::unique_ptr<WinDdcMonitor> monitor);
     virtual ~WinMonitor();
 
     virtual QString name() const override;
@@ -36,7 +36,7 @@ private:
     };
 
 private:
-    std::shared_ptr<QThread> m_sharedThread;
+    std::unique_ptr<QThread> m_thread;
     std::unique_ptr<WinDdcMonitorClient> m_client;
     WinDdcMonitorServer* m_server;
     DWORD m_capabilities;
