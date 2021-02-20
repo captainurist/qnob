@@ -15,12 +15,11 @@ public:
     virtual ~WinPlatform();
 
     virtual PlatformVolumeControl* createVolumeControl() const override;
-    virtual PlatformBrightnessControl* brightnessControl() const override;
+    virtual PlatformMonitorManager* createMonitorManager() const override;
     virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const override;
 
 private:
     std::unique_ptr<Com> m_com;
-    std::unique_ptr<WinBrightnessControl> m_brightnessControl;
     std::unique_ptr<WinShortcutDispatcher> m_shortcutDispatcher;
 };
 

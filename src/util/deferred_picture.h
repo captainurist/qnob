@@ -6,7 +6,7 @@
 
 class QPainter;
 
-// TODO: move to gui/ ?
+// TODO: move to lib/gui/etc ?
 class DeferredPicture {
     using function_type = std::function<void(QPainter*)>;
 public:

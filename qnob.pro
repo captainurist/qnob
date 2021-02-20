@@ -44,20 +44,27 @@ HEADERS += \
     src/meta/meta_object_extension.h \
     src/meta/meta_method_invoker.h \
     src/platform/platform.h \
-    src/platform/platform_brightness_control.h \
     src/platform/platform_initializer.h \
+    src/platform/platform_monitor.h \
+    src/platform/platform_monitor_manager.h \
     src/platform/platform_shortcut_notifier.h \
     src/platform/platform_volume_control.h \
     src/platform/win/com.h \
     src/platform/win/com_ptr.h \
-    src/platform/win/win_brightness_control.h \
     src/platform/win/win_error.h \
-    src/platform/win/win_physical_monitor.h \
     src/platform/win/win_platform.h \
     src/platform/win/win_shortcut_dispatcher.h \
     src/platform/win/win_shortcut_notifier.h \
     src/platform/win/win_volume_control.h \
     src/platform/win/win_volume_event_handler.h \
+    src/platform/win/win_ddc_triplet.h \
+    src/platform/win/win_ddc_monitor.h \
+    src/platform/win/win_ddc_monitor_action.h \
+    src/platform/win/win_ddc_monitor_client.h \
+    src/platform/win/win_ddc_monitor_server.h \
+    src/platform/win/win_ddc_monitor_queue.h \
+    src/platform/win/win_monitor.h \
+    src/platform/win/win_monitor_manager.h \
     src/serialization/alignment.h \
     src/serialization/enum_serialization.h \
     src/serialization/serialization_exceptions.h \
@@ -94,13 +101,17 @@ SOURCES += \
     src/meta/meta_method_invoker.cpp \
     src/platform/platform_initializer.cpp \
     src/platform/win/com.cpp \
-    src/platform/win/win_brightness_control.cpp \
     src/platform/win/win_error.cpp \
-    src/platform/win/win_physical_monitor.cpp \
     src/platform/win/win_platform.cpp \
     src/platform/win/win_shortcut_dispatcher.cpp \
     src/platform/win/win_volume_control.cpp \
     src/platform/win/win_volume_event_handler.cpp \
+    src/platform/win/win_ddc_monitor.cpp \
+    src/platform/win/win_ddc_monitor_client.cpp \
+    src/platform/win/win_ddc_monitor_server.cpp \
+    src/platform/win/win_ddc_monitor_queue.cpp \
+    src/platform/win/win_monitor.cpp \
+    src/platform/win/win_monitor_manager.cpp \
     src/serialization/alignment.cpp \
     src/serialization/serialization_exceptions.cpp \
     src/util/bad_cast_exception.cpp \
@@ -132,7 +143,7 @@ RCC_DIR   = bin/temp/rcc
 TARGET    = qnob
 
 # Full path of source code file in diagnostics
-QMAKE_CXXFLAGS += /FC
+#QMAKE_CXXFLAGS += /FC
 
 CONFIG(debug, debug|release) {
     CONFIG           += console

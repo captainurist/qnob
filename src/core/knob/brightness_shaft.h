@@ -2,7 +2,8 @@
 
 #include "shaft.h"
 
-class PlatformBrightnessControl;
+class PlatformMonitorManager;
+class PlatformMonitor;
 
 class BrightnessShaft : public Shaft {
     Q_OBJECT
@@ -17,5 +18,7 @@ public:
     virtual void setEnabled(bool value) override;
 
 private:
-    PlatformBrightnessControl* m_brightnessControl;
+    std::unique_ptr<PlatformMonitorManager> m_monitorManager;
+    std::vector<std::unique_ptr<PlatformMonitor>> m_monitors;
+    double m_value;
 };

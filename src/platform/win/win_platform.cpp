@@ -2,12 +2,11 @@
 
 #include "com.h"
 #include "win_volume_control.h"
-#include "win_brightness_control.h"
+#include "win_monitor_manager.h"
 #include "win_shortcut_dispatcher.h"
 
 WinPlatform::WinPlatform() {
     m_com.reset(new Com());
-    m_brightnessControl.reset(new WinBrightnessControl());
     m_shortcutDispatcher.reset(new WinShortcutDispatcher());
 }
 
@@ -18,8 +17,8 @@ PlatformVolumeControl* WinPlatform::createVolumeControl() const {
     return new WinVolumeControl();
 }
 
-PlatformBrightnessControl* WinPlatform::brightnessControl() const {
-    return m_brightnessControl.get();
+PlatformMonitorManager* WinPlatform::createMonitorManager() const {
+    return new WinMonitorManager();
 }
 
 PlatformShortcutNotifier* WinPlatform::createShortcutNotifier(const QKeySequence& shortcut) const {

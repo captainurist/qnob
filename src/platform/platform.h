@@ -3,8 +3,8 @@
 #include <QtGui/QKeySequence>
 
 #include "platform_volume_control.h"
-#include "platform_brightness_control.h"
 #include "platform_shortcut_notifier.h"
+#include "platform_monitor_manager.h"
 
 class Platform {
 public:
@@ -15,10 +15,7 @@ public:
      */
     virtual PlatformVolumeControl* createVolumeControl() const = 0;
 
-    /**
-     * \return                          Brightness control object. Never null.
-     */
-    virtual PlatformBrightnessControl* brightnessControl() const = 0;
+    virtual PlatformMonitorManager* createMonitorManager() const = 0;
 
     /**
      * \param shortcut                  Key sequence to create a global shortcut for.

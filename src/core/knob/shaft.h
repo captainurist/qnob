@@ -3,7 +3,7 @@
 #include <QtCore/QObject>
 
 /**
- * Shaft is what you attach a knob on. No more question please.
+ * Shaft is what you attach a knob on.
  */
 class Shaft : public QObject {
     Q_OBJECT
@@ -15,6 +15,6 @@ public:
     virtual void setEnabled(bool value) = 0;
 
 signals:
-    void notificationReceived();
+    void notificationReceived(); // TODO: changedExternally()
 };
 
