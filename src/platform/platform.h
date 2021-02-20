@@ -11,9 +11,9 @@ public:
     virtual ~Platform() {}
 
     /**
-     * \returns                         Volume control object. Never null.
+     * \returns                         New volume control object.
      */
-    virtual PlatformVolumeControl* volumeControl() const = 0;
+    virtual PlatformVolumeControl* createVolumeControl() const = 0;
 
     /**
      * \return                          Brightness control object. Never null.

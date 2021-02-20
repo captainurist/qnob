@@ -17,5 +17,5 @@ public:
     virtual void setEnabled(bool value) override;
 
 private:
-    PlatformVolumeControl* m_volumeControl;
+    std::unique_ptr<PlatformVolumeControl> m_volumeControl;
 };

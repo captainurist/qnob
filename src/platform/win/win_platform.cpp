@@ -7,7 +7,6 @@
 
 WinPlatform::WinPlatform() {
     m_com.reset(new Com());
-    m_volumeControl.reset(new WinVolumeControl());
     m_brightnessControl.reset(new WinBrightnessControl());
     m_shortcutDispatcher.reset(new WinShortcutDispatcher());
 }
@@ -15,8 +14,8 @@ WinPlatform::WinPlatform() {
 WinPlatform::~WinPlatform() {
 }
 
-PlatformVolumeControl* WinPlatform::volumeControl() const {
-    return m_volumeControl.get();
+PlatformVolumeControl* WinPlatform::createVolumeControl() const {
+    return new WinVolumeControl();
 }
 
 PlatformBrightnessControl* WinPlatform::brightnessControl() const {

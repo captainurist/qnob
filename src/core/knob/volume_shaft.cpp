@@ -2,10 +2,10 @@
 
 #include <platform/platform.h>
 
-VolumeShaft::VolumeShaft() {
-    m_volumeControl = platform()->volumeControl();
-
-    connect(m_volumeControl, &PlatformVolumeControl::notificationReceived, this, &Shaft::notificationReceived);
+VolumeShaft::VolumeShaft():
+    m_volumeControl(platform()->createVolumeControl())
+{
+    connect(m_volumeControl.get(), &PlatformVolumeControl::notificationReceived, this, &Shaft::notificationReceived);
 }
 
 VolumeShaft::~VolumeShaft()
@@ -26,4 +26,3 @@ bool VolumeShaft::enabled() const {
 void VolumeShaft::setEnabled(bool value) {
     m_volumeControl->setMuted(!value);
 }
-
