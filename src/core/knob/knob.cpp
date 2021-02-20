@@ -17,14 +17,6 @@ KnobState Knob::state() const {
     KnobState result;
     result.enabled = m_shaft->enabled();
     result.value = m_shaft->value();
-
-    if (result.value < 0.001) {
-        result.enabled = false;
-        result.value = 0.0;
-    } else if (result.value > 0.999) {
-        result.value = 1.0;
-    }
-
     return result;
 }
 
@@ -36,7 +28,7 @@ void Knob::toggle() {
 
 void Knob::rotate(double delta) {
     m_shaft->setEnabled(true);
-    m_shaft->setValue(m_shaft->value() + delta);
+    m_shaft->setValue(clampValue(m_shaft->value() + delta));
 
     activateLater();
 }
@@ -54,4 +46,16 @@ void Knob::activateLater() {
         emit activated();
     };
     QMetaObject::invokeMethod(this, callback, Qt::QueuedConnection);
+}
+
+double Knob::clampValue(double value) {
+    value = std::clamp(value, 0.0, 1.0);
+
+    if (value < 0.001) {
+        value = 0.0;
+    } else if (value > 0.999) {
+        value = 1.0;
+    }
+
+    return value;
 }

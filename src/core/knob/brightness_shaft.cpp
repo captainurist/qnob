@@ -1,6 +1,7 @@
 #include "brightness_shaft.h"
 
 #include <cmath>
+#include <cassert>
 
 #include <platform/platform.h>
 
@@ -29,6 +30,8 @@ double BrightnessShaft::value() const {
 }
 
 void BrightnessShaft::setValue(double value) {
+    assert(value >= 0.0 && value <= 1.0);
+
     m_value = value;
     for (auto& monitor : m_monitors)
         monitor->setProperty(PlatformMonitor::BrightnessProperty, value);

@@ -28,6 +28,8 @@ signals:
 private:
     void activateLater();
 
+    static double clampValue(double value);
+
 private:
     std::unique_ptr<Shaft> m_shaft;
     bool m_activationPending = false;
