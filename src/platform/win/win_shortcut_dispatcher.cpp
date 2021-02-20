@@ -12,6 +12,7 @@
 #include <util/map_access.h>
 
 #include "win_error.h"
+#include "win_shortcut_notifier.h"
 
 /* Derived from qwindowskeymapper.cpp. */
 
@@ -24,9 +25,6 @@ namespace Qt {
     constexpr Qt::Key Key_unimplemented = static_cast<Qt::Key>(Qt::Key_unknown - 1);
 }
 
-// Meaning of values:
-//             0 = Character output key, needs keyboard driver mapping
-//   Key_unknown = Unknown Virtual Key, no translation possible, ignore
 constexpr std::array<KeyMappingElement, 256> KeyMapping = {{
                                                     // Dec |  Hex | Windows Virtual key
     {Qt::Key_unknown,       0},                     //   0   0x00
@@ -307,20 +305,6 @@ public:
     WinShortcutDispatcher* m_dispatcher = nullptr;
 };
 
-class WinShortcutNotifier : public PlatformShortcutNotifier {
-public:
-    WinShortcutNotifier(WinShortcutDispatcher* dispatcher, int id) : m_dispatcher(dispatcher), m_id(id) {}
-
-    ~WinShortcutNotifier() {
-        if(m_dispatcher)
-            m_dispatcher->removeShortcutNotifier(m_id);
-    }
-
-private:
-    QPointer<WinShortcutDispatcher> m_dispatcher;
-    int m_id = 0;
-};
-
 WinShortcutDispatcher::WinShortcutDispatcher(QObject* parent): QObject(parent) {
     for (quint32 winKey = 0; winKey < KeyMapping.size(); winKey++) {
         Qt::Key qtKey = KeyMapping[winKey].key;
@@ -361,7 +345,8 @@ PlatformShortcutNotifier* WinShortcutDispatcher::createShortcutNotifier(const QK
     if (!succeeded(RegisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), m_nextId, nativeMods, nativeKey)))
         return nullptr;
 
-    WinShortcutNotifier* notifier = new WinShortcutNotifier(this, m_nextId);
+    WinShortcutNotifier* notifier = new WinShortcutNotifier(m_nextId);
+    connect(notifier, &WinShortcutNotifier::aboutToBeDestroyed, this, &WinShortcutDispatcher::removeShortcutNotifier);
     m_notifierById[m_nextId] = notifier;
     m_nextId++;
     return notifier;

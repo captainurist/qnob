@@ -55,6 +55,7 @@ HEADERS += \
     src/platform/win/win_physical_monitor.h \
     src/platform/win/win_platform.h \
     src/platform/win/win_shortcut_dispatcher.h \
+    src/platform/win/win_shortcut_notifier.h \
     src/platform/win/win_volume_control.h \
     src/platform/win/win_volume_event_handler.h \
     src/serialization/alignment.h \
