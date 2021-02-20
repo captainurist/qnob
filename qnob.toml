@@ -34,6 +34,12 @@ target = "brightness"
 action = "rotate"
 args = [-0.05]
 
+[exit]
+type = "shortcut"
+trigger = "Ctrl+Alt+Shift+Q"
+target = "app"
+action = "exit"
+
 [sfx]
 type = "sound"
 targets = ["volume", "brightness"]

@@ -37,6 +37,7 @@
     <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_utf8_streams.hpp" />
     <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_value.h" />
     <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_version.h" />
+    <ClInclude Include="src\core\app\app.h" />
     <ClInclude Include="src\core\entity\entity_parsers.h" />
     <ClInclude Include="src\config\entity_config.h" />
     <ClInclude Include="src\config\full_config.h" />
@@ -112,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\config\full_config.cpp" />
+    <ClCompile Include="src\core\app\app.cpp" />
     <ClCompile Include="src\core\entity\entity_creation_context.cpp" />
     <ClCompile Include="src\core\entity\entity_factory_pool.cpp" />
     <ClCompile Include="src\core\entity\entity_parsers.cpp" />

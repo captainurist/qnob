@@ -16,6 +16,7 @@ HEADERS += \
     src/config/config_exception.h \
     src/config/entity_config.h \
     src/config/full_config.h \
+    src/core/app/app.h \
     src/core/entity/entity.h \
     src/core/entity/entity_creation_context.h \
     src/core/entity/entity_creation_exception.h \
@@ -78,6 +79,7 @@ HEADERS += \
 
 SOURCES += \
     src/config/full_config.cpp \
+    src/core/app/app.cpp \
     src/core/entity/entity_creation_context.cpp \
     src/core/entity/entity_factory_pool.cpp \
     src/core/entity/entity_parsers.cpp \
