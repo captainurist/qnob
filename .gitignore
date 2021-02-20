@@ -16,3 +16,4 @@ x64/Debug/qnob.vcxprojAssemblyReference.cache
 x64/Release/qnob.vcxprojAssemblyReference.cache
 x64/Release/qnob.log
 x64/Debug/qnob.Build.CppClean.log
+qnob_plugin_import.cpp
