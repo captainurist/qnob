@@ -24,11 +24,9 @@ int main(int argc, char *argv[]) {
     try {
         QApplication application(argc, argv);
         QApplication::setQuitOnLastWindowClosed(false);
-        QThread::currentThread()->setObjectName(lit("main"));
+        QThread::currentThread()->setObjectName(lit("MainThread"));
 
         PlatformInitializer platform;
-
-        FullConfig config = FullConfig::loadFromTomlFile(QLatin1String("qnob.toml"));
 
         EntityPool pool;
         pool.addEntity(new Knob(lit("volume"), new VolumeShaft()));
@@ -42,7 +40,7 @@ int main(int argc, char *argv[]) {
         factoryPool.registerFactory(new OsdFactory());
 
         EntityPoolBuilder builder(&factoryPool, &pool);
-        builder.addEntities(config);
+        builder.addEntities(FullConfig::loadFromTomlFile(QLatin1String("qnob.toml")));
 
         return application.exec();
     } catch (const Exception& e) {

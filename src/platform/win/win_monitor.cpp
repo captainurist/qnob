@@ -19,6 +19,7 @@ WinMonitor::WinMonitor(std::unique_ptr<WinDdcMonitor> monitor) {
 
     /* Then set up a processing thread. */
     m_thread.reset(new QThread());
+    m_thread->setObjectName(lit("WinMonitorThread"));
     m_thread->start();
 
     /* Then we can do the actual client-server initialization. */

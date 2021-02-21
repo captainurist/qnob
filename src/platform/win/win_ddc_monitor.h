@@ -37,23 +37,3 @@ public:
 private:
     PHYSICAL_MONITOR m_physicalMonitor;
 };
-
-// TODO: WM_DISPLAYCHANGE is sent when # of monitors is changed.
-
-// TODO
-
-/*physical monitor -- for actual api calls.
-shared_ptr'd
-
-ddc queue -- per-monitor queue, basically just does uniq for calls
-
-ddc queue processor - qobject, contains shared_ptr to monitor, implements thread-safe api with callbacks must be moved to the processing thread.
-
-win_monitor_manager
-contains qthread
-contains queue processors
-listens to change events (destroys monitors & queues in this case)
-exposes sane api
-*/
-
-
