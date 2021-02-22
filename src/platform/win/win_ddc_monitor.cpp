@@ -35,9 +35,16 @@ WinDdcMonitor::~WinDdcMonitor() {
 std::vector<std::unique_ptr<WinDdcMonitor>> WinDdcMonitor::enumerateMonitors() {
     std::vector<std::unique_ptr<WinDdcMonitor>> result;
 
+    /* We can also get hardware IDs by matching monitors here with what EnumDisplayDevices returns,
+     * but there is little point. */
+
     QVarLengthArray<PHYSICAL_MONITOR, 8> physicalMonitors;
     for (HMONITOR displayMonitor : enumDisplayMonitors()) {
         DWORD count = 0;
+
+        /* We can get display index here from MONITORINFOEXW::szDevice after a call to GetMonitorInfoW.
+         * But again, there is little point for now. */
+
         if (!succeeded(GetNumberOfPhysicalMonitorsFromHMONITOR(displayMonitor, &count)) || count == 0)
             continue;
 
