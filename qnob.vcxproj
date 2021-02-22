@@ -189,38 +189,44 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <NMakePreprocessorDefinitions>_DEBUG;lit=QStringLiteral;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeBuildCommandLine>
-qmake -o $(ProjectName).mak $(ProjectName).pro
-jom $(Configuration) -f $(ProjectName).mak</NMakeBuildCommandLine>
+cd build
+ninja</NMakeBuildCommandLine>
     <NMakeReBuildCommandLine>
-qmake -o $(ProjectName).mak $(ProjectName).pro
-jom $(Configuration)-clean -f $(ProjectName).mak
-jom $(Configuration) -f $(ProjectName).mak</NMakeReBuildCommandLine>
+cd build
+cmake -S .. -B . -DCMAKE_BUILD_TYPE=$(Configuration) -G "Ninja"
+ninja clean
+ninja</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>
-qmake -o $(ProjectName).mak $(ProjectName).pro
-jom $(Configuration)-clean -f $(ProjectName).mak</NMakeCleanCommandLine>
-    <NMakeOutput>bin/$(Configuration)/$(ProjectName).exe</NMakeOutput>
+cd build
+ninja clean</NMakeCleanCommandLine>
+    <NMakeOutput>build/$(ProjectName).exe</NMakeOutput>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);$(QTDIR)/bin;</ExecutablePath>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(QTDIR)/include;$(ProjectDir)src;$(ProjectDir)3rdparty/tomlplusplus/include</IncludePath>
     <NMakeIncludeSearchPath>$(QTDIR)\include;$(ProjectDir)src</NMakeIncludeSearchPath>
     <AdditionalOptions>/std:c++latest</AdditionalOptions>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <NMakePreprocessorDefinitions>NDEBUG;lit=QStringLiteral;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeBuildCommandLine>
-qmake -o $(ProjectName).mak $(ProjectName).pro
-jom $(Configuration) -f $(ProjectName).mak</NMakeBuildCommandLine>
+cd build
+ninja</NMakeBuildCommandLine>
     <NMakeReBuildCommandLine>
-qmake -o $(ProjectName).mak $(ProjectName).pro
-jom $(Configuration)-clean -f $(ProjectName).mak
-jom $(Configuration) -f $(ProjectName).mak</NMakeReBuildCommandLine>
+cd build
+cmake -S .. -B . -DCMAKE_BUILD_TYPE=$(Configuration) -G "Ninja"
+ninja clean
+ninja</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>
-qmake -o $(ProjectName).mak $(ProjectName).pro
-jom $(Configuration)-clean -f $(ProjectName).mak</NMakeCleanCommandLine>
-    <NMakeOutput>bin/$(Configuration)/$(ProjectName).exe</NMakeOutput>
+cd build
+ninja clean</NMakeCleanCommandLine>
+    <NMakeOutput>build/$(ProjectName).exe</NMakeOutput>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);$(QTDIR)/bin;</ExecutablePath>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(QTDIR)/include;$(ProjectDir)src;$(ProjectDir)3rdparty/tomlplusplus/include</IncludePath>
     <NMakeIncludeSearchPath>$(QTDIR)\include;$(ProjectDir)src</NMakeIncludeSearchPath>
     <AdditionalOptions>/std:c++latest</AdditionalOptions>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
