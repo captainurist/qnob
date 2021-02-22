@@ -9,7 +9,7 @@ class Shaft : public QObject {
     Q_OBJECT
 public:
     /**
-     * \returns                         Current value, in [0, 1].
+     * \returns                         Current value, in [0, 1], or NAN if this shaft is broken or not yet initialized.
      */
     virtual double value() const = 0;
 
@@ -24,11 +24,17 @@ public:
     virtual bool enabled() const = 0;
 
     /**
+     * Enables / disables a shaft. Not all shafts support this function, so it might have no effect.
+     *
      * param value                      New enabled state.
      */
     virtual void setEnabled(bool value) = 0;
 
 signals:
-    void notificationReceived(); // TODO: changedExternally()
+    /**
+     * Some shafts might provide notifications for state changes that were made externally, i.e. not through `Shaft`
+     * interface.
+     */
+    void changedExternally();
 };
 

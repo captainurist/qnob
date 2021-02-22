@@ -7,7 +7,7 @@
 VolumeShaft::VolumeShaft():
     m_volumeControl(platform()->createVolumeControl())
 {
-    connect(m_volumeControl.get(), &PlatformVolumeControl::notificationReceived, this, &Shaft::notificationReceived);
+    connect(m_volumeControl.get(), &PlatformVolumeControl::changedExternally, this, &Shaft::changedExternally);
 }
 
 VolumeShaft::~VolumeShaft()

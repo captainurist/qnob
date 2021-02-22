@@ -1,6 +1,6 @@
 #pragma once
 
-#include "platform/platform_volume_control.h"
+#include <platform/platform_volume_control.h>
 
 #include "com_ptr.h"
 

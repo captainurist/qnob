@@ -4,9 +4,9 @@
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
 
+#include <cmath>
 #include <algorithm> /* For std::clamp. */
 
-#include "com_ptr.h"
 #include "win_volume_event_handler.h"
 #include "win_error.h"
 
@@ -17,7 +17,7 @@ WinVolumeControl::WinVolumeControl():
     m_eventHandler(new WinVolumeEventHandler(GUID_QnobAudioEvent))
 {
     /* WinVolumeEventHandler emits these signals from another thread. */
-    connect(m_eventHandler.get(), &WinVolumeEventHandler::volumeChangedExternally, this, &WinVolumeControl::notificationReceived);
+    connect(m_eventHandler.get(), &WinVolumeEventHandler::volumeChangedExternally, this, &WinVolumeControl::changedExternally);
     connect(m_eventHandler.get(), &WinVolumeEventHandler::defaultDeviceChanged, this, [&] {
         deinitializeDefaultDevice();
         initializeDefaultDevice();
@@ -62,11 +62,11 @@ void WinVolumeControl::deinitializeDefaultDevice() {
 
 float WinVolumeControl::volume() const {
     if (!m_volumeControl)
-        return 0;
+        return NAN;
 
     float result;
     if (!succeeded(m_volumeControl->GetMasterVolumeLevelScalar(&result)))
-        return 0;
+        return NAN;
 
     return result;
 }

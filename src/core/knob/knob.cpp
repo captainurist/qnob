@@ -4,11 +4,24 @@
 
 #include "shaft.h"
 
+static double clampValue(double value) {
+    value = std::clamp(value, 0.0, 1.0);
+
+    if (value < 0.001) {
+        value = 0.0;
+    } else if (value > 0.999) {
+        value = 1.0;
+    }
+
+    return value;
+}
+
+
 Knob::Knob(const QString& id, Shaft* shaft) :
     Entity(id),
     m_shaft(shaft)
 {
-    connect(shaft, &Shaft::notificationReceived, this, &Knob::activateLater);
+    connect(shaft, &Shaft::changedExternally, this, &Knob::activateLater);
 }
 
 Knob::~Knob() {}
@@ -27,8 +40,12 @@ void Knob::toggle() {
 }
 
 void Knob::rotate(double delta) {
+    double value = m_shaft->value();
+    if (std::isnan(value))
+        return; /* Shaft is either broken or pending initialization. */
+
     m_shaft->setEnabled(true);
-    m_shaft->setValue(clampValue(m_shaft->value() + delta));
+    m_shaft->setValue(clampValue(value + delta));
 
     activateLater();
 }
@@ -48,14 +65,3 @@ void Knob::activateLater() {
     QMetaObject::invokeMethod(this, callback, Qt::QueuedConnection);
 }
 
-double Knob::clampValue(double value) {
-    value = std::clamp(value, 0.0, 1.0);
-
-    if (value < 0.001) {
-        value = 0.0;
-    } else if (value > 0.999) {
-        value = 1.0;
-    }
-
-    return value;
-}

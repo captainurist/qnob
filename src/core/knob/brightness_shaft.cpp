@@ -18,7 +18,7 @@ public:
     QFuture<MonitorList> future;
     MonitorList monitors;
     bool initialized = false;
-    double value = NAN;
+    double cachedValue = NAN;
 };
 
 BrightnessShaft::BrightnessShaft():
@@ -50,9 +50,9 @@ void BrightnessShaft::handleFutureFinished() {
 
 double BrightnessShaft::value() const {
     if (!d->initialized)
-        return 0.0;
+        return NAN;
 
-    double result = d->value;
+    double result = d->cachedValue;
 
     if (std::isnan(result)) {
         result = 0;
@@ -60,8 +60,7 @@ double BrightnessShaft::value() const {
             result += monitor->property(PlatformMonitor::BrightnessProperty);
         result /= d->monitors.size();
 
-        if (std::isnan(result))
-            result = 0.0;
+        /* Might still be NAN at this point if brightness is not supported. */
     }
 
     return result;
@@ -73,7 +72,7 @@ void BrightnessShaft::setValue(double value) {
     if (!d->initialized)
         return;
 
-    d->value = value;
+    d->cachedValue = value;
     for (auto& monitor : d->monitors)
         monitor->setProperty(PlatformMonitor::BrightnessProperty, value);
 }
