@@ -1,6 +1,7 @@
 #pragma once
 
 #include <wtypes.h>
+#include <winerror.h>
 
 #include <QtCore/QString>
 
@@ -10,9 +11,25 @@ QString GetLastErrorAsString();
 
 namespace detail {
 
-bool checkAndLog(BOOL result, const char* call, const std::source_location& location);
-bool checkAndLog(HRESULT result, const char* call, const std::source_location& location);
+void logError(HRESULT result, const char* expr, const std::source_location& location);
+void logError(BOOL result, const char* expr, const std::source_location& location);
+
+Q_ALWAYS_INLINE bool isSuccess(BOOL result) {
+    return result;
+}
+
+Q_ALWAYS_INLINE bool isSuccess(HRESULT result) {
+    return SUCCEEDED(result);
+}
 
 }
 
-#define succeeded(CALL) (detail::checkAndLog(CALL, #CALL, __LOCATION__))
+#define succeeded(CALL) (                                                                                               \
+    [&] {                                                                                                               \
+        auto __result = CALL;                                                                                           \
+        if (detail::isSuccess(__result))                                                                                \
+            return true;                                                                                                \
+        detail::logError(__result, #CALL, __LOCATION__);                                                                \
+        return false;                                                                                                   \
+    }                                                                                                                   \
+)()

@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 
+#include <cassert>
 #include <type_traits>
 
 #include <QtCore/QDebug>
@@ -41,9 +42,9 @@ static QByteArray extractFunctionName(const char* expr) {
     return result;
 }
 
-bool detail::checkAndLog(BOOL result, const char* expr, const std::source_location& location) {
-    if (result)
-        return true;
+void detail::logError(BOOL result, const char* expr, const std::source_location& location) {
+    assert(!result);
+    Q_UNUSED(result);
 
     QString lastErrorString = GetLastErrorAsString();
 
@@ -51,19 +52,14 @@ bool detail::checkAndLog(BOOL result, const char* expr, const std::source_locati
         << extractFunctionName(expr)
         << " failed: "
         << (lastErrorString.isEmpty() ? lit("<unknown error>") : lastErrorString);
-
-    return false;
 }
 
-bool detail::checkAndLog(HRESULT result, const char* expr, const std::source_location& location) {
-    if (SUCCEEDED(result))
-        return true;
+void detail::logError(HRESULT result, const char* expr, const std::source_location& location) {
+    assert(!SUCCEEDED(result));
 
     QMessageLogger(location.file_name(), location.line(), location.function_name()).warning().noquote().nospace()
         << extractFunctionName(expr)
         << " failed with HRESULT=0x"
         << lit("%1").arg(static_cast<std::make_unsigned_t<HRESULT>>(result), sizeof(result) * 2, 16, QLatin1Char('0'));
-
-    return false;
 }
 
