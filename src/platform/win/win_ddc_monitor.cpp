@@ -57,11 +57,12 @@ QString WinDdcMonitor::name() const {
     return QString::fromWCharArray(m_physicalMonitor.szPhysicalMonitorDescription);
 }
 
-void WinDdcMonitor::readCapabilities(DWORD* capabilities, DWORD* colorTemperatures) {
-    if (!succeeded(GetMonitorCapabilities(m_physicalMonitor.hPhysicalMonitor, capabilities, colorTemperatures))) {
+void WinDdcMonitor::readCapabilities(DWORD* capabilities) {
+    DWORD colorTemperatures; /* Discarded for now. */
+
+    if (!succeeded(GetMonitorCapabilities(m_physicalMonitor.hPhysicalMonitor, capabilities, &colorTemperatures))) {
         /* This means that the monitor doesn't support DDC/CI. */
         *capabilities = 0;
-        *colorTemperatures = 0;
     }
 }
 

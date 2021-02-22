@@ -25,13 +25,34 @@ public:
 
     static std::vector<std::unique_ptr<WinDdcMonitor>> enumerateMonitors();
 
+    /**
+     * \returns                         Name of the monitor, as shown in device manager.
+     */
     QString name() const;
 
-    void readCapabilities(DWORD* capabilities, DWORD* colorTemperatures);
+    /**
+     * Reads monitor capabilities. Might take over a second to complete.
+     *
+     * \param[out] capabilities         Monitor capabilities.
+     */
+    void readCapabilities(DWORD* capabilities);
 
-    /* Functions below take up to 50ms to complete as noted in the corresponding API docs. */
-
+    /**
+     * Reads a DDC/CI property. Might take up to 50ms to complete.
+     *
+     * \param property                  Property to read.
+     * \param[out]                      Property value.
+     * \returns                         Whether the operation was successful.
+     */
     bool read(PlatformMonitor::Property property, WinDdcTriplet* value);
+
+    /**
+     * Writes a DDC/CI property. Might take up to 50ms to complete.
+     *
+     * \param property                  Property to write.
+     * \param value                     New value for the property.
+     * \returns                         Whether the operation was successful.
+     */
     bool write(PlatformMonitor::Property property, DWORD value);
 
 private:

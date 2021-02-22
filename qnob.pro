@@ -2,6 +2,7 @@ QT += widgets
 
 CONFIG += c++latest
 CONFIG += strict_c++
+# CONFIG += force_debug_info
 
 DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
@@ -41,6 +42,11 @@ HEADERS += \
     src/core/trigger/trigger.h \
     src/core/trigger/hotkey_trigger.h \
     src/core/trigger/hotkey_trigger_factory.h \
+    src/lib/monitor/monitor.h \
+    src/lib/monitor/monitor_server.h \
+    src/lib/monitor/monitor_queue.h \
+    src/lib/monitor/monitor_action.h \
+    src/lib/monitor/monitor_manager.h \
     src/meta/bound_meta_call.h \
     src/meta/meta_object_extension.h \
     src/meta/meta_method_invoker.h \
@@ -60,10 +66,6 @@ HEADERS += \
     src/platform/win/win_volume_event_handler.h \
     src/platform/win/win_ddc_triplet.h \
     src/platform/win/win_ddc_monitor.h \
-    src/platform/win/win_ddc_monitor_action.h \
-    src/platform/win/win_ddc_monitor_client.h \
-    src/platform/win/win_ddc_monitor_server.h \
-    src/platform/win/win_ddc_monitor_queue.h \
     src/platform/win/win_monitor.h \
     src/platform/win/win_monitor_manager.h \
     src/serialization/alignment.h \
@@ -98,6 +100,10 @@ SOURCES += \
     src/core/sound/sound_factory.cpp \
     src/core/trigger/hotkey_trigger.cpp \
     src/core/trigger/hotkey_trigger_factory.cpp \
+    src/lib/monitor/monitor.cpp \
+    src/lib/monitor/monitor_server.cpp \
+    src/lib/monitor/monitor_queue.cpp \
+    src/lib/monitor/monitor_manager.cpp \
     src/meta/bound_meta_call.cpp \
     src/meta/meta_object_extension.cpp \
     src/meta/meta_method_invoker.cpp \
@@ -109,9 +115,6 @@ SOURCES += \
     src/platform/win/win_volume_control.cpp \
     src/platform/win/win_volume_event_handler.cpp \
     src/platform/win/win_ddc_monitor.cpp \
-    src/platform/win/win_ddc_monitor_client.cpp \
-    src/platform/win/win_ddc_monitor_server.cpp \
-    src/platform/win/win_ddc_monitor_queue.cpp \
     src/platform/win/win_monitor.cpp \
     src/platform/win/win_monitor_manager.cpp \
     src/serialization/alignment.cpp \

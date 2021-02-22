@@ -6,6 +6,15 @@
 #include "platform_shortcut_notifier.h"
 #include "platform_monitor_manager.h"
 
+/**
+ * Platform abstraction factory class.
+ *
+ * Instantiate `PlatformInitializer` in your code first, then you'll be able to use platform global instance.
+ *
+ * Some guidelines for platform classes:
+ * - They are pretty low level, convenience classes are to be added on top.
+ * - They don't throw exceptions.
+ */
 class Platform {
 public:
     virtual ~Platform() {}
@@ -15,6 +24,9 @@ public:
      */
     virtual PlatformVolumeControl* createVolumeControl() const = 0;
 
+    /**
+     * \returns                         New monitor manager object.
+     */
     virtual PlatformMonitorManager* createMonitorManager() const = 0;
 
     /**
@@ -22,11 +34,9 @@ public:
      * \returns                         New shortcut notifier, or `nullptr` in case of an error.
      */
     virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const = 0;
-
-    static Platform* instance();
 };
 
-inline Platform* platform() {
-    return Platform::instance();
-}
-
+/**
+ * \returns                             Global platform instance.
+ */
+Platform* platform();

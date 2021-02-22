@@ -21,6 +21,6 @@ PlatformInitializer::~PlatformInitializer() {
     g_platform = nullptr;
 }
 
-Platform* Platform::instance() {
+Platform* platform() {
     return g_platform;
 }

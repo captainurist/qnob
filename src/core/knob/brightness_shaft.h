@@ -2,8 +2,7 @@
 
 #include "shaft.h"
 
-class PlatformMonitorManager;
-class PlatformMonitor;
+class BrightnessShaftPrivate;
 
 class BrightnessShaft : public Shaft {
     Q_OBJECT
@@ -18,7 +17,8 @@ public:
     virtual void setEnabled(bool value) override;
 
 private:
-    std::unique_ptr<PlatformMonitorManager> m_monitorManager;
-    std::vector<std::unique_ptr<PlatformMonitor>> m_monitors;
-    double m_value;
+    Q_SLOT void handleFutureFinished();
+
+private:
+    std::unique_ptr<BrightnessShaftPrivate> d;
 };

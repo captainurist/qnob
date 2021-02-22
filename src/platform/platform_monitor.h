@@ -2,6 +2,14 @@
 
 #include <QtCore/QObject>
 
+#include <util/bitset_flags.h>
+
+/**
+ * Abstraction around a monitor.
+ *
+ * Underlying implementation will likely use DDC/CI calls, which are insanely slow. So it might be a good idea to do
+ * all the calls in a separate thread.
+ */
 class PlatformMonitor: public QObject {
     Q_OBJECT
 public:
@@ -11,16 +19,17 @@ public:
         PropertyCount
     };
 
+    QB_DECLARE_BITSET_FLAGS(Properties, Property, PropertyCount);
+
     /**
      * \returns                         Name of this monitor.
      */
     virtual QString name() const = 0;
 
     /**
-     * \param property                  Property to check.
-     * \returns                         Whether the provided property is supported.
+     * \returns                         Supported properties for this monitor.
      */
-    virtual bool supported(Property property) const = 0;
+    virtual Properties capabilities() const = 0;
 
     /**
      * \param property                  Property to read.
@@ -41,9 +50,6 @@ public:
      * \param value                     New value for the property.
      */
     virtual void setProperty(Property property, float value) = 0;
-
-signals:
-    void propertyChanged(Property property);
 };
 
-Q_DECLARE_METATYPE(PlatformMonitor::Property)
+QB_DELARE_OPERATORS_FOR_BITSET_FLAGS(PlatformMonitor::Properties)
