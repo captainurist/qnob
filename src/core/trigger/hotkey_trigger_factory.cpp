@@ -5,8 +5,8 @@
 #include <config/entity_config.h>
 #include <core/entity/entity_creation_exception.h>
 #include <core/entity/factory_resolver.h>
+#include <lib/metacall/bound_meta_call.h>
 #include <util/map_access.h>
-#include <meta/bound_meta_call.h>
 
 #include "hotkey_trigger.h"
 

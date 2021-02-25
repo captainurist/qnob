@@ -4,8 +4,8 @@
 
 #include <QtCore/QVariant>
 
+#include <lib/serialization/serialization_traits.h>
 #include <util/bad_cast_exception.h>
-#include <serialization/serialization_traits.h>
 
 #include "entity_creation_context.h"
 

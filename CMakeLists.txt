@@ -60,6 +60,12 @@ set(src
     src/core/trigger/hotkey_trigger_factory.cpp
     src/core/trigger/hotkey_trigger_factory.h
     src/core/trigger/trigger.h
+    src/lib/metacall/bound_meta_call.cpp
+    src/lib/metacall/bound_meta_call.h
+    src/lib/metacall/meta_method_invoker.cpp
+    src/lib/metacall/meta_method_invoker.h
+    src/lib/metacall/meta_object_extension.cpp
+    src/lib/metacall/meta_object_extension.h
     src/lib/monitor/monitor.cpp
     src/lib/monitor/monitor.h
     src/lib/monitor/monitor_action.h
@@ -69,13 +75,13 @@ set(src
     src/lib/monitor/monitor_queue.h
     src/lib/monitor/monitor_server.cpp
     src/lib/monitor/monitor_server.h
+    src/lib/serialization/alignment.cpp
+    src/lib/serialization/alignment.h
+    src/lib/serialization/enum_serialization.h
+    src/lib/serialization/serialization_exceptions.cpp
+    src/lib/serialization/serialization_exceptions.h
+    src/lib/serialization/serialization_fwd.h
     src/main.cpp
-    src/meta/bound_meta_call.cpp
-    src/meta/bound_meta_call.h
-    src/meta/meta_method_invoker.cpp
-    src/meta/meta_method_invoker.h
-    src/meta/meta_object_extension.cpp
-    src/meta/meta_object_extension.h
     src/platform/platform.h
     src/platform/platform_initializer.cpp
     src/platform/platform_initializer.h
@@ -104,12 +110,6 @@ set(src
     src/platform/win/win_volume_control.h
     src/platform/win/win_volume_event_handler.cpp
     src/platform/win/win_volume_event_handler.h
-    src/serialization/alignment.cpp
-    src/serialization/alignment.h
-    src/serialization/enum_serialization.h
-    src/serialization/serialization_exceptions.cpp
-    src/serialization/serialization_exceptions.h
-    src/serialization/serialization_fwd.h
     src/util/bad_cast_exception.cpp
     src/util/bad_cast_exception.h
     src/util/debug.cpp

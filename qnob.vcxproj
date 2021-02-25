@@ -63,7 +63,16 @@
     <ClInclude Include="src\core\skin\skin_factory.h" />
     <ClInclude Include="src\core\sound\sound.h" />
     <ClInclude Include="src\core\sound\sound_factory.h" />
+    <ClInclude Include="src\lib\metacall\bound_meta_call.h" />
+    <ClInclude Include="src\lib\metacall\meta_call_exception.h" />
+    <ClInclude Include="src\lib\metacall\meta_method_invoker.h" />
+    <ClInclude Include="src\lib\metacall\meta_object_extension.h" />
     <ClInclude Include="src\lib\monitor\monitor_manager.h" />
+    <ClInclude Include="src\lib\serialization\alignment.h" />
+    <ClInclude Include="src\lib\serialization\enum_serialization.h" />
+    <ClInclude Include="src\lib\serialization\serialization_exceptions.h" />
+    <ClInclude Include="src\lib\serialization\serialization_fwd.h" />
+    <ClInclude Include="src\lib\serialization\serialization_traits.h" />
     <ClInclude Include="src\meta\meta_call_exception.h" />
     <ClInclude Include="src\platform\platform.h" />
     <ClInclude Include="src\platform\platform_initializer.h" />
@@ -132,7 +141,12 @@
     <ClCompile Include="src\core\skin\skin_factory.cpp" />
     <ClCompile Include="src\core\sound\sound.cpp" />
     <ClCompile Include="src\core\sound\sound_factory.cpp" />
+    <ClCompile Include="src\lib\metacall\bound_meta_call.cpp" />
+    <ClCompile Include="src\lib\metacall\meta_method_invoker.cpp" />
+    <ClCompile Include="src\lib\metacall\meta_object_extension.cpp" />
     <ClCompile Include="src\lib\monitor\monitor_manager.cpp" />
+    <ClCompile Include="src\lib\serialization\alignment.cpp" />
+    <ClCompile Include="src\lib\serialization\serialization_exceptions.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\lib\monitor\monitor_queue.cpp" />
     <ClCompile Include="src\lib\monitor\monitor_server.cpp" />
@@ -163,6 +177,9 @@
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="qnob.pro" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
