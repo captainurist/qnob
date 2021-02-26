@@ -99,6 +99,7 @@ set(src
     src/platform/win/win_monitor.h
     src/platform/win/win_monitor_manager.cpp
     src/platform/win/win_monitor_manager.h
+    src/platform/win/win_native_event_window.h
     src/platform/win/win_platform.cpp
     src/platform/win/win_platform.h
     src/platform/win/win_shortcut_dispatcher.cpp

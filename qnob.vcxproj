@@ -90,6 +90,7 @@
     <ClInclude Include="src\lib\monitor\monitor.h" />
     <ClInclude Include="src\platform\win\win_monitor_manager.h" />
     <ClInclude Include="src\platform\win\win_error.h" />
+    <ClInclude Include="src\platform\win\win_native_event_window.h" />
     <ClInclude Include="src\platform\win\win_platform.h" />
     <ClInclude Include="src\platform\win\win_shortcut_dispatcher.h" />
     <ClInclude Include="src\platform\win\win_shortcut_notifier.h" />

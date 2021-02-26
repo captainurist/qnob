@@ -7,7 +7,7 @@
 #include <QtGui/QKeySequence>
 
 class PlatformShortcutNotifier;
-class WinShortcutEventHandler;
+class WinNativeEventWindow;
 class WinShortcutNotifier;
 
 class WinShortcutDispatcher: public QObject {
@@ -19,16 +19,13 @@ public:
     PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut);
 
 private:
-    friend class WinShortcutEventHandler;
-    friend class WinShortcutNotifier;
-
     void dispatchEvent(void* message);
     void removeShortcutNotifier(int id);
     void convertToNativeKey(Qt::Key key, Qt::KeyboardModifiers mods, quint32* outKey, quint32* outMods) const;
 
 private:
     std::unordered_map<quint32, quint32> m_winKeyByQtKey;
-    std::unique_ptr<WinShortcutEventHandler> m_eventHandler;
+    std::unique_ptr<WinNativeEventWindow> m_eventWindow;
     std::unordered_map<int, WinShortcutNotifier*> m_notifierById;
     int m_nextId = 1;
 };

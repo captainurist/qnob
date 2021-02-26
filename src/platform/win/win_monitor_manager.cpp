@@ -2,10 +2,14 @@
 
 #include <physicalmonitorenumerationapi.h> /* For EnumDisplayMonitors. */
 
+#include <cassert>
+
 #include <QtCore/QVarLengthArray>
+#include <QtGui/QWindow>
 
 #include "win_monitor.h"
 #include "win_error.h"
+#include "win_native_event_window.h"
 
 struct MonitorInfo {
     DISPLAY_DEVICEW display;
@@ -96,7 +100,13 @@ QString monitorDeviceId(const std::vector<MonitorInfo>& monitorInfos, const Disp
     return QString();
 }
 
-WinMonitorManager::WinMonitorManager() {}
+WinMonitorManager::WinMonitorManager():
+    m_eventWindow(new WinNativeEventWindow(WM_DISPLAYCHANGE))
+{
+    connect(m_eventWindow.get(), &WinNativeEventWindow::messageReceived, this, &WinMonitorManager::dispatchEvent);
+}
+
+WinMonitorManager::~WinMonitorManager() {}
 
 std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonitors() {
     std::vector<std::unique_ptr<PlatformMonitor>> result;
@@ -125,4 +135,11 @@ std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonito
     }
 
     return result;
+}
+
+void WinMonitorManager::dispatchEvent(void* message) {
+    MSG* msg = static_cast<MSG*>(message);
+    assert(msg->message == WM_DISPLAYCHANGE);
+
+    emit monitorsChanged(); // TODO: actually, we can do better than that! Maybe cache & compare.
 }

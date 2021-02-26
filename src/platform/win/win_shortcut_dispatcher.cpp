@@ -13,6 +13,7 @@
 
 #include "win_error.h"
 #include "win_shortcut_notifier.h"
+#include "win_native_event_window.h"
 
 /* Derived from qwindowskeymapper.cpp. */
 
@@ -288,23 +289,6 @@ constexpr std::array<KeyMappingElement, 256> KeyMapping = {{
     {Qt::Key_unimplemented, 0}
 }};
 
-
-class WinShortcutEventHandler : public QWindow {
-public:
-    WinShortcutEventHandler(WinShortcutDispatcher* dispatcher) : m_dispatcher(dispatcher) {}
-
-    virtual bool nativeEvent(const QByteArray& eventType, void* message, qintptr* result) override {
-        MSG* msg = static_cast<MSG*>(message);
-        if (msg->message == WM_HOTKEY)
-            m_dispatcher->dispatchEvent(message);
-
-        return QWindow::nativeEvent(eventType, message, result);
-    }
-
-public:
-    WinShortcutDispatcher* m_dispatcher = nullptr;
-};
-
 WinShortcutDispatcher::WinShortcutDispatcher(QObject* parent): QObject(parent) {
     for (quint32 winKey = 0; winKey < KeyMapping.size(); winKey++) {
         Qt::Key qtKey = KeyMapping[winKey].key;
@@ -324,7 +308,8 @@ WinShortcutDispatcher::WinShortcutDispatcher(QObject* parent): QObject(parent) {
         m_winKeyByQtKey[combinedKey] = winKey;
     }
 
-    m_eventHandler.reset(new WinShortcutEventHandler(this));
+    m_eventWindow.reset(new WinNativeEventWindow(WM_HOTKEY));
+    connect(m_eventWindow.get(), &WinNativeEventWindow::messageReceived, this, &WinShortcutDispatcher::dispatchEvent);
 }
 
 WinShortcutDispatcher::~WinShortcutDispatcher() {}
@@ -342,7 +327,7 @@ PlatformShortcutNotifier* WinShortcutDispatcher::createShortcutNotifier(const QK
     quint32 nativeMods = 0;
     convertToNativeKey(key, mods, &nativeKey, &nativeMods);
 
-    if (!succeeded(RegisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), m_nextId, nativeMods, nativeKey)))
+    if (!succeeded(RegisterHotKey(reinterpret_cast<HWND>(m_eventWindow->winId()), m_nextId, nativeMods, nativeKey)))
         return nullptr;
 
     WinShortcutNotifier* notifier = new WinShortcutNotifier(m_nextId);
@@ -366,7 +351,7 @@ void WinShortcutDispatcher::dispatchEvent(void* message) {
 }
 
 void WinShortcutDispatcher::removeShortcutNotifier(int id) {
-    succeeded(UnregisterHotKey(reinterpret_cast<HWND>(m_eventHandler->winId()), id));
+    succeeded(UnregisterHotKey(reinterpret_cast<HWND>(m_eventWindow->winId()), id));
 
     m_notifierById.erase(id);
 }
