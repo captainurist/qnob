@@ -92,8 +92,6 @@ set(src
     src/platform/win/com.cpp
     src/platform/win/com.h
     src/platform/win/com_ptr.h
-    src/platform/win/win_ddc_monitor.cpp
-    src/platform/win/win_ddc_monitor.h
     src/platform/win/win_ddc_triplet.h
     src/platform/win/win_error.cpp
     src/platform/win/win_error.h

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <wtypes.h>
+#include <physicalmonitorenumerationapi.h> /* For PHYSICAL_MONITOR. */
 
 #include <optional>
 #include <array>
@@ -14,7 +15,7 @@ class WinDdcMonitor;
 class WinMonitor : public PlatformMonitor {
     Q_OBJECT
 public:
-    WinMonitor(std::unique_ptr<WinDdcMonitor> monitor);
+    WinMonitor(PHYSICAL_MONITOR physicalMonitor);
     virtual ~WinMonitor();
 
     virtual QString name() const override;
@@ -23,6 +24,11 @@ public:
     virtual void setProperty(Property property, float value) override;
 
 private:
-    std::unique_ptr<WinDdcMonitor> m_monitor;
+    void capabilitiesInternal(DWORD* capabilities) const;
+    bool propertyInternal(Property property, WinDdcTriplet * value) const;
+    bool setPropertyInternal(Property property, DWORD value);
+
+private:
+    PHYSICAL_MONITOR m_physicalMonitor;
     mutable std::array<std::optional<WinDdcTriplet>, PlatformMonitor::PropertyCount> m_cachedProperties;
 };

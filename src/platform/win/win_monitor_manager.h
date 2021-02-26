@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory>
-
 #include <platform/platform_monitor_manager.h>
 
 
