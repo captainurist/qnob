@@ -6,7 +6,7 @@
 
 class OsdWindow : public QRasterWindow {
 public:
-    OsdWindow();
+    OsdWindow(const QString& title);
 
     void setPicture(const DeferredPicture& picture);
     const DeferredPicture& picture() const;

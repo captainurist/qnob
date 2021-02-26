@@ -308,7 +308,7 @@ WinShortcutDispatcher::WinShortcutDispatcher(QObject* parent): QObject(parent) {
         m_winKeyByQtKey[combinedKey] = winKey;
     }
 
-    m_eventWindow.reset(new WinNativeEventWindow(WM_HOTKEY));
+    m_eventWindow.reset(new WinNativeEventWindow(lit("WinShortcutDispatcherEventWindow"), WM_HOTKEY));
     connect(m_eventWindow.get(), &WinNativeEventWindow::messageReceived, this, &WinShortcutDispatcher::dispatchEvent);
 }
 

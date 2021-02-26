@@ -101,8 +101,16 @@ QString monitorDeviceId(const std::vector<MonitorInfo>& monitorInfos, const Disp
 }
 
 WinMonitorManager::WinMonitorManager():
-    m_eventWindow(new WinNativeEventWindow(WM_DISPLAYCHANGE))
+    m_eventWindow(new WinNativeEventWindow(lit("WinMonitorManagerEventWindow"), WM_DISPLAYCHANGE))
 {
+    /* This magic here is needed because message-only windows don't receive broadcast messages, see
+     * https://stackoverflow.com/questions/22570008/not-receiving-wm-displaychange */
+    m_eventWindow->setFlag(Qt::FramelessWindowHint);
+    m_eventWindow->setFlag(Qt::WindowTransparentForInput);
+    m_eventWindow->setGeometry(0, 0, 0, 0);
+    m_eventWindow->show(); /* This is where the underlying window is created. */
+    m_eventWindow->hide();
+
     connect(m_eventWindow.get(), &WinNativeEventWindow::messageReceived, this, &WinMonitorManager::dispatchEvent);
 }
 

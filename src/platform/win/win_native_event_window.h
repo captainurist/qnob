@@ -7,7 +7,11 @@
 class WinNativeEventWindow : public QWindow {
     Q_OBJECT
 public:
-    WinNativeEventWindow(UINT message) : m_message(message) {}
+    WinNativeEventWindow(const QString& title, UINT message) :
+        m_message(message)
+    {
+        setTitle(title); /* Mainly used for debugging with Spy++. */
+    }
 
 signals:
     void messageReceived(void* message);

@@ -12,7 +12,7 @@
 
 Osd::Osd(const QString& id):
     Entity(id),
-    m_window(new OsdWindow()),
+    m_window(new OsdWindow(lit("OsdWindow"))),
     m_fsm(new OsdFsm())
 {
     connect(m_fsm.get(), &OsdFsm::started, m_window.get(), &OsdWindow::show);

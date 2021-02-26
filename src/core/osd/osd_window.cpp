@@ -3,11 +3,12 @@
 #include <QtGui/QPainter>
 #include <QtCore/QDebug>
 
-OsdWindow::OsdWindow() {
+OsdWindow::OsdWindow(const QString& title) {
     setFlag(Qt::WindowStaysOnTopHint);
     setFlag(Qt::FramelessWindowHint);
     setFlag(Qt::WindowTransparentForInput);
     setFlag(Qt::Tool);
+    setTitle(title); /* Mainly used for debugging with Spy++. */
 
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
