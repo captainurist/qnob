@@ -19,12 +19,17 @@ static float mapFromNative(const WinDdcTriplet& triplet) {
     return (triplet.current - triplet.min) * 1.0f / (triplet.max - triplet.min);
 }
 
-WinMonitor::WinMonitor(PHYSICAL_MONITOR physicalMonitor):
+WinMonitor::WinMonitor(const QString& deviceId, PHYSICAL_MONITOR physicalMonitor):
+    m_deviceId(deviceId),
     m_physicalMonitor(physicalMonitor)
 {}
 
 WinMonitor::~WinMonitor() {
     succeeded(DestroyPhysicalMonitor(m_physicalMonitor.hPhysicalMonitor));
+}
+
+QString WinMonitor::deviceId() const {
+    return m_deviceId;
 }
 
 QString WinMonitor::name() const {

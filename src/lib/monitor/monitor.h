@@ -16,6 +16,7 @@ public:
 
     bool isInitialized() const;
 
+    virtual QString deviceId() const override;
     virtual QString name() const override;
     virtual Properties capabilities() const override;
     virtual float property(Property property) const override;
@@ -36,6 +37,7 @@ private:
     std::unique_ptr<QThread> m_thread;
     std::shared_ptr<MonitorQueue> m_queue;
     int m_pendingInitializationRequests = 0;
+    QString m_cachedDeviceId;
     QString m_cachedName;
     Properties m_cachedCapabilities;
     std::array<float, PropertyCount> m_cachedProperties;

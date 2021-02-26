@@ -8,7 +8,8 @@
 #include "monitor_server.h"
 
 Monitor::Monitor(std::unique_ptr<PlatformMonitor> monitor) {
-    /* Getting a name doesn't take forever to complete, so we do in in ctor. */
+    /* Getting a name & device id doesn't take forever to complete, so we do in in ctor. */
+    m_cachedDeviceId = monitor->deviceId();
     m_cachedName = monitor->name();
 
     /* Set up a processing thread. */
@@ -44,6 +45,10 @@ Monitor::~Monitor() {
 
 bool Monitor::isInitialized() const {
     return m_pendingInitializationRequests == 0;
+}
+
+QString Monitor::deviceId() const {
+    return m_cachedDeviceId;
 }
 
 QString Monitor::name() const {

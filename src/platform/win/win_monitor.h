@@ -15,9 +15,10 @@ class WinDdcMonitor;
 class WinMonitor : public PlatformMonitor {
     Q_OBJECT
 public:
-    WinMonitor(PHYSICAL_MONITOR physicalMonitor);
+    WinMonitor(const QString& deviceId, PHYSICAL_MONITOR physicalMonitor);
     virtual ~WinMonitor();
 
+    virtual QString deviceId() const override;
     virtual QString name() const override;
     virtual Properties capabilities() const override;
     virtual float property(Property property) const override;
@@ -29,6 +30,7 @@ private:
     bool setPropertyInternal(Property property, DWORD value);
 
 private:
+    QString m_deviceId;
     PHYSICAL_MONITOR m_physicalMonitor;
     mutable std::array<std::optional<WinDdcTriplet>, PlatformMonitor::PropertyCount> m_cachedProperties;
 };

@@ -21,7 +21,11 @@ public:
     QB_DECLARE_BITSET_FLAGS(Properties, Property, PropertyCount);
 
     /**
-     * \returns                         Name of this monitor.
+     * \returns                         System-wide unique identifier for this monitor.
+     */
+    virtual QString deviceId() const = 0;
+
+    /**
      * \returns                         Name of this monitor. On windows, this is the name as shown in device manager.
      */
     virtual QString name() const = 0;
