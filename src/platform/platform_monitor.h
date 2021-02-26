@@ -18,33 +18,35 @@ public:
         ContrastProperty,
         PropertyCount
     };
-
     QB_DECLARE_BITSET_FLAGS(Properties, Property, PropertyCount);
 
     /**
      * \returns                         Name of this monitor.
+     * \returns                         Name of this monitor. On windows, this is the name as shown in device manager.
      */
     virtual QString name() const = 0;
 
     /**
+     * Reads monitor capabilities. This function might take over a second to complete.
+     *
      * \returns                         Supported properties for this monitor.
      */
     virtual Properties capabilities() const = 0;
 
     /**
+     * Reads a monitor property. This function might take over 50ms to complete.
+     *
+     * Errors are reported into debug log.
+     *
      * \param property                  Property to read.
-     * \returns                         Current value for the property.
+     * \returns                         Current value for the property, or NAN in case of an error.
      */
     virtual float property(Property property) const = 0;
 
     /**
-     * Modifier for properly values. This function returns immediately, but actual updates might happen on a different
-     * thread, and might take some time to finish. This is why reading a property right after this call won't return
-     * the new value.
+     * Updates a monitor properly. This function might take over 100ms to complete.
      *
-     * You can subscribe to `propertyChanged` if you want to receive a notification when the underlying API has
-     * finished. Note however that implementation might merge several consecutive calls to `setProperty`, and thus
-     * you might get only one notification for several calls.
+     * Errors are reported into debug log.
      *
      * \param property                  Property to write.
      * \param value                     New value for the property.
