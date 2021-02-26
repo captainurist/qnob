@@ -20,8 +20,8 @@ Osd::Osd(const QString& id):
     connect(m_fsm.get(), &OsdFsm::valueChanged, m_window.get(), &OsdWindow::setOpacity);
     connect(m_fsm.get(), &OsdFsm::finished, m_window.get(), &OsdWindow::hide);
 
-    /* Note that connection to raise above is important. Otherwise OSD window ends up below all other windows after
-     * changing main screen in Win10. */
+    /* Note that connection to OsdWindow::raise above is important. Otherwise OSD window ends up below all other
+     * windows after changing main display in Win10. */
 }
 
 Osd::~Osd() {}
