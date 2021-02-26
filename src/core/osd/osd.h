@@ -38,4 +38,3 @@ private:
     Qt::Alignment m_alignment = Qt::AlignBottom | Qt::AlignHCenter;
     QPoint m_offset = QPoint(0, -100);
 };
-
