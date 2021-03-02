@@ -9,8 +9,10 @@
 * Lua script entity, with access to globals.
 * Generic knob with acceleration (like in win10) and finer details at 0.
 * Lua knob for monitor brightness that also changes contrast.
+* Utility shafts for (all) external monitors & built-in monitor.
 * Multi-shaft OSD for the lua knob.
-* --list option to list built-in entities.
+* --list option to list built-in entities. Or rather a mode, `qnob list`.
+* Similar option to list all monitors. `qnob dump`.
 * Description for built-in entities.
 
 0.2:
