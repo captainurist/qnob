@@ -1,26 +1,16 @@
 #pragma once
 
-#include <memory>
-
-#include <QtCore/QSize>
-
 #include <core/entity/entity.h>
 
-#include "skin_data.h"
-
+class QSize;
 class QPainter;
 class KnobState;
 
 class Skin : public Entity {
     Q_OBJECT
 public:
-    Skin(const QString& id, const SkinData& data);
+    Skin(const QString& id) : Entity(id) {}
 
-    QSize size() const;
-
-    void paint(QPainter* painter, const KnobState& state);
-
-private:
-    SkinData m_data;
-    QSize m_size;
+    virtual QSize size() const = 0;
+    virtual void paint(QPainter* painter, const KnobState& state) = 0;
 };

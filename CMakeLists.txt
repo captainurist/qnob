@@ -47,10 +47,12 @@ set(src
     src/core/osd/osd_fsm.h
     src/core/osd/osd_window.cpp
     src/core/osd/osd_window.h
-    src/core/skin/skin.cpp
+    src/core/skin/horizontal_bar_skin.h
     src/core/skin/skin.h
     src/core/skin/skin_factory.cpp
     src/core/skin/skin_factory.h
+    src/core/skin/skin_type.h
+    src/core/skin/skin_type.cpp
     src/core/sound/sound.cpp
     src/core/sound/sound.h
     src/core/sound/sound_factory.cpp

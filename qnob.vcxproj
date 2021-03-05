@@ -58,9 +58,10 @@
     <ClInclude Include="src\core\osd\osd_factory.h" />
     <ClInclude Include="src\core\osd\osd_fsm.h" />
     <ClInclude Include="src\core\osd\osd_window.h" />
+    <ClInclude Include="src\core\skin\horizontal_bar_skin.h" />
     <ClInclude Include="src\core\skin\skin.h" />
-    <ClInclude Include="src\core\skin\skin_data.h" />
     <ClInclude Include="src\core\skin\skin_factory.h" />
+    <ClInclude Include="src\core\skin\skin_type.h" />
     <ClInclude Include="src\core\sound\sound.h" />
     <ClInclude Include="src\core\sound\sound_factory.h" />
     <ClInclude Include="src\core\tray_icon\tray_icon.h" />
@@ -72,6 +73,7 @@
     <ClInclude Include="src\lib\monitor\monitor_manager.h" />
     <ClInclude Include="src\lib\serialization\alignment.h" />
     <ClInclude Include="src\lib\serialization\enum_serialization.h" />
+    <ClInclude Include="src\lib\serialization\serialization.h" />
     <ClInclude Include="src\lib\serialization\serialization_exceptions.h" />
     <ClInclude Include="src\lib\serialization\serialization_fwd.h" />
     <ClInclude Include="src\lib\serialization\serialization_traits.h" />
@@ -138,8 +140,8 @@
     <ClCompile Include="src\core\osd\osd_factory.cpp" />
     <ClCompile Include="src\core\osd\osd_fsm.cpp" />
     <ClCompile Include="src\core\osd\osd_window.cpp" />
-    <ClCompile Include="src\core\skin\skin.cpp" />
     <ClCompile Include="src\core\skin\skin_factory.cpp" />
+    <ClCompile Include="src\core\skin\skin_type.cpp" />
     <ClCompile Include="src\core\sound\sound.cpp" />
     <ClCompile Include="src\core\sound\sound_factory.cpp" />
     <ClCompile Include="src\core\tray_icon\tray_icon.cpp" />

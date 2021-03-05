@@ -62,7 +62,7 @@ offset_x = 0
 offset_y = -100
 
 [mac_volume]
-type = "skin"
+type = "horizontal_bar_skin"
 background = ":/resource/mac/volume.png"
 progress = ":/resource/mac/meter.png"
 disabled = ":/resource/mac/mute.png"
@@ -71,7 +71,7 @@ y = 165
 units = 16
 
 [mac_brightness]
-type = "skin"
+type = "horizontal_bar_skin"
 background = ":/resource/mac/brightness.png"
 progress = ":/resource/mac/meter.png"
 disabled = ":/resource/mac/brightness.png"

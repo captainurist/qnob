@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
         EntityFactoryPool factoryPool;
         factoryPool.registerFactory(new HotkeyTriggerFactory());
         factoryPool.registerFactory(new SoundFactory());
-        factoryPool.registerFactory(new SkinFactory());
+        factoryPool.registerFactory(new SkinFactory(HorizontalBarSkinType));
         factoryPool.registerFactory(new OsdFactory());
         factoryPool.registerFactory(new TrayIconFactory());
 
