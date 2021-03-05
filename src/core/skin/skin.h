@@ -6,8 +6,10 @@
 
 #include <core/entity/entity.h>
 
-class SkinData;
-class KnobPainter;
+#include "skin_data.h"
+
+class QPainter;
+class KnobState;
 
 class Skin : public Entity {
     Q_OBJECT
@@ -16,9 +18,9 @@ public:
 
     QSize size() const;
 
-    KnobPainter* createPainter() const;
+    void paint(QPainter* painter, const KnobState& state);
 
 private:
-    std::shared_ptr<SkinData> m_data;
+    SkinData m_data;
     QSize m_size;
 };

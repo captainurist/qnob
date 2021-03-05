@@ -24,8 +24,7 @@ Entity* OsdFactory::createEntity(const EntityCreationContext& ctx) {
     int offsetY = ctx.requireOr<qint64>(lit("offset_y"), 0);
 
     Osd* result = new Osd(ctx.id());
-    result->resize(skin->size());
-    result->setPainter(skin->createPainter());
+    result->setSkin(skin);
     result->setAlignment(alignment);
     result->setOffset({ offsetX, offsetY });
 

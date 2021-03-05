@@ -18,7 +18,7 @@ Entity* SkinFactory::createEntity(const EntityCreationContext& ctx) {
     data.disabled = ctx.require<QPixmap>(lit("disabled"));
     data.offset.setX(ctx.require<qint64>(lit("x")));
     data.offset.setY(ctx.require<qint64>(lit("y")));
-    data.units = ctx.require<qint64>(lit("units"));
+    data.units = ctx.require<qint64>(lit("units")); // TODO: not used right now
 
     return new Skin(ctx.id(), data);
 }

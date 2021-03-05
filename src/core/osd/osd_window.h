@@ -4,7 +4,7 @@
 
 #include <core/knob/knob_state.h>
 
-class KnobPainter;
+class Skin;
 
 class OsdWindow : public QRasterWindow {
 public:
@@ -13,12 +13,13 @@ public:
     KnobState state() const;
     void setState(const KnobState& state);
 
-    void setPainter(KnobPainter* painter);
+    Skin* skin() const;
+    void setSkin(Skin* skin);
 
 protected:
     virtual void paintEvent(QPaintEvent* paintEvent) override;
 
 private:
-    std::unique_ptr<KnobPainter> m_painter;
+    Skin* m_skin = nullptr;
     KnobState m_state;
 };

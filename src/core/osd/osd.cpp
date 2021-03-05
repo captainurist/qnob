@@ -32,18 +32,6 @@ void Osd::hide() {
     m_fsm->stop();
 }
 
-QSize Osd::size() const {
-    return m_window->size();
-}
-
-void Osd::resize(QSize size) {
-    if (size == m_window->size())
-        return;
-
-    m_window->resize(size);
-    updatePosition();
-}
-
 Qt::Alignment Osd::alignment() const {
     return m_alignment;
 }
@@ -68,16 +56,22 @@ void Osd::setOffset(const QPoint& offset) {
     updatePosition();
 }
 
+void Osd::setSkin(Skin* skin) {
+    m_window->setSkin(skin);
+
+    updatePosition();
+}
+
+Skin* Osd::skin() const {
+    return m_window->skin();
+}
+
 KnobState Osd::state() const {
     return m_window->state();
 }
 
 void Osd::setState(const KnobState& state) {
     m_window->setState(state);
-}
-
-void Osd::setPainter(KnobPainter* painter) {
-    m_window->setPainter(painter);
 }
 
 void Osd::updatePosition() {

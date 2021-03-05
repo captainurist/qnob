@@ -8,7 +8,7 @@
 
 class OsdWindow;
 class OsdFsm;
-class KnobPainter;
+class Skin;
 class KnobState;
 
 class Osd : public Entity {
@@ -19,9 +19,6 @@ public:
     void show(int showMs, int fadeMs);
     void hide();
 
-    QSize size() const;
-    void resize(QSize size);
-
     Qt::Alignment alignment() const;
     void setAlignment(Qt::Alignment alignment);
 
@@ -29,11 +26,15 @@ public:
     void setOffset(const QPoint& offset);
 
     // TODO: maybe the three functions below don't belong here?
+    // More like setSkin()
+    //           setKnob()
+    // But then shared ownership is needed? Not really!
+
+    void setSkin(Skin* skin);
+    Skin* skin() const;
 
     KnobState state() const;
     void setState(const KnobState& state);
-
-    void setPainter(KnobPainter* painter);
 
 private:
     void updatePosition();

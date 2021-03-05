@@ -3,7 +3,7 @@
 #include <QtGui/QPainter>
 #include <QtCore/QDebug>
 
-#include <core/painting/knob_painter.h>
+#include <core/skin/skin.h>
 
 OsdWindow::OsdWindow(const QString& title) {
     setFlag(Qt::WindowStaysOnTopHint);
@@ -32,18 +32,27 @@ void OsdWindow::setState(const KnobState& state) {
     update();
 }
 
-void OsdWindow::setPainter(KnobPainter* painter) {
-    m_painter.reset(painter);
+Skin* OsdWindow::skin() const {
+    return m_skin;
+}
+
+void OsdWindow::setSkin(Skin* skin) {
+    m_skin = skin;
+
+    resize(m_skin ? m_skin->size() : QSize());
 }
 
 void OsdWindow::paintEvent(QPaintEvent* /*paintEvent*/) {
+    if (!m_skin)
+        return;
+
     QPainter painter(this);
 
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(QRect(QPoint(), size()), Qt::transparent);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-    m_painter->paint(&painter, m_state);
+    m_skin->paint(&painter, m_state);
     painter.end();
 }
 
