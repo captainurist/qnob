@@ -3,8 +3,7 @@
 #include <QtGui/QPainter>
 
 #include <core/knob/knob_state.h>
-#include <util/deferred_picture.h>
-
+#include <core/painting/knob_painter.h>
 #include "skin_data.h"
 
 Skin::Skin(const QString& id, const SkinData& data) :
@@ -19,8 +18,8 @@ QSize Skin::size() const {
     return m_size;
 }
 
-DeferredPicture Skin::picture(const KnobState& state) const {
-    return [data=m_data, state](QPainter* painter) {
+KnobPainter* Skin::createPainter() const {
+    return new KnobPainter([data = m_data](QPainter* painter, const KnobState& state) {
         if (state.enabled) {
             painter->drawPixmap(0, 0, data->background);
 
@@ -30,5 +29,6 @@ DeferredPicture Skin::picture(const KnobState& state) const {
         } else {
             painter->drawPixmap(0, 0, data->disabled);
         }
-    };
+    });
 }
+

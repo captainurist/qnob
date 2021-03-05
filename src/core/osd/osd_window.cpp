@@ -3,6 +3,8 @@
 #include <QtGui/QPainter>
 #include <QtCore/QDebug>
 
+#include <core/painting/knob_painter.h>
+
 OsdWindow::OsdWindow(const QString& title) {
     setFlag(Qt::WindowStaysOnTopHint);
     setFlag(Qt::FramelessWindowHint);
@@ -17,13 +19,21 @@ OsdWindow::OsdWindow(const QString& title) {
     resize(0, 0);
 }
 
-void OsdWindow::setPicture(const DeferredPicture& picture) {
-    m_picture = picture;
+KnobState OsdWindow::state() const {
+    return m_state;
+}
+
+void OsdWindow::setState(const KnobState& state) {
+    if (m_state == state)
+        return;
+
+    m_state = state;
+
     update();
 }
 
-const DeferredPicture& OsdWindow::picture() const {
-    return m_picture;
+void OsdWindow::setPainter(KnobPainter* painter) {
+    m_painter.reset(painter);
 }
 
 void OsdWindow::paintEvent(QPaintEvent* /*paintEvent*/) {
@@ -33,7 +43,7 @@ void OsdWindow::paintEvent(QPaintEvent* /*paintEvent*/) {
     painter.fillRect(QRect(QPoint(), size()), Qt::transparent);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-    m_picture.play(&painter);
+    m_painter->paint(&painter, m_state);
     painter.end();
 }
 

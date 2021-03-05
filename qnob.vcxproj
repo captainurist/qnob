@@ -58,11 +58,13 @@
     <ClInclude Include="src\core\osd\osd_factory.h" />
     <ClInclude Include="src\core\osd\osd_fsm.h" />
     <ClInclude Include="src\core\osd\osd_window.h" />
+    <ClInclude Include="src\core\painting\knob_painter.h" />
     <ClInclude Include="src\core\skin\skin.h" />
     <ClInclude Include="src\core\skin\skin_data.h" />
     <ClInclude Include="src\core\skin\skin_factory.h" />
     <ClInclude Include="src\core\sound\sound.h" />
     <ClInclude Include="src\core\sound\sound_factory.h" />
+    <ClInclude Include="src\core\tray_icon\tray_icon.h" />
     <ClInclude Include="src\lib\metacall\bound_meta_call.h" />
     <ClInclude Include="src\lib\metacall\meta_call_exception.h" />
     <ClInclude Include="src\lib\metacall\meta_method_invoker.h" />
@@ -109,7 +111,6 @@
     <ClInclude Include="src\util\bitops.h" />
     <ClInclude Include="src\util\bitset_flags.h" />
     <ClInclude Include="src\util\debug.h" />
-    <ClInclude Include="src\util\deferred_picture.h" />
     <ClInclude Include="src\serialization\enum_serialization.h" />
     <ClInclude Include="src\util\exception.h" />
     <ClInclude Include="src\util\globals.h" />

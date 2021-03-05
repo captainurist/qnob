@@ -8,7 +8,6 @@
 #include <core/skin/skin.h>
 
 #include <lib/serialization/alignment.h>
-#include <util/deferred_picture.h>
 
 #include "osd.h"
 
@@ -26,11 +25,12 @@ Entity* OsdFactory::createEntity(const EntityCreationContext& ctx) {
 
     Osd* result = new Osd(ctx.id());
     result->resize(skin->size());
+    result->setPainter(skin->createPainter());
     result->setAlignment(alignment);
     result->setOffset({ offsetX, offsetY });
 
     QObject::connect(knob, &Knob::activated, result, [=] {
-        result->update(skin->picture(knob->state()));
+        result->setState(knob->state());
         result->show(500, 500);
     });
 

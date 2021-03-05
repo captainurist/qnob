@@ -2,18 +2,23 @@
 
 #include <QtGui/QRasterWindow>
 
-#include <util/deferred_picture.h>
+#include <core/knob/knob_state.h>
+
+class KnobPainter;
 
 class OsdWindow : public QRasterWindow {
 public:
     OsdWindow(const QString& title);
 
-    void setPicture(const DeferredPicture& picture);
-    const DeferredPicture& picture() const;
+    KnobState state() const;
+    void setState(const KnobState& state);
+
+    void setPainter(KnobPainter* painter);
 
 protected:
     virtual void paintEvent(QPaintEvent* paintEvent) override;
 
 private:
-    DeferredPicture m_picture;
+    std::unique_ptr<KnobPainter> m_painter;
+    KnobState m_state;
 };

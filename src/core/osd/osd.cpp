@@ -1,7 +1,5 @@
 #include "osd.h"
 
-#include <util/deferred_picture.h>
-
 #include <QtCore/QDebug>
 #include <QtGui/QPainter>
 #include <QtGui/QRasterWindow>
@@ -70,8 +68,16 @@ void Osd::setOffset(const QPoint& offset) {
     updatePosition();
 }
 
-void Osd::update(const DeferredPicture& picture) {
-    m_window->setPicture(picture);
+KnobState Osd::state() const {
+    return m_window->state();
+}
+
+void Osd::setState(const KnobState& state) {
+    m_window->setState(state);
+}
+
+void Osd::setPainter(KnobPainter* painter) {
+    m_window->setPainter(painter);
 }
 
 void Osd::updatePosition() {

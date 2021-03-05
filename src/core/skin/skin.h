@@ -6,9 +6,8 @@
 
 #include <core/entity/entity.h>
 
-class KnobState;
-class DeferredPicture;
 class SkinData;
+class KnobPainter;
 
 class Skin : public Entity {
     Q_OBJECT
@@ -17,7 +16,7 @@ public:
 
     QSize size() const;
 
-    DeferredPicture picture(const KnobState& state) const;
+    KnobPainter* createPainter() const;
 
 private:
     std::shared_ptr<SkinData> m_data;

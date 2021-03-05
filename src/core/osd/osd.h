@@ -8,7 +8,8 @@
 
 class OsdWindow;
 class OsdFsm;
-class DeferredPicture;
+class KnobPainter;
+class KnobState;
 
 class Osd : public Entity {
 public:
@@ -27,7 +28,12 @@ public:
     QPoint offset() const;
     void setOffset(const QPoint& offset);
 
-    void update(const DeferredPicture& picture);
+    // TODO: maybe the three functions below don't belong here?
+
+    KnobState state() const;
+    void setState(const KnobState& state);
+
+    void setPainter(KnobPainter* painter);
 
 private:
     void updatePosition();
