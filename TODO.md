@@ -1,5 +1,6 @@
 0.1:
-* Skinnable tray icon entity.
+* **DONE**. Skinnable tray icon entity.
+* Numeric skin for tray icons.
 * Mouse wheel events for tray icons on Win.
 * Mouse wheel events for built-in tray icons (yeah, I'm talking about volume).
 * Update tooltip after a wheel event on a tray icon.

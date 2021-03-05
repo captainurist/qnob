@@ -30,7 +30,7 @@ public:
      *
      * Format notice to make life easier: provided exception message should not include the trailing dot.
      *
-     * \param message                   Exception message.
+     * \param message                   Exception message. Should not include the trailing dot.
      */
     Exception(const QString& message) {
         m_message = message;

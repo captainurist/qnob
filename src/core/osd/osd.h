@@ -30,8 +30,8 @@ public:
     //           setKnob()
     // But then shared ownership is needed? Not really!
 
-    void setSkin(Skin* skin);
     Skin* skin() const;
+    void setSkin(Skin* skin);
 
     KnobState state() const;
     void setState(const KnobState& state);

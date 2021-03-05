@@ -15,6 +15,7 @@
 #include <core/sound/sound_factory.h>
 #include <core/skin/skin_factory.h>
 #include <core/osd/osd_factory.h>
+#include <core/tray_icon/tray_icon_factory.h>
 
 #include <config/full_config.h>
 
@@ -38,6 +39,7 @@ int main(int argc, char *argv[]) {
         factoryPool.registerFactory(new SoundFactory());
         factoryPool.registerFactory(new SkinFactory());
         factoryPool.registerFactory(new OsdFactory());
+        factoryPool.registerFactory(new TrayIconFactory());
 
         EntityPoolBuilder builder(&factoryPool, &pool);
         builder.addEntities(FullConfig::loadFromTomlFile(QLatin1String("qnob.toml")));

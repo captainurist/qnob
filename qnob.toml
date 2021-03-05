@@ -79,8 +79,10 @@ x = 33
 y = 165
 units = 16
 
-#[trayicon.volume_icon]
-#target = "volume"
+[br_icon]
+type = "tray_icon"
+target = "brightness"
+skin = "mac_brightness"
 #overrides = "win_sound_icon"
 
 #[trayevent.0]

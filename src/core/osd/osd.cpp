@@ -56,14 +56,14 @@ void Osd::setOffset(const QPoint& offset) {
     updatePosition();
 }
 
+Skin* Osd::skin() const {
+    return m_window->skin();
+}
+
 void Osd::setSkin(Skin* skin) {
     m_window->setSkin(skin);
 
     updatePosition();
-}
-
-Skin* Osd::skin() const {
-    return m_window->skin();
 }
 
 KnobState Osd::state() const {
