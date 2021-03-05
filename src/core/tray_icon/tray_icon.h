@@ -6,6 +6,8 @@
 class QSystemTrayIcon;
 class Skin;
 
+// TODO: gotta show it only when the corresponding knob is ready
+
 class TrayIcon : public Entity {
     Q_OBJECT
 public:
