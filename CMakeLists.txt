@@ -48,6 +48,7 @@ set(src
     src/core/osd/osd_window.cpp
     src/core/osd/osd_window.h
     src/core/skin/horizontal_bar_skin.h
+    src/core/skin/numeric_skin.h
     src/core/skin/skin.h
     src/core/skin/skin_factory.cpp
     src/core/skin/skin_factory.h
@@ -81,8 +82,10 @@ set(src
     src/lib/monitor/monitor_queue.h
     src/lib/monitor/monitor_server.cpp
     src/lib/monitor/monitor_server.h
-    src/lib/serialization/alignment.cpp
-    src/lib/serialization/alignment.h
+    src/lib/serializable_types/alignment.cpp
+    src/lib/serializable_types/alignment.h
+    src/lib/serializable_types/color.cpp
+    src/lib/serializable_types/color.h
     src/lib/serialization/enum_serialization.h
     src/lib/serialization/serialization_exceptions.cpp
     src/lib/serialization/serialization_exceptions.h

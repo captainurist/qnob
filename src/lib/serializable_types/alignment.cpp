@@ -1,6 +1,6 @@
 #include "alignment.h"
 
-#include "enum_serialization.h"
+#include <lib/serialization/enum_serialization.h>
 
 QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Alignment, ({
     {Qt::AlignTop | Qt::AlignLeft, "top_left"},

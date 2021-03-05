@@ -2,7 +2,6 @@
 
 #include <core/entity/entity.h>
 
-class QSize;
 class QPainter;
 class KnobState;
 

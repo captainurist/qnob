@@ -21,7 +21,9 @@ class QKeySequence;
  * \param tag                           Validation tag, `nullptr_t` means no validation.
  */
 template<class T, class ValidationTag>
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, T* to, ValidationTag tag);
+void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, T* to, ValidationTag tag) {
+    static_assert(false, "Cannot parse type T.");
+}
 
 struct AsPath {};
 

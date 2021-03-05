@@ -59,6 +59,7 @@
     <ClInclude Include="src\core\osd\osd_fsm.h" />
     <ClInclude Include="src\core\osd\osd_window.h" />
     <ClInclude Include="src\core\skin\horizontal_bar_skin.h" />
+    <ClInclude Include="src\core\skin\numeric_skin.h" />
     <ClInclude Include="src\core\skin\skin.h" />
     <ClInclude Include="src\core\skin\skin_factory.h" />
     <ClInclude Include="src\core\skin\skin_type.h" />
@@ -71,7 +72,8 @@
     <ClInclude Include="src\lib\metacall\meta_method_invoker.h" />
     <ClInclude Include="src\lib\metacall\meta_object_extension.h" />
     <ClInclude Include="src\lib\monitor\monitor_manager.h" />
-    <ClInclude Include="src\lib\serialization\alignment.h" />
+    <ClInclude Include="src\lib\serializable_types\alignment.h" />
+    <ClInclude Include="src\lib\serializable_types\color.h" />
     <ClInclude Include="src\lib\serialization\enum_serialization.h" />
     <ClInclude Include="src\lib\serialization\serialization.h" />
     <ClInclude Include="src\lib\serialization\serialization_exceptions.h" />
@@ -150,7 +152,8 @@
     <ClCompile Include="src\lib\metacall\meta_method_invoker.cpp" />
     <ClCompile Include="src\lib\metacall\meta_object_extension.cpp" />
     <ClCompile Include="src\lib\monitor\monitor_manager.cpp" />
-    <ClCompile Include="src\lib\serialization\alignment.cpp" />
+    <ClCompile Include="src\lib\serializable_types\alignment.cpp" />
+    <ClCompile Include="src\lib\serializable_types\color.cpp" />
     <ClCompile Include="src\lib\serialization\serialization_exceptions.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\lib\monitor\monitor_queue.cpp" />

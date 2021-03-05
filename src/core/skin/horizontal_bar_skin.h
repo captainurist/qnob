@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QtCore/QPoint>
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 

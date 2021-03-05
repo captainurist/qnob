@@ -1,8 +1,10 @@
 #include "skin_factory.h"
 
+#include <lib/serializable_types/color.h>
 #include <lib/serialization/serialization.h>
 
 #include "horizontal_bar_skin.h"
+#include "numeric_skin.h"
 
 SkinFactory::SkinFactory(SkinType type):
     EntityFactory(serialize(type)),
@@ -21,7 +23,10 @@ Entity* SkinFactory::createEntity(const EntityCreationContext& ctx) {
         );
     default:
         assert(m_type == NumericSkinType);
-        return nullptr;
+        return new NumericSkin(
+            ctx.id(),
+            ctx.require<QColor>(lit("color"))
+        );
     }
 
     // TODO: "units" not used right now

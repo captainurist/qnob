@@ -7,7 +7,7 @@
 #include <core/knob/knob_state.h>
 #include <core/skin/skin.h>
 
-#include <lib/serialization/alignment.h>
+#include <lib/serializable_types/alignment.h>
 
 #include "osd.h"
 
