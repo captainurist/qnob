@@ -1,19 +1,18 @@
 #include "sound.h"
 
+#include <Windows.h>
+
 #include <QtCore/QFile>
 #include <QtCore/QDebug>
 
-#include <Windows.h>
+#include <util/exception.h>
 
 Sound::Sound(const QString& id, const QString& path):
     Entity(id)
 {
     QFile file(path);
-    bool isOpen = file.open(QIODevice::ReadOnly);
-
-    // TODO: I think this one should be an exception.
-    if (!isOpen)
-        qWarning() << "Could not open sound file" << path;
+    if (!file.open(QIODevice::ReadOnly))
+        qthrow Exception(Exception::tr("Could not open sound file '%1'").arg(path)); // TODO: IoException?
 
     m_data = file.readAll();
 }
