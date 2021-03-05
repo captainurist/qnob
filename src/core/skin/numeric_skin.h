@@ -3,6 +3,7 @@
 #include <QtGui/QPainter>
 
 #include <core/knob/knob_state.h>
+#include <lib/rollback/painter_rollback.h>
 
 #include "skin.h"
 
@@ -21,10 +22,12 @@ public:
     virtual void paint(QPainter* painter, const KnobState& state) {
         QString text = state.enabled ? QString::number(static_cast<int>(std::round(100 * state.value))) : lit("0");
 
+        PainterTransformRollback transformRollback(painter);
+        PainterPenRollback penRollback(painter, m_color);
+        PainterFontRollback fontRollback(painter);
         QFont font = painter->font();
         font.setPixelSize(64);
         painter->setFont(font);
-        painter->setPen(m_color); // TODO: rollback!
 
         QFontMetrics metrics(font);
         QRect rect = metrics.boundingRect(text);

@@ -72,6 +72,8 @@
     <ClInclude Include="src\lib\metacall\meta_method_invoker.h" />
     <ClInclude Include="src\lib\metacall\meta_object_extension.h" />
     <ClInclude Include="src\lib\monitor\monitor_manager.h" />
+    <ClInclude Include="src\lib\rollback\painter_rollback.h" />
+    <ClInclude Include="src\lib\rollback\property_rollback.h" />
     <ClInclude Include="src\lib\serializable_types\alignment.h" />
     <ClInclude Include="src\lib\serializable_types\color.h" />
     <ClInclude Include="src\lib\serialization\enum_serialization.h" />
