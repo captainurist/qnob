@@ -327,7 +327,7 @@ PlatformShortcutNotifier* WinShortcutDispatcher::createShortcutNotifier(const QK
     quint32 nativeMods = 0;
     convertToNativeKey(key, mods, &nativeKey, &nativeMods);
 
-    if (!succeeded(RegisterHotKey(reinterpret_cast<HWND>(m_eventWindow->winId()), m_nextId, nativeMods, nativeKey)))
+    if (!apicall(RegisterHotKey(reinterpret_cast<HWND>(m_eventWindow->winId()), m_nextId, nativeMods, nativeKey)))
         return nullptr;
 
     WinShortcutNotifier* notifier = new WinShortcutNotifier(m_nextId);
@@ -351,7 +351,7 @@ void WinShortcutDispatcher::dispatchEvent(void* message) {
 }
 
 void WinShortcutDispatcher::removeShortcutNotifier(int id) {
-    succeeded(UnregisterHotKey(reinterpret_cast<HWND>(m_eventWindow->winId()), id));
+    apicall(UnregisterHotKey(reinterpret_cast<HWND>(m_eventWindow->winId()), id));
 
     m_notifierById.erase(id);
 }

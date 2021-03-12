@@ -23,10 +23,10 @@ WinVolumeControl::WinVolumeControl():
         initializeDefaultDevice();
     });
 
-    if (!succeeded(CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_enumerator))))
+    if (!apicall(CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_enumerator))))
         return;
 
-    if (!succeeded(m_enumerator->RegisterEndpointNotificationCallback(m_eventHandler.get())))
+    if (!apicall(m_enumerator->RegisterEndpointNotificationCallback(m_eventHandler.get())))
         return;
 
     initializeDefaultDevice();
@@ -43,19 +43,19 @@ void WinVolumeControl::initializeDefaultDevice() {
     if (!m_enumerator)
         return;
 
-    if (!succeeded(m_enumerator->GetDefaultAudioEndpoint(eRender, eMultimedia, m_defaultDevice.mutablePtr())))
+    if (!apicall(m_enumerator->GetDefaultAudioEndpoint(eRender, eMultimedia, m_defaultDevice.mutablePtr())))
         return;
 
-    if (!succeeded(m_defaultDevice->Activate(m_volumeControl.staticId(), CLSCTX_INPROC_SERVER, nullptr, m_volumeControl.mutableVoidPtr())))
+    if (!apicall(m_defaultDevice->Activate(m_volumeControl.staticId(), CLSCTX_INPROC_SERVER, nullptr, m_volumeControl.mutableVoidPtr())))
         return;
 
-    if (!succeeded(m_volumeControl->RegisterControlChangeNotify(m_eventHandler.get())))
+    if (!apicall(m_volumeControl->RegisterControlChangeNotify(m_eventHandler.get())))
         return;
 }
 
 void WinVolumeControl::deinitializeDefaultDevice() {
     if (m_volumeControl)
-        if (!succeeded(m_volumeControl->UnregisterControlChangeNotify(m_eventHandler.get())))
+        if (!apicall(m_volumeControl->UnregisterControlChangeNotify(m_eventHandler.get())))
             return;
 }
 
@@ -65,7 +65,7 @@ float WinVolumeControl::volume() const {
         return NAN;
 
     float result;
-    if (!succeeded(m_volumeControl->GetMasterVolumeLevelScalar(&result)))
+    if (!apicall(m_volumeControl->GetMasterVolumeLevelScalar(&result)))
         return NAN;
 
     return result;
@@ -75,7 +75,7 @@ void WinVolumeControl::setVolume(float volume) {
     if (!m_volumeControl)
         return;
 
-    if (!succeeded(m_volumeControl->SetMasterVolumeLevelScalar(std::clamp(volume, 0.0f, 1.0f), &GUID_QnobAudioEvent)))
+    if (!apicall(m_volumeControl->SetMasterVolumeLevelScalar(std::clamp(volume, 0.0f, 1.0f), &GUID_QnobAudioEvent)))
         return;
 }
 
@@ -84,7 +84,7 @@ bool WinVolumeControl::isMuted() const {
         return true;
 
     BOOL muted = FALSE;
-    if(!succeeded(m_volumeControl->GetMute(&muted)))
+    if(!apicall(m_volumeControl->GetMute(&muted)))
         return false;
 
     return muted;
@@ -94,7 +94,7 @@ void WinVolumeControl::setMuted(bool muted) {
     if (!m_volumeControl)
         return;
 
-    if (!succeeded(m_volumeControl->SetMute(muted, &GUID_QnobAudioEvent)))
+    if (!apicall(m_volumeControl->SetMute(muted, &GUID_QnobAudioEvent)))
         return;
 }
 

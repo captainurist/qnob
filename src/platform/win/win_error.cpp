@@ -42,10 +42,7 @@ static QByteArray extractFunctionName(const char* expr) {
     return result;
 }
 
-void detail::logError(BOOL result, const char* expr, const std::source_location& location) {
-    assert(!result);
-    Q_UNUSED(result);
-
+void detail::logError(const char* expr, const std::source_location& location) {
     QString lastErrorString = GetLastErrorAsString();
 
     QMessageLogger(location.file_name(), location.line(), location.function_name()).warning().noquote().nospace()

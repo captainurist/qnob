@@ -34,7 +34,7 @@ static BOOL CALLBACK EnumDisplayMonitorsProc(HMONITOR handle, HDC /*hdc*/, LPREC
     DisplayInfo element;
     element.handle = handle;
 
-    if(!succeeded(GetMonitorInfoW(handle, &element.display)))
+    if(!apicall(GetMonitorInfoW(handle, &element.display)))
         return TRUE;
 
     reinterpret_cast<std::vector<DisplayInfo>*>(data)->push_back(element);
@@ -43,7 +43,7 @@ static BOOL CALLBACK EnumDisplayMonitorsProc(HMONITOR handle, HDC /*hdc*/, LPREC
 
 static std::vector<DisplayInfo> enumDisplays() {
     std::vector<DisplayInfo> result;
-    if (!succeeded(EnumDisplayMonitors(nullptr, nullptr, EnumDisplayMonitorsProc, reinterpret_cast<LPARAM>(&result))))
+    if (!apicall(EnumDisplayMonitors(nullptr, nullptr, EnumDisplayMonitorsProc, reinterpret_cast<LPARAM>(&result))))
         result.clear();
     return result;
 }
@@ -125,12 +125,12 @@ std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonito
     for (DisplayInfo displayInfo : enumDisplays()) {
         DWORD count = 0;
 
-        if (!succeeded(GetNumberOfPhysicalMonitorsFromHMONITOR(displayInfo.handle, &count)) || count == 0)
+        if (!apicall(GetNumberOfPhysicalMonitorsFromHMONITOR(displayInfo.handle, &count)) || count == 0)
             continue;
 
         physicalMonitors.resize(count);
 
-        if (!succeeded(GetPhysicalMonitorsFromHMONITOR(displayInfo.handle, count, physicalMonitors.data())))
+        if (!apicall(GetPhysicalMonitorsFromHMONITOR(displayInfo.handle, count, physicalMonitors.data())))
             continue;
 
         for (size_t monitorIndex = 0; monitorIndex < physicalMonitors.size(); monitorIndex++) {

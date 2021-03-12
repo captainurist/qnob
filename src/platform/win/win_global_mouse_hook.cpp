@@ -24,13 +24,12 @@ WinGlobalMouseHook::WinGlobalMouseHook() {
     assert(g_hookInstance == nullptr);
     g_hookInstance = this;
 
-    // TODO: check return value
-    g_mouseHook = SetWindowsHookExW(WH_MOUSE_LL, &LowLevelMouseProc, NULL, 0);
+    g_mouseHook = apicall(SetWindowsHookExW(WH_MOUSE_LL, &LowLevelMouseProc, NULL, 0));
 }
 
 WinGlobalMouseHook::~WinGlobalMouseHook() {
     if(g_mouseHook)
-        succeeded(UnhookWindowsHookEx(g_mouseHook));
+        apicall(UnhookWindowsHookEx(g_mouseHook));
 
     assert(g_hookInstance == this);
     g_hookInstance = nullptr;

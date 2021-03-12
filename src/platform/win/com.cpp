@@ -5,7 +5,7 @@
 #include "win_error.h"
 
 Com::Com() {
-    initialized_ = succeeded(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE));
+    initialized_ = apicall(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE));
 }
 
 Com::~Com() {

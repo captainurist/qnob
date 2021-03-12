@@ -25,7 +25,7 @@ WinMonitor::WinMonitor(const QString& deviceId, PHYSICAL_MONITOR physicalMonitor
 {}
 
 WinMonitor::~WinMonitor() {
-    succeeded(DestroyPhysicalMonitor(m_physicalMonitor.hPhysicalMonitor));
+    apicall(DestroyPhysicalMonitor(m_physicalMonitor.hPhysicalMonitor));
 }
 
 QString WinMonitor::deviceId() const {
@@ -73,7 +73,7 @@ void WinMonitor::setProperty(Property property, float value) {
 void WinMonitor::capabilitiesInternal(DWORD* capabilities) const {
     DWORD colorTemperatures; /* Discarded for now. */
 
-    if (!succeeded(GetMonitorCapabilities(m_physicalMonitor.hPhysicalMonitor, capabilities, &colorTemperatures))) {
+    if (!apicall(GetMonitorCapabilities(m_physicalMonitor.hPhysicalMonitor, capabilities, &colorTemperatures))) {
         /* This means that the monitor doesn't support DDC/CI. */
         *capabilities = 0;
     }
@@ -82,9 +82,9 @@ void WinMonitor::capabilitiesInternal(DWORD* capabilities) const {
 bool WinMonitor::propertyInternal(PlatformMonitor::Property property, WinDdcTriplet* value) const {
     switch (property) {
     case PlatformMonitor::BrightnessProperty:
-        return succeeded(GetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max));
+        return apicall(GetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max));
     case PlatformMonitor::ContrastProperty:
-        return succeeded(GetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max));
+        return apicall(GetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max));
     default:
         assert(false);
         return false;
@@ -94,9 +94,9 @@ bool WinMonitor::propertyInternal(PlatformMonitor::Property property, WinDdcTrip
 bool WinMonitor::setPropertyInternal(PlatformMonitor::Property property, DWORD value) {
     switch (property) {
     case PlatformMonitor::BrightnessProperty:
-        return succeeded(SetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, value));
+        return apicall(SetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, value));
     case PlatformMonitor::ContrastProperty:
-        return succeeded(SetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, value));
+        return apicall(SetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, value));
     default:
         assert(false);
         return false;
