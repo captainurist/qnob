@@ -14,7 +14,6 @@ using MonitorList = std::vector<std::unique_ptr<PlatformMonitor>>;
 
 class BrightnessShaftPrivate {
 public:
-    std::unique_ptr<PlatformMonitorManager> monitorManager;
     QFuture<MonitorList> future;
     MonitorList monitors;
     bool initialized = false;
@@ -22,10 +21,9 @@ public:
 };
 
 BrightnessShaft::BrightnessShaft():
-    d (new BrightnessShaftPrivate)
+    d(new BrightnessShaftPrivate)
 {
-    d->monitorManager.reset(platform()->createMonitorManager());
-    d->future = MonitorManager::enumerateMonitors(d->monitorManager.get());
+    d->future = MonitorManager::enumerateMonitors(platform()->monitorManager());
 
     QFutureWatcher<MonitorList>* watcher = new QFutureWatcher<MonitorList>(this);
     connect(watcher, &QFutureWatcherBase::finished, this, &BrightnessShaft::handleFutureFinished);

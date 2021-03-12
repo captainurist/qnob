@@ -2,8 +2,6 @@
 
 #include "shaft.h"
 
-class PlatformVolumeControl;
-
 class VolumeShaft : public Shaft {
     Q_OBJECT
 public:
@@ -15,7 +13,4 @@ public:
 
     virtual bool enabled() const override;
     virtual void setEnabled(bool value) override;
-
-private:
-    std::unique_ptr<PlatformVolumeControl> m_volumeControl;
 };

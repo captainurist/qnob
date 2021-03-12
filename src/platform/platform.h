@@ -7,10 +7,8 @@
 #include "platform_monitor_manager.h"
 #include "platform_tray_icon_wheel_event_manager.h"
 
-// TODO: I don't think I like that this class is a factory. Just add accessors and that's it!
-
 /**
- * Platform abstraction factory class.
+ * Platform abstraction class.
  *
  * Instantiate `PlatformInitializer` in your code first, then you'll be able to use platform global instance.
  *
@@ -23,22 +21,25 @@ public:
     virtual ~Platform() {}
 
     /**
-     * \returns                         New volume control object.
+     * \returns                         Volume control object.
      */
-    virtual PlatformVolumeControl* createVolumeControl() const = 0;
+    virtual PlatformVolumeControl* volumeControl() const = 0;
 
     /**
-     * \returns                         New monitor manager object.
+     * \returns                         Monitor manager object.
      */
-    virtual PlatformMonitorManager* createMonitorManager() const = 0;
+    virtual PlatformMonitorManager* monitorManager() const = 0;
+
+    /**
+     * \returns                         Tray icon wheel event manager object.
+     */
+    virtual PlatformTrayIconWheelEventManager* trayIconWheelEventManager() const = 0;
 
     /**
      * \param shortcut                  Key sequence to create a global shortcut for.
      * \returns                         New shortcut notifier, or `nullptr` in case of an error.
      */
     virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const = 0;
-
-    virtual PlatformTrayIconWheelEventManager* createTrayIconWheelEventManager() const = 0;
 };
 
 /**

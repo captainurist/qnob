@@ -6,7 +6,8 @@
 
 class Com;
 class WinVolumeControl;
-class WinBrightnessControl;
+class WinMonitorManager;
+class WinTrayIconWheelEventManager;
 class WinShortcutDispatcher;
 
 class WinPlatform: public Platform {
@@ -14,13 +15,16 @@ public:
     WinPlatform();
     virtual ~WinPlatform();
 
-    virtual PlatformVolumeControl* createVolumeControl() const override;
-    virtual PlatformMonitorManager* createMonitorManager() const override;
+    virtual PlatformVolumeControl* volumeControl() const override;
+    virtual PlatformMonitorManager* monitorManager() const override;
+    virtual PlatformTrayIconWheelEventManager* trayIconWheelEventManager() const override;
     virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const override;
-    virtual PlatformTrayIconWheelEventManager* createTrayIconWheelEventManager() const override;
 
 private:
     std::unique_ptr<Com> m_com;
+    std::unique_ptr<WinVolumeControl> m_volumeControl;
+    std::unique_ptr<WinMonitorManager> m_monitorManager;
+    std::unique_ptr<WinTrayIconWheelEventManager> m_trayIconWheelEventManager;
     std::unique_ptr<WinShortcutDispatcher> m_shortcutDispatcher;
 };
 

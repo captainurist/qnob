@@ -8,26 +8,29 @@
 
 WinPlatform::WinPlatform() {
     m_com.reset(new Com());
+    m_volumeControl.reset(new WinVolumeControl());
+    m_monitorManager.reset(new WinMonitorManager());
+    m_trayIconWheelEventManager.reset(new WinTrayIconWheelEventManager());
     m_shortcutDispatcher.reset(new WinShortcutDispatcher());
 }
 
 WinPlatform::~WinPlatform() {
 }
 
-PlatformVolumeControl* WinPlatform::createVolumeControl() const {
-    return new WinVolumeControl();
+PlatformVolumeControl* WinPlatform::volumeControl() const {
+    return m_volumeControl.get();
 }
 
-PlatformMonitorManager* WinPlatform::createMonitorManager() const {
-    return new WinMonitorManager();
+PlatformMonitorManager* WinPlatform::monitorManager() const {
+    return m_monitorManager.get();
+}
+
+PlatformTrayIconWheelEventManager* WinPlatform::trayIconWheelEventManager() const {
+    return m_trayIconWheelEventManager.get();
 }
 
 PlatformShortcutNotifier* WinPlatform::createShortcutNotifier(const QKeySequence& shortcut) const {
     return m_shortcutDispatcher->createShortcutNotifier(shortcut);
-}
-
-PlatformTrayIconWheelEventManager* WinPlatform::createTrayIconWheelEventManager() const {
-    return new WinTrayIconWheelEventManager();
 }
 
 Platform* createPlatform() {
