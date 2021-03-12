@@ -98,12 +98,15 @@ set(src
     src/platform/platform_monitor_manager.h
     src/platform/platform_shortcut_notifier.h
     src/platform/platform_volume_control.h
+    src/platform/platform_tray_icon_wheel_event_manager.h
     src/platform/win/com.cpp
     src/platform/win/com.h
     src/platform/win/com_ptr.h
     src/platform/win/win_ddc_triplet.h
     src/platform/win/win_error.cpp
     src/platform/win/win_error.h
+    src/platform/win/win_global_mouse_hook.cpp
+    src/platform/win/win_global_mouse_hook.h
     src/platform/win/win_monitor.cpp
     src/platform/win/win_monitor.h
     src/platform/win/win_monitor_manager.cpp
@@ -114,6 +117,8 @@ set(src
     src/platform/win/win_shortcut_dispatcher.cpp
     src/platform/win/win_shortcut_dispatcher.h
     src/platform/win/win_shortcut_notifier.h
+    src/platform/win/win_tray_icon_wheel_event_manager.cpp
+    src/platform/win/win_tray_icon_wheel_event_manager.h
     src/platform/win/win_volume_control.cpp
     src/platform/win/win_volume_control.h
     src/platform/win/win_volume_event_handler.cpp

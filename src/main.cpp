@@ -21,7 +21,7 @@
 
 #include <platform/platform_initializer.h>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     try {
         QApplication application(argc, argv);
         QApplication::setQuitOnLastWindowClosed(false);

@@ -5,6 +5,9 @@
 #include "platform_volume_control.h"
 #include "platform_shortcut_notifier.h"
 #include "platform_monitor_manager.h"
+#include "platform_tray_icon_wheel_event_manager.h"
+
+// TODO: I don't think I like that this class is a factory. Just add accessors and that's it!
 
 /**
  * Platform abstraction factory class.
@@ -34,6 +37,8 @@ public:
      * \returns                         New shortcut notifier, or `nullptr` in case of an error.
      */
     virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const = 0;
+
+    virtual PlatformTrayIconWheelEventManager* createTrayIconWheelEventManager() const = 0;
 };
 
 /**

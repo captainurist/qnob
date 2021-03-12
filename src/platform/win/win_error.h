@@ -24,6 +24,7 @@ Q_ALWAYS_INLINE bool isSuccess(HRESULT result) {
 
 }
 
+// TODO: rename apicall()
 #define succeeded(CALL) (                                                                                               \
     [&] {                                                                                                               \
         auto __result = CALL;                                                                                           \

@@ -10,6 +10,7 @@ class PlatformShortcutNotifier;
 class WinNativeEventWindow;
 class WinShortcutNotifier;
 
+// TODO: WinShortcutManager
 class WinShortcutDispatcher: public QObject {
     Q_OBJECT;
 public:
