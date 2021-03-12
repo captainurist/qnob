@@ -43,7 +43,7 @@ void WinTrayIconWheelEventManager::unregisterTrayIcon(QSystemTrayIcon* icon) {
 }
 
 void WinTrayIconWheelEventManager::processMessage(UINT message, const MSLLHOOKSTRUCT& data) {
-    assert(message == WM_MOUSEWHEEL);
+    assert(message == WM_MOUSEWHEEL || message == WM_MOUSEHWHEEL);
 
     HWND window = WindowFromPoint(data.pt);
     if (window == NULL)
@@ -70,7 +70,7 @@ void WinTrayIconWheelEventManager::processMessage(UINT message, const MSLLHOOKST
                 globalPoint - globalGeometry.topLeft(),
                 globalPoint,
                 QPoint(),
-                QPoint(0, delta), // TODO: WM_MOUSEHWHEEL
+                message == WM_MOUSEWHEEL ? QPoint(0, delta) : QPoint(delta, 0),
                 Qt::NoButton,
                 Qt::NoModifier,
                 Qt::NoScrollPhase,
@@ -81,4 +81,3 @@ void WinTrayIconWheelEventManager::processMessage(UINT message, const MSLLHOOKST
         }
     }
 }
-

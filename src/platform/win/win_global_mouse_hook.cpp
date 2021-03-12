@@ -14,7 +14,7 @@ LRESULT CALLBACK LowLevelMouseProc(int code, WPARAM wParam, LPARAM lParam) {
         return CallNextHookEx(g_mouseHook, code, wParam, lParam);
 
     assert(g_hookInstance);
-    if (wParam == WM_MOUSEWHEEL)
+    if (wParam == WM_MOUSEWHEEL || wParam == WM_MOUSEHWHEEL)
         emit g_hookInstance->messageHooked(wParam, *reinterpret_cast<MSLLHOOKSTRUCT*>(lParam));
 
     return CallNextHookEx(g_mouseHook, code, wParam, lParam);
