@@ -27,35 +27,39 @@ void EntityPoolBuilder::addEntities(const FullConfig& fullConfig) {
 
     m_dir = QFileInfo(fullConfig.path).absolutePath();
     m_configs = fullConfig.records;
-    m_entities.resize(m_configs.size());
-
-    m_indexById.clear();
-    for (size_t i = 0; i < m_configs.size(); i++)
-        m_indexById[m_configs[i].id] = i;
-    assert(m_indexById.size() == m_configs.size()); /* Expect unique ids. */
-
     m_idsInFlight.clear();
     m_idStack.clear();
 
-    for (size_t i = 0; i < m_configs.size(); i++) {
-        if(m_entities[i])
+    for (auto [id, config] : m_configs) {
+        if(config.typeId() != MetaType::VariantMap)
+            continue; /* Just ignore free-standing values for now. */
+
+        if (m_entities.contains(id))
             continue; /* Already created. */
 
-        createEntity(i);
+        initEntity(id);
     }
 }
 
-void EntityPoolBuilder::createEntity(size_t index) {
-    const EntityConfig& config = m_configs[index];
+void EntityPoolBuilder::initEntity(const QString& id) {
+    assert(m_configs.contains(id));
+    assert(m_configs[id].typeId() == MetaType::VariantMap);
 
-    EntityFactory* factory = m_factoryPool->factory(config.type);
+    const VariantMap& config = variantValueRef<VariantMap>(m_configs[id]);
+
+    QVariant typeVariant = value_or(config, lit("type"), QVariant());
+    if (typeVariant.isNull())
+        qthrow EntityCreationException(id, EntityCreationException::tr("Type not specified."));
+
+    QString type = typeVariant.toString();
+    EntityFactory* factory = m_factoryPool->factory(type);
     if (!factory)
-        qthrow EntityCreationException(config.id, EntityCreationException::tr("Unknown entity type '%1'.").arg(config.type));
+        qthrow EntityCreationException(id, EntityCreationException::tr("Unknown entity type '%1'.").arg(type));
 
-    m_idStack.push_back(config.id);
-    m_idsInFlight.insert(config.id);
-    m_entities[index].reset(factory->createEntity({ &config, this }));
-    m_idsInFlight.erase(config.id);
+    m_idStack.push_back(id);
+    m_idsInFlight.insert(id);
+    m_entities[id].reset(factory->createEntity({ id, config, this }));
+    m_idsInFlight.erase(id);
     m_idStack.pop_back();
 }
 
@@ -66,19 +70,18 @@ Entity* EntityPoolBuilder::resolveEntity(const QString& id) {
     if (Entity* result = m_entityPool->entity(id))
         return result;
 
-    int index = value_or(m_indexById, id, -1);
-    if (index == -1) {
+    if (m_entities.contains(id))
+        return m_entities[id].get();
+
+    if (value_or(m_configs, id, QVariant()).typeId() != MetaType::VariantMap) {
         qthrow EntityCreationException(
             m_idStack.back(),
             EntityCreationException::tr("Entity refers to an unknown entity '%1'.").arg(id)
         );
     }
 
-    if (!m_entities[index])
-        createEntity(index);
-
-    assert(m_entities[index]);
-    return m_entities[index].get();
+    initEntity(id);
+    return m_entities[id].get();
 }
 
 QString EntityPoolBuilder::resolvePath(const QString& path) {

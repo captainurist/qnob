@@ -13,7 +13,6 @@ find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
 
 set(src
     src/config/config_exception.h
-    src/config/entity_config.h
     src/config/full_config.cpp
     src/config/full_config.h
     src/core/app/app.cpp

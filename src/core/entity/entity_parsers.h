@@ -6,6 +6,7 @@
 
 #include <lib/serialization/serialization_traits.h>
 #include <util/bad_cast_exception.h>
+#include <util/variant.h>
 
 #include "entity_creation_context.h"
 
@@ -33,7 +34,7 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QV
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QString* to, nullptr_t);
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, double* to, nullptr_t);
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, qint64* to, nullptr_t);
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QVariantList* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, VariantVector* to, nullptr_t);
 
 /* The only parser with validation so far - validates paths. */
 
@@ -75,12 +76,11 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, De
 }
 
 /* Parser for lists. */
-
 template<class List, class ValidationTag>
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, List* to, ValidationTag tag)
     requires requires (List a) { a.emplace_back(); }
 {
-    QVariantList variantList;
+    VariantVector variantList;
     parseConfigValue(ctx, from, &variantList, nullptr);
 
     to->clear();

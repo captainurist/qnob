@@ -1,7 +1,6 @@
 #include "full_config.h"
 
 #include <QtCore/QFile>
-#include <QtCore/QCoreApplication>
 
 #include <toml++/toml.h>
 
@@ -15,7 +14,9 @@ ConfigLocation location(const toml::node& node) {
     return { node.source().begin.line, node.source().begin.column };
 }
 
-QVariant getValue(const toml::node& node) {
+VariantMap convertTomlTable(const toml::table& table);
+
+QVariant convertTomlNode(const toml::node& node) {
     switch (node.type()) {
     case toml::node_type::string:
         return QVariant::fromValue<QString>(QString::fromUtf8(node.as_string()->get()));
@@ -26,14 +27,23 @@ QVariant getValue(const toml::node& node) {
     case toml::node_type::boolean:
         return QVariant::fromValue<bool>(node.as_boolean()->get());
     case toml::node_type::array: {
-        QVariantList result;
+        VariantVector result;
         for (const toml::node& element : *node.as_array())
-            result.push_back(getValue(element));
-        return QVariant::fromValue<QVariantList>(result);
+            result.push_back(convertTomlNode(element));
+        return variantFromRValue(std::move(result));
     }
+    case toml::node_type::table:
+        return variantFromRValue(convertTomlTable(*node.as_table()));
     default:
         qthrow ConfigException(location(node), ConfigException::tr("Expected a value."));
     }
+}
+
+VariantMap convertTomlTable(const toml::table& table) {
+    VariantMap result;
+    for (auto [id, section] : table) // TODO: &
+        result.emplace(QString::fromUtf8(id), convertTomlNode(section));
+    return result;
 }
 
 }
@@ -59,25 +69,6 @@ FullConfig FullConfig::loadFromTomlFile(const QString& path) {
         );
     }
 
-    FullConfig result;
-    result.path = path;
-
-    for (auto [id, section] : table) {
-        if (!section.is_table())
-            qthrow ConfigException(location(section), ConfigException::tr("Values outside of sections are not allowed."));
-
-        EntityConfig entity;
-        entity.id = QString::fromUtf8(id);
-        for (auto [key, value] : *section.as_table())
-            entity.data[QString::fromUtf8(key)] = getValue(value);
-
-        entity.type = value_or(entity.data, lit("type")).toString();
-        if (entity.type.isEmpty())
-            qthrow ConfigException(location(section), ConfigException::tr("Type is not specified for section '%1'.").arg(entity.id));
-
-        result.records.push_back(entity);
-    }
-
-    return result;
+    return { path, convertTomlTable(table) };
 }
 

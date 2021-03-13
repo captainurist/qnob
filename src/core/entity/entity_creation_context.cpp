@@ -1,16 +1,16 @@
 #include "entity_creation_context.h"
 
-#include <config/entity_config.h>
 #include <core/entity/entity_creation_exception.h>
 #include <util/map_access.h>
 
-EntityCreationContext::EntityCreationContext(const EntityConfig* config, FactoryResolver* resolver):
+EntityCreationContext::EntityCreationContext(const QString& id, const VariantMap& config, FactoryResolver* resolver):
+    m_id(id),
     m_config(config),
     m_resolver(resolver)
 {}
 
 const QString& EntityCreationContext::id() const {
-    return m_config->id;
+    return m_id;
 }
 
 FactoryResolver* EntityCreationContext::resolver() const {
@@ -18,7 +18,7 @@ FactoryResolver* EntityCreationContext::resolver() const {
 }
 
 bool EntityCreationContext::has(const QString& key) const {
-    return m_config->data.contains(key);
+    return m_config.contains(key);
 }
 
 QVariant EntityCreationContext::require(const QString& key) const {
@@ -29,7 +29,7 @@ QVariant EntityCreationContext::require(const QString& key) const {
 }
 
 QVariant EntityCreationContext::requireOr(const QString& key, const QVariant& defaultValue) const {
-    return value_or(m_config->data, key, defaultValue);
+    return value_or(m_config, key, defaultValue);
 }
 
 void EntityCreationContext::throwCreationException(const QString& key) const {

@@ -39,7 +39,6 @@
     <ClInclude Include="3rdparty\tomlplusplus\include\toml++\toml_version.h" />
     <ClInclude Include="src\core\app\app.h" />
     <ClInclude Include="src\core\entity\entity_parsers.h" />
-    <ClInclude Include="src\config\entity_config.h" />
     <ClInclude Include="src\config\full_config.h" />
     <ClInclude Include="src\core\entity\entity_creation_context.h" />
     <ClInclude Include="src\core\entity\entity_factory_pool.h" />
@@ -131,6 +130,7 @@
     <ClInclude Include="src\util\pod_pool.h" />
     <ClInclude Include="src\util\string_pool.h" />
     <ClInclude Include="src\util\human_readable_name.h" />
+    <ClInclude Include="src\util\variant.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\config\full_config.cpp" />

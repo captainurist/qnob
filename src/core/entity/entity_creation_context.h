@@ -3,13 +3,15 @@
 #include <QtCore/QString>
 #include <QtCore/QVariant>
 
+#include <util/variant.h>
+
 #include "factory_resolver.h"
 
 class EntityConfig;
 
 class EntityCreationContext {
 public:
-    EntityCreationContext(const EntityConfig* config, FactoryResolver* resolver);
+    EntityCreationContext(const QString& id, const VariantMap& config, FactoryResolver* resolver);
 
     const QString& id() const;
     FactoryResolver* resolver() const;
@@ -44,7 +46,8 @@ private:
     [[noreturn]] void throwCreationException(const QString& key) const;
 
 private:
-    const EntityConfig* m_config;
+    const QString& m_id;
+    const VariantMap& m_config;
     FactoryResolver* m_resolver;
 };
 

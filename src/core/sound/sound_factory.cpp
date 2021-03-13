@@ -1,7 +1,5 @@
 #include "sound_factory.h"
 
-#include <config/entity_config.h>
-#include <core/entity/factory_resolver.h>
 #include <core/knob/knob.h>
 
 #include "sound.h"

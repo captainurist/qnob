@@ -1,13 +1,13 @@
 #pragma once
 
-#include <vector>
+#include <QtCore/QVariant>
 
-#include "entity_config.h"
+#include <util/variant.h>
 
 class FullConfig {
 public:
     QString path;
-    std::vector<EntityConfig> records;
+    VariantMap records;
 
     /**
      * Loads a config from a toml file.
