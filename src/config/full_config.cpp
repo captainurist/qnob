@@ -41,7 +41,7 @@ QVariant convertTomlNode(const toml::node& node) {
 
 VariantMap convertTomlTable(const toml::table& table) {
     VariantMap result;
-    for (auto [id, section] : table) // TODO: &
+    for (const auto& [id, section] : table)
         result.emplace(QString::fromUtf8(id), convertTomlNode(section));
     return result;
 }
