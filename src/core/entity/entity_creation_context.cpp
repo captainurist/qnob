@@ -29,8 +29,7 @@ QVariant EntityCreationContext::require(const QString& key) const {
 }
 
 QVariant EntityCreationContext::requireOr(const QString& key, const QVariant& defaultValue) const {
-    const QVariant* result = value_ptr(m_config->data, key);
-    return result ? *result : defaultValue;
+    return value_or(m_config->data, key, defaultValue);
 }
 
 void EntityCreationContext::throwCreationException(const QString& key) const {

@@ -10,7 +10,7 @@ Value value_or(const Map& map, const Key& key, const std::type_identity_t<Value>
 
 /**
  * Warning! If you're using a temporary as `def`, then this function might return a reference to this temporary. Know
- * how object lifetimes are managed in c++ and use at your own risk.
+ * how object lifetimes are managed in c++ and use this function at your own risk.
  *
  * \param map                           Map to get a value reference from.
  * \param key                           Key to use.
