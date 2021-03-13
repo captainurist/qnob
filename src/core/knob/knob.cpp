@@ -28,13 +28,13 @@ Knob::~Knob() {}
 
 KnobState Knob::state() const {
     KnobState result;
-    result.enabled = m_shaft->enabled();
+    result.enabled = m_shaft->isEnabled();
     result.value = m_shaft->value();
     return result;
 }
 
 void Knob::toggle() {
-    m_shaft->setEnabled(!m_shaft->enabled());
+    m_shaft->setEnabled(!m_shaft->isEnabled());
 
     activateLater();
 }

@@ -75,7 +75,7 @@ void BrightnessShaft::setValue(double value) {
         monitor->setProperty(PlatformMonitor::BrightnessProperty, value);
 }
 
-bool BrightnessShaft::enabled() const {
+bool BrightnessShaft::isEnabled() const {
     return true;
 }
 

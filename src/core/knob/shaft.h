@@ -21,7 +21,7 @@ public:
     /**
      * \returns                         Enabled state.
      */
-    virtual bool enabled() const = 0;
+    virtual bool isEnabled() const = 0;
 
     /**
      * Enables / disables a shaft. Not all shafts support this function, so it might have no effect.

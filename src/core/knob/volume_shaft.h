@@ -11,6 +11,6 @@ public:
     virtual double value() const override;
     virtual void setValue(double value) override;
 
-    virtual bool enabled() const override;
+    virtual bool isEnabled() const override;
     virtual void setEnabled(bool value) override;
 };

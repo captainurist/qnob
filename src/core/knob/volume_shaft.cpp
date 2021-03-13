@@ -21,7 +21,7 @@ void VolumeShaft::setValue(double value) {
     platform()->volumeControl()->setVolume(value);
 }
 
-bool VolumeShaft::enabled() const {
+bool VolumeShaft::isEnabled() const {
     return !platform()->volumeControl()->isMuted() && !qFuzzyIsNull(platform()->volumeControl()->volume());
 }
 
