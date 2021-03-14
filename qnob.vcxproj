@@ -128,6 +128,7 @@
     <ClInclude Include="src\meta\meta_method_invoker.h" />
     <ClInclude Include="src\util\source_location.h" />
     <ClInclude Include="src\util\pod_pool.h" />
+    <ClInclude Include="src\util\stlfwd.h" />
     <ClInclude Include="src\util\string_pool.h" />
     <ClInclude Include="src\util\human_readable_name.h" />
     <ClInclude Include="src\util\variant.h" />
