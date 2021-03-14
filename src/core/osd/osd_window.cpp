@@ -19,11 +19,11 @@ OsdWindow::OsdWindow(const QString& title) {
     resize(0, 0);
 }
 
-KnobState OsdWindow::state() const {
+SettingState OsdWindow::state() const {
     return m_state;
 }
 
-void OsdWindow::setState(const KnobState& state) {
+void OsdWindow::setState(const SettingState& state) {
     if (m_state == state)
         return;
 

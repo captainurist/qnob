@@ -4,13 +4,12 @@
 #include <QtWidgets/QSystemTrayIcon>
 
 #include <core/skin/skin.h>
+#include <core/setting/setting.h>
 
 TrayIcon::TrayIcon(const QString& id) :
     Entity(id),
     m_trayIcon(new QSystemTrayIcon())
-{
-    m_trayIcon->show();
-}
+{}
 
 TrayIcon::~TrayIcon() {}
 
@@ -24,22 +23,25 @@ void TrayIcon::setSkin(Skin* skin) {
     updateIcon();
 }
 
-KnobState TrayIcon::state() const {
-    return m_state;
+Setting* TrayIcon::setting() const {
+    return m_setting;
 }
 
-void TrayIcon::setState(const KnobState& state) {
-    if (state == m_state)
-        return;
+void TrayIcon::setSetting(Setting* setting) {
+    if (m_setting)
+        disconnect(setting, nullptr, this, nullptr);
 
-    m_state = state;
+    m_setting = setting;
+
+    if (m_setting)
+        connect(m_setting, &Setting::changed, this, &TrayIcon::updateIcon);
 
     updateIcon();
 }
 
 void TrayIcon::updateIcon() {
-    if (!m_skin) {
-        m_trayIcon->setIcon(QIcon());
+    if (!m_skin || !m_setting || !m_setting->isInitialized()) {
+        m_trayIcon->hide();
         return;
     }
 
@@ -47,8 +49,9 @@ void TrayIcon::updateIcon() {
     pixmap.fill(Qt::transparent);
 
     QPainter painter(&pixmap);
-    m_skin->paint(&painter, m_state);
+    m_skin->paint(&painter, m_setting->state());
     painter.end();
 
     m_trayIcon->setIcon(pixmap);
+    m_trayIcon->show();
 }

@@ -9,7 +9,7 @@
 class OsdWindow;
 class OsdFsm;
 class Skin;
-class KnobState;
+class Setting;
 
 class Osd : public Entity {
 public:
@@ -25,16 +25,11 @@ public:
     QPoint offset() const;
     void setOffset(const QPoint& offset);
 
-    // TODO: maybe the three functions below don't belong here?
-    // More like setSkin()
-    //           setKnob()
-    // But then shared ownership is needed? Not really!
-
     Skin* skin() const;
     void setSkin(Skin* skin);
 
-    KnobState state() const;
-    void setState(const KnobState& state);
+    Setting* setting() const;
+    void setSetting(Setting* setting);
 
 private:
     void updatePosition();
@@ -44,4 +39,5 @@ private:
     std::unique_ptr<OsdFsm> m_fsm;
     Qt::Alignment m_alignment = Qt::AlignBottom | Qt::AlignHCenter;
     QPoint m_offset = QPoint(0, -100);
+    Setting* m_setting = nullptr;
 };

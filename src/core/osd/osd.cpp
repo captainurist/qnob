@@ -5,6 +5,8 @@
 #include <QtGui/QRasterWindow>
 #include <QtGui/QScreen>
 
+#include <core/setting/setting.h>
+
 #include "osd_window.h"
 #include "osd_fsm.h"
 
@@ -66,12 +68,25 @@ void Osd::setSkin(Skin* skin) {
     updatePosition();
 }
 
-KnobState Osd::state() const {
-    return m_window->state();
+Setting* Osd::setting() const {
+    return m_setting;
 }
 
-void Osd::setState(const KnobState& state) {
-    m_window->setState(state);
+void Osd::setSetting(Setting* setting) {
+    if (m_setting)
+        disconnect(m_setting, nullptr, this, nullptr);
+
+    m_setting = setting;
+
+    if (m_setting) {
+        connect(m_setting, &Setting::changed, this, [&] {
+            m_window->setState(m_setting->state());
+        });
+
+        connect(m_setting, &Setting::activated, this, [&] {
+            show(500, 500);
+        });
+    }
 }
 
 void Osd::updatePosition() {

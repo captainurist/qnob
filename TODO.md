@@ -1,11 +1,11 @@
 0.1:
 * **DONE**. Skinnable tray icon entity.
 * **DONE**. Numeric skin for tray icons.
+* **DONE**. Settings directly exposed in the entity model.
+* **DONE** Knob API: increase, decrease, toggle.
 * Mouse wheel events for tray icons on Win.
 * Mouse wheel events for built-in tray icons (yeah, I'm talking about volume).
 * Update tooltip after a wheel event on a tray icon.
-* Shafts directly exposed in the entity model.
-* Knob API: rotateUp, rotateDown, toggle.
 * Duck typing in factories (through qt metacalls).
 * Lua script entity, with access to globals.
 * Generic knob with acceleration (like in win10) and finer details at 0.

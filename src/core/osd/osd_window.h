@@ -2,7 +2,7 @@
 
 #include <QtGui/QRasterWindow>
 
-#include <core/knob/knob_state.h>
+#include <core/setting/setting_state.h>
 
 class Skin;
 
@@ -10,8 +10,8 @@ class OsdWindow : public QRasterWindow {
 public:
     OsdWindow(const QString& title);
 
-    KnobState state() const;
-    void setState(const KnobState& state);
+    SettingState state() const;
+    void setState(const SettingState& state);
 
     Skin* skin() const;
     void setSkin(Skin* skin);
@@ -21,5 +21,5 @@ protected:
 
 private:
     Skin* m_skin = nullptr;
-    KnobState m_state;
+    SettingState m_state;
 };

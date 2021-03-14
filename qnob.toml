@@ -1,67 +1,73 @@
 # "volume" is a default id!
 
-[vol_up]
+[volume_knob]
+type = "knob"
+step = 0.05
+target = "volume"
+
+[brightness_knob]
+type = "knob"
+step = 0.05
+target = "brightness"
+
+[volume_up_shortcut]
 type = "shortcut"
 trigger = "Pause"
-target = "volume"
-action = "rotate"
-args = [+0.05]
+target = "volume_knob"
+action = "increase"
 
-[vol_down]
+[volume_down_shortcut]
 type = "shortcut"
 trigger = "Scroll Lock"
-target = "volume"
-action = "rotate"
-args = [-0.05]
+target = "volume_knob"
+action = "decrease"
 
-[mute]
+[mute_shortcut]
 type = "shortcut"
 trigger = "Print Screen"
-target = "volume"
+target = "volume_knob"
 action = "toggle"
 
-[br_up]
+[brightness_up_shortcut]
 type = "shortcut"
 trigger = "Ctrl+Shift+Up"
-target = "brightness"
-action = "rotate"
-args = [+0.05]
+target = "brightness_knob"
+action = "increase"
 
-[br_down]
+[brightness_down_shortcut]
 type = "shortcut"
 trigger = "Ctrl+Shift+Down"
-target = "brightness"
-action = "rotate"
-args = [-0.05]
+target = "brightness_knob"
+action = "decrease"
 
-[exit]
+[exit_shortcut]
 type = "shortcut"
 trigger = "Ctrl+Alt+Shift+Q"
 target = "app"
 action = "exit"
 
-[sfx]
+[volume_sound]
 type = "sound"
-targets = ["volume", "brightness"]
+target = "volume"
 path = ":/resource/mac/volume.wav"
 
-[vol_osd]
+[volume_osd]
 type = "osd"
 target = "volume"
-skin = "mac_volume"
+skin = "volume_skin"
 position = "bottom"
 offset_x = 0
 offset_y = -100
 
-[br_osd]
+[brightness_osd]
 type = "osd"
 target = "brightness"
-skin = "mac_brightness"
+skin = "brightness_skin"
 position = "bottom"
 offset_x = 0
 offset_y = -100
 
-[mac_volume]
+[volume_skin]
 type = "horizontal_bar_skin"
 background = ":/resource/mac/volume.png"
 progress = ":/resource/mac/meter.png"
@@ -70,7 +76,7 @@ x = 33
 y = 165
 units = 16
 
-[mac_brightness]
+[brightness_skin]
 type = "horizontal_bar_skin"
 background = ":/resource/mac/brightness.png"
 progress = ":/resource/mac/meter.png"
@@ -83,7 +89,7 @@ units = 16
 type = "numeric_skin"
 color = "red"
 
-[br_icon]
+[brightness_icon]
 type = "tray_icon"
 target = "brightness"
 skin = "tray_icon_skin"

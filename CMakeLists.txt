@@ -31,13 +31,10 @@ set(src
     src/core/entity/entity_pool_builder.cpp
     src/core/entity/entity_pool_builder.h
     src/core/entity/factory_resolver.h
-    src/core/knob/brightness_shaft.cpp
-    src/core/knob/brightness_shaft.h
     src/core/knob/knob.cpp
     src/core/knob/knob.h
-    src/core/knob/shaft.h
-    src/core/knob/volume_shaft.cpp
-    src/core/knob/volume_shaft.h
+    src/core/knob/knob_factory.cpp
+    src/core/knob/knob_factory.h
     src/core/osd/osd.cpp
     src/core/osd/osd.h
     src/core/osd/osd_factory.cpp
@@ -46,6 +43,13 @@ set(src
     src/core/osd/osd_fsm.h
     src/core/osd/osd_window.cpp
     src/core/osd/osd_window.h
+    src/core/setting/brightness_setting_backend.cpp
+    src/core/setting/brightness_setting_backend.h
+    src/core/setting/setting_backend.h
+    src/core/setting/setting.h
+    src/core/setting/setting.cpp
+    src/core/setting/volume_setting_backend.cpp
+    src/core/setting/volume_setting_backend.h
     src/core/skin/horizontal_bar_skin.h
     src/core/skin/numeric_skin.h
     src/core/skin/skin.h

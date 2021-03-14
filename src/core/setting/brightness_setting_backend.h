@@ -1,20 +1,22 @@
 #pragma once
 
-#include "shaft.h"
+#include "setting_backend.h"
 
 class BrightnessShaftPrivate;
 
-class BrightnessShaft : public Shaft {
+class BrightnessSettingBackend : public SettingBackend {
     Q_OBJECT
 public:
-    BrightnessShaft();
-    virtual ~BrightnessShaft();
+    BrightnessSettingBackend();
+    virtual ~BrightnessSettingBackend();
 
     virtual double value() const override;
     virtual void setValue(double value) override;
 
     virtual bool isEnabled() const override;
     virtual void setEnabled(bool value) override;
+
+    virtual bool isInitialized() const override;
 
 private:
     Q_SLOT void handleFutureFinished();

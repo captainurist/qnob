@@ -1,13 +1,8 @@
 #include "osd_factory.h"
 
-#include <core/knob/knob.h>
-#include <core/skin/skin.h>
-
-#include <core/knob/knob.h>
-#include <core/knob/knob_state.h>
-#include <core/skin/skin.h>
-
 #include <lib/serializable_types/alignment.h>
+#include <core/setting/setting.h>
+#include <core/skin/skin.h>
 
 #include "osd.h"
 
@@ -16,22 +11,17 @@ OsdFactory::OsdFactory():
 {}
 
 Entity* OsdFactory::createEntity(const EntityCreationContext& ctx) {
-    Knob* knob = ctx.require<Knob*>(lit("target"));
+    Setting* setting = ctx.require<Setting*>(lit("target"));
     Skin* skin = ctx.require<Skin*>(lit("skin"));
 
     Qt::Alignment alignment = ctx.requireOr<Qt::Alignment>(lit("position"), Qt::AlignBottom);
     int offsetX = ctx.requireOr<qint64>(lit("offset_x"), 0);
-    int offsetY = ctx.requireOr<qint64>(lit("offset_y"), 0);
+    int offsetY = ctx.requireOr<qint64>(lit("offset_y"), 0); // TODO: array!
 
     Osd* result = new Osd(ctx.id());
-    result->setSkin(skin);
     result->setAlignment(alignment);
     result->setOffset({ offsetX, offsetY });
-
-    QObject::connect(knob, &Knob::activated, result, [=] {
-        result->setState(knob->state());
-        result->show(500, 500);
-    });
-
+    result->setSkin(skin);
+    result->setSetting(setting);
     return result;
 }

@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "shaft.h"
+#include <core/setting/setting.h>
 
 static double clampValue(double value) {
     value = std::clamp(value, 0.0, 1.0);
@@ -16,52 +16,55 @@ static double clampValue(double value) {
     return value;
 }
 
-
-Knob::Knob(const QString& id, Shaft* shaft) :
-    Entity(id),
-    m_shaft(shaft)
-{
-    connect(shaft, &Shaft::changedExternally, this, &Knob::activateLater);
-}
+Knob::Knob(const QString& id) :
+    Entity(id)
+{}
 
 Knob::~Knob() {}
 
-KnobState Knob::state() const {
-    KnobState result;
-    result.enabled = m_shaft->isEnabled();
-    result.value = m_shaft->value();
-    return result;
+double Knob::step() const {
+    return m_step;
+}
+
+void Knob::setStep(double step) {
+    m_step = step;
+}
+
+Setting* Knob::setting() const {
+    return m_setting;
+}
+
+void Knob::setSetting(Setting* setting) {
+    m_setting = setting;
 }
 
 void Knob::toggle() {
-    m_shaft->setEnabled(!m_shaft->isEnabled());
-
-    activateLater();
-}
-
-void Knob::rotate(double delta) {
-    double value = m_shaft->value();
-    if (std::isnan(value))
-        return; /* Shaft is either broken or pending initialization. */
-
-    m_shaft->setEnabled(true);
-    m_shaft->setValue(clampValue(value + delta));
-
-    activateLater();
-}
-
-void Knob::activateLater() {
-    if (m_activationPending)
+    if (!m_setting)
         return;
 
-    m_activationPending = true;
+    SettingState state = m_setting->state();
+    state.enabled = !state.enabled;
+    m_setting->setState(state);
 
-    auto callback = [&] {
-        assert(m_activationPending);
-        m_activationPending = false;
-
-        emit activated();
-    };
-    QMetaObject::invokeMethod(this, callback, Qt::QueuedConnection);
+    m_setting->activate();
 }
 
+void Knob::decrease() {
+    change(-m_step);
+}
+
+void Knob::increase() {
+    change(m_step);
+}
+
+void Knob::change(double delta) {
+    if (!m_setting)
+        return;
+
+    SettingState state = m_setting->state();
+    state.enabled = true;
+    state.value = clampValue(state.value + delta);
+    m_setting->setState(state);
+
+    m_setting->activate();
+}

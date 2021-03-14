@@ -3,7 +3,7 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 
-#include <core/knob/knob_state.h>
+#include <core/setting/setting_state.h>
 
 #include "skin.h"
 
@@ -22,7 +22,7 @@ public:
         return m_background.size();
     }
 
-    virtual void paint(QPainter* painter, const KnobState& state) {
+    virtual void paint(QPainter* painter, const SettingState& state) {
         if (state.enabled) {
             painter->drawPixmap(0, 0, m_background);
 

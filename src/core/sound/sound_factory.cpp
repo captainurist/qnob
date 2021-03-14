@@ -1,6 +1,6 @@
 #include "sound_factory.h"
 
-#include <core/knob/knob.h>
+#include <core/setting/setting.h>
 
 #include "sound.h"
 
@@ -10,16 +10,10 @@ SoundFactory::SoundFactory():
 
 Entity* SoundFactory::createEntity(const EntityCreationContext& ctx) {
     QString path = ctx.require<QString, AsPath>(lit("path"));
-    Knob* target = ctx.requireOr<Knob*>(lit("target"), nullptr);
-    std::vector<Knob*> targets = ctx.requireOr<std::vector<Knob*>>(lit("targets"), std::vector<Knob*>());
-    if (target)
-        targets.push_back(target);
+    Setting* target = ctx.require<Setting*>(lit("target"));
 
     Sound* result = new Sound(ctx.id(), path);
-
-    for (Knob* knob : targets)
-        QObject::connect(knob, &Knob::activated, result, &Sound::play);
-
+    QObject::connect(target, &Setting::activated, result, &Sound::play);
     return result;
 }
 

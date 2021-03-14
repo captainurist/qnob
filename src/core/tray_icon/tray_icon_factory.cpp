@@ -1,6 +1,6 @@
 #include "tray_icon_factory.h"
 
-#include <core/knob/knob.h>
+#include <core/setting/setting.h>
 #include <core/skin/skin.h>
 
 #include "tray_icon.h"
@@ -10,15 +10,11 @@ TrayIconFactory::TrayIconFactory() :
 {}
 
 Entity* TrayIconFactory::createEntity(const EntityCreationContext& ctx) {
-    Knob* knob = ctx.require<Knob*>(lit("target"));
+    Setting* setting = ctx.require<Setting*>(lit("target"));
     Skin* skin = ctx.require<Skin*>(lit("skin"));
 
     TrayIcon* result = new TrayIcon(ctx.id());
     result->setSkin(skin);
-
-    QObject::connect(knob, &Knob::activated, result, [=] {
-        result->setState(knob->state());
-    });
-
+    result->setSetting(setting);
     return result;
 }
