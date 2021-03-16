@@ -96,6 +96,7 @@
     <ClInclude Include="src\lib\monitor\monitor_server.h" />
     <ClInclude Include="src\platform\win\win_ddc_triplet.h" />
     <ClInclude Include="src\lib\monitor\monitor_queue.h" />
+    <ClInclude Include="src\platform\win\win_guids.h" />
     <ClInclude Include="src\platform\win\win_monitor.h" />
     <ClInclude Include="src\lib\monitor\monitor.h" />
     <ClInclude Include="src\platform\win\win_monitor_manager.h" />
