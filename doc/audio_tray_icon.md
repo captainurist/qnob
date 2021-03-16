@@ -16,9 +16,13 @@ So the steps are as follows:
 4. Right click on the audio icon.
 5. Examine message log for messages that look like tray icon notifications (see [docs for `NOTIFYICONDATAW`](https://docs.microsoft.com/en-us/windows/win32/api/shellapi/ns-shellapi-notifyicondataw)). The messages will have mouse coordinates in `wParam` and icon id & windows message code in `lParam`. Look for `lParam` that looks like `0x0064007B` (`0x7B` is `WM_CONTEXTMENU`).
 6. `HIWORD(lParam)` will contain icon id.
-7. Check the window that's processed this message, note its window class.
+7. Check the window that's processed this message, note its window class & caption.
 
-For Win 10.0.18363 icon id is `0x0064`, and window class is `ATL:00007FFD51668280` (lol).
+For Win 10.0.18363 icon id is `0x0064`, and window class is `ATL:00007FFD51668280` (lol), with empty caption.
+
+Same steps can be applied for other system tray icons. E.g. battery icon is also created by explorer, its icon id is `0x04C9`, window class is `SystemTray_Main`, caption is `"Battery Meter"`.
+
+Also [anvir task manager](http://www.anvir.com/download.htm) can be used to identify the process that the tray icon belongs to.
 
 
 Getting Windows Version
