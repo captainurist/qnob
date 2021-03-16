@@ -3,7 +3,8 @@
 * **DONE**. Numeric skin for tray icons.
 * **DONE**. Settings directly exposed in the entity model.
 * **DONE** Knob API: increase, decrease, toggle.
-* Mouse wheel events for tray icons on Win.
+* Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
+* Mouse wheel events for tray icons on Win. 
 * Mouse wheel events for built-in tray icons (yeah, I'm talking about volume).
 * Update tooltip after a wheel event on a tray icon.
 * Duck typing in factories (through qt metacalls).
@@ -13,6 +14,7 @@
 * Utility shafts for (all) external monitors & built-in monitor.
 * Multi-shaft OSD for the lua knob.
 * --list option to list built-in entities. Or rather a mode, `qnob list`.
+* Some option to list bindable keys.
 * Similar option to list all monitors. `qnob dump`.
 * Description for built-in entities.
 
