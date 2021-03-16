@@ -95,16 +95,15 @@ target = "brightness"
 skin = "tray_icon_skin"
 #overrides = "win_sound_icon"
 
-#[trayevent.0]
-#trigger = "Mouse Wheel Up"
-#source = "volume_icon"
-#target = "volume"
-#action = "changeValue"
-#arg = 0.05
+#[]
+#type = "tray_event"
+#trigger = "MWHEELUP"
+#source = "brightness_icon"
+#target = "brightness_knob"
+#action = "rotateUp"
 
-#[win_hide_volume_osd.0]
-# no params!
-
+#[]
+#type = "hide_win10_volume_osd"
 
 
 
