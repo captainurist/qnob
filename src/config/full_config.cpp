@@ -8,15 +8,13 @@
 
 #include "config_exception.h"
 
-namespace {
-
-ConfigLocation location(const toml::node& node) {
+static ConfigLocation location(const toml::node& node) {
     return { node.source().begin.line, node.source().begin.column };
 }
 
-VariantMap convertTomlTable(const toml::table& table);
+static VariantMap convertTomlTable(const toml::table& table);
 
-QVariant convertTomlNode(const toml::node& node) {
+static QVariant convertTomlNode(const toml::node& node) {
     switch (node.type()) {
     case toml::node_type::string:
         return QVariant::fromValue<QString>(QString::fromUtf8(node.as_string()->get()));
@@ -39,13 +37,11 @@ QVariant convertTomlNode(const toml::node& node) {
     }
 }
 
-VariantMap convertTomlTable(const toml::table& table) {
+static VariantMap convertTomlTable(const toml::table& table) {
     VariantMap result;
     for (const auto& [id, section] : table)
         result.emplace(QString::fromUtf8(id), convertTomlNode(section));
     return result;
-}
-
 }
 
 FullConfig FullConfig::loadFromTomlFile(const QString& path) {

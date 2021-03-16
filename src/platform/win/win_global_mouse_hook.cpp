@@ -6,8 +6,8 @@
 
 #include "win_error.h"
 
-WinGlobalMouseHook* g_hookInstance = nullptr;
-HHOOK g_mouseHook = 0;
+static WinGlobalMouseHook* g_hookInstance = nullptr;
+static HHOOK g_mouseHook = 0;
 
 LRESULT CALLBACK LowLevelMouseProc(int code, WPARAM wParam, LPARAM lParam) {
     if (code < 0)

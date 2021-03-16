@@ -10,8 +10,6 @@
 
 #include <util/map_access.h>
 
-namespace {
-
 class MetaObjectExtensionStorage {
 public:
     const MetaObjectExtension* extension(const QMetaObject* metaObject) {
@@ -33,8 +31,6 @@ private:
 };
 
 Q_GLOBAL_STATIC(MetaObjectExtensionStorage, g_extensionStorage)
-
-}
 
 MetaObjectExtension::~MetaObjectExtension() {}
 

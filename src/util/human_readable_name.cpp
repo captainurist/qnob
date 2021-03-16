@@ -39,6 +39,7 @@ private:
     QMutex m_mutex;
     std::unordered_map<std::type_index, QString> m_valueByType;
 };
+
 Q_GLOBAL_STATIC(HumanReadable, g_humanReadable)
 
 QString humanReadableName(const std::type_info& typeInfo) {
