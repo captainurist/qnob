@@ -3,7 +3,7 @@ The Problem
 
 What we want is to be able to identify the audio icon in the system tray, so that we could then properly process mouse wheel events for it.
 
-Mouse events are processed in the low-level mouse hook, and icon positions are retrieved via a call to `Shell_NotifyIconGetRect`, which requires either a GUID, or HWND + icon id pair. I'm yet to find out if GUIDs are used for audio icons. But icons always have ids, so this is what we can use.
+Mouse events are processed in the low-level mouse hook, and icon positions are retrieved via a call to `Shell_NotifyIconGetRect`, which requires either a GUID, or HWND + icon id pair.
 
 
 
@@ -47,7 +47,7 @@ For Win 10.0.18363 audio icon id is `0x0064`, and window class is `ATL:00007FFD5
 
 Also somehow this has [already been figured out](https://titanwolf.org/Network/Articles/Article?AID=e112b2ff-5db8-4aee-9de7-fe6be97a743b).
 
-And apparently the same can be achieved via [UI Automation](https://docs.microsoft.com/en-us/windows/win32/api/uiautomationclient/nf-uiautomationclient-iuiautomation-elementfrompoint).
+And apparently GUID can be retreived with [UI Automation](https://docs.microsoft.com/en-us/windows/win32/api/uiautomationclient/nf-uiautomationclient-iuiautomation-elementfrompoint).
 
 
 
