@@ -6,6 +6,7 @@ What we want is to be able to identify the audio icon in the system tray, so tha
 Mouse events are processed in the low-level mouse hook, and icon positions are retrieved via a call to `Shell_NotifyIconGetRect`, which requires either a GUID, or HWND + icon id pair. I'm yet to find out if GUIDs are used for audio icons. But icons always have ids, so this is what we can use.
 
 
+
 Finding HWND & Icon Id
 =================
 
@@ -19,6 +20,7 @@ So the steps are as follows:
 5. Examine message log for messages that look like tray icon notifications (see [docs for `NOTIFYICONDATAW`](https://docs.microsoft.com/en-us/windows/win32/api/shellapi/ns-shellapi-notifyicondataw)). The messages will have mouse coordinates in `wParam` and icon id & windows message code in `lParam`. Look for `lParam` that looks like `0x0064007B` (`0x7B` is `WM_CONTEXTMENU`).
 6. `HIWORD(lParam)` will contain icon id.
 7. Check the window that's processed this message, note its window class & caption.
+
 
 
 Finding out if Explorer uses GUIDs
@@ -37,10 +39,12 @@ Option #2:
 3. Examine it for GUIDs. Note that this is harder than option #1 above because data layout is not known here (but can be reconstructed by looking at `Shell_NotifyIconW` code).
 
 
+
 Results
 =======
 
 For Win 10.0.18363 audio icon id is `0x0064`, and window class is `ATL:00007FFD51668280` (lol), with empty caption. Guid is `73 AE 20 78 E3 23 29 42 82 C1 E4 1C B6 7D 5B 9C`, and this will be easier to use.
+
 
 
 Getting Windows Version
