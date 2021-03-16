@@ -43,7 +43,11 @@ Option #2:
 Results
 =======
 
-For Win 10.0.18363 audio icon id is `0x0064`, and window class is `ATL:00007FFD51668280` (lol), with empty caption. Guid is `73 AE 20 78 E3 23 29 42 82 C1 E4 1C B6 7D 5B 9C`, and this will be easier to use.
+For Win 10.0.18363 audio icon id is `0x0064`, and window class is `ATL:00007FFD51668280` (lol), with empty caption. Guid is `73 AE 20 78 E3 23 29 42 82 C1 E4 1C B6 7D 5B 9C`, and this will be easier to use. 
+
+Also somehow this has [already been figured out](https://titanwolf.org/Network/Articles/Article?AID=e112b2ff-5db8-4aee-9de7-fe6be97a743b).
+
+And apparently the same can be achieved via [UI Automation](https://docs.microsoft.com/en-us/windows/win32/api/uiautomationclient/nf-uiautomationclient-iuiautomation-elementfrompoint).
 
 
 
