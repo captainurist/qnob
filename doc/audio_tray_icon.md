@@ -9,6 +9,8 @@ Mouse events are processed in the low-level mouse hook, and icon positions are r
 Finding HWND & Icon Id
 =================
 
+[Anvir task manager](http://www.anvir.com/download.htm) can be used to identify the process that the tray icon belongs to. Audio icon is created by explorer.exe.
+
 So the steps are as follows:
 1. Open spyxx.
 2. Open processes view, and open message log for explorer.exe.
@@ -18,18 +20,6 @@ So the steps are as follows:
 6. `HIWORD(lParam)` will contain icon id.
 7. Check the window that's processed this message, note its window class & caption.
 
-For Win 10.0.18363 icon id is `0x0064`, and window class is `ATL:00007FFD51668280` (lol), with empty caption.
-
-Same steps can be applied for other system tray icons. E.g. battery icon is also created by explorer, its icon id is `0x04C9`, window class is `SystemTray_Main`, caption is `"Battery Meter"`.
-
-Also [anvir task manager](http://www.anvir.com/download.htm) can be used to identify the process that the tray icon belongs to.
-
-
-Getting Windows Version
-=======================
-
-Everything's in [this stackoverflow answer](https://stackoverflow.com/questions/47581146/getting-os-build-version-from-win32-api-c). It's either via `GetProductInfo` call, or from `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion` registry key.
-
 
 Finding out if Explorer uses GUIDs
 ==================================
@@ -38,11 +28,22 @@ Finding out if Explorer uses GUIDs
 Option #1:
 1. Open explorer.exe in x64dbg.
 2. Set breakpoint in `Shell_NotifyIconW`.
-3. Examine params.
+3. Right click on the audio icon.
+4. Examine params.
 
 Option #2:
 1. Hook into explorer.exe via `SetWindowsHookExW(WH_GETMESSAGE, ...)`.
 2. Look for `WM_COPYDATA`, dump all data.
 3. Examine it for GUIDs. Note that this is harder than option #1 above because data layout is not known here (but can be reconstructed by looking at `Shell_NotifyIconW` code).
 
-This is yet to be done.
+
+Results
+=======
+
+For Win 10.0.18363 audio icon id is `0x0064`, and window class is `ATL:00007FFD51668280` (lol), with empty caption. Guid is `73 AE 20 78 E3 23 29 42 82 C1 E4 1C B6 7D 5B 9C`, and this will be easier to use.
+
+
+Getting Windows Version
+=======================
+
+Everything's in [this stackoverflow answer](https://stackoverflow.com/questions/47581146/getting-os-build-version-from-win32-api-c). It's either via `GetProductInfo` call, or from `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion` registry key.
