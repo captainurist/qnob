@@ -2,7 +2,7 @@
 * **DONE**. Skinnable tray icon entity.
 * **DONE**. Numeric skin for tray icons.
 * **DONE**. Settings directly exposed in the entity model.
-* **DONE** Knob API: increase, decrease, toggle.
+* **DONE**. Knob API: increase, decrease, toggle.
 * Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
 * Mouse wheel events for tray icons on Win. 
 * Mouse wheel events for built-in tray icons (yeah, I'm talking about volume).
@@ -13,13 +13,15 @@
 * Lua knob for monitor brightness that also changes contrast.
 * Utility shafts for (all) external monitors & built-in monitor.
 * Multi-shaft OSD for the lua knob.
-* --list option to list built-in entities. Or rather a mode, `qnob list`.
-* Some option to list bindable keys.
-* Similar option to list all monitors. `qnob dump`.
-* Description for built-in entities.
+* --list option to list built-in entities. Or rather `--list entities`.
+* Some option to list bindable keys, `--list keys`?
+* Similar option to list all monitors. `--list monitors`?
+* Description for built-in entities. `--list verbose-entities`?
+* HEOS controls. Input, volume.
 
 0.2:
 * GUI
+* Philips Hue controls. Colorloop, mode, brightness.
 
 1.0:
-* AHK -> lua translator
+* AHK -> lua translator? Looks like an overkill.
