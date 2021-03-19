@@ -18,10 +18,14 @@ public:
     virtual void registerTrayIcon(QSystemTrayIcon* icon) override;
     virtual void unregisterTrayIcon(QSystemTrayIcon* icon) override;
 
+    virtual void registerStandardIcon(StandardTrayIcon standardIcon, QObject* icon);
+    virtual void unregisterStandardIcon(StandardTrayIcon standardIcon);
+
 private:
     Q_SLOT void processMessage(UINT message, const MSLLHOOKSTRUCT& data);
 
 private:
     std::unique_ptr<QThread> m_hookThread;
     std::unordered_set<QSystemTrayIcon*> m_icons;
+    std::unordered_map<StandardTrayIcon, QObject*> m_standardIcons;
 };
