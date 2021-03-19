@@ -4,6 +4,7 @@
 
 #include <cassert>
 
+#include <QtCore/QUuid>
 #include <QtCore/QVarLengthArray>
 #include <QtCore/QDebug>
 #include <QtGui/QWindow>
@@ -135,8 +136,11 @@ std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonito
 
         for (size_t monitorIndex = 0; monitorIndex < physicalMonitors.size(); monitorIndex++) {
             QString deviceId = monitorDeviceId(monitorInfos, displayInfo, monitorIndex, physicalMonitors[monitorIndex]);
-            if (deviceId.isEmpty())
-                continue; // TODO?
+            if (deviceId.isEmpty()) {
+                /* Just generate a random deviceId so that all the machinery down the line still works.
+                 * In theory, we should never get here. */
+                deviceId = lit("DISPLAY\\%1\\{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}").arg(QUuid::createUuid().toString());
+            }
 
             result.emplace_back(new WinMonitor(deviceId, physicalMonitors[monitorIndex]));
         }
