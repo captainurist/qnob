@@ -65,11 +65,10 @@ set(src
     src/core/tray_icon/tray_icon.cpp
     src/core/tray_icon/tray_icon_factory.h
     src/core/tray_icon/tray_icon_factory.cpp
-    src/core/trigger/hotkey_trigger.cpp
-    src/core/trigger/hotkey_trigger.h
-    src/core/trigger/hotkey_trigger_factory.cpp
-    src/core/trigger/hotkey_trigger_factory.h
-    src/core/trigger/trigger.h
+    src/core/hotkey/hotkey.cpp
+    src/core/hotkey/hotkey.h
+    src/core/hotkey/hotkey_factory.cpp
+    src/core/hotkey/hotkey_factory.h
     src/lib/metacall/bound_meta_call.cpp
     src/lib/metacall/bound_meta_call.h
     src/lib/metacall/meta_method_invoker.cpp

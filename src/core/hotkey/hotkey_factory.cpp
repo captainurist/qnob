@@ -1,14 +1,14 @@
-#include "hotkey_trigger_factory.h"
+#include "hotkey_factory.h"
 
 #include <lib/metacall/bound_meta_call.h>
 
-#include "hotkey_trigger.h"
+#include "hotkey.h"
 
-HotkeyTriggerFactory::HotkeyTriggerFactory() :
-    EntityFactory(lit("shortcut"))
+HotkeyFactory::HotkeyFactory() :
+    EntityFactory(lit("hotkey"))
 {}
 
-Entity* HotkeyTriggerFactory::createEntity(const EntityCreationContext& ctx) {
+Entity* HotkeyFactory::createEntity(const EntityCreationContext& ctx) {
     QKeySequence shortcut = ctx.require<QKeySequence>(lit("trigger"));
     Entity* target = ctx.require<Entity*>(lit("target"));
     QString action = ctx.require<QString>(lit("action"));
@@ -17,8 +17,8 @@ Entity* HotkeyTriggerFactory::createEntity(const EntityCreationContext& ctx) {
     BoundMetaCall call;
     call.bind(target, action.toUtf8(), args);
 
-    HotkeyTrigger* result = new HotkeyTrigger(ctx.id(), shortcut);
-    QObject::connect(result, &Trigger::triggered, target, [=]() mutable {
+    Hotkey* result = new Hotkey(ctx.id(), shortcut);
+    QObject::connect(result, &Hotkey::triggered, target, [=]() mutable {
         call.invoke();
     });
     return result;

@@ -2,9 +2,9 @@
 
 #include <core/entity/entity_factory.h>
 
-class HotkeyTriggerFactory : public EntityFactory {
+class HotkeyFactory : public EntityFactory {
 public:
-    HotkeyTriggerFactory();
+    HotkeyFactory();
 
     virtual Entity* createEntity(const EntityCreationContext& ctx) override;
 };

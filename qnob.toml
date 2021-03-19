@@ -10,38 +10,38 @@ type = "knob"
 step = 0.05
 target = "brightness"
 
-[volume_up_shortcut]
-type = "shortcut"
+[volume_up_hotkey]
+type = "hotkey"
 trigger = "Pause"
 target = "volume_knob"
 action = "increase"
 
-[volume_down_shortcut]
-type = "shortcut"
+[volume_down_hotkey]
+type = "hotkey"
 trigger = "Scroll Lock"
 target = "volume_knob"
 action = "decrease"
 
-[mute_shortcut]
-type = "shortcut"
+[mute_hotkey]
+type = "hotkey"
 trigger = "Print Screen"
 target = "volume_knob"
 action = "toggle"
 
-[brightness_up_shortcut]
-type = "shortcut"
+[brightness_up_hotkey]
+type = "hotkey"
 trigger = "Ctrl+Shift+Up"
 target = "brightness_knob"
 action = "increase"
 
-[brightness_down_shortcut]
-type = "shortcut"
+[brightness_down_hotkey]
+type = "hotkey"
 trigger = "Ctrl+Shift+Down"
 target = "brightness_knob"
 action = "decrease"
 
-[exit_shortcut]
-type = "shortcut"
+[exit_hotkey]
+type = "hotkey"
 trigger = "Ctrl+Alt+Shift+Q"
 target = "app"
 action = "exit"

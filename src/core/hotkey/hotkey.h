@@ -3,15 +3,18 @@
 #include <QtCore/QScopedPointer>
 #include <QtGui/QKeySequence>
 
-#include "trigger.h"
+#include <core/entity/entity.h>
 
 class PlatformShortcutNotifier;
 
-class HotkeyTrigger : public Trigger {
+class Hotkey : public Entity {
     Q_OBJECT
 public:
-    HotkeyTrigger(const QString& id, const QKeySequence& shortcut);
-    virtual ~HotkeyTrigger();
+    Hotkey(const QString& id, const QKeySequence& shortcut);
+    virtual ~Hotkey();
+
+signals:
+    void triggered();
 
 private:
     QScopedPointer<PlatformShortcutNotifier> m_notifier;

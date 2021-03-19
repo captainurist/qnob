@@ -12,7 +12,7 @@
 #include <core/setting/brightness_setting_backend.h>
 #include <core/setting/volume_setting_backend.h>
 #include <core/setting/setting.h>
-#include <core/trigger/hotkey_trigger_factory.h>
+#include <core/hotkey/hotkey_factory.h>
 #include <core/sound/sound_factory.h>
 #include <core/skin/skin_factory.h>
 #include <core/osd/osd_factory.h>
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 
         EntityFactoryPool factoryPool;
         factoryPool.registerFactory(new KnobFactory());
-        factoryPool.registerFactory(new HotkeyTriggerFactory());
+        factoryPool.registerFactory(new HotkeyFactory());
         factoryPool.registerFactory(new SoundFactory());
         factoryPool.registerFactory(new SkinFactory(HorizontalBarSkinType));
         factoryPool.registerFactory(new SkinFactory(NumericSkinType));
