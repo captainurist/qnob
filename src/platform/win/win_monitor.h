@@ -20,17 +20,17 @@ public:
 
     virtual QString deviceId() const override;
     virtual QString name() const override;
-    virtual Properties capabilities() const override;
-    virtual float property(Property property) const override;
-    virtual void setProperty(Property property, float value) override;
+    virtual PlatformMonitorProperties capabilities() const override;
+    virtual float property(PlatformMonitorProperty property) const override;
+    virtual void setProperty(PlatformMonitorProperty property, float value) override;
 
 private:
     void capabilitiesInternal(DWORD* capabilities) const;
-    bool propertyInternal(Property property, WinDdcTriplet * value) const;
-    bool setPropertyInternal(Property property, DWORD value);
+    bool propertyInternal(PlatformMonitorProperty property, WinDdcTriplet * value) const;
+    bool setPropertyInternal(PlatformMonitorProperty property, DWORD value);
 
 private:
     QString m_deviceId;
     PHYSICAL_MONITOR m_physicalMonitor;
-    mutable std::array<std::optional<WinDdcTriplet>, PlatformMonitor::PropertyCount> m_cachedProperties;
+    mutable std::array<std::optional<WinDdcTriplet>, MonitorPropertyCount> m_cachedProperties;
 };

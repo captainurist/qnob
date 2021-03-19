@@ -64,12 +64,12 @@ void WinTrayIconWheelEventManager::unregisterTrayIcon(QSystemTrayIcon* icon) {
     m_icons.erase(icon);
 }
 
-void WinTrayIconWheelEventManager::registerStandardIcon(StandardTrayIcon standardIcon, QObject* icon) {
+void WinTrayIconWheelEventManager::registerStandardIcon(PlatformStandardTrayIcon standardIcon, QObject* icon) {
     assert(!m_standardIcons.contains(standardIcon));
     m_standardIcons[standardIcon] = icon;
 }
 
-void WinTrayIconWheelEventManager::unregisterStandardIcon(StandardTrayIcon standardIcon) {
+void WinTrayIconWheelEventManager::unregisterStandardIcon(PlatformStandardTrayIcon standardIcon) {
     assert(m_standardIcons.contains(standardIcon));
     m_standardIcons.erase(standardIcon);
 }

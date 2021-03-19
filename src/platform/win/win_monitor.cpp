@@ -36,19 +36,19 @@ QString WinMonitor::name() const {
     return QString::fromWCharArray(m_physicalMonitor.szPhysicalMonitorDescription);
 }
 
-WinMonitor::Properties WinMonitor::capabilities() const {
+PlatformMonitorProperties WinMonitor::capabilities() const {
     DWORD capabilities;
     capabilitiesInternal(&capabilities);
 
-    WinMonitor::Properties result;
+    PlatformMonitorProperties result;
     if (capabilities & MC_CAPS_BRIGHTNESS)
-        result |= BrightnessProperty;
+        result |= BrightnessMonitorProperty;
     if (capabilities & MC_CAPS_CONTRAST)
-        result |= ContrastProperty;
+        result |= ContrastMonitorProperty;
     return result;
 }
 
-float WinMonitor::property(Property property) const {
+float WinMonitor::property(PlatformMonitorProperty property) const {
     WinDdcTriplet triplet;
     if (!propertyInternal(property, &triplet))
         return NAN;
@@ -60,7 +60,7 @@ float WinMonitor::property(Property property) const {
     return mapFromNative(triplet);
 }
 
-void WinMonitor::setProperty(Property property, float value) {
+void WinMonitor::setProperty(PlatformMonitorProperty property, float value) {
     if (!m_cachedProperties[property]) {
         this->property(property);
         if (!m_cachedProperties[property])
@@ -79,11 +79,11 @@ void WinMonitor::capabilitiesInternal(DWORD* capabilities) const {
     }
 }
 
-bool WinMonitor::propertyInternal(PlatformMonitor::Property property, WinDdcTriplet* value) const {
+bool WinMonitor::propertyInternal(PlatformMonitorProperty property, WinDdcTriplet* value) const {
     switch (property) {
-    case PlatformMonitor::BrightnessProperty:
+    case BrightnessMonitorProperty:
         return apicall(GetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max));
-    case PlatformMonitor::ContrastProperty:
+    case ContrastMonitorProperty:
         return apicall(GetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max));
     default:
         assert(false);
@@ -91,11 +91,11 @@ bool WinMonitor::propertyInternal(PlatformMonitor::Property property, WinDdcTrip
     }
 }
 
-bool WinMonitor::setPropertyInternal(PlatformMonitor::Property property, DWORD value) {
+bool WinMonitor::setPropertyInternal(PlatformMonitorProperty property, DWORD value) {
     switch (property) {
-    case PlatformMonitor::BrightnessProperty:
+    case BrightnessMonitorProperty:
         return apicall(SetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, value));
-    case PlatformMonitor::ContrastProperty:
+    case ContrastMonitorProperty:
         return apicall(SetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, value));
     default:
         assert(false);

@@ -47,7 +47,7 @@ double BrightnessSettingBackend::value() const {
 
     double result = 0;
     for (auto& monitor : d->monitors)
-        result += monitor->property(PlatformMonitor::BrightnessProperty);
+        result += monitor->property(BrightnessMonitorProperty);
     result /= d->monitors.size();
 
     assert(!std::isnan(result));
@@ -64,7 +64,7 @@ void BrightnessSettingBackend::setValue(double value) {
 
     d->cachedValue = value;
     for (auto& monitor : d->monitors)
-        monitor->setProperty(PlatformMonitor::BrightnessProperty, value);
+        monitor->setProperty(BrightnessMonitorProperty, value);
 }
 
 bool BrightnessSettingBackend::isEnabled() const {

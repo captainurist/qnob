@@ -4,6 +4,8 @@
 
 #include <util/bitset_flags.h>
 
+#include "platform_enums.h"
+
 /**
  * Abstraction around a monitor.
  *
@@ -13,13 +15,6 @@
 class PlatformMonitor: public QObject {
     Q_OBJECT
 public:
-    enum Property {
-        BrightnessProperty,
-        ContrastProperty,
-        PropertyCount
-    };
-    QB_DECLARE_BITSET_FLAGS(Properties, Property, PropertyCount);
-
     /**
      * \returns                         System-wide unique identifier for this monitor.
      */
@@ -35,7 +30,7 @@ public:
      *
      * \returns                         Supported properties for this monitor.
      */
-    virtual Properties capabilities() const = 0;
+    virtual PlatformMonitorProperties capabilities() const = 0;
 
     /**
      * Reads a monitor property. This function might take over 50ms to complete.
@@ -45,7 +40,7 @@ public:
      * \param property                  Property to read.
      * \returns                         Current value for the property, or NAN in case of an error.
      */
-    virtual float property(Property property) const = 0;
+    virtual float property(PlatformMonitorProperty property) const = 0;
 
     /**
      * Updates a monitor properly. This function might take over 100ms to complete.
@@ -55,7 +50,7 @@ public:
      * \param property                  Property to write.
      * \param value                     New value for the property.
      */
-    virtual void setProperty(Property property, float value) = 0;
+    virtual void setProperty(PlatformMonitorProperty property, float value) = 0;
 };
 
-QB_DELARE_OPERATORS_FOR_BITSET_FLAGS(PlatformMonitor::Properties)
+

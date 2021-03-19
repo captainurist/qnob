@@ -18,9 +18,9 @@ public:
 
     virtual QString deviceId() const override;
     virtual QString name() const override;
-    virtual Properties capabilities() const override;
-    virtual float property(Property property) const override;
-    virtual void setProperty(Property property, float value) override;
+    virtual PlatformMonitorProperties capabilities() const override;
+    virtual float property(PlatformMonitorProperty property) const override;
+    virtual void setProperty(PlatformMonitorProperty property, float value) override;
 
 signals:
     void initialized();
@@ -29,9 +29,9 @@ private:
     Q_SIGNAL void notifyServer();
 
     void handleInitializationReply();
-    void handleCapabilitiesCompleted(PlatformMonitor::Properties capabilities);
-    void handleReadCompleted(PlatformMonitor::Property property, float value);
-    void handleWriteCompleted(PlatformMonitor::Property property, float value);
+    void handleCapabilitiesCompleted(PlatformMonitorProperties capabilities);
+    void handleReadCompleted(PlatformMonitorProperty property, float value);
+    void handleWriteCompleted(PlatformMonitorProperty property, float value);
 
 private:
     std::unique_ptr<QThread> m_thread;
@@ -39,6 +39,6 @@ private:
     int m_pendingInitializationRequests = 0;
     QString m_cachedDeviceId;
     QString m_cachedName;
-    Properties m_cachedCapabilities;
-    std::array<float, PropertyCount> m_cachedProperties;
+    PlatformMonitorProperties m_cachedCapabilities;
+    std::array<float, MonitorPropertyCount> m_cachedProperties;
 };

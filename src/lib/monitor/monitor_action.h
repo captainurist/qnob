@@ -1,6 +1,6 @@
 #pragma once
 
-#include <platform/platform_monitor.h>
+#include <platform/platform_enums.h>
 
 struct MonitorAction {
     enum Type {
@@ -10,6 +10,6 @@ struct MonitorAction {
     };
 
     Type type = ReadProperty;
-    PlatformMonitor::Property property = PlatformMonitor::BrightnessProperty;
+    PlatformMonitorProperty property = BrightnessMonitorProperty;
     float value = 0.0f;
 };

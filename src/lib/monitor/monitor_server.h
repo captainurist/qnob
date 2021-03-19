@@ -17,14 +17,12 @@ public:
     Q_SLOT void processQueue();
 
 signals:
-    void capabilitiesCompleted(PlatformMonitor::Properties capabilities);
-    void readCompleted(PlatformMonitor::Property property, float value);
-    void writeCompleted(PlatformMonitor::Property property, float value);
+    void capabilitiesCompleted(PlatformMonitorProperties capabilities);
+    void readCompleted(PlatformMonitorProperty property, float value);
+    void writeCompleted(PlatformMonitorProperty property, float value);
 
 private:
     std::unique_ptr<PlatformMonitor> m_monitor;
     std::shared_ptr<MonitorQueue> m_queue;
 };
 
-Q_DECLARE_METATYPE(PlatformMonitor::Properties);
-Q_DECLARE_METATYPE(PlatformMonitor::Property);

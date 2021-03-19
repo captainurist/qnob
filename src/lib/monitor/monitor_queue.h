@@ -15,5 +15,5 @@ public:
 
 private:
     QMutex m_mutex;
-    std::unordered_map<std::pair<MonitorAction::Type, PlatformMonitor::Property>, float> m_actions;
+    std::unordered_map<std::pair<MonitorAction::Type, PlatformMonitorProperty>, float> m_actions;
 };

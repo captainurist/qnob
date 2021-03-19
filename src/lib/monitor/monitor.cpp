@@ -31,8 +31,8 @@ Monitor::Monitor(std::unique_ptr<PlatformMonitor> monitor) {
 
     /* Fire initialization requests. */
     m_queue->addAction({ MonitorAction::ReadCapabilities });
-    m_queue->addAction({ MonitorAction::ReadProperty, BrightnessProperty });
-    m_queue->addAction({ MonitorAction::ReadProperty, ContrastProperty });
+    m_queue->addAction({ MonitorAction::ReadProperty, BrightnessMonitorProperty });
+    m_queue->addAction({ MonitorAction::ReadProperty, ContrastMonitorProperty });
     m_pendingInitializationRequests = 3;
     emit notifyServer();
 }
@@ -55,19 +55,19 @@ QString Monitor::name() const {
     return m_cachedName;
 }
 
-Monitor::Properties Monitor::capabilities() const {
+PlatformMonitorProperties Monitor::capabilities() const {
     assert(isInitialized());
 
     return m_cachedCapabilities;
 }
 
-float Monitor::property(Property property) const {
+float Monitor::property(PlatformMonitorProperty property) const {
     assert(isInitialized());
 
     return m_cachedProperties[property];
 }
 
-void Monitor::setProperty(Property property, float value) {
+void Monitor::setProperty(PlatformMonitorProperty property, float value) {
     assert(isInitialized());
 
     m_queue->addAction({ MonitorAction::WriteProperty, property, value });
@@ -84,18 +84,18 @@ void Monitor::handleInitializationReply() {
         emit initialized();
 }
 
-void Monitor::handleCapabilitiesCompleted(PlatformMonitor::Properties capabilities) {
+void Monitor::handleCapabilitiesCompleted(PlatformMonitorProperties capabilities) {
     m_cachedCapabilities = capabilities;
 
     handleInitializationReply();
 }
 
-void Monitor::handleReadCompleted(PlatformMonitor::Property property, float value) {
+void Monitor::handleReadCompleted(PlatformMonitorProperty property, float value) {
     m_cachedProperties[property] = value;
 
     handleInitializationReply();
 }
 
-void Monitor::handleWriteCompleted(PlatformMonitor::Property property, float value) {
+void Monitor::handleWriteCompleted(PlatformMonitorProperty property, float value) {
     m_cachedProperties[property] = value;
 }
