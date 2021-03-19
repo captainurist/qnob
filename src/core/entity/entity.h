@@ -5,7 +5,9 @@
 class Entity : public QObject {
     Q_OBJECT
 public:
-    Entity(const QString& id): m_id(id) {}
+    Entity(const QString& id): m_id(id) {
+        setObjectName(id);
+    }
 
     const QString& id() const {
         return m_id;

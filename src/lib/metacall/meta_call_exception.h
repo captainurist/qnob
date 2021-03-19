@@ -4,6 +4,8 @@
 
 #include <util/exception.h>
 
+// TODO: we need better exception messages here. Provide method name in message!
+
 class MetaCallException : public Exception {
     Q_DECLARE_TR_FUNCTIONS(MetaCallException)
 public:

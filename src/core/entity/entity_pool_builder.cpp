@@ -1,5 +1,6 @@
 #include "entity_pool_builder.h"
 
+#include <QtCore/QScopeGuard>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QFileInfo>
 
@@ -58,9 +59,21 @@ void EntityPoolBuilder::initEntity(const QString& id) {
 
     m_idStack.push_back(id);
     m_idsInFlight.insert(id);
-    m_entities[id].reset(factory->createEntity({ id, config, this }));
-    m_idsInFlight.erase(id);
-    m_idStack.pop_back();
+    auto cleanup = QScopeGuard([&] {
+        m_idsInFlight.erase(id);
+        m_idStack.pop_back();
+    });
+
+    std::unique_ptr<Entity> entity;
+    try {
+        entity.reset(factory->createEntity({ id, config, this }));
+    } catch (EntityCreationException& e) {
+        throw;
+    } catch (...) {
+        /* Wrap unknown exceptions in an EntityCreationException. */
+        qthrow EntityCreationException(id, EntityCreationException::tr("Factory function failed."));
+    }
+    m_entities[id] = std::move(entity);
 }
 
 Entity* EntityPoolBuilder::resolveEntity(const QString& id) {
