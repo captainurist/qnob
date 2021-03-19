@@ -5,6 +5,7 @@
 #include <cassert>
 
 #include <QtCore/QVarLengthArray>
+#include <QtCore/QDebug>
 #include <QtGui/QWindow>
 
 #include "win_monitor.h"
@@ -52,15 +53,13 @@ static std::vector<MonitorInfo> enumMonitors() {
     std::vector<MonitorInfo> result;
 
     MonitorInfo element;
-    for (size_t i = 0; EnumDisplayDevicesW(NULL, i, &element.display, EDD_GET_DEVICE_INTERFACE_NAME); i++) {
+    for (size_t i = 0; apicall(EnumDisplayDevicesW(NULL, i, &element.display, EDD_GET_DEVICE_INTERFACE_NAME)); i++) {
         if (element.display.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER)
             continue; /* Represents a pseudo device used to mirror application drawing for remoting. */
 
-        for (uint j = 0; EnumDisplayDevicesW(element.display.DeviceName, j, &element.monitor, EDD_GET_DEVICE_INTERFACE_NAME); j++) {
+        for (uint j = 0; apicall(EnumDisplayDevicesW(element.display.DeviceName, j, &element.monitor, EDD_GET_DEVICE_INTERFACE_NAME)); j++) {
             /* In theory we should check here that DISPLAY_DEVICE_ACTIVE is set.
              * However, starting with Vista it's always set. And Qt6 only supports Windows 10+. */
-
-            // TODO: assert_log();
 
             element.monitorIndex = j;
             result.push_back(element);
@@ -70,7 +69,7 @@ static std::vector<MonitorInfo> enumMonitors() {
     return result;
 }
 
-QString monitorDeviceId(const std::vector<MonitorInfo>& monitorInfos, const DisplayInfo& displayInfo, size_t monitorIndex, const PHYSICAL_MONITOR& physicalMonitor) {
+static QString monitorDeviceId(const std::vector<MonitorInfo>& monitorInfos, const DisplayInfo& displayInfo, size_t monitorIndex, const PHYSICAL_MONITOR& physicalMonitor) {
     for (const MonitorInfo& monitorInfo : monitorInfos) {
         if (monitorInfo.monitorIndex != monitorIndex ||
             std::wcscmp(monitorInfo.display.DeviceName, displayInfo.display.szDevice) != 0 ||
@@ -86,9 +85,10 @@ QString monitorDeviceId(const std::vector<MonitorInfo>& monitorInfos, const Disp
          * We normalize this to look the same as 'device instance path' property in device manager:
          *
          * DISPLAY\<hwid>\<instanceid> */
-        QStringList chunks = QString::fromWCharArray(monitorInfo.monitor.DeviceID).split(QLatin1Char('#'));
+        QString deviceId = QString::fromWCharArray(monitorInfo.monitor.DeviceID);
+        QStringList chunks = deviceId.split(QLatin1Char('#'));
         if (chunks.size() < 3 || chunks[0] != lit("\\\\?\\DISPLAY")) {
-            // TODO: assert_log
+            qWarning() << "Invalid monitor deviceId format:" << deviceId;
             continue;
         }
 
@@ -149,5 +149,5 @@ void WinMonitorManager::dispatchEvent(void* message) {
     MSG* msg = static_cast<MSG*>(message);
     assert(msg->message == WM_DISPLAYCHANGE);
 
-    emit monitorsChanged(); // TODO: actually, we can do better than that! Maybe cache & compare.
+    emit monitorsChanged(); // TODO: actually, we can do better than that! Maybe cache & compare?
 }
