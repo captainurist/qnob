@@ -1,6 +1,5 @@
-#include <fstream>
-
-#include <QtCore/QThread>
+#include <QtCore/QThreadPool>
+#include <QtCore/QScopeGuard>
 #include <QtWidgets/QApplication>
 
 #include <core/entity/entity_factory_pool.h>
@@ -31,6 +30,9 @@ int main(int argc, char* argv[]) {
         QThread::currentThread()->setObjectName(lit("MainThread"));
 
         PlatformInitializer platform;
+
+        /* Join all worker threads before platform is destroyed, there might be some deinitialization pending there. */
+        auto cleanup = QScopeGuard([] { QThreadPool::globalInstance()->waitForDone(); });
 
         EntityPool pool;
         pool.addEntity(new Setting(lit("volume"), new VolumeSettingBackend()));
