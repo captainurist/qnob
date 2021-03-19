@@ -59,3 +59,13 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QK
     if (to->isEmpty() || (*to)[0].key() == Qt::Key_unknown)
         qthrow BadCastException(BadCastException::tr("'%1' is not a valid key sequence.").arg(sequenceString));
 }
+
+void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QPoint* to, nullptr_t) {
+    std::vector<qint64> list;
+    parseConfigValue(ctx, from, &list, nullptr);
+
+    if (list.size() != 2)
+        qthrow BadCastException(BadCastException::tr("2D point must contain exactly 2 coordinates."));
+
+    *to = QPoint(list[0], list[1]);
+}

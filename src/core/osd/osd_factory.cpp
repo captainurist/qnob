@@ -15,12 +15,11 @@ Entity* OsdFactory::createEntity(const EntityCreationContext& ctx) {
     Skin* skin = ctx.require<Skin*>(lit("skin"));
 
     Qt::Alignment alignment = ctx.requireOr<Qt::Alignment>(lit("position"), Qt::AlignBottom);
-    int offsetX = ctx.requireOr<qint64>(lit("offset_x"), 0);
-    int offsetY = ctx.requireOr<qint64>(lit("offset_y"), 0); // TODO: array!
+    QPoint offset = ctx.requireOr<QPoint>(lit("offset"), QPoint(0, 0));
 
     Osd* result = new Osd(ctx.id());
     result->setAlignment(alignment);
-    result->setOffset({ offsetX, offsetY });
+    result->setOffset(offset);
     result->setSkin(skin);
     result->setSetting(setting);
     return result;
