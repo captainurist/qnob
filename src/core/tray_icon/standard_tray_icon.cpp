@@ -8,8 +8,6 @@ StandardTrayIcon::StandardTrayIcon(const QString& id, PlatformStandardTrayIcon s
     Entity(id),
     m_standardIcon(standardIcon)
 {
-    assert(standardIcon != NoTrayIcon);
-
     platform()->trayIconWheelEventManager()->registerStandardIcon(m_standardIcon, this);
 }
 
