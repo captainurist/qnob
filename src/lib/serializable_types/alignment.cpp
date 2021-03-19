@@ -2,6 +2,8 @@
 
 #include <lib/serialization/enum_serialization.h>
 
+QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH_BY_VALUE(Qt::Alignment)
+
 QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Alignment, ({
     {Qt::AlignTop | Qt::AlignLeft, "top_left"},
     {Qt::AlignTop | Qt::AlignHCenter, "top"},

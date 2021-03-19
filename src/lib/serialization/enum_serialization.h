@@ -14,8 +14,6 @@
 
 #include "serialization_exceptions.h"
 
-QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH_BY_VALUE(Qt::Alignment) // TODO: this does not belong here.
-
 template<class T>
 class EnumSerializer {
 public:
