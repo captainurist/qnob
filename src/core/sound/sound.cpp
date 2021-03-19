@@ -12,7 +12,8 @@ Sound::Sound(const QString& id, const QString& path):
 {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly))
-        qthrow Exception(Exception::tr("Could not open sound file '%1'").arg(path)); // TODO: IoException?
+        qthrow Exception(Exception::tr("Could not open sound file '%1'").arg(path));
+    // TODO: IoException above? First figure out what to do with exceptions in general. I18n, subclassing etc.
 
     m_data = file.readAll();
 }
