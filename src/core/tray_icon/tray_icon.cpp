@@ -6,12 +6,18 @@
 #include <core/skin/skin.h>
 #include <core/setting/setting.h>
 
+#include <platform/platform.h>
+
 TrayIcon::TrayIcon(const QString& id) :
     Entity(id),
     m_trayIcon(new QSystemTrayIcon())
-{}
+{
+    platform()->trayIconWheelEventManager()->registerTrayIcon(m_trayIcon.get());
+}
 
-TrayIcon::~TrayIcon() {}
+TrayIcon::~TrayIcon() {
+    platform()->trayIconWheelEventManager()->unregisterTrayIcon(m_trayIcon.get());
+}
 
 Skin* TrayIcon::skin() const {
     return m_skin;
@@ -37,6 +43,10 @@ void TrayIcon::setSetting(Setting* setting) {
         connect(m_setting, &Setting::changed, this, &TrayIcon::updateIcon);
 
     updateIcon();
+}
+
+QObject* TrayIcon::icon() const {
+    return m_trayIcon.get();
 }
 
 void TrayIcon::updateIcon() {

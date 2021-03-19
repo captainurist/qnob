@@ -95,12 +95,33 @@ target = "brightness"
 skin = "tray_icon_skin"
 #overrides = "win_sound_icon"
 
-#[]
-#type = "tray_event"
-#trigger = "MWHEELUP"
-#source = "brightness_icon"
-#target = "brightness_knob"
-#action = "rotateUp"
+[volume_up_tray_event]
+type = "tray_event"
+trigger = "mwheelup"
+source = "volume_icon"
+target = "volume_knob"
+action = "increase"
+
+[volume_down_tray_event]
+type = "tray_event"
+trigger = "mwheeldown"
+source = "volume_icon"
+target = "volume_knob"
+action = "decrease"
+
+[brightness_up_tray_event]
+type = "tray_event"
+trigger = "mwheelup"
+source = "brightness_icon"
+target = "brightness_knob"
+action = "increase"
+
+[brightness_down_tray_event]
+type = "tray_event"
+trigger = "mwheeldown"
+source = "brightness_icon"
+target = "brightness_knob"
+action = "decrease"
 
 #[]
 #type = "hide_win10_volume_osd"

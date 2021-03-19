@@ -19,6 +19,8 @@ public:
     Setting* setting() const;
     void setSetting(Setting* setting);
 
+    QObject* icon() const;
+
 private:
     void updateIcon();
 

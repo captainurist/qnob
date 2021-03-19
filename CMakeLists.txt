@@ -61,6 +61,14 @@ set(src
     src/core/sound/sound.h
     src/core/sound/sound_factory.cpp
     src/core/sound/sound_factory.h
+    src/core/tray_event/mouse_key.h
+    src/core/tray_event/mouse_key.cpp
+    src/core/tray_event/tray_event.h
+    src/core/tray_event/tray_event.cpp
+    src/core/tray_event/tray_event_factory.h
+    src/core/tray_event/tray_event_factory.cpp
+    src/core/tray_icon/standard_tray_icon.h
+    src/core/tray_icon/standard_tray_icon.cpp
     src/core/tray_icon/tray_icon.h
     src/core/tray_icon/tray_icon.cpp
     src/core/tray_icon/tray_icon_factory.h

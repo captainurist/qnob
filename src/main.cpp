@@ -17,6 +17,8 @@
 #include <core/skin/skin_factory.h>
 #include <core/osd/osd_factory.h>
 #include <core/tray_icon/tray_icon_factory.h>
+#include <core/tray_icon/standard_tray_icon.h>
+#include <core/tray_event/tray_event_factory.h>
 
 #include <config/full_config.h>
 
@@ -34,6 +36,7 @@ int main(int argc, char* argv[]) {
         pool.addEntity(new Setting(lit("volume"), new VolumeSettingBackend()));
         pool.addEntity(new Setting(lit("brightness"), new BrightnessSettingBackend()));
         pool.addEntity(new App(lit("app")));
+        pool.addEntity(new StandardTrayIcon(lit("volume_icon"), AudioTrayIcon));
 
         EntityFactoryPool factoryPool;
         factoryPool.registerFactory(new KnobFactory());
@@ -43,6 +46,7 @@ int main(int argc, char* argv[]) {
         factoryPool.registerFactory(new SkinFactory(NumericSkinType));
         factoryPool.registerFactory(new OsdFactory());
         factoryPool.registerFactory(new TrayIconFactory());
+        factoryPool.registerFactory(new TrayEventFactory());
 
         EntityPoolBuilder builder(&factoryPool, &pool);
         builder.addEntities(FullConfig::loadFromTomlFile(QLatin1String("qnob.toml")));

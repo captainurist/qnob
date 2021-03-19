@@ -11,5 +11,6 @@ QB_DECLARE_BITSET_FLAGS(PlatformMonitorProperties, PlatformMonitorProperty, Moni
 QB_DELARE_OPERATORS_FOR_BITSET_FLAGS(PlatformMonitorProperties)
 
 enum PlatformStandardTrayIcon {
-    AudioTrayIcon
+    AudioTrayIcon,
+    NoTrayIcon = -1  // TODO: remove?
 };

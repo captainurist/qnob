@@ -18,7 +18,7 @@ static QRect QRectFromRECT(const RECT& rect) {
 }
 
 static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry, UINT message, const MSLLHOOKSTRUCT& data) {
-    int delta = -GET_WHEEL_DELTA_WPARAM(data.mouseData);
+    int delta = GET_WHEEL_DELTA_WPARAM(data.mouseData);
 
     QWheelEvent event(
         QPoint(data.pt.x, data.pt.y) - globalGeometry.topLeft(),
@@ -65,13 +65,13 @@ void WinTrayIconWheelEventManager::unregisterTrayIcon(QSystemTrayIcon* icon) {
 }
 
 void WinTrayIconWheelEventManager::registerStandardIcon(PlatformStandardTrayIcon standardIcon, QObject* icon) {
-    assert(!m_standardIcons.contains(standardIcon));
-    m_standardIcons[standardIcon] = icon;
+    assert(!m_objectsByStandardIcon[standardIcon].contains(icon));
+    m_objectsByStandardIcon[standardIcon].insert(icon);
 }
 
-void WinTrayIconWheelEventManager::unregisterStandardIcon(PlatformStandardTrayIcon standardIcon) {
-    assert(m_standardIcons.contains(standardIcon));
-    m_standardIcons.erase(standardIcon);
+void WinTrayIconWheelEventManager::unregisterStandardIcon(PlatformStandardTrayIcon standardIcon, QObject* icon) {
+    assert(m_objectsByStandardIcon[standardIcon].contains(icon));
+    m_objectsByStandardIcon[standardIcon].erase(icon);
 }
 
 void WinTrayIconWheelEventManager::processMessage(UINT message, const MSLLHOOKSTRUCT& data) {
@@ -97,11 +97,14 @@ void WinTrayIconWheelEventManager::processMessage(UINT message, const MSLLHOOKST
 
         if (globalGeometry.contains(globalPoint)) {
             sendSyntheticWheelEvent(icon, globalGeometry, message, data);
-            return; /* Re-registrations are not allowed, so it's safe to return here. */
+            return;
         }
     }
 
-    for (auto [standardIcon, icon] : m_standardIcons) {
+    for (const auto& [standardIcon, objects] : m_objectsByStandardIcon) {
+        if(objects.empty())
+            continue;
+
         assert(standardIcon == AudioTrayIcon);
 
         NOTIFYICONIDENTIFIER identifier;
@@ -112,12 +115,13 @@ void WinTrayIconWheelEventManager::processMessage(UINT message, const MSLLHOOKST
 
         RECT location;
         if (!apicall(Shell_NotifyIconGetRect(&identifier, &location)))
-            continue; /* Icon not found? */
+            continue; /* Icon not found. */
         QRect globalGeometry = QRectFromRECT(location);
 
         if (globalGeometry.contains(globalPoint)) {
-            sendSyntheticWheelEvent(icon, globalGeometry, message, data);
-            return; /* Re-registrations are not allowed, so it's safe to return here. */
+            for(QObject* object: objects)
+                sendSyntheticWheelEvent(object, globalGeometry, message, data);
+            return;
         }
     }
 }

@@ -73,7 +73,7 @@ QVariant variantFromRValue(T&& value) {
  * This basically is a zerocopy read accessor for `QVariant`. Note that `QVariant` doesn't provide this functionality -
  * it always performs a copy.
  *
- * \param value                         Variant to get a reference for,
+ * \param value                         Variant to get a reference for.
  * \returns                             Reference to the value stored inside a `QVariant`.
  */
 template<class T>
