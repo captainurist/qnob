@@ -56,7 +56,7 @@ type = "osd"
 target = "volume"
 skin = "volume_skin"
 position = "bottom"
-offset = [0, -100, 1]
+offset = [0, -100]
 
 [brightness_osd]
 type = "osd"
@@ -85,7 +85,9 @@ units = 16
 
 [tray_icon_skin]
 type = "numeric_skin"
-color = "red"
+size = [16, 16]
+color = "white"
+font = "Consolas"
 
 [brightness_icon]
 type = "tray_icon"

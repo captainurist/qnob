@@ -45,6 +45,7 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QS
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QPixmap* to, nullptr_t);
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QKeySequence* to, nullptr_t);
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QPoint* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QSize* to, nullptr_t);
 
 /* Parser for entities. */
 

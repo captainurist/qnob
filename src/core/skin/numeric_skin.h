@@ -10,13 +10,15 @@
 class NumericSkin : public Skin {
     Q_OBJECT
 public:
-    NumericSkin(const QString& id, const QColor& color) :
+    NumericSkin(const QString& id, const QSize& size, const QColor& color, const QString& fontFamily = QString()) :
         Skin(id),
-        m_color(color)
+        m_size(size),
+        m_color(color),
+        m_fontFamily(fontFamily)
     {}
 
     virtual QSize size() const override {
-        return QSize(64, 64);
+        return m_size;
     }
 
     virtual void paint(QPainter* painter, const SettingState& state) {
@@ -26,20 +28,24 @@ public:
         PainterPenRollback penRollback(painter, m_color);
         PainterFontRollback fontRollback(painter);
         QFont font = painter->font();
-        font.setPixelSize(64);
+        font.setPixelSize(m_size.height());
+        if(!m_fontFamily.isEmpty())
+            font.setFamily(m_fontFamily);
         painter->setFont(font);
 
         QFontMetrics metrics(font);
         QRect rect = metrics.boundingRect(text);
-        if (rect.width() > 64) {
-            painter->translate(32, 0);
-            painter->scale(64.0 / rect.width(), 1.0);
-            painter->translate(-32, 0);
+        if (rect.width() > m_size.width()) {
+            painter->translate(m_size.width() / 2.0, 0);
+            painter->scale(1.0 * m_size.width() / rect.width(), 1.0);
+            painter->translate(-m_size.width() / 2.0, 0);
         }
 
-        painter->drawText(QRect(-32, 0, 128, 64), Qt::AlignCenter, text);
+        painter->drawText(QRect(-m_size.width() / 2.0, 0, m_size.width() * 2.0, m_size.height()), Qt::AlignCenter, text);
     }
 
 private:
+    QSize m_size;
     QColor m_color;
+    QString m_fontFamily;
 };

@@ -69,3 +69,13 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QP
 
     *to = QPoint(list[0], list[1]);
 }
+
+void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QSize* to, nullptr_t) {
+    std::vector<qint64> list;
+    parseConfigValue(ctx, from, &list, nullptr);
+
+    if (list.size() != 2)
+        qthrow BadCastException(BadCastException::tr("2D size must contain exactly 2 coordinates."));
+
+    *to = QSize(list[0], list[1]);
+}
