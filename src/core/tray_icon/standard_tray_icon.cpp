@@ -22,7 +22,7 @@ StandardTrayIcon::StandardTrayIcon(const QString& id, Setting* setting, Platform
 }
 
 StandardTrayIcon::~StandardTrayIcon() {
-    platform()->trayIconWheelEventManager()->registerControl(m_control.get());
+    platform()->trayIconWheelEventManager()->unregisterControl(m_control.get());
 }
 
 Setting* StandardTrayIcon::setting() const {
