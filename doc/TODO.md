@@ -3,9 +3,9 @@
 * **DONE**. Numeric skin for tray icons.
 * **DONE**. Settings directly exposed in the entity model.
 * **DONE**. Knob API: increase, decrease, toggle.
+* **DONE**. Mouse wheel events for tray icons on Win. 
+* **DONE**. Mouse wheel events for built-in tray icons (yeah, I'm talking about volume).
 * Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
-* Mouse wheel events for tray icons on Win. 
-* Mouse wheel events for built-in tray icons (yeah, I'm talking about volume).
 * Update tooltip after a wheel event on a tray icon.
 * Duck typing in factories (through qt metacalls).
 * Lua script entity, with access to globals.
