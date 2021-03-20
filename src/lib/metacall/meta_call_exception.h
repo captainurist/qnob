@@ -5,6 +5,7 @@
 #include <util/exception.h>
 
 // TODO: we need better exception messages here. Provide method name in message!
+// yeah, when we get to exception i18n.
 
 class MetaCallException : public Exception {
     Q_DECLARE_TR_FUNCTIONS(MetaCallException)
