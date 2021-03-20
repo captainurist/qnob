@@ -314,15 +314,9 @@ WinShortcutManager::WinShortcutManager(QObject* parent): QObject(parent) {
 
 WinShortcutManager::~WinShortcutManager() {}
 
-PlatformShortcutNotifier* WinShortcutManager::createShortcutNotifier(const QKeySequence& shortcut) {
-    if (shortcut.isEmpty())
-        return nullptr;
-
-    if (shortcut.count() > 1)
-        qWarning() << "Creating global shortcut only for the 1st key in sequence" << shortcut;
-
-    Qt::Key key = shortcut[0].key();
-    Qt::KeyboardModifiers mods = shortcut[0].keyboardModifiers();
+PlatformShortcutNotifier* WinShortcutManager::createShortcutNotifier(const QKeyCombination& shortcut) {
+    Qt::Key key = shortcut.key();
+    Qt::KeyboardModifiers mods = shortcut.keyboardModifiers();
     quint32 nativeKey = 0;
     quint32 nativeMods = 0;
     convertToNativeKey(key, mods, &nativeKey, &nativeMods);

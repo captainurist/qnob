@@ -62,12 +62,14 @@ PlatformControl* WinPlatform::createStandardControl(PlatformStandardControl cont
 
 void WinPlatform::execute(PlatformFunction function) {
     switch (function) 	{
-    case WinToggleHooks:
-        emit hookChangeRequested(!m_hook->isEnabled());
+    case WinEnableHooks:
+        emit hookChangeRequested(true);
+        break;
+    case WinDisableHooks:
+        emit hookChangeRequested(false);
         break;
     default:
         assert(function == WinUpdateCurrentToolTip);
-    case WinUpdateCurrentToolTip:
         updateCurrentToolTip();
         break;
     }

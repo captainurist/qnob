@@ -16,7 +16,7 @@ public:
     WinShortcutManager(QObject* parent = nullptr);
     ~WinShortcutManager();
 
-    PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut);
+    PlatformShortcutNotifier* createShortcutNotifier(const QKeyCombination& shortcut);
 
 private:
     void dispatchEvent(void* message);

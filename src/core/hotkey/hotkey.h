@@ -10,7 +10,7 @@ class PlatformShortcutNotifier;
 class Hotkey : public Entity {
     Q_OBJECT
 public:
-    Hotkey(const QString& id, const QKeySequence& shortcut);
+    Hotkey(const QString& id, const QKeyCombination& shortcut);
     virtual ~Hotkey();
 
 signals:

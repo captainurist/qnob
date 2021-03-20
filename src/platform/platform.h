@@ -8,7 +8,7 @@
 #include "platform_wheel_event_manager.h"
 #include "platform_control.h"
 
-class QKeySequence;
+class QKeyCombination;
 
 /**
  * Platform abstraction class.
@@ -40,10 +40,10 @@ public:
     virtual PlatformWheelEventManager* trayIconWheelEventManager() const = 0;
 
     /**
-     * \param shortcut                  Key sequence to create a global shortcut for.
+     * \param shortcut                  Key combination to create a global shortcut for.
      * \returns                         New shortcut notifier, or `nullptr` in case of an error.
      */
-    virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const = 0;
+    virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeyCombination& shortcut) const = 0;
 
     /**
      * \param control                   Standard control.

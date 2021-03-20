@@ -55,7 +55,7 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QK
     QString sequenceString;
     parseConfigValue(ctx, from, &sequenceString, nullptr);
 
-    *to = QKeySequence::fromString(sequenceString);
+    *to = QKeySequence::fromString(sequenceString, QKeySequence::NativeText);
     if (to->isEmpty() || (*to)[0].key() == Qt::Key_unknown)
         qthrow BadCastException(BadCastException::tr("'%1' is not a valid key sequence.").arg(sequenceString));
 }

@@ -17,7 +17,7 @@ Entity* HotkeyFactory::createEntity(const EntityCreationContext& ctx) {
     BoundMetaCall call;
     call.bind(target, action.toUtf8(), args);
 
-    Hotkey* result = new Hotkey(ctx.id(), shortcut);
+    Hotkey* result = new Hotkey(ctx.id(), shortcut[0]); // TODO
     QObject::connect(result, &Hotkey::triggered, target, [=]() mutable {
         call.invoke();
     });

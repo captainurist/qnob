@@ -22,7 +22,7 @@ public:
     virtual PlatformVolumeControl* volumeControl() const override;
     virtual PlatformMonitorManager* monitorManager() const override;
     virtual PlatformWheelEventManager* trayIconWheelEventManager() const override;
-    virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const override;
+    virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeyCombination& shortcut) const override;
     virtual PlatformControl* createStandardControl(PlatformStandardControl control) const override;
     virtual void execute(PlatformFunction function) override;
 
@@ -37,6 +37,6 @@ private:
     std::unique_ptr<WinVolumeControl> m_volumeControl;
     std::unique_ptr<WinMonitorManager> m_monitorManager;
     std::unique_ptr<WinWheelEventManager> m_trayIconWheelEventManager;
-    std::unique_ptr<WinShortcutManager> m_shortcutDispatcher;
+    std::unique_ptr<WinShortcutManager> m_shortcutManager;
 };
 

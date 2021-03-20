@@ -2,7 +2,7 @@
 
 #include <platform/platform.h>
 
-Hotkey::Hotkey(const QString& id, const QKeySequence& shortcut):
+Hotkey::Hotkey(const QString& id, const QKeyCombination& shortcut):
     Entity(id)
 {
     m_notifier.reset(platform()->createShortcutNotifier(shortcut));
