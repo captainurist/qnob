@@ -153,5 +153,5 @@ void WinMonitorManager::dispatchEvent(void* message) {
     MSG* msg = static_cast<MSG*>(message);
     assert(msg->message == WM_DISPLAYCHANGE);
 
-    emit monitorsChanged(); // TODO: actually, we can do better than that! Maybe cache & compare?
+    emit monitorsChanged();
 }
