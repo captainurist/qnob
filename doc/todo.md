@@ -5,8 +5,8 @@
 * **DONE**. Knob API: increase, decrease, toggle.
 * **DONE**. Mouse wheel events for tray icons on Win. 
 * **DONE**. Mouse wheel events for built-in tray icons (yeah, I'm talking about volume).
+* **DONE**. Update tooltip after a wheel event on a tray icon.
 * Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
-* Update tooltip after a wheel event on a tray icon.
 * Duck typing in factories (through qt metacalls).
 * Lua script entity, with access to globals.
 * Generic knob with acceleration (like in win10) and finer details at 0.
