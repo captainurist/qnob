@@ -6,6 +6,7 @@
 #include "platform_shortcut_notifier.h"
 #include "platform_monitor_manager.h"
 #include "platform_wheel_event_manager.h"
+#include "platform_shortcut_manager.h"
 #include "platform_control.h"
 
 class QKeyCombination;
@@ -35,15 +36,14 @@ public:
     virtual PlatformMonitorManager* monitorManager() const = 0;
 
     /**
-     * \returns                         Tray icon wheel event manager object.
+     * \returns                         Shortcut manager object.
      */
-    virtual PlatformWheelEventManager* trayIconWheelEventManager() const = 0;
+    virtual PlatformShortcutManager* shortcutManager() const = 0;
 
     /**
-     * \param shortcut                  Key combination to create a global shortcut for.
-     * \returns                         New shortcut notifier, or `nullptr` in case of an error.
+     * \returns                         Tray icon wheel event manager object.
      */
-    virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeyCombination& shortcut) const = 0;
+    virtual PlatformWheelEventManager* trayIconWheelEventManager() const = 0; // TODO: wheelEventManager
 
     /**
      * \param control                   Standard control.

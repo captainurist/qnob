@@ -108,6 +108,7 @@ set(src
     src/platform/platform_monitor.h
     src/platform/platform_monitor_manager.h
     src/platform/platform_shortcut_notifier.h
+    src/platform/platform_shortcut_manager.h
     src/platform/platform_volume_control.h
     src/platform/platform_wheel_event_manager.h
     src/platform/win/com.cpp

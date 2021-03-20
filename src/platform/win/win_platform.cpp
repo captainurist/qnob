@@ -48,12 +48,12 @@ PlatformMonitorManager* WinPlatform::monitorManager() const {
     return m_monitorManager.get();
 }
 
-PlatformWheelEventManager* WinPlatform::trayIconWheelEventManager() const {
-    return m_trayIconWheelEventManager.get();
+PlatformShortcutManager* WinPlatform::shortcutManager() const {
+    return m_shortcutManager.get();
 }
 
-PlatformShortcutNotifier* WinPlatform::createShortcutNotifier(const QKeyCombination& shortcut) const {
-    return m_shortcutManager->createShortcutNotifier(shortcut);
+PlatformWheelEventManager* WinPlatform::trayIconWheelEventManager() const {
+    return m_trayIconWheelEventManager.get();
 }
 
 PlatformControl* WinPlatform::createStandardControl(PlatformStandardControl control) const {

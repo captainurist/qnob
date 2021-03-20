@@ -72,6 +72,7 @@
     <ClInclude Include="src\core\tray_icon\standard_tray_icon.h" />
     <ClInclude Include="src\core\tray_icon\tray_icon.h" />
     <ClInclude Include="src\core\tray_icon\tray_icon_factory.h" />
+    <ClInclude Include="src\lib\keys\key_combination.h" />
     <ClInclude Include="src\lib\metacall\bound_meta_call.h" />
     <ClInclude Include="src\lib\metacall\meta_call_exception.h" />
     <ClInclude Include="src\lib\metacall\meta_method_invoker.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="src\core\tray_icon\standard_tray_icon.cpp" />
     <ClCompile Include="src\core\tray_icon\tray_icon.cpp" />
     <ClCompile Include="src\core\tray_icon\tray_icon_factory.cpp" />
+    <ClCompile Include="src\lib\keys\key_combination.cpp" />
     <ClCompile Include="src\lib\metacall\bound_meta_call.cpp" />
     <ClCompile Include="src\lib\metacall\meta_method_invoker.cpp" />
     <ClCompile Include="src\lib\metacall\meta_object_extension.cpp" />
