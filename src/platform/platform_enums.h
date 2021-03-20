@@ -10,9 +10,9 @@ enum PlatformMonitorProperty {
 QB_DECLARE_BITSET_FLAGS(PlatformMonitorProperties, PlatformMonitorProperty, MonitorPropertyCount);
 QB_DELARE_OPERATORS_FOR_BITSET_FLAGS(PlatformMonitorProperties)
 
-enum PlatformStandardTrayIcon {
+enum PlatformStandardControl {
     AudioTrayIcon,
-    TrayIconCount
+    NonStandardControl
 };
 
 enum PlatformFunction {

@@ -93,7 +93,8 @@
     <ClInclude Include="src\platform\platform_monitor.h" />
     <ClInclude Include="src\platform\platform_monitor_manager.h" />
     <ClInclude Include="src\platform\platform_shortcut_notifier.h" />
-    <ClInclude Include="src\platform\platform_tray_icon_wheel_event_manager.h" />
+    <ClInclude Include="src\platform\platform_control.h" />
+    <ClInclude Include="src\platform\platform_wheel_event_manager.h" />
     <ClInclude Include="src\platform\platform_volume_control.h" />
     <ClInclude Include="src\platform\win\com.h" />
     <ClInclude Include="src\platform\win\com_ptr.h" />
@@ -111,7 +112,8 @@
     <ClInclude Include="src\platform\win\win_platform.h" />
     <ClInclude Include="src\platform\win\win_shortcut_manager.h" />
     <ClInclude Include="src\platform\win\win_shortcut_notifier.h" />
-    <ClInclude Include="src\platform\win\win_tray_icon_wheel_event_manager.h" />
+    <ClInclude Include="src\platform\win\win_standard_control.h" />
+    <ClInclude Include="src\platform\win\win_wheel_event_manager.h" />
     <ClInclude Include="src\platform\win\win_volume_control.h" />
     <ClInclude Include="src\config\config_exception.h" />
     <ClInclude Include="src\core\hotkey\hotkey.h" />
@@ -181,7 +183,8 @@
     <ClCompile Include="src\platform\win\win_monitor.cpp" />
     <ClCompile Include="src\lib\monitor\monitor.cpp" />
     <ClCompile Include="src\platform\win\win_monitor_manager.cpp" />
-    <ClCompile Include="src\platform\win\win_tray_icon_wheel_event_manager.cpp" />
+    <ClCompile Include="src\platform\win\win_standard_control.cpp" />
+    <ClCompile Include="src\platform\win\win_wheel_event_manager.cpp" />
     <ClCompile Include="src\serialization\serialization_exceptions.cpp" />
     <ClCompile Include="src\util\bad_cast_exception.cpp" />
     <ClCompile Include="src\util\human_readable_name.cpp" />

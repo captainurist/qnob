@@ -4,24 +4,25 @@
 #include <chrono>
 
 #include <QtCore/QTimer>
+#include <QtGui/QCursor>
 
 #include <core/setting/setting.h>
 #include <platform/platform.h>
 
 using namespace std::chrono_literals;
 
-StandardTrayIcon::StandardTrayIcon(const QString& id, Setting* setting, PlatformStandardTrayIcon standardIcon) :
+StandardTrayIcon::StandardTrayIcon(const QString& id, Setting* setting, PlatformStandardControl control) :
     Entity(id),
-    m_setting(setting),
-    m_standardIcon(standardIcon)
+    m_control(platform()->createStandardControl(control)),
+    m_setting(setting)
 {
-    platform()->trayIconWheelEventManager()->registerStandardIcon(m_standardIcon, this);
+    platform()->trayIconWheelEventManager()->registerControl(m_control.get());
 
     connect(m_setting, &Setting::changed, this, &StandardTrayIcon::handleSettingChange);
 }
 
 StandardTrayIcon::~StandardTrayIcon() {
-    platform()->trayIconWheelEventManager()->unregisterStandardIcon(m_standardIcon, this);
+    platform()->trayIconWheelEventManager()->registerControl(m_control.get());
 }
 
 Setting* StandardTrayIcon::setting() const {
@@ -29,11 +30,11 @@ Setting* StandardTrayIcon::setting() const {
 }
 
 QObject* StandardTrayIcon::icon() const {
-    return const_cast<StandardTrayIcon*>(this);
+    return m_control.get();
 }
 
 void StandardTrayIcon::handleSettingChange() {
-    if (m_standardIcon == AudioTrayIcon) {
+    if (m_control->geometry().contains(QCursor::pos())) {
         /* Quick & dirty workaround for the fact that tooltip is not updated when using mouse wheel over win audio icon.
          * It takes some time for updates to get delivered to explorer.exe, so we have to use a timer here.
          * Maybe a better solution exists. */

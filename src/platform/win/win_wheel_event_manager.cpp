@@ -1,4 +1,4 @@
-#include "win_tray_icon_wheel_event_manager.h"
+#include "win_wheel_event_manager.h"
 
 #include <cassert>
 #include <ranges>
@@ -8,6 +8,8 @@
 #include <QtCore/QCoreApplication>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QSystemTrayIcon>
+
+#include <platform/platform_control.h>
 
 #include "win_global_mouse_hook.h"
 #include "win_guids.h"
@@ -34,33 +36,33 @@ static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry
     qApp->notify(target, &event);
 }
 
-WinTrayIconWheelEventManager::WinTrayIconWheelEventManager(WinGlobalMouseHook* hook) {
-    connect(hook, &WinGlobalMouseHook::messageHooked, this, &WinTrayIconWheelEventManager::processMessage);
+WinWheelEventManager::WinWheelEventManager(WinGlobalMouseHook* hook) {
+    connect(hook, &WinGlobalMouseHook::messageHooked, this, &WinWheelEventManager::processMessage);
 }
 
-WinTrayIconWheelEventManager::~WinTrayIconWheelEventManager() {}
+WinWheelEventManager::~WinWheelEventManager() {}
 
-void WinTrayIconWheelEventManager::registerTrayIcon(QSystemTrayIcon* icon) {
+void WinWheelEventManager::registerTrayIcon(QSystemTrayIcon* icon) {
     assert(!m_icons.contains(icon));
     m_icons.insert(icon);
 }
 
-void WinTrayIconWheelEventManager::unregisterTrayIcon(QSystemTrayIcon* icon) {
+void WinWheelEventManager::unregisterTrayIcon(QSystemTrayIcon* icon) {
     assert(m_icons.contains(icon));
     m_icons.erase(icon);
 }
 
-void WinTrayIconWheelEventManager::registerStandardIcon(PlatformStandardTrayIcon standardIcon, QObject* icon) {
-    assert(!m_objectsByStandardIcon[standardIcon].contains(icon));
-    m_objectsByStandardIcon[standardIcon].insert(icon);
+void WinWheelEventManager::registerControl(PlatformControl* control) {
+    assert(!m_controls.contains(control));
+    m_controls.insert(control);
 }
 
-void WinTrayIconWheelEventManager::unregisterStandardIcon(PlatformStandardTrayIcon standardIcon, QObject* icon) {
-    assert(m_objectsByStandardIcon[standardIcon].contains(icon));
-    m_objectsByStandardIcon[standardIcon].erase(icon);
+void WinWheelEventManager::unregisterControl(PlatformControl* control) {
+    assert(m_controls.contains(control));
+    m_controls.erase(control);
 }
 
-void WinTrayIconWheelEventManager::processMessage(UINT message, const MSLLHOOKSTRUCT& data) {
+void WinWheelEventManager::processMessage(UINT message, const MSLLHOOKSTRUCT& data) {
     assert(message == WM_MOUSEWHEEL || message == WM_MOUSEHWHEEL);
 
     HWND window = WindowFromPoint(data.pt);
@@ -87,27 +89,12 @@ void WinTrayIconWheelEventManager::processMessage(UINT message, const MSLLHOOKST
         }
     }
 
-    for (const auto& [standardIcon, objects] : m_objectsByStandardIcon) {
-        if(objects.empty())
-            continue;
-
-        assert(standardIcon == AudioTrayIcon);
-
-        NOTIFYICONIDENTIFIER identifier;
-        identifier.cbSize = sizeof(identifier);
-        identifier.hWnd = 0;
-        identifier.uID = 0;
-        identifier.guidItem = GUID_TrayIconVolume;
-
-        RECT location;
-        if (!apicall(Shell_NotifyIconGetRect(&identifier, &location)))
-            continue; /* Icon not found. */
-        QRect globalGeometry = QRectFromRECT(location);
+    for (PlatformControl* control : m_controls) {
+        QRect globalGeometry = control->geometry();
 
         if (globalGeometry.contains(globalPoint)) {
-            for(QObject* object: objects)
-                sendSyntheticWheelEvent(object, globalGeometry, message, data);
-            return;
+            sendSyntheticWheelEvent(control, globalGeometry, message, data);
+            /* Can't return here, can have duplicates in standard controls. */
         }
     }
 }

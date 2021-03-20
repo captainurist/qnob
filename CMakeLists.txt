@@ -102,13 +102,14 @@ set(src
     src/lib/serialization/serialization_fwd.h
     src/main.cpp
     src/platform/platform.h
+    src/platform/platform_control.h
     src/platform/platform_initializer.cpp
     src/platform/platform_initializer.h
     src/platform/platform_monitor.h
     src/platform/platform_monitor_manager.h
     src/platform/platform_shortcut_notifier.h
     src/platform/platform_volume_control.h
-    src/platform/platform_tray_icon_wheel_event_manager.h
+    src/platform/platform_wheel_event_manager.h
     src/platform/win/com.cpp
     src/platform/win/com.h
     src/platform/win/com_ptr.h
@@ -127,8 +128,10 @@ set(src
     src/platform/win/win_shortcut_manager.cpp
     src/platform/win/win_shortcut_manager.h
     src/platform/win/win_shortcut_notifier.h
-    src/platform/win/win_tray_icon_wheel_event_manager.cpp
-    src/platform/win/win_tray_icon_wheel_event_manager.h
+    src/platform/win/win_standard_control.cpp
+    src/platform/win/win_standard_control.h
+    src/platform/win/win_wheel_event_manager.cpp
+    src/platform/win/win_wheel_event_manager.h
     src/platform/win/win_volume_control.cpp
     src/platform/win/win_volume_control.h
     src/platform/win/win_volume_event_handler.cpp

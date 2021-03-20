@@ -11,8 +11,9 @@
 #include "win_volume_control.h"
 #include "win_monitor_manager.h"
 #include "win_shortcut_manager.h"
-#include "win_tray_icon_wheel_event_manager.h"
+#include "win_wheel_event_manager.h"
 #include "win_global_mouse_hook.h"
+#include "win_standard_control.h"
 
 WinPlatform::WinPlatform() {
     m_com.reset(new Com());
@@ -28,7 +29,7 @@ WinPlatform::WinPlatform() {
 
     m_volumeControl.reset(new WinVolumeControl());
     m_monitorManager.reset(new WinMonitorManager());
-    m_trayIconWheelEventManager.reset(new WinTrayIconWheelEventManager(m_hook));
+    m_trayIconWheelEventManager.reset(new WinWheelEventManager(m_hook));
     m_shortcutDispatcher.reset(new WinShortcutManager());
 
     /* Enable the hook. Gotta do this through the event loop so that the registration is done on the hook thread,
@@ -49,12 +50,16 @@ PlatformMonitorManager* WinPlatform::monitorManager() const {
     return m_monitorManager.get();
 }
 
-PlatformTrayIconWheelEventManager* WinPlatform::trayIconWheelEventManager() const {
+PlatformWheelEventManager* WinPlatform::trayIconWheelEventManager() const {
     return m_trayIconWheelEventManager.get();
 }
 
 PlatformShortcutNotifier* WinPlatform::createShortcutNotifier(const QKeySequence& shortcut) const {
     return m_shortcutDispatcher->createShortcutNotifier(shortcut);
+}
+
+PlatformControl* WinPlatform::createStandardControl(PlatformStandardControl control) const {
+    return new WinStandardControl(control);
 }
 
 void WinPlatform::execute(PlatformFunction function) {

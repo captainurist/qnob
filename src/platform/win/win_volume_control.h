@@ -29,4 +29,3 @@ private:
     ComPtr<IAudioEndpointVolume> m_volumeControl;
     ComPtr<WinVolumeEventHandler> m_eventHandler;
 };
-

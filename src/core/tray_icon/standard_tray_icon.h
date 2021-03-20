@@ -4,13 +4,14 @@
 
 #include <platform/platform_enums.h>
 
-#include <core/setting/setting.h>
-
 // TODO: probably belongs in a different folder.
+
+class PlatformControl;
+class Setting;
 
 class StandardTrayIcon : public Entity {
 public:
-    StandardTrayIcon(const QString& id, Setting* setting, PlatformStandardTrayIcon standardIcon);
+    StandardTrayIcon(const QString& id, Setting* setting, PlatformStandardControl control);
     virtual ~StandardTrayIcon();
 
     Setting* setting() const;
@@ -20,6 +21,6 @@ private:
     void handleSettingChange();
 
 private:
+    std::unique_ptr<PlatformControl> m_control;
     Setting* m_setting = nullptr;
-    PlatformStandardTrayIcon m_standardIcon;
 };
