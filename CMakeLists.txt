@@ -155,11 +155,14 @@ add_executable(qnob ${src})
 # Add console to debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE false)
+else()
+    set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true)
 endif()
 
 if (MSVC)
     # Full path of source code file in diagnostics
     target_compile_options(qnob PRIVATE /FC)
+    # target_compile_options(qnob PRIVATE /MT)
 endif()
 
 target_compile_definitions(qnob PRIVATE
