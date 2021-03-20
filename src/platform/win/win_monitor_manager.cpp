@@ -54,11 +54,11 @@ static std::vector<MonitorInfo> enumMonitors() {
     std::vector<MonitorInfo> result;
 
     MonitorInfo element;
-    for (size_t i = 0; apicall(EnumDisplayDevicesW(NULL, i, &element.display, EDD_GET_DEVICE_INTERFACE_NAME)); i++) {
+    for (size_t i = 0; EnumDisplayDevicesW(NULL, i, &element.display, EDD_GET_DEVICE_INTERFACE_NAME); i++) {
         if (element.display.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER)
             continue; /* Represents a pseudo device used to mirror application drawing for remoting. */
 
-        for (uint j = 0; apicall(EnumDisplayDevicesW(element.display.DeviceName, j, &element.monitor, EDD_GET_DEVICE_INTERFACE_NAME)); j++) {
+        for (uint j = 0; EnumDisplayDevicesW(element.display.DeviceName, j, &element.monitor, EDD_GET_DEVICE_INTERFACE_NAME); j++) {
             /* In theory we should check here that DISPLAY_DEVICE_ACTIVE is set.
              * However, starting with Vista it's always set. And Qt6 only supports Windows 10+. */
 
