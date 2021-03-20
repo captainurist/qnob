@@ -14,3 +14,8 @@ enum PlatformStandardTrayIcon {
     AudioTrayIcon,
     TrayIconCount
 };
+
+enum PlatformFunction {
+    WinToggleHooks,
+    WinUpdateCurrentToolTip
+};

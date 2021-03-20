@@ -23,11 +23,11 @@ public:
     virtual PlatformMonitorManager* monitorManager() const override;
     virtual PlatformTrayIconWheelEventManager* trayIconWheelEventManager() const override;
     virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const override;
-    virtual bool hooksEnabled() const override;
-    virtual void setHooksEnabled(bool enabled) override;
+    virtual void execute(PlatformFunction function) override;
 
 private:
     Q_SIGNAL void hookChangeRequested(bool enabled);
+    void updateCurrentToolTip() const;
 
 private:
     std::unique_ptr<Com> m_com;

@@ -1,6 +1,8 @@
 #pragma once
 
-#include <Windows.h>
+#include <Windows.h> /* For MSLLHOOKSTRUCT. */
+
+#include <atomic>
 
 #include <QtCore/QObject>
 
@@ -22,5 +24,5 @@ signals:
     void messageHooked(UINT message, const MSLLHOOKSTRUCT& data);
 
 private:
-    bool m_enabled = false;
+    std::atomic<bool> m_enabled = false;
 };

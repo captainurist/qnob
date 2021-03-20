@@ -52,6 +52,12 @@ trigger = "Ctrl+Alt+Shift+H"
 target = "app"
 action = "toggleHooks"
 
+[debug_hotkey]
+type = "hotkey"
+trigger = "Ctrl+Alt+Shift+D"
+target = "app"
+action = "debugAction"
+
 [volume_sound]
 type = "sound"
 target = "volume"

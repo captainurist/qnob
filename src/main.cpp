@@ -34,11 +34,13 @@ int main(int argc, char* argv[]) {
         /* Join all worker threads before platform is destroyed, there might be some deinitialization pending there. */
         auto cleanup = QScopeGuard([] { QThreadPool::globalInstance()->waitForDone(); });
 
+        Setting* volume = new Setting(lit("volume"), new VolumeSettingBackend());
+
         EntityPool pool;
-        pool.addEntity(new Setting(lit("volume"), new VolumeSettingBackend()));
+        pool.addEntity(volume);
         pool.addEntity(new Setting(lit("brightness"), new BrightnessSettingBackend()));
         pool.addEntity(new App(lit("app")));
-        pool.addEntity(new StandardTrayIcon(lit("volume_icon"), AudioTrayIcon));
+        pool.addEntity(new StandardTrayIcon(lit("volume_icon"), volume, AudioTrayIcon));
 
         EntityFactoryPool factoryPool;
         factoryPool.registerFactory(new KnobFactory());

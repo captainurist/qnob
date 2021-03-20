@@ -44,9 +44,12 @@ public:
      */
     virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const = 0;
 
-    virtual bool hooksEnabled() const = 0;
-
-    virtual void setHooksEnabled(bool enabled) = 0;
+    /**
+     * Runs a platform-specific function.
+     *
+     * \param function                  Function to run.
+     */
+    virtual void execute(PlatformFunction function) = 0;
 };
 
 /**

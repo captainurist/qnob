@@ -1,5 +1,10 @@
 #include "win_platform.h"
 
+#include <Windows.h>
+#include <CommCtrl.h>
+
+#include <cassert>
+
 #include <QtCore/QThread>
 
 #include "com.h"
@@ -52,14 +57,31 @@ PlatformShortcutNotifier* WinPlatform::createShortcutNotifier(const QKeySequence
     return m_shortcutDispatcher->createShortcutNotifier(shortcut);
 }
 
+void WinPlatform::execute(PlatformFunction function) {
+    switch (function) 	{
+    case WinToggleHooks:
+        emit hookChangeRequested(!m_hook->isEnabled());
+        break;
+    default:
+        assert(function == WinUpdateCurrentToolTip);
+    case WinUpdateCurrentToolTip:
+        updateCurrentToolTip();
+        break;
+    }
+}
+
+void WinPlatform::updateCurrentToolTip() const {
+    HWND hwnd = NULL;
+
+    while (hwnd = FindWindowExW(NULL, hwnd, L"tooltips_class32", NULL)) {
+        if (!IsWindowVisible(hwnd))
+            continue;
+
+        PostMessageW(hwnd, TTM_UPDATE, 0, 0);
+        return;
+    }
+}
+
 Platform* createPlatform() {
     return new WinPlatform();
-}
-
-bool WinPlatform::hooksEnabled() const {
-    return m_hook->isEnabled();
-}
-
-void WinPlatform::setHooksEnabled(bool enabled) {
-    emit hookChangeRequested(enabled);
 }

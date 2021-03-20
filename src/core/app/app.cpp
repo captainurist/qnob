@@ -4,6 +4,10 @@
 
 #include <platform/platform.h>
 
+#include <QtCore/QDebug>
+#include <Windows.h>
+#include <CommCtrl.h>
+
 App::App(const QString& id) :
     Entity(id)
 {}
@@ -13,5 +17,9 @@ void App::exit() {
 }
 
 void App::toggleHooks() {
-    platform()->setHooksEnabled(!platform()->hooksEnabled());
+    platform()->execute(WinToggleHooks);
+}
+
+void App::debugAction() {
+    platform()->execute(WinUpdateCurrentToolTip);
 }

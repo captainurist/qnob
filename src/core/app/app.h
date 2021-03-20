@@ -9,4 +9,5 @@ public:
 
     Q_SLOT void exit();
     Q_SLOT void toggleHooks();
+    Q_SLOT void debugAction();
 };
