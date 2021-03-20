@@ -65,7 +65,7 @@ private:
 #define QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(TYPE, INITIALIZER)                                                       \
 Q_GLOBAL_STATIC_WITH_ARGS(EnumSerializer<TYPE>, g_initializer_ ## __LINE__, INITIALIZER)                                \
                                                                                                                         \
-void serialize(TYPE value, QString* target) {                                                                           \
+void serialize(const TYPE& value, QString* target) {                                                                    \
     g_initializer_ ## __LINE__()->serialize(value, target);                                                             \
 }                                                                                                                       \
                                                                                                                         \
