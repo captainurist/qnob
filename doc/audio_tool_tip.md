@@ -13,8 +13,8 @@ This will get us a tool window that has a wndproc similar to how it's defined in
 
 What we have there:
 * `WM_GETTEXT`. Windows does all the marshaling for us, so this just works, and returns the tooltip text. Which means that we're on the right track.
-* `TTM_GETTOOLCOUNT`. This one returns the number of tools inside a tooltip, and I have over 10. Looks like it's one per tray icon.
-* `TTM_GETCURRENTTOOLW` gets extended info about the tool, but it's a `WM_USER` message, and it doesn't get marshaled. So we need to roll something on our own, and this is what I came up with:
+* `TTM_GETTOOLCOUNT`. This one returns the number of tools inside a tooltip, and I have over 10 of these. Looks like it's one per tray icon.
+* `TTM_GETCURRENTTOOLW` retrieves extended info about the tool, but it's a `WM_USER` message, and it doesn't get marshaled. So we need to roll something on our own, and this is what I came up with:
 
   ```cpp
     DWORD processId;
