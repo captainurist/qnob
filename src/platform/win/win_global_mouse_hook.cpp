@@ -23,14 +23,31 @@ LRESULT CALLBACK LowLevelMouseProc(int code, WPARAM wParam, LPARAM lParam) {
 WinGlobalMouseHook::WinGlobalMouseHook() {
     assert(g_hookInstance == nullptr);
     g_hookInstance = this;
-
-    g_mouseHook = apicall(SetWindowsHookExW(WH_MOUSE_LL, &LowLevelMouseProc, NULL, 0));
 }
 
 WinGlobalMouseHook::~WinGlobalMouseHook() {
-    if(g_mouseHook)
-        apicall(UnhookWindowsHookEx(g_mouseHook));
+    setEnabled(false);
 
     assert(g_hookInstance == this);
     g_hookInstance = nullptr;
+}
+
+bool WinGlobalMouseHook::isEnabled() {
+    return m_enabled;
+}
+
+void WinGlobalMouseHook::setEnabled(bool enabled) {
+    if (m_enabled == enabled)
+        return;
+
+    if (m_enabled && !enabled) {
+        if (g_mouseHook)
+            apicall(UnhookWindowsHookEx(g_mouseHook));
+    }
+
+    if (!m_enabled && enabled) {
+        g_mouseHook = apicall(SetWindowsHookExW(WH_MOUSE_LL, &LowLevelMouseProc, NULL, 0));
+    }
+
+    m_enabled = enabled;
 }

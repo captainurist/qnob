@@ -8,4 +8,5 @@ public:
     App(const QString& id);
 
     Q_SLOT void exit();
+    Q_SLOT void toggleHooks();
 };

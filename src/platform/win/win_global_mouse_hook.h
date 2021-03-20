@@ -15,6 +15,12 @@ public:
     WinGlobalMouseHook();
     virtual ~WinGlobalMouseHook();
 
+    bool isEnabled();
+    void setEnabled(bool enabled);
+
 signals:
     void messageHooked(UINT message, const MSLLHOOKSTRUCT& data);
+
+private:
+    bool m_enabled = false;
 };

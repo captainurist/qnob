@@ -34,25 +34,11 @@ static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry
     qApp->notify(target, &event);
 }
 
-WinTrayIconWheelEventManager::WinTrayIconWheelEventManager() {
-    m_hookThread.reset(new QThread());
-    m_hookThread->setObjectName(lit("GlobalMouseHookThread"));
-
-    connect(m_hookThread.get(), &QThread::started, [&] {
-        WinGlobalMouseHook* hook = new WinGlobalMouseHook();
-
-        connect(m_hookThread.get(), &QThread::finished, hook, &QObject::deleteLater);
-        connect(hook, &WinGlobalMouseHook::messageHooked, this, &WinTrayIconWheelEventManager::processMessage);
-    });
-
-    /* We want the hook proc to always return FAST, thus the custom priority here. */
-    m_hookThread->start(QThread::HighestPriority);
+WinTrayIconWheelEventManager::WinTrayIconWheelEventManager(WinGlobalMouseHook* hook) {
+    connect(hook, &WinGlobalMouseHook::messageHooked, this, &WinTrayIconWheelEventManager::processMessage);
 }
 
-WinTrayIconWheelEventManager::~WinTrayIconWheelEventManager() {
-    m_hookThread->exit();
-    m_hookThread->wait();
-}
+WinTrayIconWheelEventManager::~WinTrayIconWheelEventManager() {}
 
 void WinTrayIconWheelEventManager::registerTrayIcon(QSystemTrayIcon* icon) {
     assert(!m_icons.contains(icon));

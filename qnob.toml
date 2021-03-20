@@ -46,6 +46,12 @@ trigger = "Ctrl+Alt+Shift+Q"
 target = "app"
 action = "exit"
 
+[toggle_hooks_hotkey]
+type = "hotkey"
+trigger = "Ctrl+Alt+Shift+H"
+target = "app"
+action = "toggleHooks"
+
 [volume_sound]
 type = "sound"
 target = "volume"

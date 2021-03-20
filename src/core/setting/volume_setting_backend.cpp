@@ -32,3 +32,4 @@ void VolumeSettingBackend::setEnabled(bool value) {
 bool VolumeSettingBackend::isInitialized() const {
     return true;
 }
+

@@ -1,11 +1,13 @@
 #pragma once
 
-#include <QtGui/QKeySequence>
+#include <QtCore/QObject>
 
 #include "platform_volume_control.h"
 #include "platform_shortcut_notifier.h"
 #include "platform_monitor_manager.h"
 #include "platform_tray_icon_wheel_event_manager.h"
+
+class QKeySequence;
 
 /**
  * Platform abstraction class.
@@ -16,7 +18,8 @@
  * - They are pretty low level, convenience classes are to be added on top.
  * - They don't throw exceptions.
  */
-class Platform {
+class Platform : public QObject {
+    Q_OBJECT
 public:
     virtual ~Platform() {}
 
@@ -40,6 +43,10 @@ public:
      * \returns                         New shortcut notifier, or `nullptr` in case of an error.
      */
     virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut) const = 0;
+
+    virtual bool hooksEnabled() const = 0;
+
+    virtual void setHooksEnabled(bool enabled) = 0;
 };
 
 /**
