@@ -124,8 +124,8 @@ set(src
     src/platform/win/win_native_event_window.h
     src/platform/win/win_platform.cpp
     src/platform/win/win_platform.h
-    src/platform/win/win_shortcut_dispatcher.cpp
-    src/platform/win/win_shortcut_dispatcher.h
+    src/platform/win/win_shortcut_manager.cpp
+    src/platform/win/win_shortcut_manager.h
     src/platform/win/win_shortcut_notifier.h
     src/platform/win/win_tray_icon_wheel_event_manager.cpp
     src/platform/win/win_tray_icon_wheel_event_manager.h

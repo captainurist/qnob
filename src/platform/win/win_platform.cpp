@@ -3,7 +3,7 @@
 #include "com.h"
 #include "win_volume_control.h"
 #include "win_monitor_manager.h"
-#include "win_shortcut_dispatcher.h"
+#include "win_shortcut_manager.h"
 #include "win_tray_icon_wheel_event_manager.h"
 
 WinPlatform::WinPlatform() {
@@ -11,7 +11,7 @@ WinPlatform::WinPlatform() {
     m_volumeControl.reset(new WinVolumeControl());
     m_monitorManager.reset(new WinMonitorManager());
     m_trayIconWheelEventManager.reset(new WinTrayIconWheelEventManager());
-    m_shortcutDispatcher.reset(new WinShortcutDispatcher());
+    m_shortcutDispatcher.reset(new WinShortcutManager());
 }
 
 WinPlatform::~WinPlatform() {

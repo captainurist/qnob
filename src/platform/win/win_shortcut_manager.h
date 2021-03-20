@@ -10,12 +10,11 @@ class PlatformShortcutNotifier;
 class WinNativeEventWindow;
 class WinShortcutNotifier;
 
-// TODO: WinShortcutManager
-class WinShortcutDispatcher: public QObject {
+class WinShortcutManager: public QObject {
     Q_OBJECT;
 public:
-    WinShortcutDispatcher(QObject* parent = nullptr);
-    ~WinShortcutDispatcher();
+    WinShortcutManager(QObject* parent = nullptr);
+    ~WinShortcutManager();
 
     PlatformShortcutNotifier* createShortcutNotifier(const QKeySequence& shortcut);
 

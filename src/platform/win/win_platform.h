@@ -8,7 +8,7 @@ class Com;
 class WinVolumeControl;
 class WinMonitorManager;
 class WinTrayIconWheelEventManager;
-class WinShortcutDispatcher;
+class WinShortcutManager;
 
 class WinPlatform: public Platform {
 public:
@@ -25,6 +25,6 @@ private:
     std::unique_ptr<WinVolumeControl> m_volumeControl;
     std::unique_ptr<WinMonitorManager> m_monitorManager;
     std::unique_ptr<WinTrayIconWheelEventManager> m_trayIconWheelEventManager;
-    std::unique_ptr<WinShortcutDispatcher> m_shortcutDispatcher;
+    std::unique_ptr<WinShortcutManager> m_shortcutDispatcher;
 };
 

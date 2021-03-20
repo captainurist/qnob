@@ -109,7 +109,7 @@
     <ClInclude Include="src\platform\win\win_global_mouse_hook.h" />
     <ClInclude Include="src\platform\win\win_native_event_window.h" />
     <ClInclude Include="src\platform\win\win_platform.h" />
-    <ClInclude Include="src\platform\win\win_shortcut_dispatcher.h" />
+    <ClInclude Include="src\platform\win\win_shortcut_manager.h" />
     <ClInclude Include="src\platform\win\win_shortcut_notifier.h" />
     <ClInclude Include="src\platform\win\win_tray_icon_wheel_event_manager.h" />
     <ClInclude Include="src\platform\win\win_volume_control.h" />
@@ -189,7 +189,7 @@
     <ClCompile Include="src\platform\win\com.cpp" />
     <ClCompile Include="src\platform\win\win_error.cpp" />
     <ClCompile Include="src\platform\win\win_platform.cpp" />
-    <ClCompile Include="src\platform\win\win_shortcut_dispatcher.cpp" />
+    <ClCompile Include="src\platform\win\win_shortcut_manager.cpp" />
     <ClCompile Include="src\platform\win\win_volume_control.cpp" />
     <ClCompile Include="src\core\hotkey\hotkey.cpp" />
     <ClCompile Include="src\core\hotkey\hotkey_factory.cpp" />
