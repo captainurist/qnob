@@ -93,6 +93,7 @@
     <ClInclude Include="src\platform\platform_initializer.h" />
     <ClInclude Include="src\platform\platform_monitor.h" />
     <ClInclude Include="src\platform\platform_monitor_manager.h" />
+    <ClInclude Include="src\platform\platform_shortcut_manager.h" />
     <ClInclude Include="src\platform\platform_shortcut_notifier.h" />
     <ClInclude Include="src\platform\platform_control.h" />
     <ClInclude Include="src\platform\platform_wheel_event_manager.h" />
