@@ -16,8 +16,8 @@ void App::exit() {
     QCoreApplication::quit();
 }
 
-void App::toggleHooks() {
-    platform()->execute(WinToggleHooks);
+void App::disableHooks() {
+    platform()->execute(WinDisableHooks);
 }
 
 void App::debugAction() {

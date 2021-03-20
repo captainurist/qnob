@@ -22,6 +22,7 @@
 #include <config/full_config.h>
 
 #include <platform/platform_initializer.h>
+#include <platform/platform.h>
 
 int main(int argc, char* argv[]) {
     try {
@@ -29,7 +30,8 @@ int main(int argc, char* argv[]) {
         QApplication::setQuitOnLastWindowClosed(false);
         QThread::currentThread()->setObjectName(lit("MainThread"));
 
-        PlatformInitializer platform;
+        PlatformInitializer platformInitializer;
+        platform()->execute(WinEnableHooks);
 
         /* Join all worker threads before platform is destroyed, there might be some deinitialization pending there. */
         auto cleanup = QScopeGuard([] { QThreadPool::globalInstance()->waitForDone(); });

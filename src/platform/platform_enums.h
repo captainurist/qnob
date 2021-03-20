@@ -16,6 +16,7 @@ enum PlatformStandardControl {
 };
 
 enum PlatformFunction {
-    WinToggleHooks,
+    WinEnableHooks,
+    WinDisableHooks,
     WinUpdateCurrentToolTip
 };

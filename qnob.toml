@@ -50,7 +50,7 @@ action = "exit"
 type = "hotkey"
 trigger = "Ctrl+Alt+Shift+H"
 target = "app"
-action = "toggleHooks"
+action = "disableHooks"
 
 [debug_hotkey]
 type = "hotkey"

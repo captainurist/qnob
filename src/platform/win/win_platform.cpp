@@ -30,11 +30,9 @@ WinPlatform::WinPlatform() {
     m_volumeControl.reset(new WinVolumeControl());
     m_monitorManager.reset(new WinMonitorManager());
     m_trayIconWheelEventManager.reset(new WinWheelEventManager(m_hook));
-    m_shortcutDispatcher.reset(new WinShortcutManager());
+    m_shortcutManager.reset(new WinShortcutManager());
 
-    /* Enable the hook. Gotta do this through the event loop so that the registration is done on the hook thread,
-     * as this is where the hook handler will be called. */
-    emit hookChangeRequested(true);
+    /* Note that hooks are disabled by default, we don't call hookChangeRequested(true) here. */
 }
 
 WinPlatform::~WinPlatform() {
@@ -54,8 +52,8 @@ PlatformWheelEventManager* WinPlatform::trayIconWheelEventManager() const {
     return m_trayIconWheelEventManager.get();
 }
 
-PlatformShortcutNotifier* WinPlatform::createShortcutNotifier(const QKeySequence& shortcut) const {
-    return m_shortcutDispatcher->createShortcutNotifier(shortcut);
+PlatformShortcutNotifier* WinPlatform::createShortcutNotifier(const QKeyCombination& shortcut) const {
+    return m_shortcutManager->createShortcutNotifier(shortcut);
 }
 
 PlatformControl* WinPlatform::createStandardControl(PlatformStandardControl control) const {
