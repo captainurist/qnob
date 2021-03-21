@@ -1,4 +1,4 @@
-#include "full_config.h"
+#include "qnob_config.h"
 
 #include <QtCore/QFile>
 

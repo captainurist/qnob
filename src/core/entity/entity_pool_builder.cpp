@@ -6,7 +6,7 @@
 
 #include <cassert>
 
-#include <config/full_config.h>
+#include <config/qnob_config.h>
 #include <util/map_access.h>
 
 #include "entity_factory_pool.h"

@@ -19,7 +19,7 @@
 #include <core/tray_icon/standard_tray_icon.h>
 #include <core/tray_event/tray_event_factory.h>
 
-#include <config/full_config.h>
+#include <config/qnob_config.h>
 
 #include <platform/platform_initializer.h>
 #include <platform/platform.h>
