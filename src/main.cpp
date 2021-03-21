@@ -24,6 +24,8 @@
 #include <platform/platform_initializer.h>
 #include <platform/platform.h>
 
+#include <QtCore/QDir>
+
 int main(int argc, char* argv[]) {
     try {
         QApplication application(argc, argv);
@@ -59,7 +61,7 @@ int main(int argc, char* argv[]) {
 
         return application.exec();
     } catch (const Exception& e) {
-        qCritical() << e;
+        qCritical() << e << QDir::current();
         return 1;
     }
 }

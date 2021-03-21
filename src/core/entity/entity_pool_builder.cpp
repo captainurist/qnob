@@ -22,7 +22,7 @@ EntityPoolBuilder::EntityPoolBuilder(EntityFactoryPool* factoryPool, EntityPool*
 
 EntityPoolBuilder::~EntityPoolBuilder() {}
 
-void EntityPoolBuilder::addEntities(const FullConfig& fullConfig) {
+void EntityPoolBuilder::addEntities(const QnobConfig& fullConfig) {
     if (fullConfig.records.empty())
         return;
 

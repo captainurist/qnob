@@ -4,7 +4,7 @@
 
 #include <util/variant.h>
 
-class FullConfig {
+class QnobConfig {
 public:
     QString path;
     VariantMap records;
@@ -16,5 +16,5 @@ public:
      * \returns                         Loaded config.
      * \throws ConfigException
      */
-    static FullConfig loadFromTomlFile(const QString& path);
+    static QnobConfig loadFromTomlFile(const QString& path);
 };

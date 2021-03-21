@@ -44,7 +44,7 @@ static VariantMap convertTomlTable(const toml::table& table) {
     return result;
 }
 
-FullConfig FullConfig::loadFromTomlFile(const QString& path) {
+QnobConfig QnobConfig::loadFromTomlFile(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         qthrow Exception(ConfigException::tr("Could not open config file '%1'.").arg(path));

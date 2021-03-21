@@ -15,14 +15,14 @@
 class EntityPool;
 class EntityFactoryPool;
 class EntityConfig;
-class FullConfig;
+class QnobConfig;
 
 class EntityPoolBuilder: private FactoryResolver {
 public:
     EntityPoolBuilder(EntityFactoryPool* factoryPool, EntityPool* entityPool);
     ~EntityPoolBuilder();
 
-    void addEntities(const FullConfig& fullConfig);
+    void addEntities(const QnobConfig& fullConfig);
 
 private:
     void initEntity(const QString& id);
