@@ -24,8 +24,6 @@
 #include <platform/platform_initializer.h>
 #include <platform/platform.h>
 
-#include <QtCore/QDir>
-
 int main(int argc, char* argv[]) {
     try {
         QApplication application(argc, argv);
@@ -57,11 +55,11 @@ int main(int argc, char* argv[]) {
         factoryPool.registerFactory(new TrayEventFactory());
 
         EntityPoolBuilder builder(&factoryPool, &pool);
-        builder.addEntities(FullConfig::loadFromTomlFile(QLatin1String("qnob.toml")));
+        builder.addEntities(QnobConfig::loadFromTomlFile(QLatin1String("qnob.toml")));
 
         return application.exec();
     } catch (const Exception& e) {
-        qCritical() << e << QDir::current();
+        qCritical() << e;
         return 1;
     }
 }
