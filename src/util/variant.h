@@ -10,7 +10,7 @@
 /* QVariantList/Map/Hash use Qt containers, which are not STL compatible in a lot of weird ways.
  * So we need our own containers. */
 
-using VariantVector = std::vector<QVariant>;
+using VariantVector = std::vector<QVariant>; // TODO: List, not Vector!
 using VariantMap = std::map<QString, QVariant>;
 using VariantHash = std::unordered_map<QString, QVariant>;
 
