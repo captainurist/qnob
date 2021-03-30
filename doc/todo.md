@@ -9,6 +9,7 @@
 * **DONE**. Build via MSVC cmake project.
 * Basic command line options (--config at least).
 * Proper logging in release mode (into a log file).
+* Fix icons & OSD looking like shit on hidpi displays.
 * Option to log to console always (even in release).
 * Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
 * Duck typing in factories (through qt metacalls).
