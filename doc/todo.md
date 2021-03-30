@@ -6,7 +6,8 @@
 * **DONE**. Mouse wheel events for tray icons on Win. 
 * **DONE**. Mouse wheel events for built-in tray icons (yeah, I'm talking about volume).
 * **DONE**. Update tooltip after a wheel event on a tray icon.
-* Build via MSVC cmake project.
+* **DONE**. Build via MSVC cmake project.
+* Basic command line options (--config at least).
 * Proper logging in release mode (into a log file).
 * Option to log to console always (even in release).
 * Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
