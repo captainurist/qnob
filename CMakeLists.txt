@@ -13,6 +13,7 @@ find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
 
 set(src
     "src/config/config_exception.h"
+    "src/config/qnob_args.h"
     "src/config/qnob_config.cpp"
     "src/config/qnob_config.h"
     "src/core/app/app.cpp"
@@ -148,6 +149,14 @@ set(src
     "src/util/pod_pool.cpp"
     "src/util/pod_pool.h"
     "qnob.qrc"
+    "src/lib/command_line/command_line_option.h"
+    "src/lib/command_line/command_line_section.h"
+    "src/lib/command_line/command_line_option_builder.h"
+    "src/lib/command_line/option_parsers.h"
+    "src/lib/command_line/command_line_parser.cpp"
+    "src/lib/command_line/command_line_exception.h"
+    "src/lib/serialization/builtin_serialization.h"
+    "src/lib/serialization/builtin_serialization.cpp"
 )
 
 add_executable(qnob ${src})
