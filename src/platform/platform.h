@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtCore/QObject>
+#include <QtCore/QVariant>
 
 #include "platform_volume_control.h"
 #include "platform_shortcut_notifier.h"
@@ -8,8 +9,6 @@
 #include "platform_wheel_event_manager.h"
 #include "platform_shortcut_manager.h"
 #include "platform_control.h"
-
-class QKeyCombination;
 
 /**
  * Platform abstraction class.
@@ -54,9 +53,10 @@ public:
     /**
      * Runs a platform-specific function.
      *
-     * \param function                  Function to run.
+     * \param function                  Platform function to run.
+     * \returns                         Result, if any.
      */
-    virtual void execute(PlatformFunction function) = 0;
+    virtual QVariant execute(PlatformFunction function) = 0;
 };
 
 /**

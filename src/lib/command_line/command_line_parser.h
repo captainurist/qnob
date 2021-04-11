@@ -6,6 +6,7 @@
 
 #include "command_line_section.h"
 #include "command_line_option_builder.h"
+#include "command_line_help_options.h"
 
 class QTextStream;
 
@@ -29,7 +30,7 @@ public:
 
     void parse(const QStringList& commandLine);
 
-    void printSections(QTextStream& stream);
+    void printSections(QTextStream& stream, const CommandLineHelpOptions& options = CommandLineHelpOptions());
 
 private:
     CommandLineSectionList m_sections;

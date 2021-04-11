@@ -16,7 +16,8 @@ enum PlatformStandardControl {
 };
 
 enum PlatformFunction {
+    GetConsoleSize,
     WinEnableHooks,
     WinDisableHooks,
-    WinUpdateCurrentToolTip
+    WinUpdateCurrentToolTip,
 };

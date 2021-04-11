@@ -48,7 +48,14 @@ bool processCommandLine(const QStringList& args, QnobArgs* params) {
         if (help) {
             stream << lit("Usage: qnob [options]") << Qt::endl;  // TODO: tr
             stream << Qt::endl;
-            parser.printSections(stream);
+
+            size_t consoleWidth = 80;
+            if (QSize consoleSize = platform()->execute(GetConsoleSize).toSize(); consoleSize.isValid())
+                consoleWidth = std::max(consoleSize.width(), 40);
+
+            CommandLineHelpOptions options;
+            options.maxLineLength = consoleWidth;
+            parser.printSections(stream, options);
         } else {
             stream << lit("qnob v0.0.1") << Qt::endl;
         }
@@ -65,12 +72,11 @@ int main(int argc, char* argv[]) {
         QApplication::setQuitOnLastWindowClosed(false);
         QThread::currentThread()->setObjectName(lit("MainThread"));
 
+        PlatformInitializer platformInitializer;
+
         QnobArgs args;
         if (processCommandLine(application.arguments(), &args))
             return 0;
-
-        PlatformInitializer platformInitializer;
-        platform()->execute(WinEnableHooks);
 
         /* Join all worker threads before platform is destroyed, there might be some deinitialization pending there. */
         auto cleanup = QScopeGuard([] { QThreadPool::globalInstance()->waitForDone(); });
@@ -96,6 +102,7 @@ int main(int argc, char* argv[]) {
         EntityPoolBuilder builder(&factoryPool, &pool);
         builder.addEntities(QnobConfig::loadFromTomlFile(args.configPath));
 
+        platform()->execute(WinEnableHooks);
         return application.exec();
     } catch (const CommandLineException& e) {
         QTextStream stream(stderr);

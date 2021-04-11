@@ -123,13 +123,7 @@ void CommandLineParser::parse(const QStringList& commandLine) {
     }
 }
 
-void CommandLineParser::printSections(QTextStream& stream) {
-    const size_t indent = 2;
-    const size_t maxHeaderLength = 28; /* Excluding indent. */
-    const size_t maxLineLength = 80;
-    const size_t spacing = 2;
-    const bool printDefaults = true;
-
+void CommandLineParser::printSections(QTextStream& stream, const CommandLineHelpOptions& options) {
     bool hasShortOptions;
     for (const CommandLineSection& section : m_sections)
         for (const CommandLineOption& option : section.options)
@@ -171,7 +165,7 @@ void CommandLineParser::printSections(QTextStream& stream) {
         for (const CommandLineOption& option : section.options)
             if (!option.hidden)
                 headerLength = std::max(headerLength, static_cast<size_t>(formatHeader(option).size()));
-    headerLength = std::min(headerLength, maxHeaderLength);
+    headerLength = std::min(headerLength, options.maxHeaderLength);
 
     for (const CommandLineSection& section : m_sections) {
         if (!section.name.isEmpty())
@@ -183,26 +177,26 @@ void CommandLineParser::printSections(QTextStream& stream) {
 
             QString header = formatHeader(option);
             QString description = option.description;
-            if (printDefaults && !option.defaultValue.isEmpty()) {
+            if (options.printDefaults && !option.defaultValue.isEmpty()) {
                 description += description.endsWith(QLatin1Char('.')) ? lit(" ") : lit(". ");
                 description += lit("Default is '%1'.").arg(option.defaultValue);
             }
-            QStringList lines = wrapText(description, maxLineLength - indent - headerLength - spacing);
+            QStringList lines = wrapText(description, options.maxLineLength - options.indent - headerLength - options.spacing);
             if (lines.isEmpty())
                 lines.push_back(QString()); /* Empty description, shouldn't really happen, but we still don't want to crash. */
 
-            stream << whitespace(indent) << header;
+            stream << whitespace(options.indent) << header;
 
             if (header.size() > headerLength) {
                 stream << Qt::endl;
-                stream << whitespace(indent + headerLength);
+                stream << whitespace(options.indent + headerLength);
             } else {
                 stream << whitespace(headerLength - header.size());
             }
 
-            stream << whitespace(spacing) << lines[0] << Qt::endl;
+            stream << whitespace(options.spacing) << lines[0] << Qt::endl;
             for (size_t i = 1; i < lines.size(); i++)
-                stream << whitespace(indent + headerLength + spacing) << lines[i] << Qt::endl;
+                stream << whitespace(options.indent + headerLength + options.spacing) << lines[i] << Qt::endl;
         }
 
         stream << Qt::endl;

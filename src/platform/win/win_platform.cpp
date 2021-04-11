@@ -6,8 +6,10 @@
 #include <cassert>
 
 #include <QtCore/QThread>
+#include <QtCore/QVariant>
 
 #include "com.h"
+#include "win_error.h"
 #include "win_volume_control.h"
 #include "win_monitor_manager.h"
 #include "win_shortcut_manager.h"
@@ -60,18 +62,27 @@ PlatformControl* WinPlatform::createStandardControl(PlatformStandardControl cont
     return new WinStandardControl(control);
 }
 
-void WinPlatform::execute(PlatformFunction function) {
-    switch (function) 	{
+QVariant WinPlatform::execute(PlatformFunction function) {
+    switch (function) {
+    case GetConsoleSize:
+    {
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        if (apicall(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))) {
+            return QSize(csbi.srWindow.Right - csbi.srWindow.Left + 1, csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
+        } else {
+            return QVariant();
+        }
+    }
     case WinEnableHooks:
         emit hookChangeRequested(true);
-        break;
+        return QVariant();
     case WinDisableHooks:
         emit hookChangeRequested(false);
-        break;
+        return QVariant();
     default:
         assert(function == WinUpdateCurrentToolTip);
         updateCurrentToolTip();
-        break;
+        return QVariant();
     }
 }
 

@@ -7,7 +7,7 @@
 * **DONE**. Mouse wheel events for built-in tray icons (yeah, I'm talking about volume).
 * **DONE**. Update tooltip after a wheel event on a tray icon.
 * **DONE**. Build via MSVC cmake project.
-* Basic command line options (--config at least).
+* **DONE**. Basic command line options (--config at least).
 * Proper logging in release mode (into a log file).
 * Fix icons & OSD looking like shit on hidpi displays.
 * Option to log to console always (even in release).

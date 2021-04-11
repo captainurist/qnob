@@ -157,6 +157,7 @@ set(src
     "src/lib/command_line/command_line_exception.h"
     "src/lib/serialization/builtin_serialization.h"
     "src/lib/serialization/builtin_serialization.cpp"
+    "src/lib/command_line/command_line_help_options.h"
 )
 
 add_executable(qnob ${src})
