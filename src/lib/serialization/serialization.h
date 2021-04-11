@@ -3,6 +3,8 @@
 #include <QtCore/QString>
 #include <QtCore/QStringView>
 
+#include "builtin_serialization.h"
+
 template<class T>
 inline QString serialize(const T& value) {
     QString result;
