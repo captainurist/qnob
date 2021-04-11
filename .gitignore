@@ -1,5 +1,11 @@
 enc_temp_folder
-.vs
+.vs/qnob
+.vs/cmake.db
+.vs/CMake Overview
+.vs/ProjectSettings.json
+.vs/slnx.sqlite
+.vs/tasks.vs.json
+.vs/VSWorkspaceState.json
 bin
 build
 *.pdb
