@@ -20,4 +20,6 @@ enum PlatformFunction {
     WinEnableHooks,
     WinDisableHooks,
     WinUpdateCurrentToolTip,
+    WinEnsureConsole,
+    WinIsConsoleOwned,
 };

@@ -29,6 +29,8 @@ public:
 private:
     Q_SIGNAL void hookChangeRequested(bool enabled);
     void updateCurrentToolTip() const;
+    QSize getConsoleSize() const;
+    void ensureConsole();
 
 private:
     std::unique_ptr<Com> m_com;
@@ -38,5 +40,6 @@ private:
     std::unique_ptr<WinMonitorManager> m_monitorManager;
     std::unique_ptr<WinWheelEventManager> m_trayIconWheelEventManager;
     std::unique_ptr<WinShortcutManager> m_shortcutManager;
+    bool m_ownsConsole = false;
 };
 

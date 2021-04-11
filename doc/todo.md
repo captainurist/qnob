@@ -8,9 +8,9 @@
 * **DONE**. Update tooltip after a wheel event on a tray icon.
 * **DONE**. Build via MSVC cmake project.
 * **DONE**. Basic command line options (--config at least).
+* **DONE**. Option to log to console always (even in release).
 * Proper logging in release mode (into a log file).
 * Fix icons & OSD looking like shit on hidpi displays.
-* Option to log to console always (even in release).
 * Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
 * Duck typing in factories (through qt metacalls).
 * Lua script entity, with access to globals.

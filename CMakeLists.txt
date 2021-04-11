@@ -158,16 +158,13 @@ set(src
     "src/lib/serialization/builtin_serialization.h"
     "src/lib/serialization/builtin_serialization.cpp"
     "src/lib/command_line/command_line_help_options.h"
+    "src/platform/win/win_crtio.h"
 )
 
 add_executable(qnob ${src})
 
-# Add console to debug builds
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE false)
-else()
-    set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true)
-endif()
+# No console by default
+set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true)
 
 if (MSVC)
     # Full path of source code file in diagnostics

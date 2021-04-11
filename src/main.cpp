@@ -27,6 +27,13 @@
 #include <platform/platform_initializer.h>
 #include <platform/platform.h>
 
+void maybePressAnyKey() {
+    if (platform()->execute(WinIsConsoleOwned).toBool()) {
+        QTextStream stream(stdout);
+        stream << lit("[press any key to close this window]") << Qt::endl;
+        fgetc(stdin);
+    }
+}
 
 bool processCommandLine(const QStringList& args, QnobArgs* params) {
     CommandLineParser parser;
@@ -38,12 +45,14 @@ bool processCommandLine(const QStringList& args, QnobArgs* params) {
 
     parser.addSection(QString());
     parser.addOption("config", lit("Path to a config file.")).argument("PATH", &params->configPath).defaultValue(lit("./qnob.toml"));
+    parser.addOption("console", lit("Always opens a console window (Windows only).")).flag(&params->console);
     parser.addOption("help", lit("Show help and exit.")).flag(&help);
     parser.addOption('v', "version", lit("Show version information and exit.")).flag(&version);
     parser.parse(args);
 
     if (help || version) {
-        QTextStream stream(stderr);
+        platform()->execute(WinEnsureConsole);
+        QTextStream stream(stdout);
 
         if (help) {
             stream << lit("Usage: qnob [options]") << Qt::endl;  // TODO: tr
@@ -67,16 +76,21 @@ bool processCommandLine(const QStringList& args, QnobArgs* params) {
 }
 
 int main(int argc, char* argv[]) {
+    /* Qt & platform classes don't throw. */
+    QApplication application(argc, argv);
+    QApplication::setQuitOnLastWindowClosed(false);
+    QThread::currentThread()->setObjectName(lit("MainThread"));
+    PlatformInitializer platformInitializer;
+
     try {
-        QApplication application(argc, argv);
-        QApplication::setQuitOnLastWindowClosed(false);
-        QThread::currentThread()->setObjectName(lit("MainThread"));
-
-        PlatformInitializer platformInitializer;
-
         QnobArgs args;
-        if (processCommandLine(application.arguments(), &args))
+        if (processCommandLine(application.arguments(), &args)) {
+            maybePressAnyKey();
             return 0;
+        }
+
+        if (args.console)
+            platform()->execute(WinEnsureConsole);
 
         /* Join all worker threads before platform is destroyed, there might be some deinitialization pending there. */
         auto cleanup = QScopeGuard([] { QThreadPool::globalInstance()->waitForDone(); });
@@ -108,9 +122,11 @@ int main(int argc, char* argv[]) {
         QTextStream stream(stderr);
         stream << e.message() << Qt::endl;
         stream << lit("Try 'qnob --help' for more information."); // TODO: tr
+        maybePressAnyKey();
         return 1;
     } catch (const Exception& e) {
         qCritical() << e;
+        maybePressAnyKey();
         return 1;
     }
 }

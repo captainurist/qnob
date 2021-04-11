@@ -4,4 +4,5 @@
 
 struct QnobArgs {
 	QString configPath;
+	bool console = false;
 };

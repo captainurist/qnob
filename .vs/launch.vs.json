@@ -11,6 +11,7 @@
         "PATH": "%QTDIR%\\bin;%PATH%"
       },
       "args": [
+        "--console",
         "--config",
         "../../qnob.toml"
       ]

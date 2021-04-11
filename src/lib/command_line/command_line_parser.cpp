@@ -109,8 +109,10 @@ void CommandLineParser::parse(const QStringList& commandLine) {
                 qthrow CommandLineException(CommandLineException::tr("Required option '%1' is not provided.").arg(name));
 
             QStringList values = parser.values(name);
-            if (values.isEmpty() && parser.isSet(name))
-                values.push_back(option.defaultValue); /* Pushes empty string when there is no default value. */
+            if (values.isEmpty() && !option.defaultValue.isEmpty())
+                values.push_back(option.defaultValue);
+            if (values.isEmpty() && option.valueName.isEmpty() && parser.isSet(name))
+                values.push_back(QString()); /* Flag option. */
 
             for (const QString& value : values) {
                 try {
