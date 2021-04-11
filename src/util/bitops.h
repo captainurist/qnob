@@ -1,10 +1,11 @@
 #pragma once
 
 #include <cassert>
+#include <bit>
 
 template<class T>
 bool isPower2(T value) {
-    return value > 0 && (value & (value - 1)) == 0;
+    return std::has_single_bit(value);
 }
 
 template<class T, class A>
