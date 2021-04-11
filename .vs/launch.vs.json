@@ -1,0 +1,19 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "qnob.exe",
+      "name": "qnob.exe",
+      "env": {
+        "PATH": "%QTDIR%\\bin;%PATH%"
+      },
+      "args": [
+        "--config",
+        "../../qnob.toml"
+      ]
+    }
+  ]
+}
