@@ -5,8 +5,6 @@
 #include <platform/platform.h>
 
 #include <QtCore/QDebug>
-#include <Windows.h>
-#include <CommCtrl.h>
 
 App::App(const QString& id) :
     Entity(id)
@@ -17,9 +15,11 @@ void App::exit() {
 }
 
 void App::disableHooks() {
+    qDebug() << "Hooks disabled.";
     platform()->execute(WinDisableHooks);
 }
 
 void App::debugAction() {
+    qDebug() << "Debug action.";
     platform()->execute(WinUpdateCurrentToolTip);
 }
