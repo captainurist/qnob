@@ -42,7 +42,7 @@ public:
     /**
      * \returns                         Tray icon wheel event manager object.
      */
-    virtual PlatformWheelEventManager* trayIconWheelEventManager() const = 0; // TODO: wheelEventManager
+    virtual PlatformWheelEventManager* wheelEventManager() const = 0;
 
     /**
      * \param control                   Standard control.

@@ -34,7 +34,7 @@ WinPlatform::WinPlatform() {
 
     m_volumeControl.reset(new WinVolumeControl());
     m_monitorManager.reset(new WinMonitorManager());
-    m_trayIconWheelEventManager.reset(new WinWheelEventManager(m_hook));
+    m_wheelEventManager.reset(new WinWheelEventManager(m_hook));
     m_shortcutManager.reset(new WinShortcutManager());
 
     /* Note that hooks are disabled by default, we don't call hookChangeRequested(true) here. */
@@ -57,8 +57,8 @@ PlatformShortcutManager* WinPlatform::shortcutManager() const {
     return m_shortcutManager.get();
 }
 
-PlatformWheelEventManager* WinPlatform::trayIconWheelEventManager() const {
-    return m_trayIconWheelEventManager.get();
+PlatformWheelEventManager* WinPlatform::wheelEventManager() const {
+    return m_wheelEventManager.get();
 }
 
 PlatformControl* WinPlatform::createStandardControl(PlatformStandardControl control) const {

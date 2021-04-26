@@ -12,11 +12,11 @@ TrayIcon::TrayIcon(const QString& id) :
     Entity(id),
     m_trayIcon(new QSystemTrayIcon())
 {
-    platform()->trayIconWheelEventManager()->registerTrayIcon(m_trayIcon.get());
+    platform()->wheelEventManager()->registerTrayIcon(m_trayIcon.get());
 }
 
 TrayIcon::~TrayIcon() {
-    platform()->trayIconWheelEventManager()->unregisterTrayIcon(m_trayIcon.get());
+    platform()->wheelEventManager()->unregisterTrayIcon(m_trayIcon.get());
 }
 
 Skin* TrayIcon::skin() const {

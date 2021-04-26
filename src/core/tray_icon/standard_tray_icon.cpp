@@ -16,13 +16,13 @@ StandardTrayIcon::StandardTrayIcon(const QString& id, Setting* setting, Platform
     m_control(platform()->createStandardControl(control)),
     m_setting(setting)
 {
-    platform()->trayIconWheelEventManager()->registerControl(m_control.get());
+    platform()->wheelEventManager()->registerControl(m_control.get());
 
     connect(m_setting, &Setting::changed, this, &StandardTrayIcon::handleSettingChange);
 }
 
 StandardTrayIcon::~StandardTrayIcon() {
-    platform()->trayIconWheelEventManager()->unregisterControl(m_control.get());
+    platform()->wheelEventManager()->unregisterControl(m_control.get());
 }
 
 Setting* StandardTrayIcon::setting() const {
