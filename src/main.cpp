@@ -77,6 +77,7 @@ bool processCommandLine(const QStringList& args, QnobArgs* params) {
 
 int main(int argc, char* argv[]) {
     /* Qt & platform classes don't throw. */
+    qputenv("QT_ENABLE_HIGHDPI_SCALING", "0"); /* Highdpi implementation in Qt is a mess. Couldn't make it work. */
     QApplication application(argc, argv);
     QApplication::setQuitOnLastWindowClosed(false);
     QThread::currentThread()->setObjectName(lit("MainThread"));

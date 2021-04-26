@@ -38,6 +38,11 @@ static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry
 
 WinWheelEventManager::WinWheelEventManager(WinGlobalMouseHook* hook) {
     connect(hook, &WinGlobalMouseHook::messageHooked, this, &WinWheelEventManager::processMessage);
+
+    /* Highdpi implementation in Qt is a mess, and making it work proved to be harder than I thought.
+     * So we just check that it's disabled. */
+    if (qgetenv("QT_ENABLE_HIGHDPI_SCALING") != "0")
+        qWarning() << "QT_ENABLE_HIGHDPI_SCALING != 0, trayicon mouse wheel events might not work on highdpi displays.";
 }
 
 WinWheelEventManager::~WinWheelEventManager() {}
@@ -81,6 +86,8 @@ void WinWheelEventManager::processMessage(UINT message, const MSLLHOOKSTRUCT& da
 
     QPoint globalPoint(data.pt.x, data.pt.y);
     for (QSystemTrayIcon* icon : m_icons) {
+        /* Note: if Qt highdpi is enabled, the call below returns geometry in device-independent pixels.
+         * This obviously doesn't work with coordinates from the hook struct. */
         QRect globalGeometry = icon->geometry();
 
         if (globalGeometry.contains(globalPoint)) {
