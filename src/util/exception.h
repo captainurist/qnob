@@ -19,6 +19,11 @@ class QDebug;
 class Exception : public std::exception {
     Q_DECLARE_TR_FUNCTIONS(Exception)
 public:
+    enum ChainMode {
+        DontChain = 0,
+        AutoChain = 1,
+    };
+
     /**
      * Creates an exception with the provided message.
      *
@@ -31,11 +36,14 @@ public:
      * Format notice to make life easier: provided exception message should not include the trailing dot.
      *
      * \param message                   Exception message. Should not include the trailing dot.
+     * \param chainMode                 Chain mode, pass `DontChain` so that the current exception is not automatically
+     *                                  assigned as a cause for this exception.
      */
-    Exception(const QString& message) {
+    Exception(const QString& message, ChainMode chainMode = AutoChain) {
         m_message = message;
         m_utf8Message = message.toUtf8();
-        m_cause = std::current_exception();
+        if (chainMode == AutoChain)
+            m_cause = std::current_exception();
     }
 
     virtual char const* what() const override {
