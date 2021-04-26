@@ -6,6 +6,9 @@
 
 #include <QtCore/QObject>
 
+// TODO: saner API here. Thread-safe setEnabled, hooking / unhooking on thread change,
+// always handling events on object's thread.
+
 /**
  * Global mouse hook for mouse wheel events.
  *

@@ -54,9 +54,10 @@ public:
      * Runs a platform-specific function.
      *
      * \param function                  Platform function to run.
+     * \param arg0                      First argument, if any. Argument type mismatches result in assertions.
      * \returns                         Result, if any.
      */
-    virtual QVariant execute(PlatformFunction function) = 0;
+    virtual QVariant execute(PlatformFunction function, QVariant arg0 = QVariant()) = 0;
 };
 
 /**

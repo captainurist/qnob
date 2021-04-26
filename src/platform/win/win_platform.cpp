@@ -65,18 +65,18 @@ PlatformControl* WinPlatform::createStandardControl(PlatformStandardControl cont
     return new WinStandardControl(control);
 }
 
-QVariant WinPlatform::execute(PlatformFunction function) {
+QVariant WinPlatform::execute(PlatformFunction function, QVariant arg0) {
     switch (function) {
     case GetConsoleSize:
         if (QSize size = getConsoleSize(); size.isValid())
             return size;
         return QVariant();
-    case WinEnableHooks:
-        emit hookChangeRequested(true);
+    case WinSetHooksEnabled:
+        assert(arg0.typeId() == QMetaType::Bool);
+        emit hookChangeRequested(arg0.toBool());
         return QVariant();
-    case WinDisableHooks:
-        emit hookChangeRequested(false);
-        return QVariant();
+    case WinHooksEnabled:
+        return m_hook->isEnabled();
     case WinUpdateCurrentToolTip:
         updateCurrentToolTip();
         return QVariant();

@@ -24,7 +24,7 @@ public:
     virtual PlatformShortcutManager* shortcutManager() const override;
     virtual PlatformWheelEventManager* wheelEventManager() const override;
     virtual PlatformControl* createStandardControl(PlatformStandardControl control) const override;
-    virtual QVariant execute(PlatformFunction function) override;
+    virtual QVariant execute(PlatformFunction function, QVariant arg0) override;
 
 private:
     Q_SIGNAL void hookChangeRequested(bool enabled);
