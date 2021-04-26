@@ -163,13 +163,11 @@ set(src
 
 add_executable(qnob ${src})
 
-# No console by default
-set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true)
+set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true) # No console by default
 
 if (MSVC)
-    # Full path of source code file in diagnostics
-    target_compile_options(qnob PRIVATE /FC)
-    # target_compile_options(qnob PRIVATE /MT)
+    target_compile_options(qnob PRIVATE /FC) # Full path of source code file in diagnostics
+    # target_compile_options(qnob PRIVATE /MT) # Link statically with CRT
 endif()
 
 target_compile_definitions(qnob PRIVATE
