@@ -6,6 +6,7 @@
 
 #include <core/entity/entity.h>
 
+class QScreen;
 class OsdWindow;
 class OsdFsm;
 class Skin;
@@ -33,6 +34,7 @@ public:
 
 private:
     void updatePosition();
+    void updateScreen();
 
 private:
     std::unique_ptr<OsdWindow> m_window;
@@ -40,4 +42,5 @@ private:
     Qt::Alignment m_alignment = Qt::AlignBottom | Qt::AlignHCenter;
     QPoint m_offset = QPoint(0, -100);
     Setting* m_setting = nullptr;
+    QScreen* m_screen = nullptr;
 };

@@ -22,6 +22,9 @@ Osd::Osd(const QString& id):
 
     /* Note that connection to OsdWindow::raise above is important. Otherwise OSD window ends up below all other
      * windows after changing main display in Win10. */
+
+    connect(m_window.get(), &QWindow::screenChanged, this, &Osd::updateScreen);
+    updateScreen();
 }
 
 Osd::~Osd() {}
@@ -112,4 +115,14 @@ void Osd::updatePosition() {
     }
 
     m_window->setPosition(position + m_offset);
+}
+
+void Osd::updateScreen() {
+    if (m_screen)
+        disconnect(m_screen, nullptr, this, nullptr);
+
+    m_screen = m_window->screen();
+
+    if (m_screen)
+        connect(m_screen, &QScreen::physicalDotsPerInchChanged, this, &Osd::updatePosition);
 }
