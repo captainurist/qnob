@@ -161,6 +161,23 @@ set(src
     "src/platform/win/win_crtio.h"
 )
 
+set(tests
+    "src/util/exception_ut.cpp"
+)
+
+set(defines
+    QT_DEPRECATED_WARNINGS
+    QT_DISABLE_DEPRECATED_BEFORE=0x060000
+    QT_NO_CAST_FROM_ASCII
+    QT_NO_CAST_TO_ASCII
+    QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
+    lit=QStringLiteral
+)
+
+
+#
+# Set up qnob executable
+#
 add_executable(qnob ${src})
 
 set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true) # No console by default
@@ -170,14 +187,7 @@ if (MSVC)
     # target_compile_options(qnob PRIVATE /MT) # Link statically with CRT
 endif()
 
-target_compile_definitions(qnob PRIVATE
-    QT_DEPRECATED_WARNINGS
-    QT_DISABLE_DEPRECATED_BEFORE=0x060000
-    QT_NO_CAST_FROM_ASCII
-    QT_NO_CAST_TO_ASCII
-    QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
-    lit=QStringLiteral
-)
+target_compile_definitions(qnob PRIVATE ${defines})
 
 target_include_directories(qnob PRIVATE
     3rdparty/tomlplusplus/include
@@ -193,6 +203,28 @@ target_link_libraries(qnob
     user32
 )
 
+
+#
+# Set up tests
+#
+enable_testing()
+add_subdirectory(3rdparty/googletest)
+
+add_executable(qnob_test ${tests})
+
+target_compile_definitions(qnob_test PRIVATE ${defines})
+
+target_include_directories(qnob_test PRIVATE
+    3rdparty/googletest/googletest/include
+    src
+)
+
+target_link_libraries(qnob_test
+    gtest_main
+    Qt::Core
+)
+
+add_test(NAME qnob_test COMMAND qnob_test)
 
 
 
