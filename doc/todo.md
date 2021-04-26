@@ -9,7 +9,7 @@
 * **DONE**. Build via MSVC cmake project.
 * **DONE**. Basic command line options (--config at least).
 * **DONE**. Option to log to console always (even in release).
-* Changing monitor DPI for the 1st time after starting qnob osd windows stop updating. Changing it again fixes it.
+* Osd windows stop updating when changing monitor DPI for the 1st time after starting qnob. Changing it again fixes this.
 * Proper logging in release mode (into a log file).
 * Fix icons & OSD looking like shit on hidpi displays.
 * Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
