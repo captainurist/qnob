@@ -24,8 +24,6 @@ public:
      * - Each enum value might map into several different strings. When serializing, the first string will be used.
      * - Each string value must map to exactly one enum value.
      * This basically provides support for enum aliases.
-     *
-     * Also note that the provided strings are not copied.
      */
     EnumSerializer(std::initializer_list<std::pair<T, const char*>> pairs) {
         for (const auto [value, string] : pairs) {
