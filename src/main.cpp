@@ -27,6 +27,28 @@
 #include <platform/platform_initializer.h>
 #include <platform/platform.h>
 
+void messageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg) {
+    QByteArray localMsg = msg.toLocal8Bit();
+    const char* file = context.file ? context.file : "";
+    switch (type) {
+    case QtDebugMsg:
+        fprintf(stderr, "DEBG: %s (%s:%u)\n", localMsg.constData(), file, context.line);
+        break;
+    case QtInfoMsg:
+        fprintf(stderr, "INFO: %s (%s:%u)\n", localMsg.constData(), file, context.line);
+        break;
+    case QtWarningMsg:
+        fprintf(stderr, "WARN: %s (%s:%u)\n", localMsg.constData(), file, context.line);
+        break;
+    case QtCriticalMsg:
+        fprintf(stderr, "CRIT: %s (%s:%u)\n", localMsg.constData(), file, context.line);
+        break;
+    case QtFatalMsg:
+        fprintf(stderr, "FATL: %s (%s:%u)\n", localMsg.constData(), file, context.line);
+        break;
+    }
+}
+
 void maybePressAnyKey() {
     if (platform()->execute(WinIsConsoleOwned).toBool()) {
         QTextStream stream(stdout);
@@ -76,8 +98,15 @@ bool processCommandLine(const QStringList& args, QnobArgs* params) {
 }
 
 int main(int argc, char* argv[]) {
-    /* Qt & platform classes don't throw. */
-    qputenv("QT_ENABLE_HIGHDPI_SCALING", "0"); /* Highdpi implementation in Qt is a mess. Couldn't make it work. */
+    /* Highdpi implementation in Qt is a mess. Couldn't make it work =(. */
+    qputenv("QT_ENABLE_HIGHDPI_SCALING", "0");
+
+    /* Qt caches whether we have a console attached in its default message handlers.
+     * We don't need this. */
+    qInstallMessageHandler(messageHandler);
+
+    /* Qt & platform classes don't throw, and they are used inside catch blocks.
+     * So we initialize them here. */
     QApplication application(argc, argv);
     QApplication::setQuitOnLastWindowClosed(false);
     QThread::currentThread()->setObjectName(lit("MainThread"));
