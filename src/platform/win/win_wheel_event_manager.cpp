@@ -36,17 +36,10 @@ static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry
     qApp->notify(target, &event);
 }
 
-static void checkQtHighDpiDisabled() {
-    static bool checked = false;
-    if (checked)
-        return;
-    checked = true;
-
+WinWheelEventManager::WinWheelEventManager(WinSharedEventWindow* eventWindow) {
     if (qgetenv("QT_ENABLE_HIGHDPI_SCALING") != "0")
         qCritical() << "QT_ENABLE_HIGHDPI_SCALING != 0, trayicon mouse wheel events might not work on highdpi displays.";
-}
 
-WinWheelEventManager::WinWheelEventManager(WinSharedEventWindow* eventWindow) {
     RAWINPUTDEVICE rid;
     rid.usUsagePage = 0x0001;
     rid.usUsage = 0x0002; /* Generic mouse. */
@@ -61,11 +54,6 @@ WinWheelEventManager::~WinWheelEventManager() {}
 
 void WinWheelEventManager::registerTrayIcon(QSystemTrayIcon* icon) {
     assert(!m_icons.contains(icon));
-
-    /* Highdpi implementation in Qt is a mess, and making it work proved to be harder than I thought.
-     * So we just check that it's disabled. */
-    checkQtHighDpiDisabled();
-
     m_icons.insert(icon);
 }
 

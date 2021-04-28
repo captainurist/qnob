@@ -7,6 +7,7 @@
 
 #include <lib/command_line/command_line_parser.h>
 #include <lib/command_line/command_line_exception.h>
+#include <lib/logging/message_logger.h>
 
 #include <core/entity/entity_factory_pool.h>
 #include <core/entity/entity_pool.h>
@@ -29,7 +30,12 @@
 
 #include "qnob_config.h"
 #include "qnob_args.h"
-#include "logging.h"
+
+static MessageLogger* g_logger = nullptr;
+
+static void handleMessage(QtMsgType type, const QMessageLogContext& context, const QString& msg) {
+    g_logger->log(type, context, msg);
+}
 
 static void maybePressAnyKey() {
     if (platform()->execute(WinIsConsoleOwned).toBool()) {
@@ -83,9 +89,10 @@ int Qnob::run(int argc, char** argv) {
     /* Highdpi implementation in Qt is a mess. Couldn't make it work =(. */
     qputenv("QT_ENABLE_HIGHDPI_SCALING", "0");
 
-    /* Qt caches whether we have a console attached in its default message handlers.
-     * We don't need this. */
-    qInstallMessageHandler(messageHandler);
+    /* Init logging first. Calls after this one might log! */
+    MessageLogger logger;
+    g_logger = &logger;
+    qInstallMessageHandler(handleMessage);
 
     /* Qt & platform classes don't throw, and they are used inside catch blocks.
      * So we initialize them here. */

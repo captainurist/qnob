@@ -16,7 +16,6 @@ set(src
     "src/qnob/qnob_args.h"
     "src/qnob/qnob_config.cpp"
     "src/qnob/qnob_config.h"
-    "src/qnob/logging.h"
     "src/qnob/qnob.h"
     "src/qnob/qnob.cpp"
     "src/core/app/app.cpp"
@@ -167,6 +166,8 @@ set(src
     "src/core/tray_icon/fixed_size_icon_engine.h"
     "src/platform/win/win_thread_message_hook.h"
     "src/platform/win/win_thread_message_hook.cpp"
+    "src/lib/logging/message_logger.h"
+    "src/lib/logging/message_logger.cpp"
 )
 
 set(tests
