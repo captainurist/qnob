@@ -146,7 +146,6 @@ int main(int argc, char* argv[]) {
         EntityPoolBuilder builder(&factoryPool, &pool);
         builder.addEntities(QnobConfig::loadFromTomlFile(args.configPath));
 
-        platform()->execute(WinSetHooksEnabled, true);
         return application.exec();
     } catch (const CommandLineException& e) {
         QTextStream stream(stderr);

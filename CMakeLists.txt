@@ -118,8 +118,6 @@ set(src
     "src/platform/win/win_ddc_triplet.h"
     "src/platform/win/win_error.cpp"
     "src/platform/win/win_error.h"
-    "src/platform/win/win_global_mouse_hook.cpp"
-    "src/platform/win/win_global_mouse_hook.h"
     "src/platform/win/win_monitor.cpp"
     "src/platform/win/win_monitor.h"
     "src/platform/win/win_monitor_manager.cpp"

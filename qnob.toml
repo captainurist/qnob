@@ -46,12 +46,6 @@ trigger = "Ctrl+Alt+Shift+Q"
 target = "app"
 action = "exit"
 
-[toggle_hooks_hotkey]
-type = "hotkey"
-trigger = "Ctrl+Alt+Shift+H"
-target = "app"
-action = "toggleHooks"
-
 [debug_hotkey]
 type = "hotkey"
 trigger = "Ctrl+Alt+Shift+D"

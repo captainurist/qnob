@@ -12,7 +12,6 @@ class WinMonitorManager;
 class WinShortcutManager;
 class WinWheelEventManager;
 class WinMetrics;
-class WinGlobalMouseHook;
 class WinSharedEventWindow;
 
 class WinPlatform: public Platform {
@@ -30,15 +29,12 @@ public:
     virtual QVariant execute(PlatformFunction function, QVariant arg0) override;
 
 private:
-    Q_SIGNAL void hookChangeRequested(bool enabled);
     void updateCurrentToolTip() const;
     QSize getConsoleSize() const;
     void ensureConsole();
 
 private:
     std::unique_ptr<Com> m_com;
-    WinGlobalMouseHook* m_hook = nullptr;
-    std::unique_ptr<QThread> m_hookThread;
     std::unique_ptr<WinSharedEventWindow> m_eventWindow;
     std::unique_ptr<WinVolumeControl> m_volumeControl;
     std::unique_ptr<WinMonitorManager> m_monitorManager;

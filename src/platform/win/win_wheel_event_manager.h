@@ -7,15 +7,15 @@
 
 #include <platform/platform_wheel_event_manager.h>
 
-typedef struct tagMSLLHOOKSTRUCT MSLLHOOKSTRUCT;
+typedef struct tagMSG MSG;
 class QSystemTrayIcon;
-class WinGlobalMouseHook;
+class WinSharedEventWindow;
 class PlatformControl;
 
 class WinWheelEventManager: public PlatformWheelEventManager {
     Q_OBJECT
 public:
-    WinWheelEventManager(WinGlobalMouseHook* hook);
+    WinWheelEventManager(WinSharedEventWindow* eventWindow);
     virtual ~WinWheelEventManager();
 
     virtual void registerTrayIcon(QSystemTrayIcon* icon) override;
@@ -25,7 +25,7 @@ public:
     virtual void unregisterControl(PlatformControl* control) override;
 
 private:
-    Q_SLOT void processMessage(UINT message, const MSLLHOOKSTRUCT& data);
+    Q_SLOT void processInput(MSG* message);
 
 private:
     std::unordered_set<QSystemTrayIcon*> m_icons;

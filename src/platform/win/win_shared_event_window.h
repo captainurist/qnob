@@ -21,6 +21,11 @@ signals:
     void displayChange(MSG* message);
 
     /**
+     * WM_INPUT signal.
+     */
+    void input(MSG* message);
+
+    /**
      * "TaskbarCreated" custom message.
      */
     void taskbarCreated(MSG* message);

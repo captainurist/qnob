@@ -18,36 +18,20 @@
 #include "win_shortcut_manager.h"
 #include "win_wheel_event_manager.h"
 #include "win_metrics.h"
-#include "win_global_mouse_hook.h"
 #include "win_shared_event_window.h"
 #include "win_standard_control.h"
 
 WinPlatform::WinPlatform() {
     m_com.reset(new Com());
-
-    m_hookThread.reset(new QThread());
-    m_hookThread->setObjectName(lit("GlobalMouseHookThread"));
-    m_hookThread->start(QThread::HighestPriority); /* We want the hook proc to always return FAST, thus the custom priority here. */
-
-    m_hook = new WinGlobalMouseHook();
-    m_hook->moveToThread(m_hookThread.get());
-    connect(m_hookThread.get(), &QThread::finished, m_hook, &QObject::deleteLater);
-    connect(this, &WinPlatform::hookChangeRequested, m_hook, &WinGlobalMouseHook::setEnabled);
-
     m_eventWindow.reset(new WinSharedEventWindow());
     m_volumeControl.reset(new WinVolumeControl());
     m_monitorManager.reset(new WinMonitorManager(m_eventWindow.get()));
     m_shortcutManager.reset(new WinShortcutManager(m_eventWindow.get()));
-    m_wheelEventManager.reset(new WinWheelEventManager(m_hook));
+    m_wheelEventManager.reset(new WinWheelEventManager(m_eventWindow.get()));
     m_metrics.reset(new WinMetrics(m_eventWindow.get()));
-
-    /* Hooks are disabled by default, we don't call hookChangeRequested(true) here. */
 }
 
-WinPlatform::~WinPlatform() {
-    m_hookThread->exit();
-    m_hookThread->wait();
-}
+WinPlatform::~WinPlatform() {}
 
 PlatformVolumeControl* WinPlatform::volumeControl() const {
     return m_volumeControl.get();
@@ -79,12 +63,6 @@ QVariant WinPlatform::execute(PlatformFunction function, QVariant arg0) {
         if (QSize size = getConsoleSize(); size.isValid())
             return size;
         return QVariant();
-    case WinSetHooksEnabled:
-        assert(arg0.typeId() == QMetaType::Bool);
-        emit hookChangeRequested(arg0.toBool());
-        return QVariant();
-    case WinHooksEnabled:
-        return m_hook->isEnabled();
     case WinUpdateCurrentToolTip:
         updateCurrentToolTip();
         return QVariant();

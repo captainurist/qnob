@@ -11,7 +11,7 @@
 
 #include <platform/platform_control.h>
 
-#include "win_global_mouse_hook.h"
+#include "win_shared_event_window.h"
 #include "win_guids.h"
 #include "win_error.h"
 
@@ -19,14 +19,14 @@ static QRect QRectFromRECT(const RECT& rect) {
     return QRect(QPoint(rect.left, rect.top), QPoint(rect.right, rect.bottom));
 }
 
-static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry, UINT message, const MSLLHOOKSTRUCT& data) {
-    int delta = GET_WHEEL_DELTA_WPARAM(data.mouseData);
+static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry, const RAWMOUSE& mouseInput, const POINT& cursorPos) {
+    int delta = static_cast<SHORT>(mouseInput.usButtonData);
 
     QWheelEvent event(
-        QPoint(data.pt.x, data.pt.y) - globalGeometry.topLeft(),
-        QPoint(data.pt.x, data.pt.y),
+        QPoint(cursorPos.x, cursorPos.y) - globalGeometry.topLeft(),
+        QPoint(cursorPos.x, cursorPos.y),
         QPoint(),
-        message == WM_MOUSEWHEEL ? QPoint(0, delta) : QPoint(delta, 0),
+        mouseInput.usButtonFlags == RI_MOUSE_WHEEL ? QPoint(0, delta) : QPoint(delta, 0),
         Qt::NoButton,
         Qt::NoModifier,
         Qt::NoScrollPhase,
@@ -46,8 +46,15 @@ static void checkQtHighDpiDisabled() {
         qCritical() << "QT_ENABLE_HIGHDPI_SCALING != 0, trayicon mouse wheel events might not work on highdpi displays.";
 }
 
-WinWheelEventManager::WinWheelEventManager(WinGlobalMouseHook* hook) {
-    connect(hook, &WinGlobalMouseHook::messageHooked, this, &WinWheelEventManager::processMessage);
+WinWheelEventManager::WinWheelEventManager(WinSharedEventWindow* eventWindow) {
+    RAWINPUTDEVICE rid;
+    rid.usUsagePage = 0x0001;
+    rid.usUsage = 0x0002; /* Generic mouse. */
+    rid.dwFlags = RIDEV_INPUTSINK;
+    rid.hwndTarget = reinterpret_cast<HWND>(eventWindow->winId());
+    apicall(RegisterRawInputDevices(&rid, 1, sizeof(rid)));
+
+    connect(eventWindow, &WinSharedEventWindow::input, this, &WinWheelEventManager::processInput);
 }
 
 WinWheelEventManager::~WinWheelEventManager() {}
@@ -77,10 +84,33 @@ void WinWheelEventManager::unregisterControl(PlatformControl* control) {
     m_controls.erase(control);
 }
 
-void WinWheelEventManager::processMessage(UINT message, const MSLLHOOKSTRUCT& data) {
-    assert(message == WM_MOUSEWHEEL || message == WM_MOUSEHWHEEL);
+void WinWheelEventManager::processInput(MSG* message) {
+    assert(message->message == WM_INPUT);
 
-    HWND window = WindowFromPoint(data.pt);
+    HRAWINPUT inputHandle = reinterpret_cast<HRAWINPUT>(message->lParam);
+    RAWINPUT input;
+    UINT inputSize = sizeof(input);
+    UINT bytesCopied = GetRawInputData(inputHandle, RID_INPUT, &input, &inputSize, sizeof(RAWINPUTHEADER));
+    if (bytesCopied < 0) {
+        qWarning() << "GetRawInputData failed.";
+        return;
+    }
+
+    if (input.header.dwType != RIM_TYPEMOUSE)
+        return; /* Should never happen. */
+
+    const RAWMOUSE& mouseInput = input.data.mouse;
+    if (mouseInput.usButtonFlags != RI_MOUSE_WHEEL && mouseInput.usButtonFlags != RI_MOUSE_HWHEEL)
+        return; /* We're not interested in clicks & mouse move events. */
+
+    if (mouseInput.usButtonData == 0)
+        return; /* Should never happen. */
+
+    POINT cursorPos;
+    if (!apicall(GetCursorPos(&cursorPos)))
+        return;
+
+    HWND window = WindowFromPoint(cursorPos);
     if (window == NULL)
         return; /* No window here. */
 
@@ -94,14 +124,14 @@ void WinWheelEventManager::processMessage(UINT message, const MSLLHOOKSTRUCT& da
     if (className != lit("Shell_TrayWnd") && className != lit("NotifyIconOverflowWindow"))
         return; /* Not scrolling over a tray window. */
 
-    QPoint globalPoint(data.pt.x, data.pt.y);
+    QPoint globalPoint(cursorPos.x, cursorPos.y);
     for (QSystemTrayIcon* icon : m_icons) {
         /* Note: if Qt highdpi is enabled, the call below returns geometry in device-independent pixels.
-         * This obviously doesn't work with coordinates from the hook struct. */
+         * This obviously doesn't work with cursor position returned by the OS. */
         QRect globalGeometry = icon->geometry();
 
         if (globalGeometry.contains(globalPoint)) {
-            sendSyntheticWheelEvent(icon, globalGeometry, message, data);
+            sendSyntheticWheelEvent(icon, globalGeometry, mouseInput, cursorPos);
             return;
         }
     }
@@ -110,7 +140,7 @@ void WinWheelEventManager::processMessage(UINT message, const MSLLHOOKSTRUCT& da
         QRect globalGeometry = control->geometry();
 
         if (globalGeometry.contains(globalPoint)) {
-            sendSyntheticWheelEvent(control, globalGeometry, message, data);
+            sendSyntheticWheelEvent(control, globalGeometry, mouseInput, cursorPos);
             /* Can't return here, can have duplicates in standard controls. */
         }
     }
