@@ -6,7 +6,6 @@
 
 #include <cassert>
 
-#include <config/qnob_config.h>
 #include <util/map_access.h>
 
 #include "entity_factory_pool.h"
@@ -22,12 +21,15 @@ EntityPoolBuilder::EntityPoolBuilder(EntityFactoryPool* factoryPool, EntityPool*
 
 EntityPoolBuilder::~EntityPoolBuilder() {}
 
-void EntityPoolBuilder::addEntities(const QnobConfig& fullConfig) {
-    if (fullConfig.records.empty())
+void EntityPoolBuilder::addEntities(const QString& basePath, const VariantMap& records) {
+    if (records.empty())
         return;
 
-    m_dir = QFileInfo(fullConfig.path).absolutePath();
-    m_configs = fullConfig.records;
+    m_dir = basePath;
+    if (!m_dir.endsWith(QLatin1Char('/')) && !m_dir.endsWith(QLatin1Char('\\')))
+        m_dir += QLatin1Char('/');
+
+    m_configs = records;
     m_idsInFlight.clear();
     m_idStack.clear();
 
@@ -102,5 +104,5 @@ QString EntityPoolBuilder::resolvePath(const QString& path) {
     if (info.isAbsolute())
         return path;
 
-    return m_dir + QLatin1Char('/') + path;
+    return m_dir + path;
 }

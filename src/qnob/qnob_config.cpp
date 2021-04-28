@@ -65,6 +65,5 @@ QnobConfig QnobConfig::loadFromTomlFile(const QString& path) {
         );
     }
 
-    return { path, convertTomlTable(table) };
+    return { convertTomlTable(table) };
 }
-

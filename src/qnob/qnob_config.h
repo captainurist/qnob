@@ -6,7 +6,6 @@
 
 class QnobConfig {
 public:
-    QString path;
     VariantMap records;
 
     /**

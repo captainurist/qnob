@@ -12,10 +12,13 @@ set(QT_DEFAULT_MAJOR_VERSION 6)
 find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
 
 set(src
-    "src/config/config_exception.h"
-    "src/config/qnob_args.h"
-    "src/config/qnob_config.cpp"
-    "src/config/qnob_config.h"
+    "src/qnob/config_exception.h"
+    "src/qnob/qnob_args.h"
+    "src/qnob/qnob_config.cpp"
+    "src/qnob/qnob_config.h"
+    "src/qnob/logging.h"
+    "src/qnob/qnob.h"
+    "src/qnob/qnob.cpp"
     "src/core/app/app.cpp"
     "src/core/app/app.h"
     "src/core/entity/entity.h"
@@ -157,13 +160,14 @@ set(src
     "src/lib/serialization/builtin_serialization.cpp"
     "src/lib/command_line/command_line_help_options.h"
     "src/platform/win/win_crtio.h"
- "src/platform/platform_metrics.h"
- "src/platform/win/win_metrics.h"
- "src/platform/win/win_metrics.cpp"
- "src/platform/win/win_shared_event_window.cpp"
- "src/core/tray_icon/fixed_size_icon_engine.h"
- "src/platform/win/win_thread_message_hook.h"
- "src/platform/win/win_thread_message_hook.cpp")
+    "src/platform/platform_metrics.h"
+    "src/platform/win/win_metrics.h"
+    "src/platform/win/win_metrics.cpp"
+    "src/platform/win/win_shared_event_window.cpp"
+    "src/core/tray_icon/fixed_size_icon_engine.h"
+    "src/platform/win/win_thread_message_hook.h"
+    "src/platform/win/win_thread_message_hook.cpp"
+)
 
 set(tests
     "src/util/exception_ut.cpp"
