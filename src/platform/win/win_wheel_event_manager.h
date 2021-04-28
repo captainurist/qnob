@@ -1,12 +1,13 @@
 #pragma once
 
-#include <Windows.h>
+#include <wtypes.h>
 
 #include <memory>
 #include <unordered_set>
 
 #include <platform/platform_wheel_event_manager.h>
 
+typedef struct tagMSLLHOOKSTRUCT MSLLHOOKSTRUCT;
 class QSystemTrayIcon;
 class WinGlobalMouseHook;
 class PlatformControl;

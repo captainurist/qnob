@@ -124,7 +124,7 @@ set(src
     "src/platform/win/win_monitor.h"
     "src/platform/win/win_monitor_manager.cpp"
     "src/platform/win/win_monitor_manager.h"
-    "src/platform/win/win_native_event_window.h"
+    "src/platform/win/win_shared_event_window.h"
     "src/platform/win/win_platform.cpp"
     "src/platform/win/win_platform.h"
     "src/platform/win/win_shortcut_manager.cpp"
@@ -159,7 +159,13 @@ set(src
     "src/lib/serialization/builtin_serialization.cpp"
     "src/lib/command_line/command_line_help_options.h"
     "src/platform/win/win_crtio.h"
-)
+ "src/platform/platform_metrics.h"
+ "src/platform/win/win_metrics.h"
+ "src/platform/win/win_metrics.cpp"
+ "src/platform/win/win_shared_event_window.cpp"
+ "src/core/tray_icon/fixed_size_icon_engine.h"
+ "src/platform/win/win_thread_message_hook.h"
+ "src/platform/win/win_thread_message_hook.cpp")
 
 set(tests
     "src/util/exception_ut.cpp"
@@ -201,6 +207,7 @@ target_link_libraries(qnob
     dxva2
     ole32
     user32
+    shcore
 )
 
 

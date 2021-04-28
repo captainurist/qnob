@@ -9,6 +9,7 @@
 #include "platform_wheel_event_manager.h"
 #include "platform_shortcut_manager.h"
 #include "platform_control.h"
+#include "platform_metrics.h"
 
 /**
  * Platform abstraction class.
@@ -43,6 +44,11 @@ public:
      * \returns                         Tray icon wheel event manager object.
      */
     virtual PlatformWheelEventManager* wheelEventManager() const = 0;
+
+    /**
+     * \returns                         Metrics object.
+     */
+    virtual PlatformMetrics* metrics() const = 0;
 
     /**
      * \param control                   Standard control.

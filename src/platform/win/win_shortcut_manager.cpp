@@ -13,7 +13,7 @@
 
 #include "win_error.h"
 #include "win_shortcut_notifier.h"
-#include "win_native_event_window.h"
+#include "win_shared_event_window.h"
 
 struct KeyMappingElement {
     /**
@@ -296,7 +296,9 @@ constexpr std::array<KeyMappingElement, 256> KeyMapping = {{
     {-1,                    0}
 }};
 
-WinShortcutManager::WinShortcutManager() {
+WinShortcutManager::WinShortcutManager(WinSharedEventWindow* eventWindow) :
+    m_eventWindow(eventWindow)
+{
     for (quint32 winKey = 0; winKey < KeyMapping.size(); winKey++) {
         int qtKey = KeyMapping[winKey].key;
         switch (qtKey) {
@@ -317,8 +319,7 @@ WinShortcutManager::WinShortcutManager() {
         m_bindableKeys.insert(combinedKey);
     }
 
-    m_eventWindow.reset(new WinNativeEventWindow(lit("WinShortcutDispatcherEventWindow"), WM_HOTKEY));
-    connect(m_eventWindow.get(), &WinNativeEventWindow::messageReceived, this, &WinShortcutManager::dispatchEvent);
+    connect(m_eventWindow, &WinSharedEventWindow::hotkey, this, &WinShortcutManager::dispatchEvent);
 }
 
 WinShortcutManager::~WinShortcutManager() {}
@@ -348,13 +349,12 @@ PlatformShortcutNotifier* WinShortcutManager::createShortcutNotifier(const QKeyC
     return notifier;
 }
 
-void WinShortcutManager::dispatchEvent(void* message) {
-    MSG* msg = static_cast<MSG*>(message);
-    assert(msg->message == WM_HOTKEY);
+void WinShortcutManager::dispatchEvent(MSG* message) {
+    assert(message->message == WM_HOTKEY);
 
-    WinShortcutNotifier* notifier = value_or(m_notifierById, msg->wParam);
+    WinShortcutNotifier* notifier = value_or(m_notifierById, message->wParam);
     if (!notifier) {
-        qWarning() << "Received hotkey message w/o notifier, lParam = " << msg->lParam << ", wParam = " << msg->wParam;
+        qWarning() << "Received hotkey message w/o notifier, lParam = " << message->lParam << ", wParam = " << message->wParam;
         return;
     }
 

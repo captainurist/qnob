@@ -4,19 +4,13 @@
 
 #include <platform/platform_monitor_manager.h>
 
-class WinNativeEventWindow;
+class WinSharedEventWindow;
 
 class WinMonitorManager : public PlatformMonitorManager {
     Q_OBJECT
 public:
-    WinMonitorManager();
+    WinMonitorManager(WinSharedEventWindow* eventWindow);
     virtual ~WinMonitorManager();
 
     virtual std::vector<std::unique_ptr<PlatformMonitor>> enumerateMonitors() override;
-
-private:
-    void dispatchEvent(void* message);
-
-private:
-    std::unique_ptr<WinNativeEventWindow> m_eventWindow;
 };

@@ -3,6 +3,8 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 
+#include <lib/rollback/painter_rollback.h>
+
 #include <core/setting/setting_state.h>
 
 #include "skin.h"
@@ -22,7 +24,10 @@ public:
         return m_background.size();
     }
 
-    virtual void paint(QPainter* painter, const SettingState& state) {
+    virtual void paint(QPainter* painter, const QSize& size, const SettingState& state) {
+        PainterTransformRollback rollback(painter);
+        painter->scale(static_cast<qreal>(size.width()) / m_background.width(), static_cast<qreal>(size.height()) / m_background.height());
+
         if (state.enabled) {
             painter->drawPixmap(0, 0, m_background);
 

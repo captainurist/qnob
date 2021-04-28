@@ -11,7 +11,7 @@
 
 #include "win_monitor.h"
 #include "win_error.h"
-#include "win_native_event_window.h"
+#include "win_shared_event_window.h"
 
 struct MonitorInfo {
     DISPLAY_DEVICEW display;
@@ -101,18 +101,11 @@ static QString monitorDeviceId(const std::vector<MonitorInfo>& monitorInfos, con
     return QString();
 }
 
-WinMonitorManager::WinMonitorManager():
-    m_eventWindow(new WinNativeEventWindow(lit("WinMonitorManagerEventWindow"), WM_DISPLAYCHANGE))
-{
-    /* This magic here is needed because message-only windows don't receive broadcast messages, see
-     * https://stackoverflow.com/questions/22570008/not-receiving-wm-displaychange */
-    m_eventWindow->setFlag(Qt::FramelessWindowHint);
-    m_eventWindow->setFlag(Qt::WindowTransparentForInput);
-    m_eventWindow->setGeometry(0, 0, 0, 0);
-    m_eventWindow->show(); /* This is where the underlying window is created. */
-    m_eventWindow->hide();
-
-    connect(m_eventWindow.get(), &WinNativeEventWindow::messageReceived, this, &WinMonitorManager::dispatchEvent);
+WinMonitorManager::WinMonitorManager(WinSharedEventWindow* eventWindow) {
+    /* WM_DISPLAYCHANGE is sent when display resolution has changed,
+     * which doesn't necessarily mean that the monitors have changed.
+     * It's not worth double-checking though. */
+    connect(eventWindow, &WinSharedEventWindow::displayChange, this, &WinMonitorManager::monitorsChanged);
 }
 
 WinMonitorManager::~WinMonitorManager() {}
@@ -147,11 +140,4 @@ std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonito
     }
 
     return result;
-}
-
-void WinMonitorManager::dispatchEvent(void* message) {
-    MSG* msg = static_cast<MSG*>(message);
-    assert(msg->message == WM_DISPLAYCHANGE);
-
-    emit monitorsChanged();
 }

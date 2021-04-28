@@ -7,12 +7,17 @@
 #include <core/setting/setting.h>
 
 #include <platform/platform.h>
+#include <platform/platform_metrics.h>
+
+#include "fixed_size_icon_engine.h"
 
 TrayIcon::TrayIcon(const QString& id) :
     Entity(id),
     m_trayIcon(new QSystemTrayIcon())
 {
     platform()->wheelEventManager()->registerTrayIcon(m_trayIcon.get());
+
+    connect(platform()->metrics(), &PlatformMetrics::trayIconSizeChanged, this, &TrayIcon::updateIcon);
 }
 
 TrayIcon::~TrayIcon() {
@@ -55,13 +60,15 @@ void TrayIcon::updateIcon() {
         return;
     }
 
-    QPixmap pixmap(m_skin->size());
+    QPixmap pixmap(platform()->metrics()->trayIconSize());
     pixmap.fill(Qt::transparent);
 
     QPainter painter(&pixmap);
-    m_skin->paint(&painter, m_setting->state());
+    m_skin->paint(&painter, pixmap.size(), m_setting->state());
     painter.end();
 
-    m_trayIcon->setIcon(pixmap);
+    /* We need to jump through hoops here with FixedSizeIconEngine to bypass all sizing logic in Qt and use
+     * icon sizes that we got above. */
+    m_trayIcon->setIcon(QIcon(new FixedSizeIconEngine(pixmap)));
     m_trayIcon->show();
 }

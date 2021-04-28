@@ -25,7 +25,7 @@ Entity* SkinFactory::createEntity(const EntityCreationContext& ctx) {
         assert(m_type == NumericSkinType);
         return new NumericSkin(
             ctx.id(),
-            ctx.requireOr<QSize>(lit("size"), QSize(64, 64)),
+            ctx.requireOr<QSize>(lit("size"), QSize()),
             ctx.require<QColor>(lit("color")),
             ctx.requireOr<QString>(lit("font"), QString())
         );

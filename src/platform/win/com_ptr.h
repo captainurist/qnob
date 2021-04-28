@@ -4,7 +4,6 @@
 
 #include <combaseapi.h>
 
-
 /**
  * A simple shared pointer for COM objects. Automatically calls `AddRef` / `Release` when needed.
  *

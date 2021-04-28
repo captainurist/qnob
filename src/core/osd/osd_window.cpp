@@ -52,7 +52,7 @@ void OsdWindow::paintEvent(QPaintEvent* /*paintEvent*/) {
     painter.fillRect(QRect(QPoint(), size()), Qt::transparent);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-    m_skin->paint(&painter, m_state);
+    m_skin->paint(&painter, size(), m_state);
     painter.end();
 }
 

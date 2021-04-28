@@ -97,7 +97,6 @@ units = 16
 
 [tray_icon_skin]
 type = "numeric_skin"
-size = [16, 16]
 color = "white"
 font = "Consolas"
 
@@ -105,7 +104,6 @@ font = "Consolas"
 type = "tray_icon"
 target = "brightness"
 skin = "tray_icon_skin"
-#overrides = "win_sound_icon"
 
 [volume_up_tray_event]
 type = "tray_event"

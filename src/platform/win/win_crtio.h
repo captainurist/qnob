@@ -1,14 +1,12 @@
 #pragma once
 
-#include <Windows.h>
-
 /* Copied from ucrt implementation. */
 
 #define _NO_CONSOLE_FILENO ((intptr_t)-2)
 
 struct __crt_stdio_stream_data {
     union {
-        FILE  _public_file;
+        /* FILE  _public_file; */
         char* _ptr;
     };
 
@@ -19,7 +17,7 @@ struct __crt_stdio_stream_data {
     int              _charbuf;
     int              _bufsiz;
     char* _tmpfname;
-    CRITICAL_SECTION _lock;
+    /* CRITICAL_SECTION _lock; */
 };
 
 __crt_stdio_stream_data* crtData(FILE* file) {

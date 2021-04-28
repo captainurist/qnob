@@ -21,27 +21,48 @@ public:
         return m_size;
     }
 
-    virtual void paint(QPainter* painter, const SettingState& state) {
+    virtual void paint(QPainter* painter, const QSize& size, const SettingState& state) {
         QString text = state.enabled ? QString::number(static_cast<int>(std::round(100 * state.value))) : lit("0");
 
         PainterTransformRollback transformRollback(painter);
         PainterPenRollback penRollback(painter, m_color);
         PainterFontRollback fontRollback(painter);
         QFont font = painter->font();
-        font.setPixelSize(m_size.height());
-        if(!m_fontFamily.isEmpty())
+        if (!m_fontFamily.isEmpty())
             font.setFamily(m_fontFamily);
+        font.setPixelSize(findFontPixelSize(font, text, size));
         painter->setFont(font);
 
+        painter->drawText(QRect(QPoint(0, 0), size), Qt::AlignCenter, text);
+    }
+
+private:
+    static QSize advanceAscend(const QFont& font, const QString& text) {
         QFontMetrics metrics(font);
-        QRect rect = metrics.boundingRect(text);
-        if (rect.width() > m_size.width()) {
-            painter->translate(m_size.width() / 2.0, 0);
-            painter->scale(1.0 * m_size.width() / rect.width(), 1.0);
-            painter->translate(-m_size.width() / 2.0, 0);
+        return QSize(metrics.horizontalAdvance(text), metrics.ascent());
+    }
+
+    static bool fitsInto(const QSize& small, const QSize& big) {
+        return small.width() <= big.width() && small.height() <= big.width();
+    }
+
+    static int findFontPixelSize(QFont font, const QString& text, const QSize& boundingSize) {
+        /* Binary search in [l, r). */
+        int l = 1;
+        int r = std::max(boundingSize.width(), boundingSize.height()) + 1;
+
+        while (l + 1 < r) {
+            int m = (l + r) / 2;
+            font.setPixelSize(m);
+
+            if (fitsInto(advanceAscend(font, text), boundingSize)) {
+                l = m;
+            } else {
+                r = m;
+            }
         }
 
-        painter->drawText(QRect(-m_size.width() / 2.0, 0, m_size.width() * 2.0, m_size.height()), Qt::AlignCenter, text);
+        return l;
     }
 
 private:

@@ -17,7 +17,9 @@
 #include "win_monitor_manager.h"
 #include "win_shortcut_manager.h"
 #include "win_wheel_event_manager.h"
+#include "win_metrics.h"
 #include "win_global_mouse_hook.h"
+#include "win_shared_event_window.h"
 #include "win_standard_control.h"
 
 WinPlatform::WinPlatform() {
@@ -32,12 +34,14 @@ WinPlatform::WinPlatform() {
     connect(m_hookThread.get(), &QThread::finished, m_hook, &QObject::deleteLater);
     connect(this, &WinPlatform::hookChangeRequested, m_hook, &WinGlobalMouseHook::setEnabled);
 
+    m_eventWindow.reset(new WinSharedEventWindow());
     m_volumeControl.reset(new WinVolumeControl());
-    m_monitorManager.reset(new WinMonitorManager());
+    m_monitorManager.reset(new WinMonitorManager(m_eventWindow.get()));
+    m_shortcutManager.reset(new WinShortcutManager(m_eventWindow.get()));
     m_wheelEventManager.reset(new WinWheelEventManager(m_hook));
-    m_shortcutManager.reset(new WinShortcutManager());
+    m_metrics.reset(new WinMetrics(m_eventWindow.get()));
 
-    /* Note that hooks are disabled by default, we don't call hookChangeRequested(true) here. */
+    /* Hooks are disabled by default, we don't call hookChangeRequested(true) here. */
 }
 
 WinPlatform::~WinPlatform() {
@@ -59,6 +63,10 @@ PlatformShortcutManager* WinPlatform::shortcutManager() const {
 
 PlatformWheelEventManager* WinPlatform::wheelEventManager() const {
     return m_wheelEventManager.get();
+}
+
+PlatformMetrics* WinPlatform::metrics() const {
+    return m_metrics.get();
 }
 
 PlatformControl* WinPlatform::createStandardControl(PlatformStandardControl control) const {

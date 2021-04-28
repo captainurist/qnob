@@ -1,13 +1,17 @@
 #pragma once
 
-#include <Windows.h> /* For MSLLHOOKSTRUCT. */
+#include <wtypes.h>
 
 #include <atomic>
 
 #include <QtCore/QObject>
 
+typedef struct tagMSLLHOOKSTRUCT MSLLHOOKSTRUCT;
+
 // TODO: saner API here. Thread-safe setEnabled, hooking / unhooking on thread change,
 // always handling events on object's thread.
+
+// TODO: maybe rewrite with raw input?
 
 /**
  * Global mouse hook for mouse wheel events.
