@@ -39,4 +39,4 @@ caches the `HICON`, and doesn't even bother to update the actual image if you ca
 this is exactly what's happening. This, btw, is a bug in explorer.
 
 However, this also provides a solution - create a new HICON inside the `TaskbarCreated` handler, pass it into 
-`Shell_NotifyIcon`, and you're set. Or just call `QSystemTrayIcon::setIcon` with a new icon object.
+`Shell_NotifyIcon`, and you're set. Or just call `QSystemTrayIcon::setIcon` with a new `QIcon`.
