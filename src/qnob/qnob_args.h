@@ -4,5 +4,6 @@
 
 struct QnobArgs {
 	QString configPath;
+	QString logPath;
 	bool console = false;
 };

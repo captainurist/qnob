@@ -51,6 +51,7 @@ static bool processCommandLine(const QStringList& args, QnobArgs* params) {
 
     parser.addSection(QString());
     parser.addOption("config", lit("Path to a config file.")).argument("PATH", &params->configPath).defaultValue(lit("./qnob.toml"));
+    parser.addOption("log", lit("Path to a log file.")).argument("PATH", &params->logPath).defaultValue(lit("./qnob.log"));
     parser.addOption("console", lit("Always opens a console window (Windows only).")).flag(&params->console);
     parser.addOption("help", lit("Show help and exit.")).flag(&help);
     parser.addOption('v', "version", lit("Show version information and exit.")).flag(&version);
@@ -119,7 +120,7 @@ int Qnob::run(int argc, char** argv) {
         if (args.console) {
             m_logFile->open(2, QIODevice::WriteOnly);
         } else {
-            m_logFile->setFileName(lit("qnob.log"));
+            m_logFile->setFileName(args.logPath);
             m_logFile->open(QIODevice::WriteOnly | QIODevice::Append);
         }
         m_bufferLogger->flush(m_fileLogger.get());
