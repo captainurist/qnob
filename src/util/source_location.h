@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 #ifndef _MSC_VER
 #include <source_location>
 #define __LOCATION__ std::source_location::current()
@@ -8,11 +10,6 @@
 #include <cstdint>
 
 namespace detail {
-constexpr const char* rootRelativeFilePath(const char* fileName) {
-    const char absoluteCurrentFilePath[] = __FILE__;
-    const char relativeCurrentFilePath[] = "src/util/source_location.h";
-    return fileName + sizeof(absoluteCurrentFilePath) - sizeof(relativeCurrentFilePath);
-}
 }
 
 namespace std {
@@ -56,6 +53,21 @@ private:
 
 }
 
-#define __LOCATION__ std::source_location(detail::rootRelativeFilePath(__FILE__), __FUNCTION__, __LINE__, 0)
-
+#define __LOCATION__ std::source_location(__FILE__, __FUNCTION__, __LINE__, 0)
 #endif // _MSC_VER
+
+constexpr const char* sourceRootRelativePath(const char* path) {
+    const char absoluteCurrentFilePath[] = __FILE__;
+    const char relativeCurrentFilePath[] = "src/util/source_location.h";
+    const std::string_view sourceRootPrefix(absoluteCurrentFilePath, sizeof(absoluteCurrentFilePath) - sizeof(relativeCurrentFilePath));
+    const std::string_view qtSourceRootPrefix("\\Users\\qt\\work\\qt\\");
+
+    const std::string_view pathView(path);
+    if (pathView.starts_with(sourceRootPrefix)) {
+        return path + sourceRootPrefix.size();
+    } else if (pathView.starts_with(qtSourceRootPrefix)) {
+        return path + qtSourceRootPrefix.size();
+    } else {
+        return path;
+    }
+}

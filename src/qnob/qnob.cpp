@@ -7,7 +7,9 @@
 
 #include <lib/command_line/command_line_parser.h>
 #include <lib/command_line/command_line_exception.h>
-#include <lib/logging/message_logger.h>
+#include <lib/logging/logger.h>
+#include <lib/logging/buffer_logger.h>
+#include <lib/logging/file_logger.h>
 
 #include <core/entity/entity_factory_pool.h>
 #include <core/entity/entity_pool.h>
@@ -30,12 +32,6 @@
 
 #include "qnob_config.h"
 #include "qnob_args.h"
-
-static MessageLogger* g_logger = nullptr;
-
-static void handleMessage(QtMsgType type, const QMessageLogContext& context, const QString& msg) {
-    g_logger->log(type, context, msg);
-}
 
 static void maybePressAnyKey() {
     if (platform()->execute(WinIsConsoleOwned).toBool()) {
@@ -85,14 +81,22 @@ static bool processCommandLine(const QStringList& args, QnobArgs* params) {
     return false;
 }
 
+Qnob::Qnob() {
+    m_bufferLogger.reset(new BufferLogger());
+    m_logFile.reset(new QFile());
+    m_fileLogger.reset(new FileLogger(m_logFile.get()));
+}
+
+Qnob::~Qnob() {
+    Logger::installGlobalLogger(nullptr);
+}
+
 int Qnob::run(int argc, char** argv) {
     /* Highdpi implementation in Qt is a mess. Couldn't make it work =(. */
     qputenv("QT_ENABLE_HIGHDPI_SCALING", "0");
 
     /* Init logging first. Calls after this one might log! */
-    MessageLogger logger;
-    g_logger = &logger;
-    qInstallMessageHandler(handleMessage);
+    Logger::installGlobalLogger(m_bufferLogger.get());
 
     /* Qt & platform classes don't throw, and they are used inside catch blocks.
      * So we initialize them here. */
@@ -110,6 +114,16 @@ int Qnob::run(int argc, char** argv) {
 
         if (args.console)
             platform()->execute(WinEnsureConsole);
+
+        /* Now that we're done with console we might create a real logger. */
+        if (args.console) {
+            m_logFile->open(2, QIODevice::WriteOnly);
+        } else {
+            m_logFile->setFileName(lit("qnob.log"));
+            m_logFile->open(QIODevice::WriteOnly | QIODevice::Append);
+        }
+        m_bufferLogger->flush(m_fileLogger.get());
+        Logger::installGlobalLogger(m_fileLogger.get());
 
         /* Join all worker threads before platform is destroyed, there might be some deinitialization pending there. */
         auto cleanup = QScopeGuard([] { QThreadPool::globalInstance()->waitForDone(); });

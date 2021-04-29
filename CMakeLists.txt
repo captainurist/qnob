@@ -166,8 +166,10 @@ set(src
     "src/core/tray_icon/fixed_size_icon_engine.h"
     "src/platform/win/win_thread_message_hook.h"
     "src/platform/win/win_thread_message_hook.cpp"
-    "src/lib/logging/message_logger.h"
-    "src/lib/logging/message_logger.cpp"
+    "src/lib/logging/logger.h"
+    "src/lib/logging/buffer_logger.h"
+    "src/lib/logging/file_logger.cpp"
+    "src/lib/logging/logger.cpp"
 )
 
 set(tests
