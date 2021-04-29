@@ -28,6 +28,8 @@ void FileLogger::log(QtMsgType type, const QMessageLogContext& context, const QS
         QByteArray::number(context.line) %
         QByteArrayLiteral(")\n");
 
+    // TODO: lock here? QFile is not thread-safe.
+
     m_file->write(extendedMessage);
     m_file->flush();
 }
