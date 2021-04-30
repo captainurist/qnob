@@ -23,9 +23,9 @@ How to detect DPI changes? It's possible to catch `WM_DISPLAYCHANGE`, then use `
 when you receive `WM_DISPLAYCHANGE`.
 
 OK, another option is to use `GetDpiForMonitor` instead. This returns the new dpi, and you can get the primary monitor
-with a call to `MonitorFromWindow(NULL, MONITOR_DEFAULTTOPRIMARY)`. This again doesn't work. System tray dpi hasn't 
-been updated yet (see above), so it downscales the supplied icon, then dpi gets changed, and... well. You can guess I
-was getting pretty frustrated by this point.
+with a call to `MonitorFromWindow(NULL, MONITOR_DEFAULTTOPRIMARY)`. This returns the correct updated dpi, but still 
+doesn't solve our problem. System tray dpi hasn't been updated yet (see above), so it downscales the supplied icon, 
+then explorer handles the dpi change, and then... well. You can guess I was getting pretty frustrated by this point.
 
 So I was thinking that MS might have given this problem some thought and it might make sense to put all the logic into
 `WM_DPICHANGED` handler for the message window associated with some tray icon. Nah, same results. Which makes sense, 
