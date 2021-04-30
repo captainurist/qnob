@@ -10,7 +10,6 @@
 * **DONE**. Basic command line options (--config at least).
 * **DONE**. Option to log to console always (even in release).
 * **DONE**. Proper logging in release mode (into a log file).
-* Osd windows stop updating when changing monitor DPI for the 1st time after starting qnob. Changing it again fixes this.
 * Fix icons & OSD looking like shit on hidpi displays.
 * Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
 * Duck typing in factories (through qt metacalls).
