@@ -4,6 +4,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QRasterWindow>
 #include <QtGui/QScreen>
+#include <QtGui/QGuiApplication>
 
 #include <core/setting/setting.h>
 
@@ -16,14 +17,16 @@ Osd::Osd(const QString& id):
     m_fsm(new OsdFsm())
 {
     connect(m_fsm.get(), &OsdFsm::started, m_window.get(), &OsdWindow::show);
-    connect(m_fsm.get(), &OsdFsm::started, m_window.get(), &OsdWindow::raise);
     connect(m_fsm.get(), &OsdFsm::valueChanged, m_window.get(), &OsdWindow::setOpacity);
     connect(m_fsm.get(), &OsdFsm::finished, m_window.get(), &OsdWindow::hide);
 
-    /* Note that connection to OsdWindow::raise above is important. Otherwise OSD window ends up below all other
-     * windows after changing main display in Win10. */
+    /* Connection to OsdWindow::raise is important. Otherwise OSD window ends up below all other
+     * windows after changing main screen in Win10. */
+    connect(m_fsm.get(), &OsdFsm::started, m_window.get(), &OsdWindow::raise);
 
-    connect(m_window.get(), &QWindow::screenChanged, this, &Osd::updatePosition);
+    connect(qApp, &QGuiApplication::primaryScreenChanged, this, &Osd::updatePrimaryScreen);
+
+    updatePrimaryScreen();
 }
 
 Osd::~Osd() {}
@@ -92,7 +95,7 @@ void Osd::setSetting(Setting* setting) {
 }
 
 void Osd::updatePosition() {
-    QSize screenSize = m_window->screen()->size();
+    QSize screenSize = qApp->primaryScreen()->size();
     QSize windowSize = m_window->size();
 
     QPoint position;
@@ -114,4 +117,20 @@ void Osd::updatePosition() {
     }
 
     m_window->setPosition(position + m_offset);
+}
+
+void Osd::updatePrimaryScreen() {
+    QScreen* primaryScreen = qApp->primaryScreen();
+    if (m_primaryScreen == primaryScreen)
+        return;
+
+    if (m_primaryScreen)
+        disconnect(m_primaryScreen, nullptr, this, nullptr);
+
+    m_primaryScreen = primaryScreen;
+
+    if (m_primaryScreen) {
+        connect(m_primaryScreen, &QScreen::geometryChanged, this, &Osd::updatePosition);
+        updatePosition();
+    }
 }

@@ -10,6 +10,7 @@ OsdWindow::OsdWindow(const QString& title) {
     setFlag(Qt::FramelessWindowHint);
     setFlag(Qt::WindowTransparentForInput);
     setFlag(Qt::Tool);
+    setFlag(Qt::MSWindowsFixedSizeDialogHint); /* Prevents automatic resizes on WM_DPICHANGED. */
     setTitle(title); /* Mainly used for debugging with Spy++. */
 
     QSurfaceFormat format;
