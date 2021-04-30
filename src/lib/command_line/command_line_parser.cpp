@@ -125,7 +125,7 @@ void CommandLineParser::parse(const QStringList& commandLine) {
     }
 }
 
-void CommandLineParser::printSections(QTextStream& stream, const CommandLineHelpOptions& options) {
+void CommandLineParser::printSections(QTextStream& stream, const CommandLineHelpOptions& options) const {
     bool hasShortOptions;
     for (const CommandLineSection& section : m_sections)
         for (const CommandLineOption& option : section.options)
@@ -181,7 +181,7 @@ void CommandLineParser::printSections(QTextStream& stream, const CommandLineHelp
             QString description = option.description;
             if (options.printDefaults && !option.defaultValue.isEmpty()) {
                 description += description.endsWith(QLatin1Char('.')) ? lit(" ") : lit(". ");
-                description += lit("Default is '%1'.").arg(option.defaultValue);
+                description += tr("Default is '%1'.").arg(option.defaultValue);
             }
             QStringList lines = wrapText(description, options.maxLineLength - options.indent - headerLength - options.spacing);
             if (lines.isEmpty())

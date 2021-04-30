@@ -188,6 +188,9 @@ set(src
     "src/lib/logging/buffer_logger.h"
     "src/lib/logging/file_logger.cpp"
     "src/lib/logging/logger.cpp"
+    "src/qnob/qnob_args.cpp"
+    "src/qnob/default_entity_factory_pool.h"
+    "src/qnob/qnob_command_line_parser.h"
 )
 
 set(tests

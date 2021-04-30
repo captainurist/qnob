@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <QtCore/QString>
+#include <QtCore/QCoreApplication> /* For Q_DECLARE_TR_FUNCTIONS. */
 
 #include "command_line_section.h"
 #include "command_line_option_builder.h"
@@ -11,6 +12,7 @@
 class QTextStream;
 
 class CommandLineParser {
+    Q_DECLARE_TR_FUNCTIONS(CommandLineParser);
 public:
     CommandLineParser() {}
 
@@ -30,7 +32,7 @@ public:
 
     void parse(const QStringList& commandLine);
 
-    void printSections(QTextStream& stream, const CommandLineHelpOptions& options = CommandLineHelpOptions());
+    void printSections(QTextStream& stream, const CommandLineHelpOptions& options = CommandLineHelpOptions()) const;
 
 private:
     CommandLineSectionList m_sections;

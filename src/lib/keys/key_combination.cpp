@@ -22,7 +22,7 @@ private:
 };
 
 static bool isMouseKey(Qt::Key key) {
-	switch (key) {
+    switch (key) {
     case Qt::Key_Mouse1:
     case Qt::Key_Mouse2:
     case Qt::Key_Mouse3:
@@ -31,7 +31,7 @@ static bool isMouseKey(Qt::Key key) {
         return true;
     default:
         return false;
-	}
+    }
 }
 
 void serialize(const QKeyCombination& value, QString* target) {

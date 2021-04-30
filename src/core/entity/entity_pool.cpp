@@ -17,3 +17,10 @@ void EntityPool::addEntity(Entity* entity) {
 Entity* EntityPool::entity(const QString& id) const {
     return value_ref(m_entityById, id).get();
 }
+
+std::vector<Entity*> EntityPool::entities() const {
+    std::vector<Entity*> result;
+    for (const auto& [id, entity] : m_entityById)
+        result.push_back(entity.get());
+    return result;
+}

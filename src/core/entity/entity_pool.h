@@ -23,6 +23,8 @@ public:
 
     Entity* entity(const QString& id) const;
 
+    std::vector<Entity*> entities() const;
+
 private:
     std::unordered_map<QString, std::unique_ptr<Entity>> m_entityById;
 };
