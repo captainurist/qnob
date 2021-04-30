@@ -155,6 +155,7 @@ int Qnob::run(int argc, char** argv) {
 
         return application.exec();
     } catch (const CommandLineException& e) {
+        platform()->execute(WinEnsureConsole);
         QTextStream stream(stderr);
         stream << e.message() << Qt::endl;
         stream << lit("Try 'qnob --help' for more information."); // TODO: tr
