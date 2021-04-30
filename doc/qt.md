@@ -5,6 +5,7 @@
 
 cmake --build . --parallel
 cmake --install .
+cmake --install . --config Debug
 ```
 
 Translations will be needed at some point, so everything starting with `-skip qtdeclarative` will have to be removed from the command line above.
