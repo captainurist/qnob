@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 3.19.0)
 
 project(qnob VERSION 0.0.1 LANGUAGES CXX)
 
+function(init_msvc_target target)
+    if (MSVC)
+        target_compile_options(${target} PRIVATE /FC) # Full path of source code file in diagnostics
+        set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Link statically with CRT
+    endif()
+endfunction()
+
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -190,13 +197,9 @@ set(defines
 # Set up qnob executable
 #
 add_executable(qnob ${src})
+init_msvc_target(qnob)
 
 set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true) # No console by default
-
-if (MSVC)
-    target_compile_options(qnob PRIVATE /FC) # Full path of source code file in diagnostics
-    # target_compile_options(qnob PRIVATE /MT) # Link statically with CRT
-endif()
 
 target_compile_definitions(qnob PRIVATE ${defines})
 
@@ -221,8 +224,11 @@ target_link_libraries(qnob
 #
 enable_testing()
 add_subdirectory(3rdparty/googletest)
+init_msvc_target(gtest) # for some reason this is needed
+init_msvc_target(gtest_main)
 
 add_executable(qnob_test ${tests})
+init_msvc_target(qnob_test)
 
 target_compile_definitions(qnob_test PRIVATE ${defines})
 
@@ -237,7 +243,5 @@ target_link_libraries(qnob_test
 )
 
 add_test(NAME qnob_test COMMAND qnob_test)
-
-
 
 
