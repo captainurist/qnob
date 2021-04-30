@@ -2,13 +2,6 @@ cmake_minimum_required(VERSION 3.19.0)
 
 project(qnob VERSION 0.0.1 LANGUAGES CXX)
 
-function(init_msvc_target target)
-    if (MSVC)
-        target_compile_options(${target} PRIVATE /FC) # Full path of source code file in diagnostics
-        set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Link statically with CRT
-    endif()
-endfunction()
-
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -17,6 +10,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QT_DEFAULT_MAJOR_VERSION 6)
 
 find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+
+function(init_target target)
+    if (MSVC)
+        target_compile_options(${target} PRIVATE /FC) # Full path of source code file in diagnostics
+        set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Link statically with CRT
+    endif()
+
+    target_compile_definitions(${target} PRIVATE
+        QT_DEPRECATED_WARNINGS
+        QT_DISABLE_DEPRECATED_BEFORE=0x060000
+        QT_NO_CAST_FROM_ASCII
+        QT_NO_CAST_TO_ASCII
+        QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
+        lit=QStringLiteral
+        QNOB_VERSION_STRING="${CMAKE_PROJECT_VERSION}"
+    )
+endfunction()
+
 
 set(src
     "src/qnob/config_exception.h"
@@ -183,25 +194,12 @@ set(tests
     "src/util/exception_ut.cpp"
 )
 
-set(defines
-    QT_DEPRECATED_WARNINGS
-    QT_DISABLE_DEPRECATED_BEFORE=0x060000
-    QT_NO_CAST_FROM_ASCII
-    QT_NO_CAST_TO_ASCII
-    QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
-    lit=QStringLiteral
-)
-
-
 #
 # Set up qnob executable
 #
 add_executable(qnob ${src})
-init_msvc_target(qnob)
-
+init_target(qnob)
 set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true) # No console by default
-
-target_compile_definitions(qnob PRIVATE ${defines})
 
 target_include_directories(qnob PRIVATE
     3rdparty/tomlplusplus/include
@@ -224,13 +222,11 @@ target_link_libraries(qnob
 #
 enable_testing()
 add_subdirectory(3rdparty/googletest)
-init_msvc_target(gtest) # for some reason this is needed
-init_msvc_target(gtest_main)
+init_target(gtest)
+init_target(gtest_main)
 
 add_executable(qnob_test ${tests})
-init_msvc_target(qnob_test)
-
-target_compile_definitions(qnob_test PRIVATE ${defines})
+init_target(qnob_test)
 
 target_include_directories(qnob_test PRIVATE
     3rdparty/googletest/googletest/include
