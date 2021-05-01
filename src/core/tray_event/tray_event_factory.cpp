@@ -21,7 +21,7 @@ Entity* TrayEventFactory::createEntity(const EntityCreationContext& ctx) {
     QString action = ctx.require<QString>(lit("action"));
     QVariantList args = ctx.requireOr<QVariantList>(lit("args"), QVariantList());
 
-    if (isMouseWheel(key.key()))
+    if (!isMouseWheel(key.key()))
         xthrow EntityCreationException(ctx.id(), EntityCreationException::tr("Only mouse wheel with optional modifiers is supported as trigger."));
 
     QObject* eventSource = nullptr;
