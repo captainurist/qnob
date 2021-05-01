@@ -14,6 +14,7 @@
 #include <lib/logging/logger.h>
 #include <lib/logging/buffer_logger.h>
 #include <lib/logging/file_logger.h>
+#include <lib/serializable_types/key_combination.h>
 
 #include <platform/platform_initializer.h>
 #include <platform/platform.h>
@@ -115,16 +116,33 @@ int Qnob::runVersion() {
 }
 
 int Qnob::runList(const QnobArgs& args) {
+    QTextStream stream(stdout);
+
     if (args.list == EntitiesList) {
         DefaultEntityPool entityPool;
 
         std::vector<Entity*> entities = entityPool.entities();
         std::ranges::sort(entities, std::less<>(), &Entity::id);
 
-        QTextStream stream(stdout);
         stream << tr("Built-in entities:") << Qt::endl;
         for (Entity* entity : entities)
-            stream << entity->id() << Qt::endl; // TODO: descriptions.
+            stream << entity->id() << Qt::endl; // TODO: descriptions, print as a table.
+    } else if (args.list == KeysList) {
+        std::unordered_set<QKeyCombination> keys = platform()->shortcutManager()->bindableKeys();
+
+        std::unordered_set<QKeyCombination> ignoredKeys = {
+            Qt::Key_Cancel, Qt::Key_Mode_switch, Qt::Key_Select, Qt::Key_Printer, Qt::Key_Execute, Qt::Key_Sleep,
+            Qt::Key_Massyo, Qt::Key_Touroku, Qt::Key_Stop, Qt::Key_Play
+        };
+
+        QStringList keyStrings;
+        for (QKeyCombination key : keys)
+            if (!ignoredKeys.contains(key))
+                keyStrings.push_back(lit("'%1'").arg(serialized(key)));
+        keyStrings.sort(Qt::CaseInsensitive);
+
+        stream << tr("Available keys:") << Qt::endl;
+        stream << keyStrings.join(lit(", ")) << Qt::endl; // TODO: word wrap.
     }
 
     maybePressAnyKey();

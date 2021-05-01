@@ -7,7 +7,7 @@
 #include "numeric_skin.h"
 
 SkinFactory::SkinFactory(SkinType type):
-    EntityFactory(serialize(type)),
+    EntityFactory(serialized(type)),
     m_type(type)
 {}
 

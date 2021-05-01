@@ -10,8 +10,9 @@ class QnobCommandLineParser : public CommandLineParser {
 public:
     QnobCommandLineParser() {
         QStringList listValues;
-        for (StandardList list : {EntitiesList})
-            listValues.push_back(lit("'%1'").arg(serialize(list)));
+        for (int i = 0; i < ListCount; i++)
+            listValues.push_back(lit("'%1'").arg(serialized(static_cast<StandardList>(i))));
+        listValues.sort();
         QString lists = listValues.join(lit(", "));
 
         addSection(QString());

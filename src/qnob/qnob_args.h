@@ -12,8 +12,10 @@ enum RunMode {
 };
 
 enum StandardList {
-    NoList,
-    EntitiesList
+    EntitiesList,
+    KeysList,
+    ListCount,
+    NoList = -1,
 };
 QB_DECLARE_SERIALIZATION_FUNCTIONS(StandardList)
 
