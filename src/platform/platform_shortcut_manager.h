@@ -6,14 +6,14 @@
 
 class PlatformShortcutNotifier;
 
-QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH_BY_VALUE(QKeyCombination) // TODO: doesn't belong here
+QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH_BY_VALUE(QKeyCombination)
 
 class PlatformShortcutManager : public QObject {
     Q_OBJECT
 public:
     /**
      * \returns                         A set of keys that can be used as hotkeys.
-     *                                  The only allowed modifier for returned keys is `Qt::`
+     *                                  The only allowed modifier for returned keys is `Qt::KeypadModifier`.
      */
     virtual std::unordered_set<QKeyCombination> bindableKeys() const = 0;
 

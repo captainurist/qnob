@@ -191,6 +191,7 @@ set(src
     "src/qnob/qnob_args.cpp"
     "src/qnob/default_entity_factory_pool.h"
     "src/qnob/qnob_command_line_parser.h"
+    "src/platform/win/win_shortcut_key_table.h"
 )
 
 set(tests
