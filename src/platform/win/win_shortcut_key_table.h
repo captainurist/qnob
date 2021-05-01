@@ -14,6 +14,11 @@ namespace Qt {
     constexpr Qt::Key Key_unimplemented = static_cast<Qt::Key>(Qt::Key_unknown - 1);
 }
 
+// TODO: this actually doesn't work. It will blow up on Norwegian keyboard, where you don't have separate '=' key.
+// A better way to do it would be:
+// * Get default locale (but prefer English over everything else), call MapVirtualKeyEx for all keys.
+// * ...PROFIT?
+
 /**
  * VK_* key mapping table, was derived from qwindowskeymapper.cpp.
  *
