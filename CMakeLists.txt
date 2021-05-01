@@ -82,8 +82,6 @@ set(common_srcs
     "src/core/sound/sound.h"
     "src/core/sound/sound_factory.cpp"
     "src/core/sound/sound_factory.h"
-    
-    
     "src/core/tray_event/tray_event.h"
     "src/core/tray_event/tray_event.cpp"
     "src/core/tray_event/tray_event_factory.h"
@@ -218,7 +216,8 @@ set(qnob_srcs
 set(test_srcs
     "src/util/exception_ut.cpp"
     "src/lib/keys/key_combination_ut.cpp"
- "src/lib/test/print_functions.h")
+    "src/lib/test/print_functions.h"
+)
 
 
 #
