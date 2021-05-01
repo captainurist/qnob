@@ -1,44 +1,53 @@
 #include "key_combination.h"
 
-#include <QtGui/QKeySequence>
+#include <unordered_map>
 
-#include <lib/serialization/enum_serialization.h>
+#include <QtCore/QString>
 
-QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Key, ({
-    {Qt::Key_Mouse1, "mouse1"}
-}))
+#include <util/map_access.h>
+#include <util/bad_cast_exception.h>
 
-class KeyNameMap {
+#include "key_table.h"
+
+class KeyNameMapper {
 public:
+    KeyNameMapper() {
+        for (const auto& [key, name] : KeyMapping) {
+            if (!m_nameByKey.contains(key))
+                m_nameByKey[key] = QLatin1String(name);
 
-private:
-    void initializeDefaults() {
-        Qt::Key
+            m_keyByName[QString::fromLatin1(name).toLower()] = key;
+        }
+    }
+
+    QString name(QKeyCombination key) const {
+        return value_or(m_nameByKey, key, QString());
+    }
+
+    QKeyCombination key(QStringView name) const {
+        return value_or(m_keyByName, name.toString().toLower(), Qt::Key_unknown);
     }
 
 private:
-    std::unordered_map<Qt::Key, QString> m_nameByKey;
-    std::unordered_map<QString, Qt::Key> m_keyByName;
+    std::unordered_map<QKeyCombination, QString> m_nameByKey;
+    std::unordered_map<QString, QKeyCombination> m_keyByName;
 };
 
-static bool isMouseKey(Qt::Key key) {
-    switch (key) {
-    case Qt::Key_Mouse1:
-    case Qt::Key_Mouse2:
-    case Qt::Key_Mouse3:
-    case Qt::Key_WheelUp:
-    case Qt::Key_WheelDown:
-        return true;
-    default:
-        return false;
-    }
-}
+Q_GLOBAL_STATIC(KeyNameMapper, g_keyNameMapper)
 
 void serialize(const QKeyCombination& value, QString* target) {
+    QKeyCombination nakedKey(value.keyboardModifiers() & Qt::KeypadModifier, value.key());
+    QString result = g_keyNameMapper->name(nakedKey);
+    if (result.isEmpty())
+        qthrow BadCastException(BadCastException::tr("Couldn't serialize key combination '0x%1'").arg(value.toCombined(), 8, 16, QLatin1Char('0')));
 
 
+
+    *target = result;
 }
 
 void deserialize(QStringView string, QKeyCombination* target) {
-
+    QKeyCombination result = g_keyNameMapper->key(string);
+    if (result == Qt::Key_unknown)
+        qthrow BadCastException(BadCastException::tr("Invalid key combination '%1'").arg(string));
 }
