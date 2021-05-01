@@ -16,7 +16,7 @@ TEST(KeyCombination, TestSerialization) {
     EXPECT_EQ(lit("Ctrl+Mouse3"), serialized(Qt::Key_Mouse3 | Qt::ControlModifier));
     EXPECT_EQ(lit("Alt+MouseWheelUp"), serialized(Qt::Key_WheelUp | Qt::AltModifier));
     EXPECT_EQ(lit("Shift+MouseWheelDown"), serialized(Qt::Key_WheelDown | Qt::ShiftModifier));
-    EXPECT_EQ(lit("Ctrl+MouseWheelLeft"), serialized(Qt::Key_WheelLeft | Qt::ShiftModifier));
+    EXPECT_EQ(lit("Ctrl+MouseWheelLeft"), serialized(Qt::Key_WheelLeft | Qt::ControlModifier));
     EXPECT_EQ(lit("MouseWheelRight"), serialized(Qt::Key_WheelRight));
 }
 
