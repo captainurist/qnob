@@ -4,7 +4,7 @@
 
 QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH_BY_VALUE(Qt::Alignment)
 
-QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Alignment, ({
+QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Alignment, Qt::CaseSensitive, {
     {Qt::AlignTop | Qt::AlignLeft, "top_left"},
     {Qt::AlignTop | Qt::AlignHCenter, "top"},
     {Qt::AlignTop | Qt::AlignRight, "top_right"},
@@ -14,4 +14,4 @@ QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Alignment, ({
     {Qt::AlignBottom | Qt::AlignLeft, "bottom_left"},
     {Qt::AlignBottom | Qt::AlignHCenter, "bottom"},
     {Qt::AlignBottom | Qt::AlignRight, "bottom_right"}
-}))
+})

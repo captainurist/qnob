@@ -2,7 +2,7 @@
 
 #include <lib/serialization/enum_serialization.h>
 
-QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(MouseKey, ({
-    {Key_WheelUp, "mwheelup"},
-    {Key_WheelDown, "mwheeldown"}
-}))
+QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(MouseKey, Qt::CaseInsensitive, {
+    { Key_WheelUp, "mwheelup" },
+    { Key_WheelDown, "mwheeldown" }
+})
