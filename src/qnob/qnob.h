@@ -2,13 +2,15 @@
 
 #include <memory>
 
+#include <QtCore/QCoreApplication>
+
 class QFile;
-class QApplication;
 class BufferLogger;
 class FileLogger;
 class QnobArgs;
 
 class Qnob {
+    Q_DECLARE_TR_FUNCTIONS(Qnob)
 public:
     Qnob();
     ~Qnob();
@@ -21,6 +23,8 @@ private:
     int runVersion();
     int runList(const QnobArgs& args);
     int runService(const QnobArgs& args);
+
+    void maybePressAnyKey();
 
 private:
     std::unique_ptr<QFile> m_logFile;

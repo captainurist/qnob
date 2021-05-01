@@ -24,14 +24,6 @@
 #include "default_entity_pool.h"
 #include "default_entity_factory_pool.h"
 
-static void maybePressAnyKey() {
-    if (platform()->execute(WinIsConsoleOwned).toBool()) {
-        QTextStream stream(stdout);
-        stream << lit("[press any key to close this window]") << Qt::endl;
-        fgetc(stdin);
-    }
-}
-
 Qnob::Qnob() {
     m_bufferLogger.reset(new BufferLogger());
     m_logFile.reset(new QFile());
@@ -66,7 +58,7 @@ int Qnob::run(int argc, char** argv) {
         platform()->execute(WinEnsureConsole);
         QTextStream stream(stderr);
         stream << e.message() << Qt::endl;
-        stream << lit("Try 'qnob --help' for more information."); // TODO: tr
+        stream << tr("Try 'qnob --help' for more information.");
         maybePressAnyKey();
         return 1;
     } catch (const Exception& e) {
@@ -96,7 +88,7 @@ int Qnob::run(const QnobArgs& args) {
 int Qnob::runHelp() {
     QTextStream stream(stdout);
 
-    stream << lit("Usage: qnob [options]") << Qt::endl;  // TODO: tr
+    stream << tr("Usage: qnob [options]") << Qt::endl;  // TODO: tr
     stream << Qt::endl;
 
     size_t consoleWidth = 80;
@@ -116,7 +108,7 @@ int Qnob::runHelp() {
 int Qnob::runVersion() {
     QTextStream stream(stdout);
 
-    stream << lit("qnob v%1").arg(lit(QNOB_VERSION_STRING)) << Qt::endl;
+    stream << tr("qnob v%1").arg(lit(QNOB_VERSION_STRING)) << Qt::endl;
 
     maybePressAnyKey();
     return 0;
@@ -130,6 +122,7 @@ int Qnob::runList(const QnobArgs& args) {
         std::ranges::sort(entities, std::less<>(), &Entity::id);
 
         QTextStream stream(stdout);
+        stream << tr("Built-in entities:") << Qt::endl;
         for (Entity* entity : entities)
             stream << entity->id() << Qt::endl; // TODO: descriptions.
     }
@@ -166,4 +159,12 @@ int Qnob::runService(const QnobArgs& args) {
     builder.addEntities(basePath, config.records);
 
     return m_application->exec();
+}
+
+void Qnob::maybePressAnyKey() {
+    if (platform()->execute(WinIsConsoleOwned).toBool()) {
+        QTextStream stream(stdout);
+        stream << tr("[press any key to close this window]") << Qt::endl;
+        fgetc(stdin);
+    }
 }
