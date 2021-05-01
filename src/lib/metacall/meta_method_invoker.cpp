@@ -9,7 +9,7 @@ void MetaMethodInvoker::prepareInvocation(const QMetaMethod& method, QVariantLis
 
     int parameterCount = method.parameterCount();
     if (parameterCount != args->size()) {
-        qthrow MetaCallException(
+        xthrow MetaCallException(
             method.enclosingMetaObject(),
             method.name(),
             MetaCallException::tr("Argument count mismatch (%1 != %2).").arg(parameterCount).arg(args->size())
@@ -17,14 +17,14 @@ void MetaMethodInvoker::prepareInvocation(const QMetaMethod& method, QVariantLis
     }
 
     if (parameterCount >= ctx->size())
-        qthrow MetaCallException(method.enclosingMetaObject(), method.name(), MetaCallException::tr("Method has too many arguments."));
+        xthrow MetaCallException(method.enclosingMetaObject(), method.name(), MetaCallException::tr("Method has too many arguments."));
 
     for (int i = 0; i < parameterCount; i++) {
         int expectedTypeId = method.parameterType(i);
 
         QVariant& arg = (*args)[i];
         if (expectedTypeId != arg.typeId() && !arg.convert(QMetaType(expectedTypeId))) {
-            qthrow MetaCallException(
+            xthrow MetaCallException(
                 method.enclosingMetaObject(),
                 method.name(),
                 MetaCallException::tr("Type mismatch in argument #%1: expected %2, got %3.")

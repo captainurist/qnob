@@ -115,10 +115,10 @@ private:
     std::bitset<valueCount> m_storage;
 };
 
-#define QB_DECLARE_BITSET_FLAGS(FLAGS, ENUM, COUNT)                                                                     \
+#define X_DECLARE_BITSET_FLAGS(FLAGS, ENUM, COUNT)                                                                     \
 using FLAGS = BitsetFlags<ENUM, COUNT>;
 
-#define QB_DELARE_OPERATORS_FOR_BITSET_FLAGS(FLAGS)                                                                     \
+#define X_DELARE_OPERATORS_FOR_BITSET_FLAGS(FLAGS)                                                                     \
 inline FLAGS operator|(FLAGS::enum_type l, FLAGS::enum_type r) noexcept {                                               \
     return FLAGS(l) |= r;                                                                                               \
 }

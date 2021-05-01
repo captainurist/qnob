@@ -4,4 +4,4 @@
 
 #include <lib/serialization/serialization_fwd.h>
 
-QB_DECLARE_SERIALIZATION_FUNCTIONS(Qt::Alignment)
+X_DECLARE_SERIALIZATION_FUNCTIONS(Qt::Alignment)

@@ -7,8 +7,8 @@ enum PlatformMonitorProperty {
     ContrastMonitorProperty,
     MonitorPropertyCount
 };
-QB_DECLARE_BITSET_FLAGS(PlatformMonitorProperties, PlatformMonitorProperty, MonitorPropertyCount);
-QB_DELARE_OPERATORS_FOR_BITSET_FLAGS(PlatformMonitorProperties)
+X_DECLARE_BITSET_FLAGS(PlatformMonitorProperties, PlatformMonitorProperty, MonitorPropertyCount);
+X_DELARE_OPERATORS_FOR_BITSET_FLAGS(PlatformMonitorProperties)
 
 enum PlatformStandardControl {
     AudioTrayIcon,

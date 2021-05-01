@@ -117,7 +117,7 @@ EnumSerializer<T>* serializer();
  *
  * Usage example:
  * ```
- * QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Key, Qt::CaseInsensitive, {
+ * X_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Key, Qt::CaseInsensitive, {
  *     { Qt::Key_ScrollLock, "Scroll Lock" },
  *     { Qt::Key_ScrollLock, "ScrollLock" },    // Alternative string, used only for deserialization.
  *     { Qt::Key_ScrollLock, "SCRLK" },         // Can have several alternative strings.
@@ -125,7 +125,7 @@ EnumSerializer<T>* serializer();
  * })
  * ```
  */
-#define QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(TYPE, CASE_SENSITIVITY, ... /* INITIALIZER */)                           \
+#define X_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(TYPE, CASE_SENSITIVITY, ... /* INITIALIZER */)                           \
 Q_GLOBAL_STATIC_WITH_ARGS(EnumSerializer<TYPE>, g_initializer_ ## __LINE__, (CASE_SENSITIVITY, __VA_ARGS__))            \
                                                                                                                         \
 void serialize(const TYPE& value, QString* target) {                                                                    \

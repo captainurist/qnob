@@ -33,7 +33,7 @@ static QVariant convertTomlNode(const toml::node& node) {
     case toml::node_type::table:
         return variantFromRValue(convertTomlTable(*node.as_table()));
     default:
-        qthrow ConfigException(location(node), ConfigException::tr("Expected a value."));
+        xthrow ConfigException(location(node), ConfigException::tr("Expected a value."));
     }
 }
 
@@ -47,10 +47,10 @@ static VariantMap convertTomlTable(const toml::table& table) {
 QnobConfig QnobConfig::loadFromTomlFile(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        qthrow Exception(ConfigException::tr("Could not open config file '%1'.").arg(path));
+        xthrow Exception(ConfigException::tr("Could not open config file '%1'.").arg(path));
 
     if (file.size() > 1024 * 1024 * 1024)
-        qthrow Exception(ConfigException::tr("Config file '%1' is too large (exceeds 1Mb).").arg(path));
+        xthrow Exception(ConfigException::tr("Config file '%1' is too large (exceeds 1Mb).").arg(path));
 
     QByteArray bytes = file.readAll();
 
@@ -59,7 +59,7 @@ QnobConfig QnobConfig::loadFromTomlFile(const QString& path) {
         table = toml::parse(std::string_view(bytes.data(), bytes.size()));
     } catch (const toml::parse_error& e) {
         std::string_view description = e.description();
-        qthrow ConfigException(
+        xthrow ConfigException(
             { e.source().begin.line, e.source().begin.column },
             ConfigException::tr("Toml parse error: %1.").arg(QString::fromLatin1(description.data(), description.size()))
         );

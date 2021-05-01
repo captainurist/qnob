@@ -17,7 +17,7 @@ enum StandardList {
     ListCount,
     NoList = -1,
 };
-QB_DECLARE_SERIALIZATION_FUNCTIONS(StandardList)
+X_DECLARE_SERIALIZATION_FUNCTIONS(StandardList)
 
 struct QnobArgs {
     RunMode mode = ServiceMode;

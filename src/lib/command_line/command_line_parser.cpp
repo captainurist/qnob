@@ -99,14 +99,14 @@ void CommandLineParser::parse(const QStringList& commandLine) {
     }
 
     if (!parser.parse(commandLine))
-        qthrow CommandLineException(parser.errorText());
+        xthrow CommandLineException(parser.errorText());
 
     for (const CommandLineSection& section : m_sections) {
         for (const CommandLineOption& option : section.options) {
             QString name = optionName(option);
 
             if (option.required && !parser.isSet(name))
-                qthrow CommandLineException(CommandLineException::tr("Required option '%1' is not provided.").arg(name));
+                xthrow CommandLineException(CommandLineException::tr("Required option '%1' is not provided.").arg(name));
 
             QStringList values = parser.values(name);
             if (values.isEmpty() && !option.defaultValue.isEmpty())
@@ -118,7 +118,7 @@ void CommandLineParser::parse(const QStringList& commandLine) {
                 try {
                     option.handler(value);
                 } catch (...) {
-                    qthrow CommandLineException(CommandLineException::tr("Could not parse value for option '%1'.").arg(name));
+                    xthrow CommandLineException(CommandLineException::tr("Could not parse value for option '%1'.").arg(name));
                 }
             }
         }

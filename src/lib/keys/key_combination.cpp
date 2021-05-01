@@ -11,7 +11,7 @@
 #include "mouse_keys.h"
 
 namespace detail {
-    QB_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Key, Qt::CaseInsensitive, {
+    X_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Key, Qt::CaseInsensitive, {
         { Qt::Key_Mouse1, "Mouse1" },
         { Qt::Key_Mouse2, "Mouse2" },
         { Qt::Key_Mouse3, "Mouse3" },

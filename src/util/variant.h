@@ -32,7 +32,7 @@ Q_DECLARE_BUILTIN_METATYPE("VariantHash", MetaType::VariantHash, VariantHash)
 
 /* Also now that we've decided to use STL containers we need to make `QVariant` use its internal storage for them. */
 
-#define QB_DECLARE_MOVABLE_CONTAINER(CONTAINER)                                                                         \
+#define X_DECLARE_MOVABLE_CONTAINER(CONTAINER)                                                                         \
 template<class... T>                                                                                                    \
 class QTypeInfo<CONTAINER<T...>> {                                                                                      \
 public:                                                                                                                 \
@@ -44,12 +44,12 @@ public:                                                                         
     };                                                                                                                  \
 };
 
-QB_DECLARE_MOVABLE_CONTAINER(std::vector)
-QB_DECLARE_MOVABLE_CONTAINER(std::map)
-QB_DECLARE_MOVABLE_CONTAINER(std::set)
-QB_DECLARE_MOVABLE_CONTAINER(std::unordered_map)
-QB_DECLARE_MOVABLE_CONTAINER(std::unordered_set)
-#undef QB_DECLARE_MOVABLE_CONTAINER
+X_DECLARE_MOVABLE_CONTAINER(std::vector)
+X_DECLARE_MOVABLE_CONTAINER(std::map)
+X_DECLARE_MOVABLE_CONTAINER(std::set)
+X_DECLARE_MOVABLE_CONTAINER(std::unordered_map)
+X_DECLARE_MOVABLE_CONTAINER(std::unordered_set)
+#undef X_DECLARE_MOVABLE_CONTAINER
 
 
 // TODO: push upstream?

@@ -22,7 +22,7 @@ Entity* TrayEventFactory::createEntity(const EntityCreationContext& ctx) {
     QVariantList args = ctx.requireOr<QVariantList>(lit("args"), QVariantList());
 
     if (key.key() != Qt::Key_WheelUp && key != Qt::Key_WheelDown) {
-        qthrow EntityCreationException(
+        xthrow EntityCreationException(
             ctx.id(),
             EntityCreationException::tr("Only '%1' and '%2' are supported as triggers for '%3'.")
                 .arg(serialized(Qt::Key_WheelUp))

@@ -99,4 +99,4 @@ private:
 /**
  * Same as `throw`, but adds source location information to the thrown `Exception`.
  */
-#define qthrow throw __LOCATION__ +
+#define xthrow throw __LOCATION__ +

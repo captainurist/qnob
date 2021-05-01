@@ -52,12 +52,12 @@ void EntityPoolBuilder::initEntity(const QString& id) {
 
     QVariant typeVariant = value_or(config, lit("type"), QVariant());
     if (typeVariant.isNull())
-        qthrow EntityCreationException(id, EntityCreationException::tr("Type not specified."));
+        xthrow EntityCreationException(id, EntityCreationException::tr("Type not specified."));
 
     QString type = typeVariant.toString();
     EntityFactory* factory = m_factoryPool->factory(type);
     if (!factory)
-        qthrow EntityCreationException(id, EntityCreationException::tr("Unknown entity type '%1'.").arg(type));
+        xthrow EntityCreationException(id, EntityCreationException::tr("Unknown entity type '%1'.").arg(type));
 
     m_idStack.push_back(id);
     m_idsInFlight.insert(id);
@@ -73,14 +73,14 @@ void EntityPoolBuilder::initEntity(const QString& id) {
         throw;
     } catch (...) {
         /* Wrap unknown exceptions in an EntityCreationException. */
-        qthrow EntityCreationException(id, EntityCreationException::tr("Factory function failed."));
+        xthrow EntityCreationException(id, EntityCreationException::tr("Factory function failed."));
     }
     m_entities[id] = std::move(entity);
 }
 
 Entity* EntityPoolBuilder::resolveEntity(const QString& id) {
     if (m_idsInFlight.contains(id))
-        qthrow EntityCreationException(m_idStack.back(), EntityCreationException::tr("Cyclical dependency detected."));
+        xthrow EntityCreationException(m_idStack.back(), EntityCreationException::tr("Cyclical dependency detected."));
 
     if (Entity* result = m_entityPool->entity(id))
         return result;
@@ -89,7 +89,7 @@ Entity* EntityPoolBuilder::resolveEntity(const QString& id) {
         return m_entities[id].get();
 
     if (value_or(m_configs, id, QVariant()).typeId() != MetaType::VariantMap) {
-        qthrow EntityCreationException(
+        xthrow EntityCreationException(
             m_idStack.back(),
             EntityCreationException::tr("Entity refers to an unknown entity '%1'.").arg(id)
         );

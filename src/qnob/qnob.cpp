@@ -165,7 +165,7 @@ int Qnob::runService(const QnobArgs& args) {
     m_bufferLogger->flush(m_fileLogger.get());
     Logger::installGlobalLogger(m_fileLogger.get());
     if (!logFileOk)
-        qthrow Exception(Exception::tr("Could not open log file '%1'.").arg(args.logPath));
+        xthrow Exception(Exception::tr("Could not open log file '%1'.").arg(args.logPath));
 
     /* Read config & populate entity pool. */
     QnobConfig config = QnobConfig::loadFromTomlFile(args.configPath);

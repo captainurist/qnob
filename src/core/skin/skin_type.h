@@ -7,4 +7,4 @@ enum SkinType {
     NumericSkinType
 };
 
-QB_DECLARE_SERIALIZATION_FUNCTIONS(SkinType)
+X_DECLARE_SERIALIZATION_FUNCTIONS(SkinType)

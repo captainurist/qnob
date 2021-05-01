@@ -8,7 +8,7 @@ void BoundMetaCall::bind(QObject* target, QByteArray method, const QVariantList&
 
     m_method = MetaObjectExtension::forObject(target)->methodByName(method);
     if (!m_method.isValid())
-        qthrow MetaCallException(target->metaObject(), method, MetaCallException::tr("Method doesn't exist.")); // TODO: better message text!
+        xthrow MetaCallException(target->metaObject(), method, MetaCallException::tr("Method doesn't exist.")); // TODO: better message text!
 
     m_args = args;
     MetaMethodInvoker::prepareInvocation(m_method, &m_args, &m_ctx);

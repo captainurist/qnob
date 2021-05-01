@@ -24,7 +24,7 @@ bool EntityCreationContext::has(const QString& key) const {
 QVariant EntityCreationContext::require(const QString& key) const {
     QVariant result = requireOr(key, QVariant());
     if (result.isNull())
-        qthrow EntityCreationException(id(), EntityCreationException::tr("Required parameter '%1' is not defined.").arg(key));
+        xthrow EntityCreationException(id(), EntityCreationException::tr("Required parameter '%1' is not defined.").arg(key));
     return result;
 }
 
@@ -33,7 +33,7 @@ QVariant EntityCreationContext::requireOr(const QString& key, const QVariant& de
 }
 
 void EntityCreationContext::throwCreationException(const QString& key) const {
-    qthrow EntityCreationException(
+    xthrow EntityCreationException(
         id(),
         EntityCreationException::tr("Parameter '%1' has invalid value.").arg(key)
     );

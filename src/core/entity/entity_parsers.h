@@ -60,7 +60,7 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, De
     } else {
         *to = dynamic_cast<DerivedEntity*>(entity);
         if (!*to)
-            qthrow BadCastException(typeid(*entity), typeid(DerivedEntity));
+            xthrow BadCastException(typeid(*entity), typeid(DerivedEntity));
     }
 }
 
