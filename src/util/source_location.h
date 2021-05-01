@@ -1,17 +1,6 @@
 #pragma once
 
-#include <string_view>
-
-/**
- * \param fileName                      Filename as returned by `__FILE__` macro from inside the source root.
- * \returns                             Source root-relative file path.
- */
-constexpr const char* rootRelativeFilePath(const char* fileName) {
-    const char absoluteCurrentFilePath[] = __FILE__;
-    const char relativeCurrentFilePath[] = "src/util/source_location.h";
-    return fileName + sizeof(absoluteCurrentFilePath) - sizeof(relativeCurrentFilePath);
-}
-
+#include "source_root.h"
 
 #ifndef _MSC_VER
 #include <source_location>
@@ -19,9 +8,6 @@ constexpr const char* rootRelativeFilePath(const char* fileName) {
 #else // _MSC_VER
 
 #include <cstdint>
-
-namespace detail {
-}
 
 namespace std {
 
@@ -64,5 +50,5 @@ private:
 
 }
 
-#define __LOCATION__ std::source_location(rootRelativeFilePath(__FILE__), __FUNCTION__, __LINE__, 0)
+#define __LOCATION__ std::source_location(sourceRootRelativeFilePath(__FILE__), __FUNCTION__, __LINE__, 0)
 #endif // _MSC_VER

@@ -197,6 +197,7 @@ set(common_libs
     Qt::Core
     Qt::Gui
     Qt::Widgets
+    Qt::Network
     dxva2
     ole32
     user32
