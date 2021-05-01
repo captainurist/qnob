@@ -11,18 +11,17 @@
 * **DONE**. Option to log to console always (even in release).
 * **DONE**. Proper logging in release mode (into a log file).
 * **DONE**. Fix icons & OSD looking like shit on hidpi displays.
-* Support [key names from Quake](https://github.com/id-Software/Quake/blob/master/WinQuake/keys.c).
+* **DONE**. --list option to list built-in entities. Or rather `--list entities`.
+* **DONE**. Some option to list bindable keys, `--list keys`?
+* HEOS controls. Input, volume.
 * Duck typing in factories (through qt metacalls).
 * Lua script entity, with access to globals.
 * Generic knob with acceleration (like in win10) and finer details at 0.
 * Lua knob for monitor brightness that also changes contrast.
 * Utility shafts for (all) external monitors & built-in monitor.
 * Multi-shaft OSD for the lua knob.
-* --list option to list built-in entities. Or rather `--list entities`.
-* Some option to list bindable keys, `--list keys`?
 * Similar option to list all monitors. `--list monitors`?
 * Description for built-in entities. `--list verbose-entities`?
-* HEOS controls. Input, volume.
 
 0.2:
 * GUI
