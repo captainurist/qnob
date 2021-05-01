@@ -1,7 +1,7 @@
 #include "hotkey_factory.h"
 
 #include <lib/metacall/bound_meta_call.h>
-#include <lib/serializable_types/key_combination.h>
+#include <lib/keys/key_combination.h>
 
 #include "hotkey.h"
 

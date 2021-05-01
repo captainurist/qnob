@@ -5,7 +5,6 @@
 
 #include <lib/metacall/bound_meta_call.h>
 
-#include "mouse_key.h"
 #include "tray_event.h"
 
 TrayEventFactory::TrayEventFactory() :
@@ -13,7 +12,7 @@ TrayEventFactory::TrayEventFactory() :
 {}
 
 Entity* TrayEventFactory::createEntity(const EntityCreationContext& ctx) {
-    MouseKey key = ctx.require<MouseKey>(lit("trigger"));
+    QKeyCombination key = ctx.require<QKeyCombination>(lit("trigger"));
     Entity* target = ctx.require<Entity*>(lit("target"));
     Entity* source = ctx.require<Entity*>(lit("source"));
     QString action = ctx.require<QString>(lit("action"));

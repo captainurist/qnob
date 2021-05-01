@@ -44,29 +44,59 @@ public:
         }
     }
 
-    void deserialize(QStringView string, T* target) const {
-        if (m_caseSensitivity == Qt::CaseInsensitive) {
-            deserializeInternal(string.toString().toLower(), target);
-        } else {
-            deserializeInternal(string, target);
-        }
+    void serialize(T value, QString* target) const {
+        serializeInternal<true>(value, target);
     }
 
-    void serialize(T value, QString* target) const {
-        auto pos = m_stringByEnum.find(value);
-        if (pos == m_stringByEnum.end())
-            throwSerializationException(typeid(value));
-        *target += pos->second;
+    bool try_serialize(T value, QString* target) const {
+        return serializeInternal<false>(value, target);
+    }
+
+    void deserialize(QStringView string, T* target) const {
+        deserializeInternal<true>(string, target);
+    }
+
+    bool try_deserialize(QStringView string, T* target) const {
+        return deserializeInternal<false>(string, target);
     }
 
 private:
-    void deserializeInternal(QStringView string, T* target) const {
-        auto pos = m_enumByString.find(string);
-        if (pos == m_enumByString.end())
-            throwDeserializationException(string, typeid(T));
-        *target = pos->second;
+    template<bool throwing>
+    bool serializeInternal(T value, QString* target) const {
+        auto pos = m_stringByEnum.find(value);
+        if (pos == m_stringByEnum.end()) {
+            if (throwing) {
+                throwSerializationException(typeid(value));
+            } else {
+                return false;
+            }
+        }
+        *target += pos->second;
+        return true;
     }
 
+    template<bool throwing>
+    bool deserializeInternal(QStringView string, T* target) const {
+        if (m_caseSensitivity == Qt::CaseInsensitive) {
+            return deserializeInternal2<throwing>(string.toString().toLower(), target);
+        } else {
+            return deserializeInternal2<throwing>(string, target);
+        }
+    }
+
+    template<bool throwing>
+    bool deserializeInternal2(QStringView string, T* target) const {
+        auto pos = m_enumByString.find(string);
+        if (pos == m_enumByString.end()) {
+            if (throwing) {
+                throwDeserializationException(string, typeid(T));
+            } else {
+                return false;
+            }
+        }
+        *target = pos->second;
+        return true;
+    }
 
 private:
     Qt::CaseSensitivity m_caseSensitivity;
@@ -75,6 +105,12 @@ private:
     std::unordered_map<QStringView, T> m_enumByString;
 };
 
+
+/**
+ * \returns                             Enum serializer for class `T`.
+ */
+template<class T>
+EnumSerializer<T>* serializer();
 
 /**
  * This macro generates enum serialization functions.
@@ -98,4 +134,13 @@ void serialize(const TYPE& value, QString* target) {                            
                                                                                                                         \
 void deserialize(QStringView string, TYPE* target) {                                                                    \
     g_initializer_ ## __LINE__->deserialize(string, target);                                                            \
+}                                                                                                                       \
+                                                                                                                        \
+bool try_serialize(const TYPE& value, QString* target) {                                                                \
+    return g_initializer_ ## __LINE__->try_serialize(value, target);                                                    \
+}                                                                                                                       \
+                                                                                                                        \
+bool try_deserialize(QStringView string, TYPE* target) {                                                                \
+    return g_initializer_ ## __LINE__->try_deserialize(string, target);                                                 \
 }
+

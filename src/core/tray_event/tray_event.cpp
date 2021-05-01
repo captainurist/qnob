@@ -25,11 +25,11 @@ QObject* TrayEvent::eventSource() const {
     return m_eventSource;
 }
 
-void TrayEvent::setKey(MouseKey key) {
+void TrayEvent::setKey(QKeyCombination key) {
     m_key = key;
 }
 
-MouseKey TrayEvent::key() const {
+QKeyCombination TrayEvent::key() const {
     return m_key;
 }
 
@@ -43,7 +43,7 @@ bool TrayEvent::eventFilter(QObject* /*watched*/, QEvent* event) {
 bool TrayEvent::wheelEvent(QWheelEvent* event) {
     int delta = event->angleDelta().y();
 
-    if ((delta > 0 && m_key == Key_WheelUp) || (delta < 0 && m_key == Key_WheelDown)) {
+    if ((delta > 0 && m_key.key() == Qt::Key_WheelUp) || (delta < 0 && m_key.key() == Qt::Key_WheelDown)) {
         emit triggered();
         return true;
     }

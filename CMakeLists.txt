@@ -29,7 +29,7 @@ function(init_target target)
 endfunction()
 
 
-set(src
+set(common_srcs
     "src/qnob/config_exception.h"
     "src/qnob/qnob_args.h"
     "src/qnob/qnob_config.cpp"
@@ -82,8 +82,8 @@ set(src
     "src/core/sound/sound.h"
     "src/core/sound/sound_factory.cpp"
     "src/core/sound/sound_factory.h"
-    "src/core/tray_event/mouse_key.h"
-    "src/core/tray_event/mouse_key.cpp"
+    
+    
     "src/core/tray_event/tray_event.h"
     "src/core/tray_event/tray_event.cpp"
     "src/core/tray_event/tray_event_factory.h"
@@ -121,7 +121,6 @@ set(src
     "src/lib/serialization/serialization_exceptions.cpp"
     "src/lib/serialization/serialization_exceptions.h"
     "src/lib/serialization/serialization_fwd.h"
-    "src/main.cpp"
     "src/platform/platform.h"
     "src/platform/platform_control.h"
     "src/platform/platform_initializer.cpp"
@@ -166,7 +165,6 @@ set(src
     "src/util/human_readable_name.h"
     "src/util/pod_pool.cpp"
     "src/util/pod_pool.h"
-    "qnob.qrc"
     "src/lib/command_line/command_line_option.h"
     "src/lib/command_line/command_line_section.h"
     "src/lib/command_line/command_line_option_builder.h"
@@ -192,27 +190,12 @@ set(src
     "src/qnob/default_entity_factory_pool.h"
     "src/qnob/qnob_command_line_parser.h"
     "src/platform/win/win_shortcut_key_table.h"
-    "src/lib/serializable_types/key_combination.h"
-    "src/lib/serializable_types/key_combination.cpp"
+    "src/lib/keys/key_combination.h"
+    "src/lib/keys/key_combination.cpp"
+    "src/lib/keys/mouse_keys.h"
 )
 
-set(tests
-    "src/util/exception_ut.cpp"
-)
-
-#
-# Set up qnob executable
-#
-add_executable(qnob ${src})
-init_target(qnob)
-set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true) # No console by default
-
-target_include_directories(qnob PRIVATE
-    3rdparty/tomlplusplus/include
-    src
-)
-
-target_link_libraries(qnob
+set(common_libs
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -221,6 +204,32 @@ target_link_libraries(qnob
     user32
     shcore
 )
+
+set(common_includes
+    3rdparty/tomlplusplus/include
+    src
+)
+
+set(qnob_srcs
+    "src/main.cpp"
+    "qnob.qrc"
+)
+
+set(test_srcs
+    "src/util/exception_ut.cpp"
+    "src/lib/keys/key_combination_ut.cpp"
+ "src/lib/test/print_functions.h")
+
+
+#
+# Set up qnob executable
+#
+add_executable(qnob ${common_srcs} ${qnob_srcs})
+init_target(qnob)
+target_include_directories(qnob PRIVATE ${common_includes})
+target_link_libraries(qnob ${common_libs})
+
+set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true) # No console by default
 
 
 #
@@ -231,18 +240,10 @@ add_subdirectory(3rdparty/googletest)
 init_target(gtest)
 init_target(gtest_main)
 
-add_executable(qnob_test ${tests})
+add_executable(qnob_test ${common_srcs} ${test_srcs})
 init_target(qnob_test)
-
-target_include_directories(qnob_test PRIVATE
-    3rdparty/googletest/googletest/include
-    src
-)
-
-target_link_libraries(qnob_test
-    gtest_main
-    Qt::Core
-)
+target_include_directories(qnob_test PRIVATE ${common_includes} 3rdparty/googletest/googletest/include)
+target_link_libraries(qnob_test ${common_libs} gtest_main)
 
 add_test(NAME qnob_test COMMAND qnob_test)
 

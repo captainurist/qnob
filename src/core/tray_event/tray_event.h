@@ -1,8 +1,7 @@
 #pragma once
 
 #include <core/entity/entity.h>
-
-#include "mouse_key.h"
+#include <lib/keys/key_combination.h>
 
 class QWheelEvent;
 class QSystemTrayIcon;
@@ -16,8 +15,8 @@ public:
     void setEventSource(QObject* eventSource);
     QObject* eventSource() const;
 
-    void setKey(MouseKey key);
-    MouseKey key() const;
+    void setKey(QKeyCombination key);
+    QKeyCombination key() const;
 
 signals:
     void triggered();
@@ -29,6 +28,6 @@ private:
     bool wheelEvent(QWheelEvent* event);
 
 private:
-    MouseKey m_key = Key_WheelUp;
+    QKeyCombination m_key;
     QObject* m_eventSource = nullptr;
 };

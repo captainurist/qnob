@@ -14,7 +14,7 @@
 #include <lib/logging/logger.h>
 #include <lib/logging/buffer_logger.h>
 #include <lib/logging/file_logger.h>
-#include <lib/serializable_types/key_combination.h>
+#include <lib/keys/key_combination.h>
 
 #include <platform/platform_initializer.h>
 #include <platform/platform.h>

@@ -4,4 +4,6 @@
 
 #include <lib/serialization/serialization_fwd.h>
 
+#include "mouse_keys.h"
+
 QB_DECLARE_SERIALIZATION_FUNCTIONS(QKeyCombination)
