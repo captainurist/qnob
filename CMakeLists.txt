@@ -192,6 +192,8 @@ set(src
     "src/qnob/default_entity_factory_pool.h"
     "src/qnob/qnob_command_line_parser.h"
     "src/platform/win/win_shortcut_key_table.h"
+    "src/lib/serializable_types/key_combination.h"
+    "src/lib/serializable_types/key_combination.cpp"
 )
 
 set(tests

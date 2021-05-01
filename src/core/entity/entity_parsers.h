@@ -11,7 +11,6 @@
 #include "entity_creation_context.h"
 
 class QPixmap;
-class QKeySequence;
 
 /**
  * Main extension point for all config parsing. Overloads are to be added whenever needed.
@@ -43,7 +42,6 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QS
 /* Some custom parsers. */
 
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QPixmap* to, nullptr_t);
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QKeySequence* to, nullptr_t);
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QPoint* to, nullptr_t);
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QSize* to, nullptr_t);
 

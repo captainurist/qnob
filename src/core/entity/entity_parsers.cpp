@@ -51,15 +51,6 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QP
         qthrow BadCastException(BadCastException::tr("'%1' is not a valid image file.").arg(path));
 }
 
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QKeySequence* to, nullptr_t) {
-    QString sequenceString;
-    parseConfigValue(ctx, from, &sequenceString, nullptr);
-
-    *to = QKeySequence::fromString(sequenceString);
-    if (to->isEmpty() || (*to)[0].key() == Qt::Key_unknown)
-        qthrow BadCastException(BadCastException::tr("'%1' is not a valid key sequence.").arg(sequenceString));
-}
-
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QPoint* to, nullptr_t) {
     std::vector<qint64> list;
     parseConfigValue(ctx, from, &list, nullptr);
