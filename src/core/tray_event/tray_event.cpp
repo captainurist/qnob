@@ -5,6 +5,24 @@
 
 #include <platform/platform.h>
 
+static QKeyCombination keyFromEvent(QWheelEvent* event) {
+    Qt::Key key;
+
+    if (event->angleDelta().y() > 0) {
+        key = Qt::Key_WheelUp;
+    } else if (event->angleDelta().y() < 0) {
+        key = Qt::Key_WheelDown;
+    } else if (event->angleDelta().x() > 0) {
+        key = Qt::Key_WheelRight;
+    } else if (event->angleDelta().x() < 0) {
+        key = Qt::Key_WheelLeft;
+    } else {
+        key = Qt::Key_unknown;
+    }
+
+    return key | event->modifiers();
+}
+
 TrayEvent::TrayEvent(const QString& id) :
     Entity(id)
 {}
@@ -34,19 +52,8 @@ QKeyCombination TrayEvent::key() const {
 }
 
 bool TrayEvent::eventFilter(QObject* /*watched*/, QEvent* event) {
-    if (event->type() == QEvent::Wheel)
-        return wheelEvent(static_cast<QWheelEvent*>(event));
-
-    return false;
-}
-
-bool TrayEvent::wheelEvent(QWheelEvent* event) {
-    int delta = event->angleDelta().y();
-
-    if ((delta > 0 && m_key.key() == Qt::Key_WheelUp) || (delta < 0 && m_key.key() == Qt::Key_WheelDown)) {
+    if (event->type() == QEvent::Wheel && m_key == keyFromEvent(static_cast<QWheelEvent*>(event)))
         emit triggered();
-        return true;
-    }
 
     return false;
 }

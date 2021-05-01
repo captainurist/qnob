@@ -5,9 +5,19 @@ type = "knob"
 step = 0.05
 target = "volume"
 
+[precise_volume_knob]
+type = "knob"
+step = 0.01
+target = "volume"
+
 [brightness_knob]
 type = "knob"
 step = 0.05
+target = "brightness"
+
+[precise_brightness_knob]
+type = "knob"
+step = 0.01
 target = "brightness"
 
 [volume_up_hotkey]
@@ -113,6 +123,20 @@ source = "volume_icon"
 target = "volume_knob"
 action = "decrease"
 
+[precise_volume_up_tray_event]
+type = "tray_event"
+trigger = "alt+mwheelup"
+source = "volume_icon"
+target = "precise_volume_knob"
+action = "increase"
+
+[precise_volume_down_tray_event]
+type = "tray_event"
+trigger = "alt+mwheeldown"
+source = "volume_icon"
+target = "precise_volume_knob"
+action = "decrease"
+
 [brightness_up_tray_event]
 type = "tray_event"
 trigger = "mwheelup"
@@ -125,6 +149,20 @@ type = "tray_event"
 trigger = "mwheeldown"
 source = "brightness_icon"
 target = "brightness_knob"
+action = "decrease"
+
+[precise_brightness_up_tray_event]
+type = "tray_event"
+trigger = "alt+mwheelup"
+source = "brightness_icon"
+target = "precise_brightness_knob"
+action = "increase"
+
+[precise_brightness_down_tray_event]
+type = "tray_event"
+trigger = "alt+mwheeldown"
+source = "brightness_icon"
+target = "precise_brightness_knob"
 action = "decrease"
 
 #[]

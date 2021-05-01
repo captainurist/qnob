@@ -21,15 +21,8 @@ Entity* TrayEventFactory::createEntity(const EntityCreationContext& ctx) {
     QString action = ctx.require<QString>(lit("action"));
     QVariantList args = ctx.requireOr<QVariantList>(lit("args"), QVariantList());
 
-    if (key.key() != Qt::Key_WheelUp && key != Qt::Key_WheelDown) {
-        xthrow EntityCreationException(
-            ctx.id(),
-            EntityCreationException::tr("Only '%1' and '%2' are supported as triggers for '%3'.")
-                .arg(serialized(Qt::Key_WheelUp))
-                .arg(serialized(Qt::Key_WheelDown))
-                .arg(id())
-        );
-    }
+    if (isMouseWheel(key.key()))
+        xthrow EntityCreationException(ctx.id(), EntityCreationException::tr("Only mouse wheel with optional modifiers is supported as trigger."));
 
     QObject* eventSource = nullptr;
     if (TrayIcon* trayIcon = dynamic_cast<TrayIcon*>(source))

@@ -11,15 +11,19 @@
 #include "mouse_keys.h"
 
 namespace detail {
-    X_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Key, Qt::CaseInsensitive, {
-        { Qt::Key_Mouse1, "Mouse1" },
-        { Qt::Key_Mouse2, "Mouse2" },
-        { Qt::Key_Mouse3, "Mouse3" },
-        { Qt::Key_WheelUp, "MouseWheelUp" },
-        { Qt::Key_WheelUp, "MWheelUp" },
-        { Qt::Key_WheelDown, "MouseWheelDown" },
-        { Qt::Key_WheelDown, "MWheelDown" }
-    })
+X_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Key, Qt::CaseInsensitive, {
+    { Qt::Key_Mouse1, "Mouse1" },
+    { Qt::Key_Mouse2, "Mouse2" },
+    { Qt::Key_Mouse3, "Mouse3" },
+    { Qt::Key_WheelUp, "MouseWheelUp" },
+    { Qt::Key_WheelUp, "MWheelUp" },
+    { Qt::Key_WheelDown, "MouseWheelDown" },
+    { Qt::Key_WheelDown, "MWheelDown" },
+    { Qt::Key_WheelLeft, "MouseWheelLeft" },
+    { Qt::Key_WheelLeft, "MWheelLeft" },
+    { Qt::Key_WheelRight, "MouseWheelRight" },
+    { Qt::Key_WheelRight, "MWheelRight" }
+})
 }
 
 void serialize(const QKeyCombination& src, QString* dst) {

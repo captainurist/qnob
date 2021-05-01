@@ -43,7 +43,7 @@ void OsdWindow::setSkin(Skin* skin) {
     resize(m_skin ? m_skin->size() : QSize());
 }
 
-void OsdWindow::paintEvent(QPaintEvent* /*paintEvent*/) {
+void OsdWindow::paintEvent(QPaintEvent* /*event*/) {
     if (!m_skin)
         return;
 

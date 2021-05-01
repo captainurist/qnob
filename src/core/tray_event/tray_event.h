@@ -3,9 +3,6 @@
 #include <core/entity/entity.h>
 #include <lib/keys/key_combination.h>
 
-class QWheelEvent;
-class QSystemTrayIcon;
-
 class TrayEvent : public Entity {
     Q_OBJECT
 public:
@@ -23,9 +20,6 @@ signals:
 
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event) override;
-
-private:
-    bool wheelEvent(QWheelEvent* event);
 
 private:
     QKeyCombination m_key;

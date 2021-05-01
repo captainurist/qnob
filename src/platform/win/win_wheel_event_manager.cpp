@@ -22,16 +22,28 @@ static QRect QRectFromRECT(const RECT& rect) {
 static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry, const RAWMOUSE& mouseInput, const POINT& cursorPos) {
     int delta = static_cast<SHORT>(mouseInput.usButtonData);
 
+    /* I should probably use GetAsyncKeyState here, but GetKeyState also works, and I have no idea why.
+     * I'm keeping GetKeyState. */
+    Qt::KeyboardModifiers mods;
+    if (GetKeyState(VK_SHIFT) < 0)
+        mods |= Qt::ShiftModifier;
+    if (GetKeyState(VK_CONTROL) < 0)
+        mods |= Qt::ControlModifier;
+    if (GetKeyState(VK_MENU) < 0)
+        mods |= Qt::AltModifier;
+    /* No reason to check for VK_LWIN / VK_RWIN here, you can't reasonably use it with mouse wheel over tray icons. */
+
     QWheelEvent event(
         QPoint(cursorPos.x, cursorPos.y) - globalGeometry.topLeft(),
         QPoint(cursorPos.x, cursorPos.y),
         QPoint(),
-        mouseInput.usButtonFlags == RI_MOUSE_WHEEL ? QPoint(0, delta) : QPoint(delta, 0),
+        (mouseInput.usButtonFlags & RI_MOUSE_WHEEL) ? QPoint(0, delta) : QPoint(delta, 0),
         Qt::NoButton,
         Qt::NoModifier,
         Qt::NoScrollPhase,
         /*inverted=*/ false,
         Qt::MouseEventSynthesizedByApplication);
+    event.setModifiers(mods);
 
     qApp->notify(target, &event);
 }
@@ -88,7 +100,7 @@ void WinWheelEventManager::processInput(MSG* message) {
         return; /* Should never happen. */
 
     const RAWMOUSE& mouseInput = input.data.mouse;
-    if (mouseInput.usButtonFlags != RI_MOUSE_WHEEL && mouseInput.usButtonFlags != RI_MOUSE_HWHEEL)
+    if (!(mouseInput.usButtonFlags & (RI_MOUSE_WHEEL | RI_MOUSE_HWHEEL)))
         return; /* We're not interested in clicks & mouse move events. */
 
     if (mouseInput.usButtonData == 0)

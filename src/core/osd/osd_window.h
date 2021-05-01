@@ -17,7 +17,7 @@ public:
     void setSkin(Skin* skin);
 
 protected:
-    virtual void paintEvent(QPaintEvent* paintEvent) override;
+    virtual void paintEvent(QPaintEvent* event) override;
 
 private:
     Skin* m_skin = nullptr;
