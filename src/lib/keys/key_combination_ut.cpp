@@ -7,8 +7,8 @@
 #include "mouse_keys.h"
 
 TEST(KeyCombination, TestSerialization) {
-    EXPECT_EQ(lit("X"), serialized(QKeyCombination(Qt::Key_X)));
-    EXPECT_EQ(lit("Mouse1"), serialized(QKeyCombination(Qt::Key_Mouse1)));
+    EXPECT_EQ(lit("X"), serialized(Qt::Key_X));
+    EXPECT_EQ(lit("Mouse1"), serialized(Qt::Key_Mouse1));
     EXPECT_EQ(lit("Ctrl+0"), serialized(Qt::Key_0 | Qt::ControlModifier));
     EXPECT_EQ(lit("Ctrl+X"), serialized(Qt::Key_X | Qt::ControlModifier));
     EXPECT_EQ(lit("Ctrl+Mouse1"), serialized(Qt::Key_Mouse1 | Qt::ControlModifier));
@@ -19,7 +19,7 @@ TEST(KeyCombination, TestSerialization) {
 }
 
 TEST(KeyCombination, TestDeserialization) {
-    EXPECT_EQ(deserialized<QKeyCombination>(lit("X")), Qt::Key_X);
+    EXPECT_EQ(deserialized<Qt::Key>(lit("X")), Qt::Key_X);
     EXPECT_EQ(deserialized<QKeyCombination>(lit("Ctrl+0")), Qt::Key_0 | Qt::ControlModifier);
     EXPECT_EQ(deserialized<QKeyCombination>(lit("Ctrl+X")), Qt::Key_X | Qt::ControlModifier);
     EXPECT_EQ(deserialized<QKeyCombination>(lit("Ctrl++")), Qt::Key_Plus | Qt::ControlModifier);

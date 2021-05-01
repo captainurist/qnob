@@ -1,9 +1,12 @@
 #include "tray_event_factory.h"
 
+#include <core/entity/entity_creation_exception.h>
 #include <core/tray_icon/tray_icon.h>
 #include <core/tray_icon/standard_tray_icon.h>
 
 #include <lib/metacall/bound_meta_call.h>
+#include <lib/serialization/serialization.h>
+#include <lib/keys/key_combination.h>
 
 #include "tray_event.h"
 
@@ -17,6 +20,16 @@ Entity* TrayEventFactory::createEntity(const EntityCreationContext& ctx) {
     Entity* source = ctx.require<Entity*>(lit("source"));
     QString action = ctx.require<QString>(lit("action"));
     QVariantList args = ctx.requireOr<QVariantList>(lit("args"), QVariantList());
+
+    if (key.key() != Qt::Key_WheelUp && key != Qt::Key_WheelDown) {
+        qthrow EntityCreationException(
+            ctx.id(),
+            EntityCreationException::tr("Only '%1' and '%2' are supported as triggers for '%3'.")
+                .arg(serialized(Qt::Key_WheelUp))
+                .arg(serialized(Qt::Key_WheelDown))
+                .arg(id())
+        );
+    }
 
     QObject* eventSource = nullptr;
     if (TrayIcon* trayIcon = dynamic_cast<TrayIcon*>(source))

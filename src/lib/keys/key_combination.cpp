@@ -69,3 +69,17 @@ void deserialize(QStringView src, QKeyCombination* dst) {
         *dst = keys[0];
     }
 }
+
+void serialize(const Qt::Key& src, QString* dst) {
+    serialize(QKeyCombination(src), dst);
+}
+
+void deserialize(QStringView src, Qt::Key* dst) {
+    QKeyCombination key;
+    deserialize(src, &key);
+
+    if (key.keyboardModifiers() != Qt::NoModifier)
+        throwDeserializationException(src, typeid(Qt::Key));
+
+    *dst = key.key();
+}
