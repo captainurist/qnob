@@ -64,9 +64,9 @@ private:
 Q_GLOBAL_STATIC_WITH_ARGS(EnumSerializer<TYPE>, g_initializer_ ## __LINE__, INITIALIZER)                                \
                                                                                                                         \
 void serialize(const TYPE& value, QString* target) {                                                                    \
-    g_initializer_ ## __LINE__()->serialize(value, target);                                                             \
+    g_initializer_ ## __LINE__->serialize(value, target);                                                               \
 }                                                                                                                       \
                                                                                                                         \
 void deserialize(QStringView string, TYPE* target) {                                                                    \
-    g_initializer_ ## __LINE__()->deserialize(string, target);                                                          \
+    g_initializer_ ## __LINE__->deserialize(string, target);                                                            \
 }
