@@ -4,7 +4,7 @@
 
 #include <QtCore/QVariant>
 
-#include <lib/serialization/serialization_traits.h>
+#include <lib/serialization/serialization_concepts.h>
 #include <util/bad_cast_exception.h>
 #include <util/variant.h>
 
@@ -66,10 +66,8 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, De
 
 /* Parser for deserializable objects. */
 
-template<class Deserializable>
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, Deserializable* to, nullptr_t)
-    requires is_deserializable_v<Deserializable>
-{
+template<class Deserializable> requires deserializable<Deserializable>
+void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, Deserializable* to, nullptr_t) {
     QString string;
     parseConfigValue(ctx, from, &string, nullptr);
     deserialize(string, to);
