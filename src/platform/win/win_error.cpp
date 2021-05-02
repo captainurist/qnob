@@ -34,7 +34,7 @@ static QByteArray extractFunctionName(const char* expr) {
         return result;
     result.resize(pos);
 
-    pos = result.indexOf('>');
+    pos = result.indexOf('>'); /* Handling object->Method syntax. */
     if (pos == -1)
         return result;
     result = result.mid(pos + 1);
