@@ -1,11 +1,10 @@
 #pragma once
 
 #include <exception>
+#include <source_location>
 
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
-
-#include "source_location.h"
 
 class QDebug;
 
@@ -99,4 +98,4 @@ private:
 /**
  * Same as `throw`, but adds source location information to the thrown `Exception`.
  */
-#define xthrow throw __LOCATION__ +
+#define xthrow throw std::source_location::current() +

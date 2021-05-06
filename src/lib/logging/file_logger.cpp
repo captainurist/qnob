@@ -5,7 +5,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QStringBuilder>
 
-#include <util/source_location.h>
+#include <util/source_root.h>
 
 FileLogger::FileLogger(QFile* file) :
     m_file(file)

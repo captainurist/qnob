@@ -3,9 +3,9 @@
 #include <wtypes.h>
 #include <winerror.h>
 
-#include <QtCore/QString>
+#include <source_location>
 
-#include <util/source_location.h>
+#include <QtCore/QString>
 
 QString GetLastErrorAsString();
 
@@ -34,4 +34,4 @@ Q_ALWAYS_INLINE HHOOK handleCall(HHOOK result, const char* expr, const std::sour
 
 }
 
-#define apicall(CALL) detail::handleCall(CALL, #CALL, __LOCATION__)
+#define apicall(CALL) detail::handleCall(CALL, #CALL, std::source_location::current())
