@@ -18,6 +18,7 @@ FileLogger::FileLogger(QFile* file) :
 }
 
 void FileLogger::log(QtMsgType type, const QMessageLogContext& context, const QString& message) {
+    // TODO: prefix before each \n
     QByteArray extendedMessage =
         m_prefixes[type] %
         QByteArrayLiteral(": ") %
