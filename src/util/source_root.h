@@ -10,7 +10,7 @@ namespace detail {
 /**
  * \returns                             Source root.
  */
-constexpr std::string_view sourceRoot() {
+consteval std::string_view sourceRoot() {
     return { detail::absoluteCurrentFilePath, sizeof(detail::absoluteCurrentFilePath) - sizeof(detail::relativeCurrentFilePath) };
 }
 
@@ -21,3 +21,4 @@ constexpr std::string_view sourceRoot() {
 constexpr const char* sourceRootRelativeFilePath(const char* fileName) {
     return fileName + sizeof(detail::absoluteCurrentFilePath) - sizeof(detail::relativeCurrentFilePath);
 }
+
