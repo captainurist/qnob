@@ -3,6 +3,8 @@
 #include <QtCore/QString>
 #include <QtCore/QMetaType>
 
+// TODO: rename human_readable.h, add docs!
+
 /**
  * Creates a human-readable name from a `type_info` object.
  */
