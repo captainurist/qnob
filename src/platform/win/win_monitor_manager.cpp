@@ -133,6 +133,7 @@ std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonito
                 /* Just generate a random deviceId so that all the machinery down the line still works.
                  * In theory, we should never get here. */
                 deviceId = lit("DISPLAY\\%1\\{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}").arg(QUuid::createUuid().toString());
+                // TODO: Warn here!
             }
 
             result.emplace_back(new WinMonitor(deviceId, physicalMonitors[monitorIndex]));
