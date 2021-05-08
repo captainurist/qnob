@@ -13,6 +13,8 @@
 * **DONE**. Fix icons & OSD looking like shit on hidpi displays.
 * **DONE**. --list option to list built-in entities. Or rather `--list entities`.
 * **DONE**. Some option to list bindable keys, `--list keys`?
+* Mouse wheel over tray icon events don't work with a touchpad.
+* Monitor controls don't work with a laptop monitor.
 * HEOS controls. Input, volume.
 * Duck typing in factories (through qt metacalls).
 * Lua script entity, with access to globals.
