@@ -59,6 +59,7 @@ PlatformShortcutNotifier* WinShortcutManager::createShortcutNotifier(const QKeyC
         return nullptr;
     }
 
+    // TODO: need a hotkey in log, and maybe even a desktop notification!
     if (!apicall(RegisterHotKey(reinterpret_cast<HWND>(m_eventWindow->winId()), m_nextId, nativeMods, nativeKey)))
         return nullptr;
 
