@@ -13,6 +13,7 @@
 * **DONE**. Fix icons & OSD looking like shit on hidpi displays.
 * **DONE**. --list option to list built-in entities. Or rather `--list entities`.
 * **DONE**. Some option to list bindable keys, `--list keys`?
+* Make qnob back into a console app. Add an option to hide console at startup. Whoever cares about console blinking can start qnob with CreateProcess(CREATE_NO_WINDOW).
 * Mouse wheel over tray icon events don't work with a touchpad.
 * Monitor controls don't work with a laptop monitor.
 * HEOS controls. Input, volume.
