@@ -217,6 +217,7 @@ set(qnob_srcs
 set(test_srcs
     "src/util/exception_ut.cpp"
     "src/lib/keys/key_combination_ut.cpp"
+    "src/lib/format/format_ut.cpp"
     "src/lib/test/print_functions.h"
 )
 
