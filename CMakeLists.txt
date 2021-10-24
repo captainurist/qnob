@@ -15,6 +15,7 @@ function(init_target target)
     if (MSVC)
         target_compile_options(${target} PRIVATE /FC) # Full path of source code file in diagnostics
         set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Link statically with CRT
+        target_compile_definitions(${target} PRIVATE NOMINMAX) # Please no min/max macros in Windows.h
     endif()
 
     target_compile_definitions(${target} PRIVATE
@@ -190,7 +191,10 @@ set(common_srcs
     "src/lib/keys/key_combination.h"
     "src/lib/keys/key_combination.cpp"
     "src/lib/keys/mouse_keys.h"
-)
+    "src/lib/format/format.h"
+    "src/lib/format/format_conversions.h"
+    "src/lib/format/formatters.h"
+     )
 
 set(common_libs
     Qt::Core
