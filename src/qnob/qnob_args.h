@@ -23,7 +23,7 @@ struct QnobArgs {
     RunMode mode = ServiceMode;
     QString configPath;
     QString logPath;
-    bool console = false;
+    bool hideConsole = false;
     StandardList list = NoList;
 };
 

@@ -11,7 +11,6 @@
 #include <QtCore/QVariant>
 
 #include "com.h"
-#include "win_crtio.h"
 #include "win_error.h"
 #include "win_volume_control.h"
 #include "win_monitor_manager.h"
@@ -66,11 +65,9 @@ QVariant WinPlatform::execute(PlatformFunction function, QVariant arg0) {
     case WinUpdateCurrentToolTip:
         updateCurrentToolTip();
         return QVariant();
-    case WinEnsureConsole:
-        ensureConsole();
+    case WinHideConsole:
+        hideConsole();
         return QVariant();
-    case WinIsConsoleOwned:
-        return m_ownsConsole;
     default:
         assert(false);
         return QVariant();
@@ -98,33 +95,9 @@ QSize WinPlatform::getConsoleSize() const {
     }
 }
 
-void WinPlatform::ensureConsole() {
-    if (GetConsoleWindow() != NULL)
-        return; /* Already have a console. */
-
-    if (!AttachConsole(ATTACH_PARENT_PROCESS)) {
-        /* Parent has no console, allocate a new one. */
-        if (!apicall(AllocConsole()))
-            return; /* Failed. Not much we can do at this point. */
-        m_ownsConsole = true;
-    }
-
-    /* Now redirect everything. */
-    int stdinFd = _open_osfhandle(reinterpret_cast<intptr_t>(GetStdHandle(STD_INPUT_HANDLE)), _O_RDONLY);
-    int stdoutFd = _open_osfhandle(reinterpret_cast<intptr_t>(GetStdHandle(STD_OUTPUT_HANDLE)), _O_WRONLY | _O_TEXT);
-    int stderrFd = _open_osfhandle(reinterpret_cast<intptr_t>(GetStdHandle(STD_ERROR_HANDLE)), _O_WRONLY | _O_TEXT);
-    bool stdinOk = _dup2(stdinFd, 0) == 0;
-    bool stdoutOk = _dup2(stdoutFd, 1) == 0;
-    bool stderrOk = _dup2(stderrFd, 2) == 0;
-    if (!stdinOk || !stdoutOk || !stderrOk)
-        qWarning() << "Could not redirect some of the standard streams";
-
-    /* Make stdin/stdout/stderr work. Meddling with CRT internals is OK as we're linking statically anyway. */
-    crtData(stdin)->_file = 0;
-    crtData(stdout)->_file = 1;
-    crtData(stderr)->_file = 2;
-
-    /* Note that there is no need to close the old fds. It's not like we'll be running this code twice. */
+void WinPlatform::hideConsole() const {
+    if (HWND console = GetConsoleWindow(); console != NULL)
+        ShowWindow(console, SW_HIDE);
 }
 
 Platform* createPlatform() {

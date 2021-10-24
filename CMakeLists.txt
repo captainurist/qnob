@@ -172,7 +172,6 @@ set(common_srcs
     "src/lib/serialization/builtin_serialization.h"
     "src/lib/serialization/builtin_serialization.cpp"
     "src/lib/command_line/command_line_help_options.h"
-    "src/platform/win/win_crtio.h"
     "src/platform/platform_metrics.h"
     "src/platform/win/win_metrics.h"
     "src/platform/win/win_metrics.cpp"
@@ -231,6 +230,7 @@ target_include_directories(qnob PRIVATE ${common_includes})
 target_link_libraries(qnob ${common_libs})
 
 set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true) # No console by default
+set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE false) # Qnob is a console app
 
 
 #

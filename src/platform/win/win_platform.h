@@ -31,7 +31,7 @@ public:
 private:
     void updateCurrentToolTip() const;
     QSize getConsoleSize() const;
-    void ensureConsole();
+    void hideConsole() const;
 
 private:
     std::unique_ptr<Com> m_com;

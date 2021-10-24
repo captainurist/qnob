@@ -24,8 +24,6 @@ private:
     int runList(const QnobArgs& args);
     int runService(const QnobArgs& args);
 
-    void maybePressAnyKey();
-
 private:
     std::unique_ptr<QFile> m_logFile;
     std::unique_ptr<BufferLogger> m_bufferLogger;

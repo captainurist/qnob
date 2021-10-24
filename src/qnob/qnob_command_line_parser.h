@@ -18,7 +18,7 @@ public:
         addSection(QString());
         addOption("config", tr("Path to a config file.")).argument("PATH", &m_args.configPath).defaultValue(lit("./qnob.toml"));
         addOption("log", tr("Path to a log file.")).argument("PATH", &m_args.logPath).defaultValue(lit("./qnob.log"));
-        addOption("console", tr("Always opens a console window (Windows only).")).flag(&m_args.console);
+        addOption("hide-console", tr("Hides console window on startup (Windows only).")).flag(&m_args.hideConsole);
         addOption("list", tr("Output members of one of the built-in lists. Valid values are %1.").arg(lists)).argument("LIST", &m_args.list);
         addOption("help", tr("Show help and exit.")).flag(&m_help);
         addOption('v', "version", tr("Show version information and exit.")).flag(&m_version);
@@ -29,13 +29,10 @@ public:
 
         if (m_help) {
             m_args.mode = HelpMode;
-            m_args.console = true;
         } else if (m_version) {
             m_args.mode = VersionMode;
-            m_args.console = true;
         } else if (m_args.list != NoList) {
             m_args.mode = ListMode;
-            m_args.console = true;
         } else {
             m_args.mode = ServiceMode;
         }
