@@ -228,8 +228,6 @@ add_executable(qnob ${common_srcs} ${qnob_srcs})
 init_target(qnob)
 target_include_directories(qnob PRIVATE ${common_includes})
 target_link_libraries(qnob ${common_libs})
-
-set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE true) # No console by default
 set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE false) # Qnob is a console app
 
 
