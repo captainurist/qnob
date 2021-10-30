@@ -7,6 +7,9 @@
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QApplication>
 
+#include <util/format.h>
+#include <util/debug.h>
+
 #include <core/entity/entity_pool_builder.h>
 
 #include <lib/command_line/command_line_parser.h>
@@ -24,6 +27,8 @@
 #include "qnob_command_line_parser.h"
 #include "default_entity_pool.h"
 #include "default_entity_factory_pool.h"
+
+#include <lib/heos/heos_discovery.h>
 
 Qnob::Qnob() {
     m_bufferLogger.reset(new BufferLogger());
@@ -61,7 +66,7 @@ int Qnob::run(int argc, char** argv) {
         stream << tr("Try 'qnob --help' for more information.") << Qt::endl;
         return 1;
     } catch (const Exception& e) {
-        qCritical() << e;
+        xCritical("{}", e);
         return 1;
     }
 }
@@ -99,14 +104,13 @@ int Qnob::runHelp() {
     QnobCommandLineParser parser;
     parser.printSections(stream, options);
 
-    maybePressAnyKey();
     return 0;
 }
 
 int Qnob::runVersion() {
     QTextStream stream(stdout);
 
-    stream << tr("qnob v%1").arg(lit(QNOB_VERSION_STRING)) << Qt::endl;
+    stream << xformat(tr("qnob v{}"), lit(QNOB_VERSION_STRING)) << Qt::endl;
 
     return 0;
 }
@@ -169,6 +173,9 @@ int Qnob::runService(const QnobArgs& args) {
     DefaultEntityFactoryPool factoryPool;
     EntityPoolBuilder builder(&factoryPool, &entityPool);
     builder.addEntities(basePath, config.records);
+
+    /*HeosDiscovery d;
+    d.discoverAll();*/
 
     return m_application->exec();
 }

@@ -6,8 +6,9 @@
 
 #include <QtCore/QUuid>
 #include <QtCore/QVarLengthArray>
-#include <QtCore/QDebug>
 #include <QtGui/QWindow>
+
+#include <util/debug.h>
 
 #include "win_monitor.h"
 #include "win_error.h"
@@ -89,7 +90,7 @@ static QString monitorDeviceId(const std::vector<MonitorInfo>& monitorInfos, con
         QString deviceId = QString::fromWCharArray(monitorInfo.monitor.DeviceID);
         QStringList chunks = deviceId.split(QLatin1Char('#'));
         if (chunks.size() < 3 || chunks[0] != lit("\\\\?\\DISPLAY")) {
-            qWarning() << "Invalid monitor deviceId format:" << deviceId;
+            xWarning("Invalid monitor deviceId format: {}", deviceId);
             continue;
         }
 

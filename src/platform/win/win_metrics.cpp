@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <ShellScalingApi.h>
 
-#include <QtCore/QDebug>
+#include <util/debug.h>
 
 #include "win_error.h"
 #include "win_shared_event_window.h"
@@ -19,7 +19,7 @@ static void checkProcessPerMonitorDpiAware() {
         return;
 
     if (awareness != PROCESS_PER_MONITOR_DPI_AWARE)
-        qCritical() << "Per-monitor DPI awareness mode is required for the windows platform metrics code to work.";
+        xCritical("Per-monitor DPI awareness mode is required for the windows platform metrics code to work.");
 }
 
 static UINT getSystemTrayDpi() {

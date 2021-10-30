@@ -5,11 +5,11 @@
 #include <array>
 
 #include <QtCore/QPointer>
-#include <QtCore/QDebug>
 #include <QtGui/QWindow>
 
 #include <platform/platform_shortcut_notifier.h>
 #include <util/map_access.h>
+#include <util/debug.h>
 
 #include "win_error.h"
 #include "win_shortcut_notifier.h"
@@ -55,7 +55,7 @@ PlatformShortcutNotifier* WinShortcutManager::createShortcutNotifier(const QKeyC
     quint32 nativeMods = 0;
     convertToNativeKey(key, mods, &nativeKey, &nativeMods);
     if (nativeKey == 0) {
-        qWarning() << "Could not convert" << shortcut << "to native key combination.";
+        xWarning("Could not convert {} to native key combination", shortcut);
         return nullptr;
     }
 
@@ -75,7 +75,7 @@ void WinShortcutManager::dispatchEvent(MSG* message) {
 
     WinShortcutNotifier* notifier = value_or(m_notifierById, message->wParam);
     if (!notifier) {
-        qWarning() << "Received hotkey message w/o notifier, lParam = " << message->lParam << ", wParam = " << message->wParam;
+        xWarning("Received hotkey message w/o notifier, lParam = {}, wParam = {}", message->lParam, message->wParam);
         return;
     }
 

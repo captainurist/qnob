@@ -4,12 +4,12 @@
 #include <ranges>
 
 #include <QtCore/QThread>
-#include <QtCore/QDebug>
 #include <QtCore/QCoreApplication>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QSystemTrayIcon>
 
 #include <platform/platform_control.h>
+#include <util/debug.h>
 
 #include "win_shared_event_window.h"
 #include "win_guids.h"
@@ -50,7 +50,7 @@ static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry
 
 WinWheelEventManager::WinWheelEventManager(WinSharedEventWindow* eventWindow) {
     if (qgetenv("QT_ENABLE_HIGHDPI_SCALING") != "0")
-        qCritical() << "QT_ENABLE_HIGHDPI_SCALING != 0, trayicon mouse wheel events might not work on highdpi displays.";
+        xCritical("QT_ENABLE_HIGHDPI_SCALING != 0, trayicon mouse wheel events might not work on highdpi displays.");
 
     RAWINPUTDEVICE rid;
     rid.usUsagePage = 0x0001;
@@ -92,7 +92,7 @@ void WinWheelEventManager::processInput(MSG* message) {
     UINT inputSize = sizeof(input);
     UINT bytesCopied = GetRawInputData(inputHandle, RID_INPUT, &input, &inputSize, sizeof(RAWINPUTHEADER));
     if (bytesCopied < 0) {
-        qWarning() << "GetRawInputData failed.";
+        xWarning("GetRawInputData failed");
         return;
     }
 

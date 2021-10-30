@@ -17,6 +17,7 @@ function(init_target target)
         set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Link statically with CRT
         target_compile_definitions(${target} PRIVATE NOMINMAX) # Please no min/max macros in Windows.h
         target_compile_options(${target} PRIVATE "/Zc:__cplusplus") # Fill in __cplusplus macro correctly
+        target_compile_options(${target} PRIVATE "/Zc:preprocessor") # Use a standard-complying preprocessor
     endif()
 
     target_compile_definitions(${target} PRIVATE
@@ -157,7 +158,6 @@ set(common_srcs
     "src/platform/win/win_volume_event_handler.h"
     "src/util/bad_cast_exception.cpp"
     "src/util/bad_cast_exception.h"
-    "src/util/debug.cpp"
     "src/util/debug.h"
     "src/util/exception.cpp"
     "src/util/exception.h"
@@ -198,10 +198,7 @@ set(common_srcs
     "src/lib/heos/upnp_discovery_reply.h"
     "src/lib/heos/upnp_discovery.cpp"
     "src/lib/heos/upnp_search_target.h"
-    "src/lib/format/format.h"
-    "src/lib/format/format_conversions.h"
-    "src/lib/format/formatters.h"
-     )
+      "src/util/format.h")
 
 set(common_libs
     Qt::Core
@@ -228,7 +225,7 @@ set(qnob_srcs
 set(test_srcs
     "src/util/exception_ut.cpp"
     "src/lib/keys/key_combination_ut.cpp"
-    "src/lib/format/format_ut.cpp"
+    "src/util/format_ut.cpp"
     "src/lib/test/print_functions.h"
 )
 

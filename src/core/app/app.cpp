@@ -2,9 +2,8 @@
 
 #include <QtCore/QCoreApplication>
 
+#include <util/debug.h>
 #include <platform/platform.h>
-
-#include <QtCore/QDebug>
 
 App::App(const QString& id) :
     Entity(id)
@@ -17,5 +16,5 @@ void App::exit() {
 void App::debugAction() {
     platform()->execute(WinUpdateCurrentToolTip);
 
-    qDebug() << "Debug action.";
+    xDebug("Debug action");
 }
