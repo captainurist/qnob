@@ -125,7 +125,7 @@ EnumSerializer<T>* serializer();
  * })
  * ```
  */
-#define X_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(TYPE, CASE_SENSITIVITY, ... /* INITIALIZER */)                           \
+#define X_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(TYPE, CASE_SENSITIVITY, ... /* INITIALIZER */)                            \
 Q_GLOBAL_STATIC_WITH_ARGS(EnumSerializer<TYPE>, g_initializer_ ## __LINE__, (CASE_SENSITIVITY, __VA_ARGS__))            \
                                                                                                                         \
 void serialize(const TYPE& value, QString* target) {                                                                    \
