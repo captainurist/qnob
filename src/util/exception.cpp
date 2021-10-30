@@ -56,11 +56,11 @@ static void printException(QDebug& stream, const Exception& e, bool printThread)
     }
 }
 
-QDebug&& operator<<(QDebug&& stream, const Exception& e) {
+QDebug operator<<(QDebug stream, const Exception& e) {
     QDebugStateSaver saver(stream);
     stream.noquote().nospace();
 
     printException(stream, e, true);
 
-    return std::forward<QDebug>(stream);
+    return stream;
 }

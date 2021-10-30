@@ -79,7 +79,7 @@ public:
         return m_cause;
     }
 
-    friend QDebug&& operator<<(QDebug&& stream, const Exception& e);
+    friend QDebug operator<<(QDebug stream, const Exception& e);
 
 private:
     template<class OtherException>
