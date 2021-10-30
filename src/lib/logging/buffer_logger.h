@@ -4,6 +4,11 @@
 
 #include "logger.h"
 
+/**
+ * A simple logger that just stores all messages into an internal buffer.
+ *
+ * Note that it's NOT thread-safe.
+ */
 class BufferLogger : public Logger {
 public:
     BufferLogger(size_t maxSize = 1024) :
@@ -11,8 +16,6 @@ public:
     {}
 
     virtual void log(QtMsgType type, const QMessageLogContext& context, const QString& message) override {
-        // TODO: do we need thread safety here?
-
         LogEntry entry;
         entry.type = type;
         entry.line = context.line;

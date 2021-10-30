@@ -2,6 +2,8 @@
 
 #include <array>
 
+#include <QtCore/QMutex>
+
 #include "logger.h"
 
 class QFile;
@@ -14,5 +16,6 @@ public:
 
 private:
     std::array<const char*, 5> m_prefixes;
+    QMutex m_mutex;
     QFile* m_file;
 };
