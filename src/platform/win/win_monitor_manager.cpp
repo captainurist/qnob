@@ -129,12 +129,20 @@ std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonito
             continue;
 
         for (size_t monitorIndex = 0; monitorIndex < physicalMonitors.size(); monitorIndex++) {
-            QString deviceId = monitorDeviceId(monitorInfos, displayInfo, monitorIndex, physicalMonitors[monitorIndex]);
+            const PHYSICAL_MONITOR& physicalMonitor = physicalMonitors[monitorIndex];
+
+            QString deviceId = monitorDeviceId(monitorInfos, displayInfo, monitorIndex, physicalMonitor);
             if (deviceId.isEmpty()) {
                 /* Just generate a random deviceId so that all the machinery down the line still works.
                  * In theory, we should never get here. */
                 deviceId = lit("DISPLAY\\%1\\{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}").arg(QUuid::createUuid().toString());
-                // TODO: Warn here!
+
+                xWarning(
+                    "Could not get device id for monitor \"{}\" (hPhysicalMonitor = {}), using \"{}\" intead",
+                    physicalMonitor.szPhysicalMonitorDescription,
+                    physicalMonitor.hPhysicalMonitor,
+                    deviceId
+                );
             }
 
             result.emplace_back(new WinMonitor(deviceId, physicalMonitors[monitorIndex]));
