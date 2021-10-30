@@ -12,7 +12,9 @@
       },
       "args": [
         "--config",
-        "../../qnob.toml"
+        "../../qnob.toml",
+        "--log",
+        "-"
       ]
     }
   ]
