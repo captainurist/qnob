@@ -56,22 +56,19 @@ int Qnob::run(int argc, char** argv) {
         QnobCommandLineParser parser;
         return run(parser.parse(m_application->arguments()));
     } catch (const CommandLineException& e) {
-        platform()->execute(WinEnsureConsole);
         QTextStream stream(stderr);
         stream << e.message() << Qt::endl;
-        stream << tr("Try 'qnob --help' for more information.");
-        maybePressAnyKey();
+        stream << tr("Try 'qnob --help' for more information.") << Qt::endl;
         return 1;
     } catch (const Exception& e) {
         qCritical() << e;
-        maybePressAnyKey();
         return 1;
     }
 }
 
 int Qnob::run(const QnobArgs& args) {
-    if (args.console)
-        platform()->execute(WinEnsureConsole);
+    if (args.hideConsole)
+        platform()->execute(WinHideConsole);
 
     switch (args.mode) {
     case ServiceMode:
@@ -111,7 +108,6 @@ int Qnob::runVersion() {
 
     stream << tr("qnob v%1").arg(lit(QNOB_VERSION_STRING)) << Qt::endl;
 
-    maybePressAnyKey();
     return 0;
 }
 
@@ -145,20 +141,18 @@ int Qnob::runList(const QnobArgs& args) {
         stream << keyStrings.join(lit(", ")) << Qt::endl; // TODO: word wrap.
     }
 
-    maybePressAnyKey();
     return 0;
 }
 
 int Qnob::runService(const QnobArgs& args) {
     /* Create a real logger first. */
     bool logFileOk = true;
-    if (args.console) {
+    if (args.logPath == lit("-")) {
         m_logFile->open(2, QIODevice::WriteOnly);
     } else {
         m_logFile->setFileName(args.logPath);
         if (!m_logFile->open(QIODevice::WriteOnly | QIODevice::Append)) {
             logFileOk = false;
-            platform()->execute(WinEnsureConsole);
             m_logFile->open(2, QIODevice::WriteOnly);
         }
     }
@@ -179,10 +173,3 @@ int Qnob::runService(const QnobArgs& args) {
     return m_application->exec();
 }
 
-void Qnob::maybePressAnyKey() {
-    if (platform()->execute(WinIsConsoleOwned).toBool()) {
-        QTextStream stream(stdout);
-        stream << tr("[press any key to close this window]") << Qt::endl;
-        fgetc(stdin);
-    }
-}
