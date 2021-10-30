@@ -5,6 +5,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QStringView>
+#include <QtCore/QDebug>
 
 #include "format_conversions.h"
 

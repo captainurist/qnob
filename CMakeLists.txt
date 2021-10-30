@@ -16,6 +16,7 @@ function(init_target target)
         target_compile_options(${target} PRIVATE /FC) # Full path of source code file in diagnostics
         set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Link statically with CRT
         target_compile_definitions(${target} PRIVATE NOMINMAX) # Please no min/max macros in Windows.h
+        target_compile_options(${target} PRIVATE "/Zc:__cplusplus") # Fill in __cplusplus macro correctly
     endif()
 
     target_compile_definitions(${target} PRIVATE
@@ -191,6 +192,12 @@ set(common_srcs
     "src/lib/keys/key_combination.h"
     "src/lib/keys/key_combination.cpp"
     "src/lib/keys/mouse_keys.h"
+    "src/lib/heos/heos_discovery.h"
+    "src/lib/heos/heos_discovery.cpp"
+    "src/lib/heos/upnp_discovery.h"
+    "src/lib/heos/upnp_discovery_reply.h"
+    "src/lib/heos/upnp_discovery.cpp"
+    "src/lib/heos/upnp_search_target.h"
     "src/lib/format/format.h"
     "src/lib/format/format_conversions.h"
     "src/lib/format/formatters.h"
@@ -226,12 +233,19 @@ set(test_srcs
 
 
 #
+# Set up common lib
+#
+add_library(qnob_common ${common_srcs})
+init_target(qnob_common)
+target_include_directories(qnob_common PUBLIC ${common_includes})
+
+
+#
 # Set up qnob executable
 #
-add_executable(qnob ${common_srcs} ${qnob_srcs})
+add_executable(qnob ${qnob_srcs})
 init_target(qnob)
-target_include_directories(qnob PRIVATE ${common_includes})
-target_link_libraries(qnob ${common_libs})
+target_link_libraries(qnob qnob_common ${common_libs})
 set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE false) # Qnob is a console app
 
 
@@ -243,10 +257,10 @@ add_subdirectory(3rdparty/googletest)
 init_target(gtest)
 init_target(gtest_main)
 
-add_executable(qnob_test ${common_srcs} ${test_srcs})
+add_executable(qnob_test ${test_srcs})
 init_target(qnob_test)
-target_include_directories(qnob_test PRIVATE ${common_includes} 3rdparty/googletest/googletest/include)
-target_link_libraries(qnob_test ${common_libs} gtest_main)
+target_include_directories(qnob_test PRIVATE 3rdparty/googletest/googletest/include)
+target_link_libraries(qnob_test qnob_common gtest_main ${common_libs})
 
 add_test(NAME qnob_test COMMAND qnob_test)
 
