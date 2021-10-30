@@ -4,6 +4,8 @@
 
 #include <QtCore/QDebug>
 
+#include <util/debug.h>
+
 #include "win_error.h"
 
 static UINT WM_TASKBARCREATED = 0;
@@ -33,8 +35,10 @@ bool WinSharedEventWindow::nativeEvent(const QByteArray& eventType, void* messag
     } else if (msg->message == WM_HOTKEY) {
         emit hotkey(msg);
     } else if (msg->message == WM_DISPLAYCHANGE) {
+        xInfo("Received WM_DISPLAYCHANGE");
         emit displayChange(msg);
     } else if (msg->message == WM_TASKBARCREATED) {
+        xInfo("Received WM_TASKBARCREATED");
         emit taskbarCreated(msg);
     }
 
