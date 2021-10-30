@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QT_DEFAULT_MAJOR_VERSION 6)
 
-find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Widgets Multimedia REQUIRED)
 
 function(init_target target)
     if (MSVC)
@@ -208,6 +208,7 @@ set(common_libs
     Qt::Gui
     Qt::Widgets
     Qt::Network
+    Qt::Multimedia
     dxva2
     ole32
     user32

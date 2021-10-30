@@ -15,7 +15,7 @@
 * **DONE**. Some option to list bindable keys, `--list keys`?
 * **DONE**. Make qnob back into a console app. Add an option to hide console at startup. Whoever cares about console blinking can start qnob with CreateProcess(CREATE_NO_WINDOW).
 * **DONE**. Split cmake file into a single library and several binaries. So that you don't have to rebuild everything when building tests.
-* Switch over to QtMultimedia.
+* **DONE**. Switch over to QtMultimedia.
 * Mouse wheel over tray icon events don't work with a touchpad.
 * Monitor controls don't work with a laptop monitor.
 * HEOS controls. Input, volume.
