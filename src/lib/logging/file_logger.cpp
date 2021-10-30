@@ -24,7 +24,7 @@ void FileLogger::log(QtMsgType type, const QMessageLogContext& context, const QS
         QByteArrayLiteral(": ") %
         message.toUtf8() %
         QByteArrayLiteral(" (") %
-        (std::string_view(context.file).starts_with(sourceRoot()) ? sourceRootRelativeFilePath(context.file) : context.file) %
+        relativeSourcePath(context.file).data() %
         QByteArrayLiteral(":") %
         QByteArray::number(context.line) %
         QByteArrayLiteral(")\n");

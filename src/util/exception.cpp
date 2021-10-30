@@ -4,12 +4,14 @@
 #include <QtCore/QThread>
 
 #include <util/human_readable_name.h>
+#include <util/format.h>
+#include <util/source_root.h>
 
 static QString currentThreadOutputName() {
     if (QString result = QThread::currentThread()->objectName(); !result.isEmpty())
         return QLatin1Char('\'') + result + QLatin1Char('\'');
 
-    return lit("0x%1").arg(reinterpret_cast<std::intptr_t>(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
+    return xformat(L"{:#016x}", reinterpret_cast<std::intptr_t>(QThread::currentThreadId()));
 }
 
 static void printException(QDebug& stream, const std::exception& e) {
@@ -35,7 +37,7 @@ static void printException(QDebug& stream, const Exception& e, bool printThread)
         << "        at "
         << humanReadableSignature(e.sourceLocation().function_name())
         << "("
-        << e.sourceLocation().file_name()
+        << QByteArrayView(relativeSourcePath(e.sourceLocation().file_name()))
         << ":"
         << e.sourceLocation().line()
         << ")";

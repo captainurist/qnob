@@ -15,10 +15,14 @@ consteval std::string_view sourceRoot() {
 }
 
 /**
- * \param fileName                      Filename as returned by `__FILE__` macro from inside the source root.
+ * \param sourcePath                    Filename as returned by `__FILE__` macro from inside the source root.
  * \returns                             Source root-relative file path.
  */
-constexpr const char* sourceRootRelativeFilePath(const char* fileName) {
-    return fileName + sizeof(detail::absoluteCurrentFilePath) - sizeof(detail::relativeCurrentFilePath);
+constexpr const char* rootRelativeSourcePath(const char* sourcePath) {
+    return sourcePath + sizeof(detail::absoluteCurrentFilePath) - sizeof(detail::relativeCurrentFilePath);
 }
 
+// TODO: docs
+inline std::string_view relativeSourcePath(std::string_view sourcePath) {
+    return sourcePath.starts_with(sourceRoot()) ? rootRelativeSourcePath(sourcePath.data()) : sourcePath;
+}
