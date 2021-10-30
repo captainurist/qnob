@@ -20,14 +20,14 @@ Monitor::Monitor(std::unique_ptr<PlatformMonitor> monitor) {
     /* Initialize monitor server. */
     m_queue = std::make_shared<MonitorQueue>();
     monitor->moveToThread(m_thread.get());
-    MonitorServer* server = new MonitorServer(std::move(monitor), m_queue);
-    server->moveToThread(m_thread.get());
+    m_server = new MonitorServer(std::move(monitor), m_queue);
+    m_server->moveToThread(m_thread.get());
 
-    connect(this, &Monitor::notifyServer, server, &MonitorServer::processQueue);
-    connect(server, &MonitorServer::capabilitiesCompleted, this, &Monitor::handleCapabilitiesCompleted);
-    connect(server, &MonitorServer::readCompleted, this, &Monitor::handleReadCompleted);
-    connect(server, &MonitorServer::writeCompleted, this, &Monitor::handleWriteCompleted);
-    connect(m_thread.get(), &QThread::finished, server, &QObject::deleteLater);
+    connect(this, &Monitor::notifyServer, m_server, &MonitorServer::processQueue);
+    connect(m_server, &MonitorServer::capabilitiesCompleted, this, &Monitor::handleCapabilitiesCompleted);
+    connect(m_server, &MonitorServer::readCompleted, this, &Monitor::handleReadCompleted);
+    connect(m_server, &MonitorServer::writeCompleted, this, &Monitor::handleWriteCompleted);
+    connect(m_thread.get(), &QThread::finished, m_server, &QObject::deleteLater);
 
     /* Fire initialization requests. */
     m_queue->addAction({ MonitorAction::ReadCapabilities });

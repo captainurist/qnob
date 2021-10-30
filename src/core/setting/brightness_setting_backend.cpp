@@ -14,28 +14,32 @@ using MonitorList = std::vector<std::unique_ptr<PlatformMonitor>>;
 
 class BrightnessShaftPrivate {
 public:
+    /** Pending monitor list, updated on startup and when system monitors change. */
     QFuture<MonitorList> future;
+
+    /** Current monitor list. */
     MonitorList monitors;
+
+    /** Whether we've successfully received the monitor list at least once. */
     bool initialized = false;
+
+    /** Cached combined brightness, if any. */
     std::optional<double> cachedValue;
 };
 
 BrightnessSettingBackend::BrightnessSettingBackend():
     d(new BrightnessShaftPrivate)
 {
-    d->future = MonitorManager::enumerateMonitors(platform()->monitorManager());
+    updateMonitorList();
 
-    QFutureWatcher<MonitorList>* watcher = new QFutureWatcher<MonitorList>(this);
-    connect(watcher, &QFutureWatcherBase::finished, this, &BrightnessSettingBackend::handleFutureFinished);
-    watcher->setFuture(d->future);
+    connect(platform()->monitorManager(), &PlatformMonitorManager::monitorsChanged, this, &BrightnessSettingBackend::updateMonitorList);
 }
 
 BrightnessSettingBackend::~BrightnessSettingBackend() {
-    if (d->initialized)
-        return;
-
-    d->future.cancel();
-    d->future.waitForFinished();
+    if (d->future.isStarted()) {
+        d->future.cancel();
+        d->future.waitForFinished();
+    }
 }
 
 double BrightnessSettingBackend::value() const {
@@ -68,7 +72,7 @@ void BrightnessSettingBackend::setValue(double value) {
 }
 
 bool BrightnessSettingBackend::isEnabled() const {
-    return d->initialized;
+    return true;
 }
 
 void BrightnessSettingBackend::setEnabled(bool /*value*/) {
@@ -79,13 +83,23 @@ bool BrightnessSettingBackend::isInitialized() const {
     return d->initialized;
 }
 
+void BrightnessSettingBackend::updateMonitorList() {
+    d->future = MonitorManager::enumerateMonitors(platform()->monitorManager());
+
+    QFutureWatcher<MonitorList>* watcher = new QFutureWatcher<MonitorList>(this);
+    connect(watcher, &QFutureWatcherBase::finished, this, &BrightnessSettingBackend::handleFutureFinished);
+    connect(watcher, &QFutureWatcherBase::finished, watcher, &QObject::deleteLater);
+    watcher->setFuture(d->future);
+}
+
 void BrightnessSettingBackend::handleFutureFinished() {
-    if (!d->future.isValid())
-        return; /* Got canceled. */
+    if (!d->future.isFinished())
+        return; /* Got canceled or replaced with a new future because monitors changed. */
 
     d->monitors = d->future.takeResult();
-    d->initialized = !d->monitors.empty();
 
-    if (d->initialized)
+    if (!d->initialized) {
+        d->initialized = true;
         emit initialized();
+    }
 }

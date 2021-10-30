@@ -6,6 +6,8 @@
 #include <QtCore/QEventLoop>
 #include <QtCore/QThreadPool>
 
+#include <util/debug.h>
+
 #include <platform/platform_monitor_manager.h>
 
 #include "monitor.h"
@@ -43,6 +45,10 @@ public:
             m_promise.finish();
             return;
         }
+
+        xDebug("Enumerated {} monitor(s)", result.size());
+        for (size_t i = 0; i < result.size(); i++)
+            xDebug("Monitor #{}: {} (deviceId={})", i, result[i]->name(), result[i]->deviceId());
 
         assert(initializedCount == result.size());
         for (auto& monitor : result)

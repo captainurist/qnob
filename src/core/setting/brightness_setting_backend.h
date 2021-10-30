@@ -19,6 +19,7 @@ public:
     virtual bool isInitialized() const override;
 
 private:
+    Q_SLOT void updateMonitorList();
     Q_SLOT void handleFutureFinished();
 
 private:

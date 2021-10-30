@@ -5,7 +5,13 @@
 
 #include <highlevelmonitorconfigurationapi.h>
 
+#include <util/debug.h>
+
 #include "win_error.h"
+
+// TODO: this belongs in the config file
+static size_t MAX_RETRIES = 10;
+static size_t RETRY_SLEEP_MS = 500;
 
 static DWORD mapToNative(const WinDdcTriplet& triplet, float value) {
     assert(triplet.min < triplet.max);
@@ -21,7 +27,8 @@ static float mapFromNative(const WinDdcTriplet& triplet) {
 
 WinMonitor::WinMonitor(const QString& deviceId, PHYSICAL_MONITOR physicalMonitor):
     m_deviceId(deviceId),
-    m_physicalMonitor(physicalMonitor)
+    m_physicalMonitor(physicalMonitor),
+    m_retriesLeft(MAX_RETRIES)
 {}
 
 WinMonitor::~WinMonitor() {
@@ -73,7 +80,7 @@ void WinMonitor::setProperty(PlatformMonitorProperty property, float value) {
 void WinMonitor::capabilitiesInternal(DWORD* capabilities) const {
     DWORD colorTemperatures; /* Discarded for now. */
 
-    if (!apicall(GetMonitorCapabilities(m_physicalMonitor.hPhysicalMonitor, capabilities, &colorTemperatures))) {
+    if (!maybeRetryCall([&] { return apicall(GetMonitorCapabilities(m_physicalMonitor.hPhysicalMonitor, capabilities, &colorTemperatures)); })) {
         /* This means that the monitor doesn't support DDC/CI. */
         *capabilities = 0;
     }
@@ -82,9 +89,9 @@ void WinMonitor::capabilitiesInternal(DWORD* capabilities) const {
 bool WinMonitor::propertyInternal(PlatformMonitorProperty property, WinDdcTriplet* value) const {
     switch (property) {
     case BrightnessMonitorProperty:
-        return apicall(GetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max));
+        return maybeRetryCall([&] { return apicall(GetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max)); });
     case ContrastMonitorProperty:
-        return apicall(GetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max));
+        return maybeRetryCall([&] { return apicall(GetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, &value->min, &value->current, &value->max)); });
     default:
         assert(false);
         return false;
@@ -94,11 +101,27 @@ bool WinMonitor::propertyInternal(PlatformMonitorProperty property, WinDdcTriple
 bool WinMonitor::setPropertyInternal(PlatformMonitorProperty property, DWORD value) {
     switch (property) {
     case BrightnessMonitorProperty:
-        return apicall(SetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, value));
+        return maybeRetryCall([&] { return apicall(SetMonitorBrightness(m_physicalMonitor.hPhysicalMonitor, value)); });
     case ContrastMonitorProperty:
-        return apicall(SetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, value));
+        return maybeRetryCall([&] { return apicall(SetMonitorContrast(m_physicalMonitor.hPhysicalMonitor, value)); });
     default:
         assert(false);
         return false;
+    }
+}
+
+template<class T>
+bool WinMonitor::maybeRetryCall(T&& call) const {
+    while(true) {
+        if (call())
+            return true;
+
+        if (m_retriesLeft == 0)
+            return false;
+
+        xDebug("Retrying in {}ms...", RETRY_SLEEP_MS);
+
+        m_retriesLeft--;
+        Sleep(RETRY_SLEEP_MS);
     }
 }

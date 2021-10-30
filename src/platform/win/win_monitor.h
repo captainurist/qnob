@@ -29,8 +29,12 @@ private:
     bool propertyInternal(PlatformMonitorProperty property, WinDdcTriplet * value) const;
     bool setPropertyInternal(PlatformMonitorProperty property, DWORD value);
 
+    template<class T>
+    bool maybeRetryCall(T&& call) const;
+
 private:
     QString m_deviceId;
     PHYSICAL_MONITOR m_physicalMonitor;
+    mutable size_t m_retriesLeft = 0;
     mutable std::array<std::optional<WinDdcTriplet>, MonitorPropertyCount> m_cachedProperties;
 };
