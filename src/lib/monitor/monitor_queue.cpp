@@ -19,3 +19,8 @@ bool MonitorQueue::popAction(MonitorAction* action) {
     m_actions.erase(pos);
     return true;
 }
+
+void MonitorQueue::clear() {
+    QMutexLocker locker(&m_mutex);
+    m_actions.clear();
+}

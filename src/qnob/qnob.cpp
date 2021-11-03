@@ -9,6 +9,7 @@
 
 #include <util/format.h>
 #include <util/debug.h>
+#include <util/worker_pool.h>
 
 #include <core/entity/entity_pool_builder.h>
 
@@ -55,7 +56,10 @@ int Qnob::run(int argc, char** argv) {
     PlatformInitializer platformInitializer;
 
     /* Join all worker threads before platform is destroyed, there might be some deinitialization pending there. */
-    auto cleanup = QScopeGuard([] { QThreadPool::globalInstance()->waitForDone(); });
+    auto cleanup = QScopeGuard([] {
+        QThreadPool::globalInstance()->waitForDone();
+        WorkerPool::globalInstance()->waitForDone();
+    });
 
     try {
         QnobCommandLineParser parser;

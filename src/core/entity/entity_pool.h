@@ -25,6 +25,8 @@ public:
 
     std::vector<Entity*> entities() const;
 
+    void clear();
+
 private:
     std::unordered_map<QString, std::unique_ptr<Entity>> m_entityById;
 };

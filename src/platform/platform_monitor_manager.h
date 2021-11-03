@@ -8,6 +8,8 @@ class PlatformMonitorManager : public QObject {
     Q_OBJECT
 public:
     /**
+     * This function is thread-safe.
+     *
      * \returns                         Newly created platform monitors representing all the monitors in the system.
      */
     virtual std::vector<std::unique_ptr<PlatformMonitor>> enumerateMonitors() = 0;

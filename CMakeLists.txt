@@ -198,7 +198,14 @@ set(common_srcs
     "src/lib/heos/upnp_discovery_reply.h"
     "src/lib/heos/upnp_discovery.cpp"
     "src/lib/heos/upnp_search_target.h"
-      "src/util/format.h")
+    "src/util/format.h"
+    "src/lib/monitor/monitor_enumerator.h"
+    "src/lib/monitor/monitor_enumerator.cpp"
+    "src/lib/monitor/monitor_list.h"
+    "src/util/worker_pool.h"
+    "src/util/worker_pool.cpp"
+    "src/util/package.h"
+)
 
 set(common_libs
     Qt::Core

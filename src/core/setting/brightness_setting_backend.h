@@ -1,13 +1,15 @@
 #pragma once
 
+#include <optional>
+
 #include "setting_backend.h"
 
-class BrightnessShaftPrivate;
+class MonitorManager;
 
 class BrightnessSettingBackend : public SettingBackend {
     Q_OBJECT
 public:
-    BrightnessSettingBackend();
+    BrightnessSettingBackend(MonitorManager* monitorManager);
     virtual ~BrightnessSettingBackend();
 
     virtual double value() const override;
@@ -19,9 +21,14 @@ public:
     virtual bool isInitialized() const override;
 
 private:
-    Q_SLOT void updateMonitorList();
-    Q_SLOT void handleFutureFinished();
+    Q_SLOT void handleMonitorsChanged();
 
 private:
-    std::unique_ptr<BrightnessShaftPrivate> d;
+    MonitorManager* m_monitorManager = nullptr;
+
+    /** Whether we've successfully received the monitor list at least once. */
+    bool m_initialized = false;
+
+    /** Cached combined brightness, if any. */
+    mutable std::optional<double> m_cachedValue;
 };

@@ -12,6 +12,7 @@ class MonitorQueue {
 public:
     void addAction(const MonitorAction& action);
     bool popAction(MonitorAction* action);
+    void clear();
 
 private:
     QMutex m_mutex;

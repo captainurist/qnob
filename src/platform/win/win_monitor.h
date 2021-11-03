@@ -26,7 +26,7 @@ public:
 
 private:
     void capabilitiesInternal(DWORD* capabilities) const;
-    bool propertyInternal(PlatformMonitorProperty property, WinDdcTriplet * value) const;
+    bool propertyInternal(PlatformMonitorProperty property, WinDdcTriplet* value) const;
     bool setPropertyInternal(PlatformMonitorProperty property, DWORD value);
 
     template<class T>

@@ -34,7 +34,6 @@ private:
     void handleWriteCompleted(PlatformMonitorProperty property, float value);
 
 private:
-    std::unique_ptr<QThread> m_thread;
     std::shared_ptr<MonitorQueue> m_queue;
     MonitorServer* m_server = nullptr;
     int m_pendingInitializationRequests = 0;

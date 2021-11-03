@@ -1,13 +1,31 @@
 #pragma once
 
+#include <unordered_set>
+
+#include <QtCore/QObject>
 #include <QtCore/QFuture>
 
-class PlatformMonitor;
-class PlatformMonitorManager;
+#include <util/package.h>
 
-class MonitorManager {
+#include "monitor_list.h"
+
+class MonitorEnumerator;
+
+class MonitorManager: public QObject {
+    Q_OBJECT
 public:
-    using MonitorList = std::vector<std::unique_ptr<PlatformMonitor>>;
+    MonitorManager();
+    virtual ~MonitorManager();
 
-    static QFuture<MonitorList> enumerateMonitors(PlatformMonitorManager* manager);
+    const MonitorList& monitors() const;
+
+signals:
+    void monitorsChanged();
+
+private:
+    void updateMonitors();
+    void handleEnumeratorFinished(Package<MonitorList> monitors);
+
+private:
+    MonitorList m_monitors;
 };

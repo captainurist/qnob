@@ -4,6 +4,8 @@
 
 #include <QtCore/QThread>
 
+#include <util/worker_pool.h>
+
 #include "monitor_queue.h"
 #include "monitor_server.h"
 
@@ -12,22 +14,16 @@ Monitor::Monitor(std::unique_ptr<PlatformMonitor> monitor) {
     m_cachedDeviceId = monitor->deviceId();
     m_cachedName = monitor->name();
 
-    /* Set up a processing thread. */
-    m_thread.reset(new QThread());
-    m_thread->setObjectName(lit("MonitorServerThread"));
-    m_thread->start();
-
     /* Initialize monitor server. */
     m_queue = std::make_shared<MonitorQueue>();
-    monitor->moveToThread(m_thread.get());
     m_server = new MonitorServer(std::move(monitor), m_queue);
-    m_server->moveToThread(m_thread.get());
 
     connect(this, &Monitor::notifyServer, m_server, &MonitorServer::processQueue);
     connect(m_server, &MonitorServer::capabilitiesCompleted, this, &Monitor::handleCapabilitiesCompleted);
     connect(m_server, &MonitorServer::readCompleted, this, &Monitor::handleReadCompleted);
     connect(m_server, &MonitorServer::writeCompleted, this, &Monitor::handleWriteCompleted);
-    connect(m_thread.get(), &QThread::finished, m_server, &QObject::deleteLater);
+
+    WorkerPool::globalInstance()->run(m_server);
 
     /* Fire initialization requests. */
     m_queue->addAction({ MonitorAction::ReadCapabilities });
@@ -38,9 +34,9 @@ Monitor::Monitor(std::unique_ptr<PlatformMonitor> monitor) {
 }
 
 Monitor::~Monitor() {
-    /* Clean up the thread. */
-    m_thread->quit();
-    m_thread->wait(); /* This is where m_server gets deleted. */
+    WorkerPool::globalInstance()->kill(m_server);
+
+    /* We don't wait for the server to get destroyed. */
 }
 
 bool Monitor::isInitialized() const {

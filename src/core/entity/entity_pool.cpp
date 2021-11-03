@@ -24,3 +24,7 @@ std::vector<Entity*> EntityPool::entities() const {
         result.push_back(entity.get());
     return result;
 }
+
+void EntityPool::clear() {
+    m_entityById.clear();
+}
