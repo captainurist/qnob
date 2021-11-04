@@ -12,7 +12,7 @@ void xMessageOutput(QtMsgType messageType, const std::source_location& location,
     return qt_message_output(
         messageType,
         QMessageLogContext(location.file_name(), location.line(), location.function_name(), category),
-        xformat(pattern, std::forward<Args>(args)...)
+        sformat(pattern, std::forward<Args>(args)...)
     );
 }
 

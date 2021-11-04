@@ -105,6 +105,31 @@ struct formatter<T, wchar_t> : public formatter<QStringView, wchar_t> {
     }
 };
 
+template<>
+struct formatter<QByteArrayView, char> : public formatter<std::string_view, char> {
+    using base_type = formatter<std::string_view, char>;
+
+    template <typename FormatContext>
+    auto format(QByteArrayView value, FormatContext& ctx) {
+        return base_type::format(std::string_view(value.data(), value.size()), ctx);
+    }
+};
+
+template<>
+struct formatter<QByteArray, char> : public formatter<QByteArrayView, char> {};
+
+template<class T> requires debug_streamable<T>&& std::is_class_v<std::remove_cvref_t<T>>
+struct formatter<T, char> : public formatter<QByteArrayView, char> {
+    using base_type = formatter<QByteArrayView, char>;
+
+    template <typename FormatContext>
+    auto format(const T& value, FormatContext& ctx) {
+        QString buffer;
+        QDebug(&buffer).nospace() << value;
+        return base_type::format(buffer.toUtf8(), ctx);
+    }
+};
+
 } // namespace std
 
 
@@ -112,7 +137,7 @@ struct formatter<T, wchar_t> : public formatter<QStringView, wchar_t> {
  * `std::format` alternative that formats into `QString`.
  */
 template<class... Args>
-QString xformat(std::wstring_view formatString, Args&&... args) {
+QString sformat(std::wstring_view formatString, Args&&... args) {
     QString result;
     detail::QStringBackInsertConvertingProxy resultProxy(&result);
     std::format_to(std::back_inserter(resultProxy), formatString, std::forward<Args>(args)...);
@@ -120,12 +145,32 @@ QString xformat(std::wstring_view formatString, Args&&... args) {
 }
 
 template<class... Args>
-QString xformat(QStringView formatString, Args&&... args) {
-    return xformat(detail::QStringToWcharConversionBuffer(formatString).view(), std::forward<Args>(args)...);
+QString sformat(QStringView formatString, Args&&... args) {
+    return sformat(detail::QStringToWcharConversionBuffer(formatString).view(), std::forward<Args>(args)...);
 }
 
 template<class... Args>
-QString xformat(const wchar_t* formatString, Args&&... args) {
-    return xformat(std::wstring_view(formatString), std::forward<Args>(args)...);
+QString sformat(const wchar_t* formatString, Args&&... args) {
+    return sformat(std::wstring_view(formatString), std::forward<Args>(args)...);
+}
+
+/**
+ * `std::format` alternative that formats into a `QByteArray`.
+ */
+template<class... Args>
+QByteArray bformat(std::string_view formatString, Args&&... args) {
+    QByteArray result;
+    std::format_to(std::back_inserter(result), formatString, std::forward<Args>(args)...);
+    return result;
+}
+
+template<class... Args>
+QByteArray bformat(QByteArrayView formatString, Args&&... args) {
+    return bformat(std::string_view(formatString.data(), formatString.size()), std::forward<Args>(args)...);
+}
+
+template<class... Args>
+QByteArray bformat(const char* formatString, Args&&... args) {
+    return bformat(std::string_view(formatString), std::forward<Args>(args)...);
 }
 

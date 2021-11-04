@@ -11,7 +11,7 @@ static QString currentThreadOutputName() {
     if (QString result = QThread::currentThread()->objectName(); !result.isEmpty())
         return QLatin1Char('\'') + result + QLatin1Char('\'');
 
-    return xformat(L"{:#016x}", reinterpret_cast<std::intptr_t>(QThread::currentThreadId()));
+    return sformat(L"{:#016x}", reinterpret_cast<std::intptr_t>(QThread::currentThreadId()));
 }
 
 static void printException(QDebug& stream, const std::exception& e) {

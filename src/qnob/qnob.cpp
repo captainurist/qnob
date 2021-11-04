@@ -114,7 +114,7 @@ int Qnob::runHelp() {
 int Qnob::runVersion() {
     QTextStream stream(stdout);
 
-    stream << xformat(tr("qnob v{}"), lit(QNOB_VERSION_STRING)) << Qt::endl;
+    stream << sformat(tr("qnob v{}"), lit(QNOB_VERSION_STRING)) << Qt::endl;
 
     return 0;
 }
