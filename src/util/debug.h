@@ -7,13 +7,18 @@
 
 #include "format.h"
 
-template<class StringView, class... Args>
-void xMessageOutput(QtMsgType messageType, const std::source_location& location, const char* category, StringView pattern, Args&&... args) {
-    return qt_message_output(
-        messageType,
-        QMessageLogContext(location.file_name(), location.line(), location.function_name(), category),
-        sformat(pattern, std::forward<Args>(args)...)
-    );
+template<class WideStringView, class... Args>
+void xMessageOutput(QtMsgType messageType, const std::source_location& location, const char* category, WideStringView pattern, Args&&... args) {
+    QString message;
+    QMessageLogContext ctx(location.file_name(), location.line(), location.function_name(), category);
+    try {
+        message = sformat(pattern, std::forward<Args>(args)...);
+    } catch (std::format_error& e) {
+        messageType = QtWarningMsg;
+        message = sformat(L"Could not format pattern \"{}\": {}", pattern, QByteArrayView(e.what()));
+    }
+
+    qt_message_output(messageType, ctx, message);
 }
 
 #define X_MESSAGE_OUTPUT(TYPE, PATTERN, ... /* ARGS */) \
