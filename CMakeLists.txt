@@ -22,9 +22,10 @@ function(init_target target)
 
     target_compile_definitions(${target} PRIVATE
         QT_DEPRECATED_WARNINGS
-        QT_DISABLE_DEPRECATED_BEFORE=0x060000
+        QT_DISABLE_DEPRECATED_BEFORE=0x060200
         QT_NO_CAST_FROM_ASCII
         QT_NO_CAST_TO_ASCII
+        QT_NO_CAST_FROM_BYTEARRAY # Don't autocast QByteArray to const char*
         QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
         lit=QStringLiteral
         QNOB_VERSION_STRING="${CMAKE_PROJECT_VERSION}"
