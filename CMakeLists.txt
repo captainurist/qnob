@@ -235,7 +235,7 @@ set(test_srcs
     "src/lib/keys/key_combination_ut.cpp"
     "src/util/format_ut.cpp"
     "src/lib/test/print_functions.h"
-)
+ "src/util/debug_ut.cpp")
 
 
 #
