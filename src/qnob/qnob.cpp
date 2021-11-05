@@ -29,8 +29,6 @@
 #include "default_entity_pool.h"
 #include "default_entity_factory_pool.h"
 
-#include <lib/heos/heos_discovery.h>
-
 Qnob::Qnob() {
     m_bufferLogger.reset(new BufferLogger());
     m_logFile.reset(new QFile());

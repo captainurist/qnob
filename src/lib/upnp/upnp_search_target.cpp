@@ -1,5 +1,7 @@
 #include "upnp_search_target.h"
 
+#include <util/format.h>
+
 UpnpSearchTarget::UpnpSearchTarget() {}
 
 UpnpSearchTarget::UpnpSearchTarget(const QByteArray& string) :
@@ -7,9 +9,13 @@ UpnpSearchTarget::UpnpSearchTarget(const QByteArray& string) :
 {}
 
 UpnpSearchTarget UpnpSearchTarget::all() {
-    return UpnpSearchTarget(QByteArrayLiteral("ssdp:all"));
+    return QByteArrayLiteral("ssdp:all");
 }
 
 UpnpSearchTarget UpnpSearchTarget::rootDevices() {
-    return UpnpSearchTarget(QByteArrayLiteral("upnp:rootdevice"));
+    return QByteArrayLiteral("upnp:rootdevice");
+}
+
+UpnpSearchTarget UpnpSearchTarget::device(QByteArrayView hyphenDomainName, QByteArrayView deviceType, QByteArrayView version) {
+    return bformat("urn:{}:device:{}:{}", hyphenDomainName, deviceType, version);
 }

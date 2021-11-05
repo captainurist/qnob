@@ -1,93 +1,69 @@
 #include "upnp_discovery.h"
 
 #include <cassert>
-#include <algorithm>
 
-#include <QtCore/QSysInfo>
-#include <QtNetwork/QUdpSocket>
-#include <QtNetwork/QNetworkDatagram>
+#include <QtCore/QTimer>
 
-#include <util/debug.h>
+#include "upnp_discovery_socket.h"
 
-static const int UPNP_MULTICAST_PORT = 1900;
-static const char* UPNP_MULTICAST_ADDRESS = "239.255.255.250";
+static const int UPNP_MAX_DISCOVERY_ATTEMPTS = 16;
+static const int UPNP_DISCOVERY_TIMEOUT_MS = 1000;
+static const int UPNP_REDISCOVERY_TIMEOUT_MS = 5 * 60 * 1000;
 
-UpnpDiscovery::UpnpDiscovery(const UpnpDiscoveryOptions& options):
-    m_options(options),
-    m_socket(new QUdpSocket())
+UpnpDiscovery::UpnpDiscovery(const UpnpDiscoveryOptions& options) :
+    m_socket(new UpnpDiscoverySocket(options)),
+    m_discoveryTimer(new QTimer()),
+    m_rediscoveryTimer(new QTimer())
 {
-    if (!m_socket->bind(m_options.address, m_options.port))
-        xWarning("Failed to bind UPnP socket: {}", m_socket->errorString());
-
-    connect(m_socket.get(), &QUdpSocket::readyRead, this, &UpnpDiscovery::readPendingDatagrams);
+    connect(m_socket.get(), &UpnpDiscoverySocket::discovered, this, &UpnpDiscovery::handleDiscovered);
+    connect(m_discoveryTimer.get(), &QTimer::timeout, this, &UpnpDiscovery::discoveryTick);
+    connect(m_rediscoveryTimer.get(), &QTimer::timeout, this, &UpnpDiscovery::rediscoveryTick);
 }
 
-UpnpDiscovery::~UpnpDiscovery() {}
+UpnpDiscovery::~UpnpDiscovery() {
+    stop();
+}
 
-void UpnpDiscovery::discoverAll() {
-    if (m_socket->state() != QUdpSocket::BoundState)
+void UpnpDiscovery::start() {
+    assert(!isRunning());
+
+    if (!m_socket->bind())
         return;
 
-    /* See docs at https ://openconnectivity.org/upnp-specs/UPnP-arch-DeviceArchitecture-v2.0-20200417.pdf. */
-    QByteArray discoveryMessage = bformat("\
-M-SEARCH * HTTP/1.1\r\n\
-HOST: {}:{}\r\n\
-MAN: \"ssdp:discover\"\r\n\
-MX: {}\r\n\
-ST: {}\r\n\
-USER-AGENT: {}/{} UPnP/2.0 {}/{}\r\n\
-CPFN.UPNP.ORG: {}\r\n\
-\r\n",
-        UPNP_MULTICAST_ADDRESS,
-        UPNP_MULTICAST_PORT,
-        m_options.maxWaitTime,
-        m_options.searchTarget.string(),
-        QSysInfo::productType().toUtf8(),
-        QSysInfo::productVersion().toUtf8(),
-        m_options.productName,
-        m_options.productVersion,
-        m_options.friendlyName
-    );
+    m_discoveryTimer->start(UPNP_DISCOVERY_TIMEOUT_MS);
+    m_rediscoveryTimer->start(UPNP_REDISCOVERY_TIMEOUT_MS);
+    m_discoveryAttemptsLeft = UPNP_MAX_DISCOVERY_ATTEMPTS;
 
-    qint64 result = m_socket->writeDatagram(discoveryMessage, QHostAddress(QLatin1String(UPNP_MULTICAST_ADDRESS)), UPNP_MULTICAST_PORT);
-    if (result == -1)
-        xWarning("Failed to send UPnP datagram: {}", m_socket->errorString());
+    discoveryTick();
 }
 
-void UpnpDiscovery::readPendingDatagrams() {
-    while (m_socket->hasPendingDatagrams()) {
-        QNetworkDatagram datagram = m_socket->receiveDatagram();
+void UpnpDiscovery::stop() {
+    m_socket->close();
+    m_discoveryTimer->stop();
+    m_rediscoveryTimer->stop();
+}
 
-        UpnpDiscoveryReply reply;
-        reply.sourceAddress = datagram.senderAddress();
-        reply.sourcePort = datagram.senderPort();
+bool UpnpDiscovery::isRunning() const {
+    return m_socket->isBound();
+}
 
-        QByteArrayList lines = datagram.data().split('\n');
-        for (QByteArray& line : lines)
-            if (line.endsWith('\r'))
-                line.chop(1);
+void UpnpDiscovery::discoveryTick() {
+    m_discoveryAttemptsLeft--;
 
-        if (lines.size() == 0 || lines[0] != "HTTP/1.1 200 OK") {
-            xWarning("Invalid UPnP reply from {}:{}:\n{}", datagram.senderAddress().toString(), datagram.senderPort(), datagram.data());
-            continue; /* Skip this datagram altogether. */
-        }
-
-        for(size_t i = 1; i < lines.size(); i++) {
-            QByteArray& line = lines[i];
-            if (line.isEmpty())
-                continue;
-
-            qsizetype pos = line.indexOf(':');
-            if (pos == -1) {
-                xWarning("Invalid line in UPnP reply from {}:{}:\n{}", datagram.senderAddress().toString(), datagram.senderPort(), line);
-                continue; /* Just skip this line. */
-            }
-
-            reply.headers.emplace(line.left(pos).toLower(), line.right(pos + 1).trimmed());
-        }
-
-        //xInfo("{}", datagram.data());
-
-        emit discovered(reply);
+    if (m_discoveryAttemptsLeft <= 0) {
+        m_discoveryTimer->stop();
+        return;
     }
+
+    m_socket->discover();
+}
+
+void UpnpDiscovery::rediscoveryTick() {
+    m_socket->discover();
+}
+
+void UpnpDiscovery::handleDiscovered(const UpnpDiscoveryReply& reply) {
+    m_discoveryTimer->stop(); /* Don't try again please. */
+
+    emit discovered(reply);
 }

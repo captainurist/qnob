@@ -5,6 +5,8 @@
 #include <QtCore/QByteArray>
 #include <QtNetwork/QHostAddress>
 
+#include "upnp_search_target.h"
+
 struct UpnpDiscoveryReply {
     /** Source host address. */
     QHostAddress sourceAddress;
@@ -12,6 +14,9 @@ struct UpnpDiscoveryReply {
     /** Source port. */
     quint16 sourcePort;
 
-    /** Upnp headers that were not parsed. Key is always lowercase. */
+    /** UPnP search target, "ST" field. */
+    UpnpSearchTarget searchTarget;
+
+    /** UPnP headers that were not parsed. Key is always lowercase. */
     std::unordered_map<QByteArray, QByteArray> headers;
 };

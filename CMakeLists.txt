@@ -194,9 +194,12 @@ set(common_srcs
     "src/lib/keys/key_combination.cpp"
     "src/lib/keys/mouse_keys.h"
     "src/lib/upnp/upnp_discovery.h"
-    "src/lib/upnp/upnp_discovery_reply.h"
-    "src/lib/upnp/upnp_search_target.cpp"
     "src/lib/upnp/upnp_discovery.cpp"
+    "src/lib/upnp/upnp_discovery_socket.h"
+    "src/lib/upnp/upnp_discovery_socket.cpp"
+    "src/lib/upnp/upnp_discovery_reply.h"
+    "src/lib/upnp/upnp_discovery_options.h"
+    "src/lib/upnp/upnp_search_target.cpp"
     "src/lib/upnp/upnp_search_target.h"
     "src/util/format.h"
     "src/lib/monitor/monitor_enumerator.h"
@@ -205,6 +208,8 @@ set(common_srcs
     "src/util/worker_pool.h"
     "src/util/worker_pool.cpp"
     "src/util/package.h"
+    "src/core/heos/heos.h"
+    "src/core/heos/heos.cpp"
 )
 
 set(common_libs
@@ -230,11 +235,12 @@ set(qnob_srcs
 )
 
 set(test_srcs
-    "src/util/exception_ut.cpp"
     "src/lib/keys/key_combination_ut.cpp"
+    "src/util/exception_ut.cpp"
     "src/util/format_ut.cpp"
+    "src/util/debug_ut.cpp"
     "src/lib/test/print_functions.h"
- "src/util/debug_ut.cpp")
+)
 
 
 #
