@@ -20,7 +20,7 @@ FileLogger::FileLogger(QFile* file) :
 void FileLogger::log(QtMsgType type, const QMessageLogContext& context, const QString& message) {
     QByteArray extendedMessage =
         m_prefixes[type] %
-        QByteArrayLiteral(": ") %
+        QByteArrayLiteral("| ") %
         relativeSourcePath(context.file).data() %
         QByteArrayLiteral(":") %
         QByteArray::number(context.line) %
@@ -33,7 +33,7 @@ void FileLogger::log(QtMsgType type, const QMessageLogContext& context, const QS
             nextPos = message.size();
 
         if (pos != 0)
-            extendedMessage += QByteArrayLiteral("    : ");
+            extendedMessage += QByteArrayLiteral("    | ");
 
         extendedMessage += QStringView(message.data() + pos, message.data() + nextPos).toUtf8();
         extendedMessage += QByteArrayLiteral("\n");
