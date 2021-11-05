@@ -208,6 +208,8 @@ set(common_srcs
     "src/util/worker_pool.h"
     "src/util/worker_pool.cpp"
     "src/util/package.h"
+    "src/lib/heos/heos_connection.h"
+    "src/lib/heos/heos_connection.cpp"
     "src/core/heos/heos.h"
     "src/core/heos/heos.cpp"
 )
