@@ -19,4 +19,4 @@ Code Style
 * Use `QObject` parent-child system for `QObject` ownership. It makes `moveToThread` work.
 * Also store owned `QObject`s in `std::unique_ptr` fields. This gives fine control over destruction order.
 * If a function allocates, it should return `std::unique_ptr`.
-* If a function takes ownership of a passed object, if should take `std::unique_ptr`.
+* If a function takes ownership of a passed object, it should take `std::unique_ptr`.
