@@ -12,13 +12,13 @@
 class DefaultEntityFactoryPool : public EntityFactoryPool {
 public:
     DefaultEntityFactoryPool() {
-        registerFactory(new KnobFactory());
-        registerFactory(new HotkeyFactory());
-        registerFactory(new SoundFactory());
-        registerFactory(new SkinFactory(HorizontalBarSkinType));
-        registerFactory(new SkinFactory(NumericSkinType));
-        registerFactory(new OsdFactory());
-        registerFactory(new TrayIconFactory());
-        registerFactory(new TrayEventFactory());
+        registerFactory(std::make_unique<KnobFactory>());
+        registerFactory(std::make_unique<HotkeyFactory>());
+        registerFactory(std::make_unique<SoundFactory>());
+        registerFactory(std::make_unique<SkinFactory>(HorizontalBarSkinType));
+        registerFactory(std::make_unique<SkinFactory>(NumericSkinType));
+        registerFactory(std::make_unique<OsdFactory>());
+        registerFactory(std::make_unique<TrayIconFactory>());
+        registerFactory(std::make_unique<TrayEventFactory>());
     }
 };

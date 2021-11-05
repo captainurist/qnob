@@ -17,7 +17,7 @@ class QUdpSocket;
 class UpnpDiscoverySocket : public QObject {
     Q_OBJECT
 public:
-    UpnpDiscoverySocket(const UpnpDiscoveryOptions& options);
+    UpnpDiscoverySocket(const UpnpDiscoveryOptions& options, QObject* parent);
     virtual ~UpnpDiscoverySocket();
 
     const UpnpDiscoveryOptions& options() const {

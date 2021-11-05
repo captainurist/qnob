@@ -33,11 +33,9 @@ public:
     /**
      * Allocates a separate thread for the provided worker object, and moves it into that thread.
      *
-     * Worker pool takes ownership of the provided worker object.
-     *
      * \param worker                    Worker object.
      */
-    void run(QObject* worker);
+    void run(std::unique_ptr<QObject> worker);
 
     /**
      * Schedules a release of the provided worker object that was previously passed to `run`.
@@ -59,7 +57,6 @@ public:
 
 private:
     QThread* reuseThread();
-    void registerWorker(QObject* worker, QThread* thread);
     void releaseWorker(QObject* worker);
 
 private:

@@ -10,6 +10,8 @@ class PlatformControl;
 class PlatformWheelEventManager : public QObject {
     Q_OBJECT
 public:
+    PlatformWheelEventManager(QObject* parent) : QObject(parent) {}
+
     /**
      * \param icon                      Icon to register. Re-registration is not allowed.
      */

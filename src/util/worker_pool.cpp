@@ -24,7 +24,7 @@ WorkerPool::~WorkerPool() {
     /* QThreads will be destroyed later as they are this object's children. */
 }
 
-void WorkerPool::run(QObject* worker) {
+void WorkerPool::run(std::unique_ptr<QObject> worker) {
     QThread* thread = reuseThread();
 
     if (!thread) {
@@ -36,9 +36,10 @@ void WorkerPool::run(QObject* worker) {
     }
 
     worker->moveToThread(thread);
-    connect(worker, &QObject::destroyed, this, &WorkerPool::releaseWorker, Qt::DirectConnection);
+    connect(worker.get(), &QObject::destroyed, this, &WorkerPool::releaseWorker, Qt::DirectConnection);
 
-    registerWorker(worker, thread);
+    QMutexLocker locker(&m_mutex);
+    m_threadByWorker.emplace(worker.release(), thread);
 }
 
 void WorkerPool::kill(QObject* worker) {
@@ -64,11 +65,6 @@ QThread* WorkerPool::reuseThread() {
     QThread* result = m_freeThreads.back();
     m_freeThreads.pop_back();
     return result;
-}
-
-void WorkerPool::registerWorker(QObject* worker, QThread* thread) {
-    QMutexLocker locker(&m_mutex);
-    m_threadByWorker.emplace(worker, thread);
 }
 
 void WorkerPool::releaseWorker(QObject* worker) {

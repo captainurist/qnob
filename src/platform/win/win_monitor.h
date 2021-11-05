@@ -15,7 +15,7 @@ class WinDdcMonitor;
 class WinMonitor : public PlatformMonitor {
     Q_OBJECT
 public:
-    WinMonitor(const QString& deviceId, PHYSICAL_MONITOR physicalMonitor);
+    WinMonitor(const QString& deviceId, PHYSICAL_MONITOR physicalMonitor, QObject* parent);
     virtual ~WinMonitor();
 
     virtual QString deviceId() const override;

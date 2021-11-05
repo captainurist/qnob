@@ -5,7 +5,7 @@
 class WinStandardControl : public PlatformControl {
     Q_OBJECT
 public:
-    WinStandardControl(PlatformStandardControl control);
+    WinStandardControl(PlatformStandardControl control, QObject* parent);
     virtual ~WinStandardControl();
 
     virtual QRect geometry() const override;

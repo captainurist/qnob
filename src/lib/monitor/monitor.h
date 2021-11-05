@@ -11,7 +11,7 @@ class MonitorServer;
 class Monitor: public PlatformMonitor {
     Q_OBJECT
 public:
-    Monitor(std::unique_ptr<PlatformMonitor> monitor);
+    Monitor(std::unique_ptr<PlatformMonitor> monitor, QObject* parent);
     virtual ~Monitor();
 
     bool isInitialized() const;

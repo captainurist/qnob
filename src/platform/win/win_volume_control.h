@@ -11,7 +11,7 @@ class WinVolumeEventHandler;
 
 class WinVolumeControl: public PlatformVolumeControl {
 public:
-    WinVolumeControl();
+    WinVolumeControl(QObject* parent);
     virtual ~WinVolumeControl();
 
     virtual float volume() const override;

@@ -11,7 +11,7 @@ class MonitorQueue;
 class MonitorServer : public QObject {
     Q_OBJECT
 public:
-    MonitorServer(std::unique_ptr<PlatformMonitor> monitor, std::shared_ptr<MonitorQueue> queue);
+    MonitorServer(std::unique_ptr<PlatformMonitor> monitor, std::shared_ptr<MonitorQueue> queue, QObject* parent);
     virtual ~MonitorServer();
 
     Q_SLOT void processQueue();

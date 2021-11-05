@@ -17,5 +17,5 @@ signals:
     void triggered();
 
 private:
-    QScopedPointer<PlatformShortcutNotifier> m_notifier;
+    std::unique_ptr<PlatformShortcutNotifier> m_notifier;
 };

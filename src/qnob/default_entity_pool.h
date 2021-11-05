@@ -16,15 +16,15 @@ class MonitorManager;
 class DefaultEntityPool : public EntityPool {
 public:
     DefaultEntityPool() {
-        m_monitorManager.reset(new MonitorManager());
-        m_upnpDiscovery.reset(new UpnpDiscovery(UpnpDiscoveryOptions()));
+        m_monitorManager.reset(new MonitorManager(nullptr));
+        m_upnpDiscovery.reset(new UpnpDiscovery(UpnpDiscoveryOptions(), nullptr));
 
-        Setting* volume = new Setting(lit("volume"), new VolumeSettingBackend());
-        addEntity(volume);
-        addEntity(new Setting(lit("brightness"), new BrightnessSettingBackend(m_monitorManager.get())));
-        addEntity(new App(lit("app")));
-        addEntity(new StandardTrayIcon(lit("volume_icon"), volume, AudioTrayIcon));
-        addEntity(new Heos(lit("heos"), m_upnpDiscovery.get()));
+        std::unique_ptr<Setting> volume = std::make_unique<Setting>(lit("volume"), std::make_unique<VolumeSettingBackend>());
+        addEntity(std::make_unique<Setting>(lit("brightness"), std::make_unique<BrightnessSettingBackend>(m_monitorManager.get())));
+        addEntity(std::make_unique<App>(lit("app")));
+        addEntity(std::make_unique<StandardTrayIcon>(lit("volume_icon"), volume.get(), AudioTrayIcon));
+        addEntity(std::make_unique<Heos>(lit("heos"), m_upnpDiscovery.get()));
+        addEntity(std::move(volume));
 
         m_upnpDiscovery->start();
     }

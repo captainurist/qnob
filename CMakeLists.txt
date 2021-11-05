@@ -180,8 +180,8 @@ set(common_srcs
     "src/platform/win/win_metrics.cpp"
     "src/platform/win/win_shared_event_window.cpp"
     "src/core/tray_icon/fixed_size_icon_engine.h"
-    "src/platform/win/win_thread_message_hook.h"
-    "src/platform/win/win_thread_message_hook.cpp"
+    
+    
     "src/lib/logging/logger.h"
     "src/lib/logging/buffer_logger.h"
     "src/lib/logging/file_logger.cpp"

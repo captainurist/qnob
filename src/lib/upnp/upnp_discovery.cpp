@@ -10,8 +10,9 @@ static const int UPNP_MAX_DISCOVERY_ATTEMPTS = 16;
 static const int UPNP_DISCOVERY_TIMEOUT_MS = 1000;
 static const int UPNP_REDISCOVERY_TIMEOUT_MS = 5 * 60 * 1000;
 
-UpnpDiscovery::UpnpDiscovery(const UpnpDiscoveryOptions& options) :
-    m_socket(new UpnpDiscoverySocket(options)),
+UpnpDiscovery::UpnpDiscovery(const UpnpDiscoveryOptions& options, QObject* parent) :
+    QObject(parent),
+    m_socket(new UpnpDiscoverySocket(options, this)),
     m_discoveryTimer(new QTimer()),
     m_rediscoveryTimer(new QTimer())
 {

@@ -5,7 +5,8 @@
 #include "win_guids.h"
 #include "win_error.h"
 
-WinStandardControl::WinStandardControl(PlatformStandardControl control):
+WinStandardControl::WinStandardControl(PlatformStandardControl control, QObject* parent):
+    PlatformControl(parent),
     m_control(control)
 {}
 

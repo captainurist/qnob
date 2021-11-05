@@ -13,7 +13,7 @@ using namespace std::chrono_literals;
 
 StandardTrayIcon::StandardTrayIcon(const QString& id, Setting* setting, PlatformStandardControl control) :
     Entity(id),
-    m_control(platform()->createStandardControl(control)),
+    m_control(platform()->createStandardControl(control, this)),
     m_setting(setting)
 {
     platform()->wheelEventManager()->registerControl(m_control.get());

@@ -17,7 +17,7 @@ class WinSharedEventWindow;
 class WinPlatform: public Platform {
     Q_OBJECT
 public:
-    WinPlatform();
+    WinPlatform(QObject* parent);
     virtual ~WinPlatform();
 
     virtual PlatformVolumeControl* volumeControl() const override;
@@ -25,7 +25,7 @@ public:
     virtual PlatformShortcutManager* shortcutManager() const override;
     virtual PlatformWheelEventManager* wheelEventManager() const override;
     virtual PlatformMetrics* metrics() const override;
-    virtual PlatformControl* createStandardControl(PlatformStandardControl control) const override;
+    virtual std::unique_ptr<PlatformControl> createStandardControl(PlatformStandardControl control, QObject* parent) const override;
     virtual QVariant execute(PlatformFunction function, QVariant arg0) override;
 
 private:

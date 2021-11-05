@@ -8,15 +8,15 @@
 
 #include "monitor.h"
 
-MonitorEnumerator::MonitorEnumerator() {}
+MonitorEnumerator::MonitorEnumerator(QObject* parent): QObject(parent) {}
 
 MonitorEnumerator::~MonitorEnumerator() {}
 
 void MonitorEnumerator::enumerate() {
     assert(m_result.empty());
 
-    for (auto& platformMonitor : platform()->monitorManager()->enumerateMonitors()) {
-        std::unique_ptr<Monitor> monitor(new Monitor(std::move(platformMonitor)));
+    for (auto&& platformMonitor : platform()->monitorManager()->enumerateMonitors(nullptr)) {
+        std::unique_ptr<Monitor> monitor(new Monitor(std::move(platformMonitor), nullptr));
         QObject::connect(monitor.get(), &Monitor::initialized, this, &MonitorEnumerator::handleMonitorInitializated);
         m_result.emplace_back(std::move(monitor));
     }

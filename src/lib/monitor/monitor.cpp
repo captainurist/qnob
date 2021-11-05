@@ -9,21 +9,22 @@
 #include "monitor_queue.h"
 #include "monitor_server.h"
 
-Monitor::Monitor(std::unique_ptr<PlatformMonitor> monitor) {
+Monitor::Monitor(std::unique_ptr<PlatformMonitor> monitor, QObject* parent): PlatformMonitor(parent) {
     /* Getting a name & device id doesn't take forever to complete, so we do in in ctor. */
     m_cachedDeviceId = monitor->deviceId();
     m_cachedName = monitor->name();
 
     /* Initialize monitor server. */
     m_queue = std::make_shared<MonitorQueue>();
-    m_server = new MonitorServer(std::move(monitor), m_queue);
+    std::unique_ptr<MonitorServer> server = std::make_unique<MonitorServer>(std::move(monitor), m_queue, nullptr);
+    m_server = server.get();
 
     connect(this, &Monitor::notifyServer, m_server, &MonitorServer::processQueue);
     connect(m_server, &MonitorServer::capabilitiesCompleted, this, &Monitor::handleCapabilitiesCompleted);
     connect(m_server, &MonitorServer::readCompleted, this, &Monitor::handleReadCompleted);
     connect(m_server, &MonitorServer::writeCompleted, this, &Monitor::handleWriteCompleted);
 
-    WorkerPool::globalInstance()->run(m_server);
+    WorkerPool::globalInstance()->run(std::move(server));
 
     /* Fire initialization requests. */
     m_queue->addAction({ MonitorAction::ReadCapabilities });

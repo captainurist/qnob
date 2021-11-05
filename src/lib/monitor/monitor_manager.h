@@ -14,7 +14,7 @@ class MonitorEnumerator;
 class MonitorManager: public QObject {
     Q_OBJECT
 public:
-    MonitorManager();
+    MonitorManager(QObject* parent);
     virtual ~MonitorManager();
 
     const MonitorList& monitors() const;

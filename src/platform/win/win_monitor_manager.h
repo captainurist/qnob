@@ -9,8 +9,8 @@ class WinSharedEventWindow;
 class WinMonitorManager : public PlatformMonitorManager {
     Q_OBJECT
 public:
-    WinMonitorManager(WinSharedEventWindow* eventWindow);
+    WinMonitorManager(WinSharedEventWindow* eventWindow, QObject* parent);
     virtual ~WinMonitorManager();
 
-    virtual std::vector<std::unique_ptr<PlatformMonitor>> enumerateMonitors() override;
+    virtual std::vector<std::unique_ptr<PlatformMonitor>> enumerateMonitors(QObject* parent) override;
 };

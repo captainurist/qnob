@@ -20,14 +20,16 @@
 #include "win_shared_event_window.h"
 #include "win_standard_control.h"
 
-WinPlatform::WinPlatform() {
+WinPlatform::WinPlatform(QObject* parent):
+    Platform(parent)
+{
     m_com.reset(new Com());
     m_eventWindow.reset(new WinSharedEventWindow());
-    m_volumeControl.reset(new WinVolumeControl());
-    m_monitorManager.reset(new WinMonitorManager(m_eventWindow.get()));
-    m_shortcutManager.reset(new WinShortcutManager(m_eventWindow.get()));
-    m_wheelEventManager.reset(new WinWheelEventManager(m_eventWindow.get()));
-    m_metrics.reset(new WinMetrics(m_eventWindow.get()));
+    m_volumeControl.reset(new WinVolumeControl(this));
+    m_monitorManager.reset(new WinMonitorManager(m_eventWindow.get(), this));
+    m_shortcutManager.reset(new WinShortcutManager(m_eventWindow.get(), this));
+    m_wheelEventManager.reset(new WinWheelEventManager(m_eventWindow.get(), this));
+    m_metrics.reset(new WinMetrics(m_eventWindow.get(), this));
 }
 
 WinPlatform::~WinPlatform() {}
@@ -52,8 +54,8 @@ PlatformMetrics* WinPlatform::metrics() const {
     return m_metrics.get();
 }
 
-PlatformControl* WinPlatform::createStandardControl(PlatformStandardControl control) const {
-    return new WinStandardControl(control);
+std::unique_ptr<PlatformControl> WinPlatform::createStandardControl(PlatformStandardControl control, QObject* parent) const {
+    return std::make_unique<WinStandardControl>(control, parent);
 }
 
 QVariant WinPlatform::execute(PlatformFunction function, QVariant arg0) {
@@ -101,5 +103,5 @@ void WinPlatform::hideConsole() const {
 }
 
 Platform* createPlatform() {
-    return new WinPlatform();
+    return new WinPlatform(nullptr);
 }

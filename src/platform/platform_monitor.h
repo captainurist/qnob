@@ -15,6 +15,8 @@
 class PlatformMonitor: public QObject {
     Q_OBJECT
 public:
+    PlatformMonitor(QObject* parent) : QObject(parent) {}
+
     /**
      * \returns                         System-wide unique identifier for this monitor.
      */

@@ -6,7 +6,7 @@
 #include "monitor.h"
 #include "monitor_enumerator.h"
 
-MonitorManager::MonitorManager() {
+MonitorManager::MonitorManager(QObject* parent): QObject(parent) {
     updateMonitors();
 
     connect(platform()->monitorManager(), &PlatformMonitorManager::monitorsChanged, this, &MonitorManager::updateMonitors);
@@ -19,10 +19,9 @@ const MonitorList& MonitorManager::monitors() const {
 }
 
 void MonitorManager::updateMonitors() {
-    MonitorEnumerator* enumerator = new MonitorEnumerator();
+    MonitorEnumerator* enumerator = new MonitorEnumerator(this); /* Destroy enumerator if we get destroyed before it's finished. */
     connect(enumerator, &MonitorEnumerator::finished, this, &MonitorManager::handleEnumeratorFinished);
     connect(enumerator, &MonitorEnumerator::finished, enumerator, &QObject::deleteLater);
-    enumerator->setParent(this); /* Destroy enumerator if we get destroyed before it's finished. */
     enumerator->enumerate();
 }
 

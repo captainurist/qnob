@@ -5,7 +5,7 @@
 Hotkey::Hotkey(const QString& id, const QKeyCombination& shortcut):
     Entity(id)
 {
-    m_notifier.reset(platform()->shortcutManager()->createShortcutNotifier(shortcut));
+    m_notifier = platform()->shortcutManager()->createShortcutNotifier(shortcut, this);
     if (!m_notifier)
         return;
 

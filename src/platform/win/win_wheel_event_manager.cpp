@@ -48,7 +48,9 @@ static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry
     qApp->notify(target, &event);
 }
 
-WinWheelEventManager::WinWheelEventManager(WinSharedEventWindow* eventWindow) {
+WinWheelEventManager::WinWheelEventManager(WinSharedEventWindow* eventWindow, QObject* parent):
+    PlatformWheelEventManager(parent)
+{
     if (qgetenv("QT_ENABLE_HIGHDPI_SCALING") != "0")
         xCritical("QT_ENABLE_HIGHDPI_SCALING != 0, trayicon mouse wheel events might not work on highdpi displays.");
 

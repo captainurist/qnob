@@ -15,9 +15,10 @@ static const int UPNP_MAX_DISCOVERY_ATTEMPTS = 16;
 static const int UPNP_DISCOVERY_TIMEOUT_MS = 1000;
 static const int UPNP_REDISCOVERY_TIMEOUT_MS = 5 * 60 * 1000;
 
-UpnpDiscoverySocket::UpnpDiscoverySocket(const UpnpDiscoveryOptions& options):
+UpnpDiscoverySocket::UpnpDiscoverySocket(const UpnpDiscoveryOptions& options, QObject* parent):
+    QObject(parent),
     m_options(options),
-    m_socket(new QUdpSocket())
+    m_socket(new QUdpSocket(this))
 {
     m_options.maxWaitTime = std::clamp(m_options.maxWaitTime, 1, 5); /* As required by UPnP standard. */
 

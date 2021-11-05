@@ -13,7 +13,10 @@ To make IntelliSense work with custom-built Qt:
 Code Style
 ==========
 
-* Use std::unique_ptr instead of QScopedPointer.
-* Use std::unique_ptr instead of QObject parent-child system where possible.
-* ...
-
+* Use `std::unique_ptr` instead of `QScopedPointer`.
+* Declare constructors for `QObject`-derived classes that take `QObject* parent` as the last argument. Do not default parent to `nullptr`!
+* Always pass said parent (exceptions are top-level windows and `Entity` classes).
+* Use `QObject` parent-child system for `QObject` ownership. It makes `moveToThread` work.
+* Also store owned `QObject`s in `std::unique_ptr` fields. This gives fine control over destruction order.
+* If a function allocates, it should return `std::unique_ptr`.
+* If a function takes ownership of a passed object, if should take `std::unique_ptr`.

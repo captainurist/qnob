@@ -9,7 +9,7 @@ class WinSharedEventWindow;
 class WinMetrics : public PlatformMetrics {
     Q_OBJECT
 public:
-    WinMetrics(WinSharedEventWindow* eventWindow);
+    WinMetrics(WinSharedEventWindow* eventWindow, QObject* parent);
 
     virtual QSize trayIconSize() const override;
 

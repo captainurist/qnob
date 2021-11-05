@@ -5,11 +5,12 @@
 #include "monitor.h"
 #include "monitor_queue.h"
 
-MonitorServer::MonitorServer(std::unique_ptr<PlatformMonitor> monitor, std::shared_ptr<MonitorQueue> queue) :
+MonitorServer::MonitorServer(std::unique_ptr<PlatformMonitor> monitor, std::shared_ptr<MonitorQueue> queue, QObject* parent) :
+    QObject(parent),
     m_monitor(std::move(monitor)),
     m_queue(queue)
 {
-    m_monitor->setParent(this); /* Make sure we're in the same thread! */
+    m_monitor->setParent(this);
 }
 
 MonitorServer::~MonitorServer() {}

@@ -8,6 +8,8 @@
 class PlatformControl: public QObject {
     Q_OBJECT
 public:
+    PlatformControl(QObject* parent) : QObject(parent) {}
+
     /**
      * \returns                         Current geometry of this control.
      */

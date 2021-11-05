@@ -16,7 +16,8 @@
 #include "win_shared_event_window.h"
 #include "win_shortcut_key_table.h"
 
-WinShortcutManager::WinShortcutManager(WinSharedEventWindow* eventWindow) :
+WinShortcutManager::WinShortcutManager(WinSharedEventWindow* eventWindow, QObject* parent) :
+    PlatformShortcutManager(parent),
     m_eventWindow(eventWindow)
 {
     for (quint32 winKey = 0; winKey < KeyMapping.size(); winKey++) {
@@ -48,7 +49,7 @@ std::unordered_set<QKeyCombination> WinShortcutManager::bindableKeys() const {
     return m_bindableKeys;
 }
 
-PlatformShortcutNotifier* WinShortcutManager::createShortcutNotifier(const QKeyCombination& shortcut) const {
+std::unique_ptr<PlatformShortcutNotifier> WinShortcutManager::createShortcutNotifier(const QKeyCombination& shortcut, QObject* parent) const {
     Qt::Key key = shortcut.key();
     Qt::KeyboardModifiers mods = shortcut.keyboardModifiers();
     quint32 nativeKey = 0;
@@ -63,9 +64,9 @@ PlatformShortcutNotifier* WinShortcutManager::createShortcutNotifier(const QKeyC
     if (!apicall(RegisterHotKey(reinterpret_cast<HWND>(m_eventWindow->winId()), m_nextId, nativeMods, nativeKey)))
         return nullptr;
 
-    WinShortcutNotifier* notifier = new WinShortcutNotifier(m_nextId);
-    connect(notifier, &WinShortcutNotifier::aboutToBeDestroyed, this, &WinShortcutManager::removeShortcutNotifier);
-    m_notifierById[m_nextId] = notifier;
+    std::unique_ptr<WinShortcutNotifier> notifier = std::make_unique<WinShortcutNotifier>(m_nextId, parent);
+    connect(notifier.get(), &WinShortcutNotifier::aboutToBeDestroyed, this, &WinShortcutManager::removeShortcutNotifier);
+    m_notifierById[m_nextId] = notifier.get();
     m_nextId++;
     return notifier;
 }

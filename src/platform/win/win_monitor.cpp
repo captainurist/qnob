@@ -25,7 +25,8 @@ static float mapFromNative(const WinDdcTriplet& triplet) {
     return (triplet.current - triplet.min) * 1.0f / (triplet.max - triplet.min);
 }
 
-WinMonitor::WinMonitor(const QString& deviceId, PHYSICAL_MONITOR physicalMonitor):
+WinMonitor::WinMonitor(const QString& deviceId, PHYSICAL_MONITOR physicalMonitor, QObject* parent):
+    PlatformMonitor(parent),
     m_deviceId(deviceId),
     m_physicalMonitor(physicalMonitor),
     m_retriesLeft(MAX_RETRIES)

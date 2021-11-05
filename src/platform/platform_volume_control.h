@@ -5,6 +5,8 @@
 class PlatformVolumeControl: public QObject {
     Q_OBJECT
 public:
+    PlatformVolumeControl(QObject* parent) : QObject(parent) {}
+
     /**
      * \returns                         Current system volume in [0, 1], or NAN in case of an error.
      */

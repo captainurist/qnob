@@ -5,7 +5,7 @@
 class WinShortcutNotifier : public PlatformShortcutNotifier {
     Q_OBJECT
 public:
-    WinShortcutNotifier(int id): m_id(id) {}
+    WinShortcutNotifier(int id, QObject* parent): PlatformShortcutNotifier(parent), m_id(id) {}
 
     ~WinShortcutNotifier() {
         emit aboutToBeDestroyed(m_id);

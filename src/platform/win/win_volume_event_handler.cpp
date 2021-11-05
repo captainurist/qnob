@@ -1,6 +1,7 @@
 #include "win_volume_event_handler.h"
 
-WinVolumeEventHandler::WinVolumeEventHandler(const GUID& localEventGuid) :
+WinVolumeEventHandler::WinVolumeEventHandler(const GUID& localEventGuid, QObject* parent) :
+    QObject(parent),
     m_localEventGuid(localEventGuid)
 {}
 

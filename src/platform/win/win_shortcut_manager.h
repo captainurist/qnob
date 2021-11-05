@@ -13,11 +13,11 @@ class WinShortcutNotifier;
 class WinShortcutManager: public PlatformShortcutManager {
     Q_OBJECT;
 public:
-    WinShortcutManager(WinSharedEventWindow* eventWindow);
+    WinShortcutManager(WinSharedEventWindow* eventWindow, QObject* parent);
     ~WinShortcutManager();
 
     virtual std::unordered_set<QKeyCombination> bindableKeys() const override;
-    virtual PlatformShortcutNotifier* createShortcutNotifier(const QKeyCombination& shortcut) const override;
+    virtual std::unique_ptr<PlatformShortcutNotifier> createShortcutNotifier(const QKeyCombination& shortcut, QObject* parent) const override;
 
 private:
     void dispatchEvent(MSG* message);

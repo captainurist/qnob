@@ -12,8 +12,9 @@
 
 static constexpr GUID GUID_QnobAudioEvent = {0x3bd43a3e, 0xd585, 0x4354, {0xcb, 0xf3, 0x55, 0xba, 0x11, 0xfc, 0x84, 0x12}};
 
-WinVolumeControl::WinVolumeControl():
-    m_eventHandler(new WinVolumeEventHandler(GUID_QnobAudioEvent))
+WinVolumeControl::WinVolumeControl(QObject* parent):
+    PlatformVolumeControl(parent),
+    m_eventHandler(new WinVolumeEventHandler(GUID_QnobAudioEvent, this))
 {
     /* WinVolumeEventHandler emits these signals from another thread. */
     connect(m_eventHandler.get(), &WinVolumeEventHandler::volumeChangedExternally, this, &WinVolumeControl::changedExternally);
@@ -57,7 +58,6 @@ void WinVolumeControl::deinitializeDefaultDevice() {
         if (!apicall(m_volumeControl->UnregisterControlChangeNotify(m_eventHandler.get())))
             return;
 }
-
 
 float WinVolumeControl::volume() const {
     if (!m_volumeControl)

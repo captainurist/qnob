@@ -9,7 +9,7 @@ class UpnpDiscoveryReply;
 class UpnpDiscovery : public QObject {
     Q_OBJECT
 public:
-    UpnpDiscovery(const UpnpDiscoveryOptions& options);
+    UpnpDiscovery(const UpnpDiscoveryOptions& options, QObject* parent);
     virtual ~UpnpDiscovery();
 
     const UpnpDiscoveryOptions& options() const;

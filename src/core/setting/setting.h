@@ -11,7 +11,7 @@ class SettingBackend;
 class Setting : public Entity {
     Q_OBJECT
 public:
-    Setting(const QString& id, SettingBackend* backend);
+    Setting(const QString& id, std::unique_ptr<SettingBackend> backend);
     virtual ~Setting();
 
     bool isInitialized() const;

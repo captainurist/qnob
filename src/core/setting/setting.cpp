@@ -2,13 +2,14 @@
 
 #include "setting_backend.h"
 
-Setting::Setting(const QString& id, SettingBackend* backend):
+Setting::Setting(const QString& id, std::unique_ptr<SettingBackend> backend):
     Entity(id),
-    m_backend(backend)
+    m_backend(std::move(backend))
 {
-    connect(backend, &SettingBackend::changedExternally, this, &Setting::updateCachedState);
-    connect(backend, &SettingBackend::changedExternally, this, &Setting::activate);
-    connect(backend, &SettingBackend::initialized, this, &Setting::updateCachedState);
+    m_backend->setParent(this);
+    connect(m_backend.get(), &SettingBackend::changedExternally, this, &Setting::updateCachedState);
+    connect(m_backend.get(), &SettingBackend::changedExternally, this, &Setting::activate);
+    connect(m_backend.get(), &SettingBackend::initialized, this, &Setting::updateCachedState);
 
     updateCachedState();
 }

@@ -8,7 +8,7 @@
 class WinVolumeEventHandler : public QObject, public IAudioEndpointVolumeCallback, public IMMNotificationClient {
     Q_OBJECT
 public:
-    WinVolumeEventHandler(const GUID& localEventGuid);
+    WinVolumeEventHandler(const GUID& localEventGuid, QObject* parent);
 
     /* IUnknown. */
 

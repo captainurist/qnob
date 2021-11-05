@@ -15,7 +15,7 @@ class PlatformControl;
 class WinWheelEventManager: public PlatformWheelEventManager {
     Q_OBJECT
 public:
-    WinWheelEventManager(WinSharedEventWindow* eventWindow);
+    WinWheelEventManager(WinSharedEventWindow* eventWindow, QObject* parent);
     virtual ~WinWheelEventManager();
 
     virtual void registerTrayIcon(QSystemTrayIcon* icon) override;

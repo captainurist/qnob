@@ -11,7 +11,7 @@ class PlatformMonitorManager;
 class MonitorEnumerator : public QObject {
     Q_OBJECT
 public:
-    MonitorEnumerator();
+    MonitorEnumerator(QObject* parent);
     virtual ~MonitorEnumerator();
 
     Q_SLOT void enumerate();

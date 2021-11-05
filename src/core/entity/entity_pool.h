@@ -15,11 +15,9 @@ public:
     /**
      * Adds provided entity into this entity pool. This pool must not contain an entity with the same id.
      *
-     * The pool takes ownership of the provided entity.
-     *
      * \param entity                    Entity to add.
      */
-    void addEntity(Entity* entity);
+    void addEntity(std::unique_ptr<Entity> entity);
 
     Entity* entity(const QString& id) const;
 

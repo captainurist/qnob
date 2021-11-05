@@ -23,7 +23,7 @@
 class Platform : public QObject {
     Q_OBJECT
 public:
-    virtual ~Platform() {}
+    Platform(QObject* parent) : QObject(parent) {}
 
     /**
      * \returns                         Volume control object.
@@ -54,7 +54,7 @@ public:
      * \param control                   Standard control.
      * \returns                         Platform control object for the provided standard control.
      */
-    virtual PlatformControl* createStandardControl(PlatformStandardControl control) const = 0;
+    virtual std::unique_ptr<PlatformControl> createStandardControl(PlatformStandardControl control, QObject* parent) const = 0;
 
     /**
      * Runs a platform-specific function.

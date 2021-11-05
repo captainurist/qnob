@@ -45,7 +45,9 @@ static QSize getSystemTrayIconSize() {
     return QSize(GetSystemMetricsForDpi(SM_CXSMICON, dpi), GetSystemMetricsForDpi(SM_CYSMICON, dpi));
 }
 
-WinMetrics::WinMetrics(WinSharedEventWindow* eventWindow) {
+WinMetrics::WinMetrics(WinSharedEventWindow* eventWindow, QObject* parent):
+    PlatformMetrics(parent)
+{
     /* Taskbar is recreated when primary monitor dpi changes. */
     connect(eventWindow, &WinSharedEventWindow::taskbarCreated, this, &WinMetrics::updateTrayIconSize);
 }

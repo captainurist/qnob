@@ -102,7 +102,9 @@ static QString monitorDeviceId(const std::vector<MonitorInfo>& monitorInfos, con
     return QString();
 }
 
-WinMonitorManager::WinMonitorManager(WinSharedEventWindow* eventWindow) {
+WinMonitorManager::WinMonitorManager(WinSharedEventWindow* eventWindow, QObject* parent):
+    PlatformMonitorManager(parent)
+{
     /* WM_DISPLAYCHANGE is sent when display resolution has changed,
      * which doesn't necessarily mean that the monitors have changed.
      * It's not worth double-checking though. */
@@ -111,8 +113,8 @@ WinMonitorManager::WinMonitorManager(WinSharedEventWindow* eventWindow) {
 
 WinMonitorManager::~WinMonitorManager() {}
 
-std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonitors() {
-    std::vector<std::unique_ptr<PlatformMonitor>> result;
+std::vector< std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonitors(QObject* parent) {
+    std::vector< std::unique_ptr<PlatformMonitor>> result;
 
     std::vector<MonitorInfo> monitorInfos = enumMonitors();
 
@@ -145,7 +147,7 @@ std::vector<std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonito
                 );
             }
 
-            result.emplace_back(new WinMonitor(deviceId, physicalMonitors[monitorIndex]));
+            result.emplace_back(new WinMonitor(deviceId, physicalMonitors[monitorIndex], parent));
         }
     }
 
