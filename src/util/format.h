@@ -133,6 +133,11 @@ struct formatter<T, char> : public formatter<QByteArrayView, char> {
 } // namespace std
 
 
+// TODO: it's not possible to pass QDebug in std::format_context, but there are still options:
+// 1. Pass it in the last argument and then read it via std::basic_format_context::arg.
+// 2. Pass it in the output iterator, then read via std::basic_format_context::out. This will be a little messy though.
+//    Also will have to use std::vformat_to so that my iterator doesn't get replaced with _Fmt_iterator_buffer.
+
 /**
  * `std::format` alternative that formats into `QString`.
  */
