@@ -10,31 +10,166 @@
 #include <QtCore/QVarLengthArray>
 #include <QtCore/QDebug>
 
+#include "exception.h"
+
+/**
+ * This is a pretty bad hack. We're basically forward-declaring a function from Qt internals. But whatever.
+ */
+struct QUtf8 {
+    static char* convertFromUnicode(char* out, QStringView in, QStringConverter::State* state);
+    static QChar* convertToUnicode(QChar* out, QByteArrayView in, QStringConverter::State* state);
+};
+
+namespace detail {
 
 template<class T>
 concept debug_streamable = requires (QDebug a, T b) { a << b; };
 
-namespace detail {
+inline void appendUtf16ToUtf8(QStringView src, QByteArray* dst) {
+    size_t oldSize = dst->size();
+    dst->resize(dst->size() + 3 * src.size()); /* QByteArray::resize doesn't initialize new bytes! */
+    QStringConverter::State state;
+    char* end = QUtf8::convertFromUnicode(dst->data() + oldSize, src, &state);
+    dst->resize(end - dst->data());
+}
 
-/**
- * Helper class that can be used with `std::back_inserter` to insert `wchar_t` chars directly into `QString`.
- */
-struct QStringBackInsertConvertingProxy {
+inline void appendUft8ToUtf16(QByteArrayView src, QString* dst) {
+    size_t oldSize = dst->size();
+    dst->resize(dst->size() + src.size()); /* QString::resize doesn't initialize new bytes! */
+    QStringConverter::State state;
+    QChar* end = QUtf8::convertToUnicode(dst->data() + oldSize, src, &state);
+    dst->resize(end - dst->data());
+}
+
+class StringFormatState {
 public:
     using value_type = wchar_t;
 
-    QStringBackInsertConvertingProxy(QString* target) : m_target(target) {}
+    StringFormatState() : m_debug(&m_result) {
+        m_debug = m_debug.nospace();
+    }
 
-    void push_back(wchar_t character) {
+    void append(wchar_t character) {
         /* Surrogates are not supported. */
         assert(sizeof(wchar_t) == sizeof(char16_t) || !QChar::requiresSurrogates(static_cast<char32_t>(character)));
 
-        m_target->push_back(QChar(static_cast<char16_t>(character)));
+        m_result.push_back(QChar(static_cast<char16_t>(character)));
+    }
+
+    void append(QStringView string) {
+        m_result.append(string);
+    }
+
+    void append(QByteArrayView utf8) {
+        appendUft8ToUtf16(utf8, &m_result);
+    }
+
+    template<class T>
+    void appendDebug(const T& value) {
+        m_debug << value;
+    }
+
+    QString takeResult() {
+        return std::move(m_result);
     }
 
 private:
-    QString* m_target;
+    QString m_result;
+    QDebug m_debug;
 };
+
+class ByteArrayFormatState {
+public:
+    using value_type = wchar_t;
+
+    ByteArrayFormatState() : m_debug(&m_debugBuffer) {
+        m_debug = m_debug.nospace();
+    }
+
+    void append(char character) {
+        m_result.push_back(character);
+    }
+
+    void append(QByteArrayView string) {
+        m_result.append(string);
+    }
+
+    template<class T>
+    void appendDebug(const T& value) {
+        m_debugBuffer.resize(0); /* QString::clear deallocates, this is not what we need here. */
+        m_debug << value;
+        appendUtf16ToUtf8(m_debugBuffer, &m_result);
+    }
+
+    QByteArray takeResult() {
+        return std::move(m_result);
+    }
+
+private:
+    QByteArray m_result;
+    QString m_debugBuffer;
+    QDebug m_debug;
+};
+
+template<class State>
+class FormatOutputIterator {
+public:
+    using iterator_category = std::output_iterator_tag;
+    using value_type = void;
+    using pointer = void;
+    using reference = void;
+    using difference_type = ptrdiff_t;
+
+    FormatOutputIterator() = default;
+
+    explicit FormatOutputIterator(State* state) : m_state(state) {}
+
+    FormatOutputIterator& operator=(typename State::value_type character) {
+        m_state->append(character);
+        return *this;
+    }
+
+    [[nodiscard]] FormatOutputIterator& operator*() {
+        return *this;
+    }
+
+    FormatOutputIterator& operator++() {
+        return *this;
+    }
+
+    FormatOutputIterator operator++(int) {
+        return *this;
+    }
+
+    template<class T>
+    FormatOutputIterator append(const T& value) {
+        m_state->append(value);
+        return *this;
+    }
+
+    template<class T>
+    FormatOutputIterator appendDebug(const T& value) {
+        m_state->appendDebug(value);
+        return *this;
+    }
+
+private:
+    State* m_state = nullptr;
+};
+
+template<class T>
+struct is_format_output_iterator : std::false_type {};
+
+template<class State>
+struct is_format_output_iterator<FormatOutputIterator<State>> : std::true_type {};
+
+template<class FormatContext>
+void requireFormatOutputIterator(FormatContext&) {
+    static_assert(
+        is_format_output_iterator<typename FormatContext::iterator>::value,
+        "Formatting this type is supported only through ::sformat/::bformat calls."
+    );
+}
 
 /**
  * Helper class that provides a `std::wstring_view` over a `QString`, performing conversion if necessary.
@@ -61,121 +196,126 @@ private:
     std::wstring_view m_view;
 };
 
-} // namespace detail
+/**
+ * Formatter that expects an empty format spec.
+ */
+struct EmptySpecFormatter {
+    template<class ParseContext>
+    typename ParseContext::iterator parse(ParseContext& ctx) {
+        auto pos = ctx.begin();
+        if (pos == ctx.end())
+            return pos;
+        if (*pos != '}')
+            throw std::format_error("Only empty format specs are supported.");
+        return pos;
+    }
+};
 
+/**
+ * Formatter that forward to State::append.
+ */
+template<class T>
+struct AppendFormatter : EmptySpecFormatter {
+    template <class FormatContext>
+    auto format(const T& value, FormatContext& ctx) {
+        requireFormatOutputIterator(ctx);
+        return ctx.out().append(value);
+    }
+};
+
+/**
+ * Formatter that forwards to State::appendDebug.
+ */
+template<class T>
+struct DebugFormatter : EmptySpecFormatter {
+    template <class FormatContext>
+    auto format(const T& value, FormatContext& ctx) {
+        requireFormatOutputIterator(ctx);
+        return ctx.out().appendDebug(value);
+    }
+};
+
+} // namespace detail
 
 namespace std {
 
 template<>
-struct formatter<QStringView, wchar_t> : public formatter<std::wstring_view, wchar_t> {
-    using base_type = formatter<std::wstring_view, wchar_t>;
-
-    template <class FormatContext>
-    auto format(QStringView value, FormatContext& ctx) {
-        detail::QStringToWcharConversionBuffer buffer(value);
-        return base_type::format(buffer.view(), ctx);
-    }
-};
+struct formatter<QStringView, wchar_t> : detail::AppendFormatter<QStringView> {};
 
 template<>
-struct formatter<QString, wchar_t> : public formatter<QStringView, wchar_t> {};
+struct formatter<QString, wchar_t> : detail::AppendFormatter<QString> {};
 
 template<>
-struct formatter<QByteArrayView, wchar_t> : public formatter<QStringView, wchar_t> {
-    using base_type = formatter<QStringView, wchar_t>;
-
-    template <typename FormatContext>
-    auto format(QByteArrayView value, FormatContext& ctx) {
-        return base_type::format(QString::fromUtf8(value), ctx);
-    }
-};
+struct formatter<QByteArrayView, wchar_t> : detail::AppendFormatter<QByteArrayView> {};
 
 template<>
-struct formatter<QByteArray, wchar_t> : public formatter<QByteArrayView, wchar_t> {};
+struct formatter<QByteArray, wchar_t> : detail::AppendFormatter<QByteArray> {};
 
-template<class T> requires debug_streamable<T> && std::is_class_v<std::remove_cvref_t<T>>
-struct formatter<T, wchar_t> : public formatter<QStringView, wchar_t> {
-    using base_type = formatter<QStringView, wchar_t>;
-
-    template <typename FormatContext>
-    auto format(const T& value, FormatContext& ctx) {
-        QString buffer;
-        QDebug(&buffer).nospace() << value;
-        return base_type::format(buffer, ctx);
-    }
-};
+template<class T> requires detail::debug_streamable<T> && std::is_class_v<std::remove_cvref_t<T>>
+struct formatter<T, wchar_t> : detail::DebugFormatter<T> {};
 
 template<>
-struct formatter<QByteArrayView, char> : public formatter<std::string_view, char> {
-    using base_type = formatter<std::string_view, char>;
-
-    template <typename FormatContext>
-    auto format(QByteArrayView value, FormatContext& ctx) {
-        return base_type::format(std::string_view(value.data(), value.size()), ctx);
-    }
-};
+struct formatter<QByteArrayView, char> : detail::AppendFormatter<QByteArrayView> {};
 
 template<>
-struct formatter<QByteArray, char> : public formatter<QByteArrayView, char> {};
+struct formatter<QByteArray, char> : detail::AppendFormatter<QByteArray> {};
 
-template<class T> requires debug_streamable<T>&& std::is_class_v<std::remove_cvref_t<T>>
-struct formatter<T, char> : public formatter<QByteArrayView, char> {
-    using base_type = formatter<QByteArrayView, char>;
-
-    template <typename FormatContext>
-    auto format(const T& value, FormatContext& ctx) {
-        QString buffer;
-        QDebug(&buffer).nospace() << value;
-        return base_type::format(buffer.toUtf8(), ctx);
-    }
-};
+template<class T> requires detail::debug_streamable<T> && std::is_class_v<std::remove_cvref_t<T>>
+struct formatter<T, char> : detail::DebugFormatter<T> {};
 
 } // namespace std
 
-
-// TODO: it's not possible to pass QDebug in std::format_context, but there are still options:
-// 1. Pass it in the last argument and then read it via std::basic_format_context::arg.
-// 2. Pass it in the output iterator, then read via std::basic_format_context::out. This will be a little messy though.
-//    Also will have to use std::vformat_to so that my iterator doesn't get replaced with _Fmt_iterator_buffer.
 
 /**
  * `std::format` alternative that formats into `QString`.
  */
 template<class... Args>
-QString sformat(std::wstring_view formatString, Args&&... args) {
-    QString result;
-    detail::QStringBackInsertConvertingProxy resultProxy(&result);
-    std::format_to(std::back_inserter(resultProxy), formatString, std::forward<Args>(args)...);
-    return result;
+QString sformat(std::wstring_view formatString, const Args&... args) {
+    using namespace detail;
+
+    StringFormatState state;
+    std::vformat_to(
+        FormatOutputIterator<StringFormatState>(&state),
+        formatString,
+        std::make_format_args<std::basic_format_context<FormatOutputIterator<StringFormatState>, wchar_t>>(args...)
+    );
+    return state.takeResult();
 }
 
 template<class... Args>
-QString sformat(QStringView formatString, Args&&... args) {
-    return sformat(detail::QStringToWcharConversionBuffer(formatString).view(), std::forward<Args>(args)...);
+QString sformat(QStringView formatString, const Args&... args) {
+    return sformat(detail::QStringToWcharConversionBuffer(formatString).view(), args...);
 }
 
 template<class... Args>
-QString sformat(const wchar_t* formatString, Args&&... args) {
-    return sformat(std::wstring_view(formatString), std::forward<Args>(args)...);
+QString sformat(const wchar_t* formatString, const Args&... args) {
+    return sformat(std::wstring_view(formatString), args...);
 }
+
 
 /**
- * `std::format` alternative that formats into a `QByteArray`.
+ * `std::format` alternative that formats into `QByteArray`.
  */
 template<class... Args>
-QByteArray bformat(std::string_view formatString, Args&&... args) {
-    QByteArray result;
-    std::format_to(std::back_inserter(result), formatString, std::forward<Args>(args)...);
-    return result;
+QByteArray bformat(std::string_view formatString, const Args&... args) {
+    using namespace detail;
+
+    ByteArrayFormatState state;
+    std::vformat_to(
+        FormatOutputIterator<ByteArrayFormatState>(&state),
+        formatString,
+        std::make_format_args<std::basic_format_context<FormatOutputIterator<ByteArrayFormatState>, char>>(args...)
+    );
+    return state.takeResult();
 }
 
 template<class... Args>
-QByteArray bformat(QByteArrayView formatString, Args&&... args) {
-    return bformat(std::string_view(formatString.data(), formatString.size()), std::forward<Args>(args)...);
+QByteArray bformat(QByteArrayView formatString, const Args&... args) {
+    return bformat(std::string_view(formatString.data(), formatString.size()), args...);
 }
 
 template<class... Args>
-QByteArray bformat(const char* formatString, Args&&... args) {
-    return bformat(std::string_view(formatString), std::forward<Args>(args)...);
+QByteArray bformat(const char* formatString, const Args&... args) {
+    return bformat(std::string_view(formatString), args...);
 }
 
