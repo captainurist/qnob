@@ -2,4 +2,4 @@
 
 #include "serialization_fwd.h"
 
-QB_DECLARE_SERIALIZATION_FUNCTIONS(QString)
+X_DECLARE_SERIALIZATION_FUNCTIONS(QString)
