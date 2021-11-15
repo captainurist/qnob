@@ -20,3 +20,9 @@ Code Style
 * Also store owned `QObject`s in `std::unique_ptr` fields. This gives fine control over destruction order.
 * If a function allocates, it should return `std::unique_ptr`.
 * If a function takes ownership of a passed object, it should take `std::unique_ptr`.
+
+
+Open Questions
+==============
+
+* What are our policies regarding exceptions? How do they interoperate with UI and with i18n? Search for `#exceptions` in code.

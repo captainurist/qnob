@@ -8,7 +8,7 @@
 
 class QDebug;
 
-// TODO: do we even need i18n in exceptions?
+// TODO: do we even need i18n in #exceptions?
 // TODO: and actually most of the fields in derived classes are also not needed...
 
 /**
@@ -63,7 +63,7 @@ public:
         return m_message;
     }
 
-    // TODO: actually fix all places where message is passed! To comply with the comment above.
+    // TODO: actually fix all places where message is passed! To comply with the comment above. #exceptions
 
     /**
      * \returns                         Source location where this exception was thrown from.
