@@ -180,8 +180,6 @@ set(common_srcs
     "src/platform/win/win_metrics.cpp"
     "src/platform/win/win_shared_event_window.cpp"
     "src/core/tray_icon/fixed_size_icon_engine.h"
-    
-    
     "src/lib/logging/logger.h"
     "src/lib/logging/buffer_logger.h"
     "src/lib/logging/file_logger.cpp"
@@ -195,10 +193,10 @@ set(common_srcs
     "src/lib/keys/mouse_keys.h"
     "src/lib/upnp/upnp_discovery.h"
     "src/lib/upnp/upnp_discovery.cpp"
-    "src/lib/upnp/upnp_discovery_socket.h"
-    "src/lib/upnp/upnp_discovery_socket.cpp"
-    "src/lib/upnp/upnp_discovery_reply.h"
-    "src/lib/upnp/upnp_discovery_options.h"
+    "src/lib/upnp/upnp_discovery_endpoint.h"
+    "src/lib/upnp/upnp_discovery_endpoint.cpp"
+    "src/lib/upnp/upnp_discovery_message.h"
+    "src/lib/upnp/upnp_discovery_request.h"
     "src/lib/upnp/upnp_search_target.cpp"
     "src/lib/upnp/upnp_search_target.h"
     "src/util/format.h"

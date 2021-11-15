@@ -1,21 +1,22 @@
 #include "heos.h"
 
-#include <lib/upnp/upnp_discovery.h>
-#include <lib/upnp/upnp_discovery_reply.h>
+#include <lib/upnp/upnp_discovery_endpoint.h>
+#include <lib/upnp/upnp_discovery_message.h>
 
 #include <util/debug.h>
 
-Heos::Heos(const QString& id, UpnpDiscovery* upnpDiscovery):
+Heos::Heos(const QString& id, UpnpDiscoveryEndpoint* endpoint):
 	Entity(id)
 {
 	m_upnpSearchTarget = UpnpSearchTarget::device("schemas-denon-com", "ACT-Denon", "1");
 
-	connect(upnpDiscovery, &UpnpDiscovery::discovered, this, &Heos::handleDiscovered);
+	connect(endpoint, &UpnpDiscoveryEndpoint::discovered, this, &Heos::handleDiscovered);
+	endpoint->discover();
 }
 
 Heos::~Heos() {}
 
-void Heos::handleDiscovered(const UpnpDiscoveryReply& reply) {
+void Heos::handleDiscovered(const UpnpDiscoveryMessage& reply) {
 	if (reply.searchTarget != m_upnpSearchTarget)
 		return;
 

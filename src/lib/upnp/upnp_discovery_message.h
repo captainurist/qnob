@@ -7,7 +7,19 @@
 
 #include "upnp_search_target.h"
 
-struct UpnpDiscoveryReply {
+
+struct UpnpDiscoveryMessage {
+    enum Type {
+        /** Message was sent by a newly connected UPnP device. */
+        NewDeviceNotification,
+
+        /** Message was received as a reply to "M-SEARCH" request. */
+        DiscoveryReply
+    };
+
+    /** Type of this message. */
+    Type type = NewDeviceNotification;
+
     /** Source host address. */
     QHostAddress sourceAddress;
 

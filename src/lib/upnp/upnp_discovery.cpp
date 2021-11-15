@@ -1,5 +1,7 @@
 #include "upnp_discovery.h"
 
+#if 0
+
 #include <cassert>
 
 #include <QtCore/QTimer>
@@ -10,13 +12,13 @@ static const int UPNP_MAX_DISCOVERY_ATTEMPTS = 16;
 static const int UPNP_DISCOVERY_TIMEOUT_MS = 1000;
 static const int UPNP_REDISCOVERY_TIMEOUT_MS = 5 * 60 * 1000;
 
-UpnpDiscovery::UpnpDiscovery(const UpnpDiscoveryOptions& options, QObject* parent) :
+UpnpDiscovery::UpnpDiscovery(const UpnpDiscoveryRequest& options, QObject* parent) :
     QObject(parent),
-    m_socket(new UpnpDiscoverySocket(options, this)),
+    m_socket(new UpnpDiscoveryEndpoint(options, this)),
     m_discoveryTimer(new QTimer()),
     m_rediscoveryTimer(new QTimer())
 {
-    connect(m_socket.get(), &UpnpDiscoverySocket::discovered, this, &UpnpDiscovery::handleDiscovered);
+    connect(m_socket.get(), &UpnpDiscoveryEndpoint::discovered, this, &UpnpDiscovery::handleDiscovered);
     connect(m_discoveryTimer.get(), &QTimer::timeout, this, &UpnpDiscovery::discoveryTick);
     connect(m_rediscoveryTimer.get(), &QTimer::timeout, this, &UpnpDiscovery::rediscoveryTick);
 }
@@ -63,8 +65,10 @@ void UpnpDiscovery::rediscoveryTick() {
     m_socket->discover();
 }
 
-void UpnpDiscovery::handleDiscovered(const UpnpDiscoveryReply& reply) {
+void UpnpDiscovery::handleDiscovered(const UpnpDiscoveryMessage& reply) {
     m_discoveryTimer->stop(); /* Don't try again please. */
 
     emit discovered(reply);
 }
+
+#endif

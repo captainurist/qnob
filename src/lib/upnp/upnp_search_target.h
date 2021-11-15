@@ -11,21 +11,21 @@ public:
     static UpnpSearchTarget rootDevices();
     static UpnpSearchTarget device(QByteArrayView hyphenDomainName, QByteArrayView deviceType, QByteArrayView version);
 
-    const QByteArray& string() const {
-        return m_string;
+    const QByteArray& toByteArray() const {
+        return m_data;
     }
 
     friend size_t qHash(const UpnpSearchTarget& value) {
-        return qHash(value.m_string);
+        return qHash(value.m_data);
     }
 
     friend bool operator==(const UpnpSearchTarget& l, const UpnpSearchTarget& r) = default;
 
 private:
-    friend class UpnpDiscoverySocket;
+    friend class UpnpDiscoveryEndpoint;
 
-    UpnpSearchTarget(const QByteArray& string);
+    UpnpSearchTarget(const QByteArray& data);
 
 private:
-    QByteArray m_string;
+    QByteArray m_data;
 };

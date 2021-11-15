@@ -1,18 +1,20 @@
 #pragma once
 
+#if 0
+
 #include "upnp_discovery_options.h"
 
 class QTimer;
-class UpnpDiscoverySocket;
-class UpnpDiscoveryReply;
+class UpnpDiscoveryEndpoint;
+class UpnpDiscoveryMessage;
 
 class UpnpDiscovery : public QObject {
     Q_OBJECT
 public:
-    UpnpDiscovery(const UpnpDiscoveryOptions& options, QObject* parent);
+    UpnpDiscovery(const UpnpDiscoveryRequest& options, QObject* parent);
     virtual ~UpnpDiscovery();
 
-    const UpnpDiscoveryOptions& options() const;
+    const UpnpDiscoveryRequest& options() const;
 
     /**
      * Starts discovery.
@@ -30,16 +32,18 @@ public:
     bool isRunning() const;
 
 signals:
-    void discovered(const UpnpDiscoveryReply& reply);
+    void discovered(const UpnpDiscoveryMessage& reply);
 
 private:
     void discoveryTick();
     void rediscoveryTick();
-    void handleDiscovered(const UpnpDiscoveryReply& reply);
+    void handleDiscovered(const UpnpDiscoveryMessage& reply);
 
 private:
-    std::unique_ptr<UpnpDiscoverySocket> m_socket;
+    std::unique_ptr<UpnpDiscoveryEndpoint> m_socket;
     std::unique_ptr<QTimer> m_discoveryTimer;
     std::unique_ptr<QTimer> m_rediscoveryTimer;
     int m_discoveryAttemptsLeft = 0;
 };
+
+#endif

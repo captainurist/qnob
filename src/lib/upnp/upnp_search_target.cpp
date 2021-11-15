@@ -4,8 +4,8 @@
 
 UpnpSearchTarget::UpnpSearchTarget() {}
 
-UpnpSearchTarget::UpnpSearchTarget(const QByteArray& string) :
-    m_string(string)
+UpnpSearchTarget::UpnpSearchTarget(const QByteArray& data) :
+    m_data(data)
 {}
 
 UpnpSearchTarget UpnpSearchTarget::all() {

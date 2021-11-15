@@ -5,7 +5,7 @@
 
 #include "upnp_search_target.h"
 
-struct UpnpDiscoveryOptions {
+struct UpnpDiscoveryRequest {
     /** Search target for upnp discovery. */
     UpnpSearchTarget searchTarget = UpnpSearchTarget::all();
 
@@ -20,10 +20,4 @@ struct UpnpDiscoveryOptions {
 
     /** Product version, passed in "USER-AGENT". */
     QByteArray productVersion = QByteArrayLiteral(QNOB_VERSION_STRING);
-
-    /** Host address to bind to. */
-    QHostAddress address = QHostAddress::Any;
-
-    /** Port to bind to. Zero means random port. */
-    qint16 port = 0;
 };
