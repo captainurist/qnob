@@ -20,7 +20,7 @@ UpnpDiscoveryEndpoint::~UpnpDiscoveryEndpoint() {
     stop();
 }
 
-void UpnpDiscoveryEndpoint::start(QHostAddress interface) {
+void UpnpDiscoveryEndpoint::start(QHostAddress address) {
     m_passiveSocket.reset(new QUdpSocket(this));
     m_activeSocket.reset(new QUdpSocket(this));
 
@@ -31,12 +31,17 @@ void UpnpDiscoveryEndpoint::start(QHostAddress interface) {
         readPendingDatagrams(m_activeSocket.get(), UpnpDiscoveryMessage::DiscoveryReply);
     });
 
-    if (!m_passiveSocket->bind(interface, UPNP_MULTICAST_PORT, QUdpSocket::ReuseAddressHint | QUdpSocket::ShareAddress)) {
+    if (!m_passiveSocket->bind(address, UPNP_MULTICAST_PORT, QUdpSocket::ReuseAddressHint | QUdpSocket::ShareAddress)) {
         xWarning("Failed to bind UPnP socket: {}", m_passiveSocket->errorString());
         return;
     }
 
-    if (!m_activeSocket->bind(interface)) {
+    if (!m_passiveSocket->joinMulticastGroup(QHostAddress(QLatin1String(UPNP_MULTICAST_ADDRESS)))) {
+        xWarning("Failed to join UPnP multicast group: {}", m_passiveSocket->errorString());
+        return;
+    }
+
+    if (!m_activeSocket->bind(address)) {
         xWarning("Failed to bind UPnP socket: {}", m_activeSocket->errorString());
         return;
     }

@@ -9,6 +9,8 @@
 
 class QUdpSocket;
 
+// TODO: binding to Any results in send failures, gotta bind to each interface separately.
+
 /**
  * UPnP discovery endpoint that supports both active (via "M-SEARCH" requests) and passive (listening on port 1900)
  * discovery.
@@ -26,9 +28,9 @@ public:
     /**
      * Starts listening to UPnP discovery messages.
      *
-     * \param interface                   Interface to listen on.
+     * \param address                   Address to listen on.
      */
-    void start(QHostAddress interface = QHostAddress::Any);
+    void start(QHostAddress address = QHostAddress::AnyIPv4);
 
     /**
      * Stops listening to UPnP discovery messages. Does nothing if already stopped.
