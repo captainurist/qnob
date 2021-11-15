@@ -10,6 +10,7 @@
 class QUdpSocket;
 
 // TODO: binding to Any results in send failures, gotta bind to each interface separately.
+// TODO: also apparently nobody sends ssdp:alive, so there is no reason to listen to it.
 
 /**
  * UPnP discovery endpoint that supports both active (via "M-SEARCH" requests) and passive (listening on port 1900)
