@@ -10,11 +10,9 @@
 #include <QtCore/QVarLengthArray>
 #include <QtCore/QDebug>
 
-#include "exception.h"
+#include <util/exception/exception.h>
 
-/**
- * This is a pretty bad hack. We're basically forward-declaring a function from Qt internals. But whatever.
- */
+/* This is a pretty bad hack. We're basically forward-declaring a function from Qt internals. But whatever. */
 struct QUtf8 {
     static char* convertFromUnicode(char* out, QStringView in, QStringConverter::State* state);
     static QChar* convertToUnicode(QChar* out, QByteArrayView in, QStringConverter::State* state);

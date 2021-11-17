@@ -7,7 +7,7 @@
 #include <QtMultimedia/QMediaPlayer>
 #include <QtMultimedia/QAudioOutput>
 
-#include <util/exception.h>
+#include <util/exception/exception.h>
 
 Sound::Sound(const QString& id, const QString& path):
     Entity(id)

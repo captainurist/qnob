@@ -5,7 +5,7 @@
 #include <QtCore/QVariant>
 
 #include <lib/serialization/serialization_concepts.h>
-#include <util/bad_cast_exception.h>
+#include <util/exception/bad_cast_exception.h>
 #include <util/variant.h>
 
 #include "entity_creation_context.h"

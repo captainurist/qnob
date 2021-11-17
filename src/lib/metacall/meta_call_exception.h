@@ -2,7 +2,7 @@
 
 #include <QtCore/QMetaObject>
 
-#include <util/exception.h>
+#include <util/exception/exception.h>
 
 // TODO: we need better exception messages here. Provide method name in message!
 // yeah, when we get to exception i18n.

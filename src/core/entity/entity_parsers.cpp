@@ -4,7 +4,7 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QKeySequence>
 
-#include <util/bad_cast_exception.h>
+#include <util/exception/bad_cast_exception.h>
 
 template<class T>
 static void parseConfigValueWithVariantCast(const QVariant& from, T* to) {

@@ -1,6 +1,6 @@
 #include "serialization_exceptions.h"
 
-#include <util/bad_cast_exception.h>
+#include <util/exception/bad_cast_exception.h>
 #include <util/human_readable_name.h>
 
 void throwSerializationException(const std::type_info& type) {
