@@ -5,7 +5,7 @@
 #include <lib/upnp/upnp_search_target.h>
 
 class UpnpDiscoveryEndpoint;
-class UpnpDiscoveryMessage;
+class UpnpDiscoveryReply;
 
 class Heos : public Entity {
     Q_OBJECT
@@ -14,7 +14,7 @@ public:
     virtual ~Heos();
 
 private:
-    void handleDiscovered(const UpnpDiscoveryMessage& reply);
+    void handleDiscovered(const UpnpDiscoveryReply& reply);
 
 private:
     UpnpSearchTarget m_upnpSearchTarget;

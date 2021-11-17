@@ -6,6 +6,7 @@
 #include <QtCore/QSysInfo>
 #include <QtNetwork/QUdpSocket>
 #include <QtNetwork/QNetworkDatagram>
+#include <QtNetwork/QNetworkInterface>
 
 #include <util/debug.h>
 
@@ -21,39 +22,36 @@ UpnpDiscoveryEndpoint::~UpnpDiscoveryEndpoint() {
 }
 
 void UpnpDiscoveryEndpoint::start(QHostAddress address) {
-    m_passiveSocket.reset(new QUdpSocket(this));
-    m_activeSocket.reset(new QUdpSocket(this));
+    m_sockets.clear();
 
-    connect(m_passiveSocket.get(), &QUdpSocket::readyRead, this, [this] {
-        readPendingDatagrams(m_passiveSocket.get(), UpnpDiscoveryMessage::NewDeviceNotification);
-    });
-    connect(m_activeSocket.get(), &QUdpSocket::readyRead, this, [this] {
-        readPendingDatagrams(m_activeSocket.get(), UpnpDiscoveryMessage::DiscoveryReply);
-    });
+    /* Note that it's important to have one socket per network interface because otherwise send tend to fail 
+     * randomly with WSAEHOSTUNREACH. Likely trying to send the request through a disconnected vpn adapter. */
 
-    if (!m_passiveSocket->bind(address, UPNP_MULTICAST_PORT, QUdpSocket::ReuseAddressHint | QUdpSocket::ShareAddress)) {
-        xWarning("Failed to bind UPnP socket: {}", m_passiveSocket->errorString());
-        return;
+    for (QHostAddress address : QNetworkInterface::allAddresses()) {
+        if (address.isLoopback())
+            continue; /* No reason to bind to loopback. */
+
+        std::unique_ptr<QUdpSocket> socket = std::make_unique<QUdpSocket>(this);
+        if (!socket->bind(address)) {
+            xWarning("Failed to bind UPnP discovery socket to {}: {}", address.toString(), socket->errorString());
+            continue;
+        }
+
+        connect(socket.get(), &QUdpSocket::readyRead, this, [this] { readPendingDatagrams(static_cast<QUdpSocket*>(sender())); });
+
+        m_sockets.emplace_back(std::move(socket));
     }
 
-    if (!m_passiveSocket->joinMulticastGroup(QHostAddress(QLatin1String(UPNP_MULTICAST_ADDRESS)))) {
-        xWarning("Failed to join UPnP multicast group: {}", m_passiveSocket->errorString());
-        return;
-    }
-
-    if (!m_activeSocket->bind(address)) {
-        xWarning("Failed to bind UPnP socket: {}", m_activeSocket->errorString());
-        return;
-    }
+    m_started = true;
 }
 
 void UpnpDiscoveryEndpoint::stop() {
-    m_passiveSocket.reset();
-    m_activeSocket.reset();
+    m_sockets.clear();
+    m_started = false;
 }
 
 void UpnpDiscoveryEndpoint::discover(const UpnpDiscoveryRequest& request) {
-    assert(m_activeSocket);
+    assert(m_started);
 
     xInfo("Sending UPnP discovery request");
 
@@ -77,17 +75,22 @@ CPFN.UPNP.ORG: {}\r\n\
         request.friendlyName
     );
 
-    qint64 result = m_activeSocket->writeDatagram(discoveryPacket, QHostAddress(QLatin1String(UPNP_MULTICAST_ADDRESS)), UPNP_MULTICAST_PORT);
-    if (result == -1)
-        xWarning("Failed to send UPnP datagram: {}", m_activeSocket->errorString());
+    bool hasSuccess = false;
+    for (auto&& socket : m_sockets) {
+        qint64 result = socket->writeDatagram(discoveryPacket, QHostAddress(QLatin1String(UPNP_MULTICAST_ADDRESS)), UPNP_MULTICAST_PORT);
+        if (result != -1)
+            hasSuccess = true;
+    }
+
+    if (!hasSuccess)
+        xWarning("Failed to send UPnP datagram");
 }
 
-void UpnpDiscoveryEndpoint::readPendingDatagrams(QUdpSocket* socket, UpnpDiscoveryMessage::Type type) {
+void UpnpDiscoveryEndpoint::readPendingDatagrams(QUdpSocket* socket) {
     while (socket->hasPendingDatagrams()) {
         QNetworkDatagram datagram = socket->receiveDatagram();
 
-        UpnpDiscoveryMessage message;
-        message.type = type;
+        UpnpDiscoveryReply message;
         message.sourceAddress = datagram.senderAddress();
         message.sourcePort = datagram.senderPort();
 

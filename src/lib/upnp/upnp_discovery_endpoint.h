@@ -4,7 +4,7 @@
 
 #include <QtCore/QObject>
 
-#include "upnp_discovery_message.h"
+#include "upnp_discovery_reply.h"
 #include "upnp_discovery_request.h"
 
 class QUdpSocket;
@@ -13,8 +13,11 @@ class QUdpSocket;
 // TODO: also apparently nobody sends ssdp:alive, so there is no reason to listen to it.
 
 /**
- * UPnP discovery endpoint that supports both active (via "M-SEARCH" requests) and passive (listening on port 1900)
- * discovery.
+ * This class performs active UPnP discovery (via "M-SEARCH" requests).
+ * 
+ * There is also "passive" discovery that can be done by listening to "NOTIFY" packets that UPnP devices are supposed
+ * to send out when they are connected to the network, but apparently neither HEOS nor Hue do this, so this is not 
+ * implemented.
  *
  * See docs at https://openconnectivity.org/upnp-specs/UPnP-arch-DeviceArchitecture-v2.0-20200417.pdf.
  */
@@ -45,12 +48,12 @@ public:
     void discover(const UpnpDiscoveryRequest& request = UpnpDiscoveryRequest());
 
 signals:
-    void discovered(UpnpDiscoveryMessage message);
+    void discovered(const UpnpDiscoveryReply& reply);
 
 private:
-    void readPendingDatagrams(QUdpSocket* socket, UpnpDiscoveryMessage::Type type);
+    void readPendingDatagrams(QUdpSocket* socket);
 
 private:
-    std::unique_ptr<QUdpSocket> m_passiveSocket;
-    std::unique_ptr<QUdpSocket> m_activeSocket;
+    std::vector<std::unique_ptr<QUdpSocket>> m_sockets;
+    bool m_started = false;
 };

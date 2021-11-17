@@ -195,7 +195,7 @@ set(common_srcs
     "src/lib/upnp/upnp_discovery.cpp"
     "src/lib/upnp/upnp_discovery_endpoint.h"
     "src/lib/upnp/upnp_discovery_endpoint.cpp"
-    "src/lib/upnp/upnp_discovery_message.h"
+    "src/lib/upnp/upnp_discovery_reply.h"
     "src/lib/upnp/upnp_discovery_request.h"
     "src/lib/upnp/upnp_search_target.cpp"
     "src/lib/upnp/upnp_search_target.h"

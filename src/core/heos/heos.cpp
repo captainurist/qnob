@@ -1,7 +1,7 @@
 #include "heos.h"
 
 #include <lib/upnp/upnp_discovery_endpoint.h>
-#include <lib/upnp/upnp_discovery_message.h>
+#include <lib/upnp/upnp_discovery_reply.h>
 
 #include <util/debug.h>
 
@@ -16,10 +16,10 @@ Heos::Heos(const QString& id, UpnpDiscoveryEndpoint* endpoint):
 
 Heos::~Heos() {}
 
-void Heos::handleDiscovered(const UpnpDiscoveryMessage& reply) {
+void Heos::handleDiscovered(const UpnpDiscoveryReply& reply) {
 	if (reply.searchTarget != m_upnpSearchTarget)
 		return;
 
-	xInfo("Discovered HEOS device at {}", reply.sourceAddress);
+	xInfo("Discovered HEOS device at {}", reply.sourceAddress.toString());
 }
 
