@@ -4,7 +4,7 @@
 
 #include <QtCore/QThread>
 
-#include <util/worker_pool.h>
+#include <util/thread/worker_pool.h>
 
 #include "monitor_queue.h"
 #include "monitor_server.h"

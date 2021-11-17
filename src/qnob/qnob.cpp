@@ -9,7 +9,7 @@
 
 #include <util/format.h>
 #include <util/debug.h>
-#include <util/worker_pool.h>
+#include <util/thread/worker_pool.h>
 
 #include <core/entity/entity_pool_builder.h>
 

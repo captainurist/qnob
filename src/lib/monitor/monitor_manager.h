@@ -5,7 +5,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QFuture>
 
-#include <util/package.h>
+#include <util/thread/package.h>
 
 #include "monitor_list.h"
 

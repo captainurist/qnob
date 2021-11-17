@@ -10,7 +10,7 @@
 #include <QtCore/QHashFunctions>
 #include <QtCore/QHash>
 
-#include <util/string_pool.h>
+#include <util/memory/string_pool.h>
 
 #include "serialization_exceptions.h"
 

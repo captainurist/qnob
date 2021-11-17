@@ -3,7 +3,7 @@
 #include <cassert>
 #include <algorithm> /* For std::max. */
 
-#include "bitops.h"
+#include <util/bitops.h>
 
 static char* alignPtrUp(char* ptr, size_t alignment) {
     return reinterpret_cast<char*>(alignUp(reinterpret_cast<std::intptr_t>(ptr), alignment));
