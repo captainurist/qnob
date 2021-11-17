@@ -3,7 +3,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QThread>
 
-#include <util/human_readable_name.h>
+#include <util/human_readable.h>
 #include <util/format.h>
 #include <util/source_root.h>
 

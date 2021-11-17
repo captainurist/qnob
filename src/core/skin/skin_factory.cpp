@@ -30,6 +30,4 @@ Entity* SkinFactory::createEntity(const EntityCreationContext& ctx) {
             ctx.requireOr<QString>(lit("font"), QString())
         );
     }
-
-    // TODO: "units" not used right now
 }

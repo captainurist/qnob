@@ -93,7 +93,7 @@ int Qnob::run(const QnobArgs& args) {
 int Qnob::runHelp() {
     QTextStream stream(stdout);
 
-    stream << tr("Usage: qnob [options]") << Qt::endl;  // TODO: tr
+    stream << tr("Usage: qnob [options]") << Qt::endl;
     stream << Qt::endl;
 
     size_t consoleWidth = 80;

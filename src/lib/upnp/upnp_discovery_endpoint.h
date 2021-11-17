@@ -9,14 +9,11 @@
 
 class QUdpSocket;
 
-// TODO: binding to Any results in send failures, gotta bind to each interface separately.
-// TODO: also apparently nobody sends ssdp:alive, so there is no reason to listen to it.
-
 /**
  * This class performs active UPnP discovery (via "M-SEARCH" requests).
- * 
+ *
  * There is also "passive" discovery that can be done by listening to "NOTIFY" packets that UPnP devices are supposed
- * to send out when they are connected to the network, but apparently neither HEOS nor Hue do this, so this is not 
+ * to send out when they are connected to the network, but apparently neither HEOS nor Hue do this, so this is not
  * implemented.
  *
  * See docs at https://openconnectivity.org/upnp-specs/UPnP-arch-DeviceArchitecture-v2.0-20200417.pdf.

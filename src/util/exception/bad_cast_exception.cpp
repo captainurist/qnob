@@ -1,6 +1,6 @@
 #include "bad_cast_exception.h"
 
-#include <util/human_readable_name.h>
+#include <util/human_readable.h>
 #include <util/format.h>
 
 BadCastException::BadCastException(const QString& message) :
