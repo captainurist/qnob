@@ -6,10 +6,12 @@
 #include "monitor.h"
 #include "monitor_enumerator.h"
 
-MonitorManager::MonitorManager(QObject* parent): QObject(parent) {
-    updateMonitors();
-
+MonitorManager::MonitorManager(QObject* parent): 
+    QObject(parent) 
+{
     connect(platform()->monitorManager(), &PlatformMonitorManager::monitorsChanged, this, &MonitorManager::updateMonitors);
+
+    updateMonitors();
 }
 
 MonitorManager::~MonitorManager() {}
