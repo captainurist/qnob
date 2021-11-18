@@ -37,7 +37,7 @@ static void printException(QDebug& stream, const Exception& e, bool printThread)
         << "        at "
         << humanReadableSignature(e.sourceLocation().function_name())
         << "("
-        << QByteArrayView(relativeSourcePath(e.sourceLocation().file_name()))
+        << QByteArrayView(rootRelativeSourcePath(e.sourceLocation().file_name()))
         << ":"
         << e.sourceLocation().line()
         << ")";

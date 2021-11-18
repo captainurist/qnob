@@ -21,7 +21,7 @@ void FileLogger::log(QtMsgType type, const QMessageLogContext& context, const QS
     QByteArray extendedMessage =
         m_prefixes[type] %
         QByteArrayLiteral("| ") %
-        relativeSourcePath(context.file).data() %
+        rootRelativeSourcePath(context.file).data() %
         QByteArrayLiteral(":") %
         QByteArray::number(context.line) %
         QByteArrayLiteral(": ");
