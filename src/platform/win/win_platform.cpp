@@ -18,7 +18,8 @@
 #include "win_wheel_event_manager.h"
 #include "win_metrics.h"
 #include "win_shared_event_window.h"
-#include "win_standard_control.h"
+#include "win_tray_icon_control.h"
+#include "win_guids.h"
 
 WinPlatform::WinPlatform(QObject* parent):
     Platform(parent)
@@ -55,7 +56,11 @@ PlatformMetrics* WinPlatform::metrics() const {
 }
 
 std::unique_ptr<PlatformControl> WinPlatform::createStandardControl(PlatformStandardControl control, QObject* parent) const {
-    return std::make_unique<WinStandardControl>(control, parent);
+    if (control == AudioTrayIcon) {
+        return std::make_unique<WinTrayIconControl>(GUID_TrayIconVolume, parent);
+    } else {
+        return nullptr;
+    }
 }
 
 QVariant WinPlatform::execute(PlatformFunction function, QVariant arg0) {

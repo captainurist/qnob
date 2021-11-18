@@ -16,7 +16,12 @@ public:
     virtual QRect geometry() const = 0;
 
     /**
-     * \returns                         Standard type if this is a standard control.
+     * \returns                         Whether this control is visible.
      */
-    virtual PlatformStandardControl standardType() const = 0;
+    virtual bool isVisible() const = 0;
+
+    /**
+     * \param visible                   New visibility for this control.
+     */
+    virtual void setVisible(bool visible) = 0;
 };

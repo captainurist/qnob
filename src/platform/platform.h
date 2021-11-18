@@ -53,6 +53,7 @@ public:
     /**
      * \param control                   Standard control.
      * \returns                         Platform control object for the provided standard control.
+     *                                  Might return `nullptr` if the requested standard control doesn't exist.
      */
     virtual std::unique_ptr<PlatformControl> createStandardControl(PlatformStandardControl control, QObject* parent) const = 0;
 
