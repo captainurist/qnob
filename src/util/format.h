@@ -11,6 +11,7 @@
 #include <QtCore/QDebug>
 
 #include <util/exception/exception.h>
+#include <util/explicit.h>
 
 /* This is a pretty bad hack. We're basically forward-declaring a function from Qt internals. But whatever. */
 struct QUtf8 {
@@ -41,17 +42,21 @@ inline void appendUft8ToUtf16(QByteArrayView src, QString* dst) {
 
 class StringFormatState {
 public:
-    using value_type = wchar_t;
-
     StringFormatState() : m_debug(&m_result) {
         m_debug = m_debug.nospace();
     }
 
-    void append(wchar_t character) {
+    void append(Explicit<wchar_t> character) {
         /* Surrogates are not supported. */
-        assert(sizeof(wchar_t) == sizeof(char16_t) || !QChar::requiresSurrogates(static_cast<char32_t>(character)));
+        assert(sizeof(wchar_t) == sizeof(char16_t) || !QChar::requiresSurrogates(static_cast<char32_t>(*character)));
 
-        m_result.push_back(QChar(static_cast<char16_t>(character)));
+        m_result.push_back(QChar(static_cast<char16_t>(*character)));
+    }
+
+    void append(Explicit<char> character) {
+        assert(*character >= 0 && *character <= 0x7f); /* Sane Latin-1 chars. */
+
+        m_result.push_back(QLatin1Char(*character));
     }
 
     void append(QStringView string) {
@@ -78,14 +83,12 @@ private:
 
 class ByteArrayFormatState {
 public:
-    using value_type = wchar_t;
-
     ByteArrayFormatState() : m_debug(&m_debugBuffer) {
         m_debug = m_debug.nospace();
     }
 
-    void append(char character) {
-        m_result.push_back(character);
+    void append(Explicit<char> character) {
+        m_result.push_back(*character);
     }
 
     void append(QByteArrayView string) {
@@ -119,10 +122,14 @@ public:
     using difference_type = ptrdiff_t;
 
     FormatOutputIterator() = default;
+    FormatOutputIterator& operator=(const FormatOutputIterator& other) = default;
 
     explicit FormatOutputIterator(State* state) : m_state(state) {}
 
-    FormatOutputIterator& operator=(typename State::value_type character) {
+    template<class Character>
+    FormatOutputIterator& operator=(Character character) {
+        /* It's important that we pass the character type down to the state object so that we could check that
+         * it's actually supported. */
         m_state->append(character);
         return *this;
     }
