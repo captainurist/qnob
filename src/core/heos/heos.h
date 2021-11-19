@@ -10,7 +10,7 @@ class UpnpDiscoveryReply;
 class Heos : public Entity {
     Q_OBJECT
 public:
-    Heos(const QString& id, UpnpDiscoveryEndpoint* endpoint);
+    Heos(UpnpDiscoveryEndpoint* endpoint, QObject* parent);
     virtual ~Heos();
 
 private:

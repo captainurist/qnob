@@ -11,10 +11,10 @@ class SettingBackend;
 class Setting : public Entity {
     Q_OBJECT
 public:
-    Setting(const QString& id, std::unique_ptr<SettingBackend> backend);
+    Setting(std::unique_ptr<SettingBackend> backend, QObject* parent);
     virtual ~Setting();
 
-    bool isInitialized() const;
+    bool isInitialized() const; // TODO: isStarted
 
     SettingState state() const;
     void setState(const SettingState& state);

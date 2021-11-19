@@ -46,7 +46,7 @@ set(common_srcs
     "src/core/entity/entity_creation_context.cpp"
     "src/core/entity/entity_creation_context.h"
     "src/core/entity/entity_creation_exception.h"
-    "src/core/entity/entity_factory.h"
+
     "src/core/entity/entity_factory_pool.cpp"
     "src/core/entity/entity_factory_pool.h"
     "src/core/entity/entity_parsers.cpp"
@@ -55,15 +55,15 @@ set(common_srcs
     "src/core/entity/entity_pool.h"
     "src/core/entity/entity_pool_builder.cpp"
     "src/core/entity/entity_pool_builder.h"
-    "src/core/entity/factory_resolver.h"
+
     "src/core/knob/knob.cpp"
     "src/core/knob/knob.h"
-    "src/core/knob/knob_factory.cpp"
-    "src/core/knob/knob_factory.h"
+
+
     "src/core/osd/osd.cpp"
     "src/core/osd/osd.h"
-    "src/core/osd/osd_factory.cpp"
-    "src/core/osd/osd_factory.h"
+
+
     "src/core/osd/osd_fsm.cpp"
     "src/core/osd/osd_fsm.h"
     "src/core/osd/osd_window.cpp"
@@ -78,28 +78,28 @@ set(common_srcs
     "src/core/skin/horizontal_bar_skin.h"
     "src/core/skin/numeric_skin.h"
     "src/core/skin/skin.h"
-    "src/core/skin/skin_factory.cpp"
-    "src/core/skin/skin_factory.h"
-    "src/core/skin/skin_type.h"
-    "src/core/skin/skin_type.cpp"
+
+
+
+
     "src/core/sound/sound.cpp"
     "src/core/sound/sound.h"
-    "src/core/sound/sound_factory.cpp"
-    "src/core/sound/sound_factory.h"
+
+
     "src/core/tray_event/tray_event.h"
     "src/core/tray_event/tray_event.cpp"
-    "src/core/tray_event/tray_event_factory.h"
-    "src/core/tray_event/tray_event_factory.cpp"
+
+
     "src/core/tray_icon/standard_tray_icon.h"
     "src/core/tray_icon/standard_tray_icon.cpp"
     "src/core/tray_icon/tray_icon.h"
     "src/core/tray_icon/tray_icon.cpp"
-    "src/core/tray_icon/tray_icon_factory.h"
-    "src/core/tray_icon/tray_icon_factory.cpp"
+
+
     "src/core/hotkey/hotkey.cpp"
     "src/core/hotkey/hotkey.h"
-    "src/core/hotkey/hotkey_factory.cpp"
-    "src/core/hotkey/hotkey_factory.h"
+
+
     "src/lib/metacall/bound_meta_call.cpp"
     "src/lib/metacall/bound_meta_call.h"
     "src/lib/metacall/meta_method_invoker.cpp"
@@ -214,8 +214,9 @@ set(common_srcs
     "src/core/win10/win10.cpp"
     "src/platform/win/win_hwnd_control.h"
     "src/platform/win/win_hwnd_control.cpp"
-    "src/core/win10/win10_factory.cpp"
-)
+    "src/core/entity/entity.cpp"
+    "src/qnob/default_entity_pool.h"
+    )
 
 set(common_libs
     Qt::Core

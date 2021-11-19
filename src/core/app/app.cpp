@@ -5,10 +5,6 @@
 #include <util/debug.h>
 #include <platform/platform.h>
 
-App::App(const QString& id) :
-    Entity(id)
-{}
-
 void App::exit() {
     QCoreApplication::quit();
 }

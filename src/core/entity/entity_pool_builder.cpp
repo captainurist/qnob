@@ -7,11 +7,12 @@
 #include <cassert>
 
 #include <util/map_access.h>
+#include <util/format.h>
 
 #include "entity_factory_pool.h"
-#include "entity_factory.h"
 #include "entity_pool.h"
 #include "entity_creation_exception.h"
+#include "entity_creation_context.h"
 #include "entity.h"
 
 EntityPoolBuilder::EntityPoolBuilder(EntityFactoryPool* factoryPool, EntityPool* entityPool) {
@@ -19,90 +20,36 @@ EntityPoolBuilder::EntityPoolBuilder(EntityFactoryPool* factoryPool, EntityPool*
     m_entityPool = entityPool;
 }
 
-EntityPoolBuilder::~EntityPoolBuilder() {}
-
 void EntityPoolBuilder::addEntities(const QString& basePath, const VariantMap& records) {
     if (records.empty())
         return;
 
-    m_dir = basePath;
-    if (!m_dir.endsWith(QLatin1Char('/')) && !m_dir.endsWith(QLatin1Char('\\')))
-        m_dir += QLatin1Char('/');
+    auto forEachEntity = [&](auto function) {
+        for (auto [id, record] : records) {
+            if (id.isEmpty())
+                continue; /* Should never happen really, but there are assertions down the line for this. */
+            if (record.typeId() != MetaType::VariantMap)
+                continue; /* Just ignore free-standing values for now. */
+            function(EntityCreationContext(id, variantValueRef<VariantMap>(record), basePath, m_entityPool));
+        }
+    };
 
-    m_configs = records;
-    m_idsInFlight.clear();
-    m_idStack.clear();
+    /* Create all entities first. */
+    forEachEntity([&](const EntityCreationContext& ctx) {
+        if (m_entityPool->entity(ctx.id()))
+            xthrow EntityCreationException(ctx.id(), sformat(EntityCreationException::tr("Entity '{}' already exists."), ctx.id()));
 
-    for (auto [id, config] : m_configs) {
-        if(config.typeId() != MetaType::VariantMap)
-            continue; /* Just ignore free-standing values for now. */
+        QString type = ctx.require<QString>(lit("type"));
+        std::unique_ptr<Entity> entity = m_factoryPool->createEntity(type, nullptr);
+        if (!entity)
+            xthrow EntityCreationException(ctx.id(), sformat(EntityCreationException::tr("Unknown entity type '{}'."), type));
 
-        if (m_entities.contains(id))
-            continue; /* Already created. */
-
-        initEntity(id);
-    }
-}
-
-void EntityPoolBuilder::initEntity(const QString& id) {
-    assert(m_configs.contains(id));
-    assert(m_configs[id].typeId() == MetaType::VariantMap);
-
-    const VariantMap& config = variantValueRef<VariantMap>(m_configs[id]);
-
-    QVariant typeVariant = value_or(config, lit("type"), QVariant());
-    if (typeVariant.isNull())
-        xthrow EntityCreationException(id, EntityCreationException::tr("Type not specified."));
-
-    QString type = typeVariant.toString();
-    EntityFactory* factory = m_factoryPool->factory(type);
-    if (!factory)
-        xthrow EntityCreationException(id, EntityCreationException::tr("Unknown entity type '%1'.").arg(type));
-
-    m_idStack.push_back(id);
-    m_idsInFlight.insert(id);
-    auto cleanup = QScopeGuard([&] {
-        m_idsInFlight.erase(id);
-        m_idStack.pop_back();
+        entity->initializeId(ctx.id());
+        m_entityPool->addEntity(std::move(entity));
     });
 
-    std::unique_ptr<Entity> entity;
-    try {
-        entity.reset(factory->createEntity({ id, config, this }));
-    } catch (EntityCreationException& e) {
-        throw;
-    } catch (...) {
-        /* Wrap unknown exceptions in an EntityCreationException. */
-        xthrow EntityCreationException(id, EntityCreationException::tr("Factory function failed."));
-    }
-    m_entities[id] = std::move(entity);
-}
-
-Entity* EntityPoolBuilder::resolveEntity(const QString& id) {
-    if (m_idsInFlight.contains(id))
-        xthrow EntityCreationException(m_idStack.back(), EntityCreationException::tr("Cyclical dependency detected."));
-
-    if (Entity* result = m_entityPool->entity(id))
-        return result;
-
-    if (m_entities.contains(id))
-        return m_entities[id].get();
-
-    if (value_or(m_configs, id, QVariant()).typeId() != MetaType::VariantMap) {
-        xthrow EntityCreationException(
-            m_idStack.back(),
-            EntityCreationException::tr("Entity refers to an unknown entity '%1'.").arg(id)
-        );
-    }
-
-    initEntity(id);
-    return m_entities[id].get();
-}
-
-QString EntityPoolBuilder::resolvePath(const QString& path) {
-    QFileInfo info(path);
-    if (info.isAbsolute())
-        return path;
-
-    return m_dir + path;
+    /* Then initialize them. */
+    forEachEntity([&](const EntityCreationContext& ctx) {
+        m_entityPool->entity(ctx.id())->initialize(ctx);
+    });
 }

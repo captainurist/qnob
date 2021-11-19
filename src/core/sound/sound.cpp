@@ -9,11 +9,25 @@
 
 #include <util/exception/exception.h>
 
-Sound::Sound(const QString& id, const QString& path):
-    Entity(id)
-{
+#include <core/entity/entity_creation_context.h>
+#include <core/setting/setting.h>
+
+Sound::Sound(QObject* parent) :
+    Entity(parent)
+{}
+
+Sound::~Sound() {}
+
+void Sound::initialize(const EntityCreationContext& ctx) {
+    Entity::initialize(ctx);
+
+    QString path = ctx.require<QString, AsPath>(lit("path"));
+    Setting* target = ctx.require<Setting*>(lit("target"));
+
+    QObject::connect(target, &Setting::activated, this, &Sound::play);
+
     m_audioFile.reset(new QFile(path));
-    if(!m_audioFile->open(QFile::ReadOnly))
+    if (!m_audioFile->open(QFile::ReadOnly))
         xthrow Exception(Exception::tr("Could not open sound file '%1'").arg(path));
     // TODO: IoException above? First figure out what to do with exceptions in general. I18n, subclassing etc.
 
@@ -23,10 +37,8 @@ Sound::Sound(const QString& id, const QString& path):
     m_player->setSourceDevice(m_audioFile.get());
 }
 
-Sound::~Sound() {}
-
 void Sound::play() {
-    if (m_player->playbackState() != QMediaPlayer::StoppedState)
+    if (!m_player || m_player->playbackState() != QMediaPlayer::StoppedState)
         return;
 
     m_player->play();

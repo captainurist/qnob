@@ -8,7 +8,7 @@ class SettingState;
 class Skin : public Entity {
     Q_OBJECT
 public:
-    Skin(const QString& id) : Entity(id) {}
+    using Entity::Entity;
 
     /**
      * \returns                         Expected size for `paint` calls. Can be invalid.

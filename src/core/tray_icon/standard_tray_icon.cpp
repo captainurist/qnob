@@ -11,8 +11,8 @@
 
 using namespace std::chrono_literals;
 
-StandardTrayIcon::StandardTrayIcon(const QString& id, Setting* setting, PlatformStandardControl control) :
-    Entity(id),
+StandardTrayIcon::StandardTrayIcon(PlatformStandardControl control, Setting* setting, QObject* parent) :
+    Entity(parent),
     m_control(platform()->createStandardControl(control, this)),
     m_setting(setting)
 {

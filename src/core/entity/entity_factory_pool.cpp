@@ -4,16 +4,22 @@
 
 #include <util/map_access.h>
 
-#include "entity_factory.h"
+#include "entity.h"
+
+EntityFactoryPool::EntityFactoryPool(QObject* parent) :
+    QObject(parent)
+{}
 
 EntityFactoryPool::~EntityFactoryPool() {}
 
-void EntityFactoryPool::registerFactory(std::unique_ptr<EntityFactory> factory) {
-    assert(!m_factoryById.contains(factory->id()));
+void EntityFactoryPool::registerFactory(const QString& typeId, const EntityFactoryFunction& factoryFunction) {
+    assert(!m_factoryFunctionByTypeId.contains(typeId));
 
-    m_factoryById.emplace(factory->id(), std::move(factory));
+    m_factoryFunctionByTypeId.emplace(typeId, factoryFunction);
 }
 
-EntityFactory* EntityFactoryPool::factory(const QString& id) const {
-    return value_ref(m_factoryById, id).get();
+std::unique_ptr<Entity> EntityFactoryPool::createEntity(const QString& typeId, QObject* parent) const {
+    const EntityFactoryFunction* factoryFunction = value_ptr(m_factoryFunctionByTypeId, typeId);
+    return factoryFunction ? (*factoryFunction)(parent) : nullptr;
 }
+

@@ -6,19 +6,21 @@
 #include <lib/rollback/painter_rollback.h>
 
 #include <core/setting/setting_state.h>
+#include <core/entity/entity_creation_context.h>
 
 #include "skin.h"
 
 class HorizontalBarSkin: public Skin {
     Q_OBJECT
 public:
-    HorizontalBarSkin(const QString& id, const QPixmap& background, const QPixmap& progress, const QPixmap& disabled, const QPoint& offset) :
-        Skin(id),
-        m_background(background),
-        m_progress(progress),
-        m_disabled(disabled),
-        m_offset(offset)
-    {}
+    using Skin::Skin;
+
+    virtual void initialize(const EntityCreationContext& ctx) override {
+        m_background = ctx.require<QPixmap>(lit("background"));
+        m_progress = ctx.require<QPixmap>(lit("progress"));
+        m_disabled = ctx.require<QPixmap>(lit("disabled"));
+        m_offset = QPoint(ctx.require<qint64>(lit("x")), ctx.require<qint64>(lit("y")));
+    }
 
     virtual QSize size() const override {
         return m_background.size();

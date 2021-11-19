@@ -3,18 +3,23 @@
 #include <core/entity/entity_creation_exception.h>
 #include <util/map_access.h>
 
-EntityCreationContext::EntityCreationContext(const QString& id, const VariantMap& config, FactoryResolver* resolver):
+EntityCreationContext::EntityCreationContext(const QString& id, const VariantMap& config, const QString& basePath, const EntityPool* entityPool):
     m_id(id),
     m_config(config),
-    m_resolver(resolver)
+    m_basePath(basePath),
+    m_entityPool(entityPool)
 {}
 
 const QString& EntityCreationContext::id() const {
     return m_id;
 }
 
-FactoryResolver* EntityCreationContext::resolver() const {
-    return m_resolver;
+const EntityPool* EntityCreationContext::entityPool() const {
+    return m_entityPool;
+}
+
+const QString& EntityCreationContext::basePath() const {
+    return m_basePath;
 }
 
 bool EntityCreationContext::has(const QString& key) const {

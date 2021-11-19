@@ -5,7 +5,7 @@
 class App : public Entity {
     Q_OBJECT
 public:
-    App(const QString& id);
+    using Entity::Entity;
 
     Q_SLOT void exit();
     Q_SLOT void debugAction();

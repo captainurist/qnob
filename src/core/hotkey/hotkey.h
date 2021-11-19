@@ -1,7 +1,6 @@
 #pragma once
 
-#include <QtCore/QScopedPointer>
-#include <QtGui/QKeySequence>
+#include <memory>
 
 #include <core/entity/entity.h>
 
@@ -10,11 +9,10 @@ class PlatformShortcutNotifier;
 class Hotkey : public Entity {
     Q_OBJECT
 public:
-    Hotkey(const QString& id, const QKeyCombination& shortcut);
+    using Entity::Entity;
     virtual ~Hotkey();
 
-signals:
-    void triggered();
+    virtual void initialize(const EntityCreationContext& ctx) override;
 
 private:
     std::unique_ptr<PlatformShortcutNotifier> m_notifier;

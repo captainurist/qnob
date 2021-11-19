@@ -5,8 +5,10 @@
 class Win10 : public Entity {
     Q_OBJECT
 public:
-    Win10(const QString& id);
+    using Entity::Entity;
     virtual ~Win10();
+
+    virtual void initialize(const EntityCreationContext& ctx) override;
 
     Q_INVOKABLE void ensureNativeOsdHidden();
 

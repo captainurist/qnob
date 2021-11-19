@@ -6,13 +6,17 @@
 #include <QtGui/QScreen>
 #include <QtGui/QGuiApplication>
 
+#include <lib/serializable_types/alignment.h>
+
+#include <core/entity/entity_creation_context.h>
 #include <core/setting/setting.h>
+#include <core/skin/skin.h>
 
 #include "osd_window.h"
 #include "osd_fsm.h"
 
-Osd::Osd(const QString& id):
-    Entity(id),
+Osd::Osd(QObject* parent):
+    Entity(parent),
     m_window(new OsdWindow(lit("OsdWindow"))),
     m_fsm(new OsdFsm())
 {
@@ -30,6 +34,13 @@ Osd::Osd(const QString& id):
 }
 
 Osd::~Osd() {}
+
+void Osd::initialize(const EntityCreationContext& ctx) {
+    setAlignment(ctx.requireOr<Qt::Alignment>(lit("position"), Qt::AlignBottom));
+    setOffset(ctx.requireOr<QPoint>(lit("offset"), QPoint(0, 0)));
+    setSkin(ctx.require<Skin*>(lit("skin")));
+    setSetting(ctx.require<Setting*>(lit("target")));
+}
 
 void Osd::show(int showMs, int fadeMs) {
     m_fsm->start(showMs, fadeMs);

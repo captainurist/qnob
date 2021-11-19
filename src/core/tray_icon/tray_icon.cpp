@@ -5,14 +5,15 @@
 
 #include <core/skin/skin.h>
 #include <core/setting/setting.h>
+#include <core/entity/entity_creation_context.h>
 
 #include <platform/platform.h>
 #include <platform/platform_metrics.h>
 
 #include "fixed_size_icon_engine.h"
 
-TrayIcon::TrayIcon(const QString& id) :
-    Entity(id),
+TrayIcon::TrayIcon(QObject* parent) :
+    Entity(parent),
     m_trayIcon(new QSystemTrayIcon())
 {
     platform()->wheelEventManager()->registerTrayIcon(m_trayIcon.get());
@@ -22,6 +23,11 @@ TrayIcon::TrayIcon(const QString& id) :
 
 TrayIcon::~TrayIcon() {
     platform()->wheelEventManager()->unregisterTrayIcon(m_trayIcon.get());
+}
+
+void TrayIcon::initialize(const EntityCreationContext& ctx) {
+    setSkin(ctx.require<Skin*>(lit("skin")));
+    setSetting(ctx.require<Setting*>(lit("target")));
 }
 
 Skin* TrayIcon::skin() const {

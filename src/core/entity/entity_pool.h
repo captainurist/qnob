@@ -3,14 +3,17 @@
 #include <unordered_map>
 #include <memory>
 
+#include <QtCore/QObject>
 #include <QtCore/QHashFunctions>
 #include <QtCore/QString>
 
 class Entity;
 
-class EntityPool {
+class EntityPool: public QObject {
+    Q_OBJECT
 public:
-    ~EntityPool();
+    EntityPool(QObject* parent);
+    virtual ~EntityPool();
 
     /**
      * Adds provided entity into this entity pool. This pool must not contain an entity with the same id.

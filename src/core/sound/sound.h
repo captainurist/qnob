@@ -11,8 +11,10 @@ class QAudioOutput;
 class Sound : public Entity {
     Q_OBJECT
 public:
-    Sound(const QString& id, const QString& path);
+    Sound(QObject* parent);
     virtual ~Sound();
+
+    virtual void initialize(const EntityCreationContext& ctx) override;
 
     Q_SLOT void play();
 

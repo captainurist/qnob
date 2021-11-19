@@ -6,8 +6,10 @@
 class TrayEvent : public Entity {
     Q_OBJECT
 public:
-    TrayEvent(const QString& id);
+    using Entity::Entity;
     virtual ~TrayEvent();
+
+    virtual void initialize(const EntityCreationContext& ctx) override;
 
     void setEventSource(QObject* eventSource);
     QObject* eventSource() const;

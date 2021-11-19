@@ -6,11 +6,18 @@
 
 #include "entity.h"
 
+EntityPool::EntityPool(QObject* parent) :
+    QObject(parent)
+{}
+
 EntityPool::~EntityPool() {}
 
 void EntityPool::addEntity(std::unique_ptr<Entity> entity) {
+    assert(entity);
+    assert(!entity->id().isEmpty()); /* Forgot to call Entity::initializeId? */
     assert(!m_entityById.contains(entity->id()));
 
+    entity->setParent(this);
     m_entityById.emplace(entity->id(), std::move(entity));
 }
 

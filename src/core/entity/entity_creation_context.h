@@ -5,16 +5,15 @@
 
 #include <util/variant.h>
 
-#include "factory_resolver.h"
-
-class EntityConfig;
+class EntityPool;
 
 class EntityCreationContext {
 public:
-    EntityCreationContext(const QString& id, const VariantMap& config, FactoryResolver* resolver);
+    EntityCreationContext(const QString& id, const VariantMap& config, const QString& basePath, const EntityPool* entityPool);
 
     const QString& id() const;
-    FactoryResolver* resolver() const;
+    const EntityPool* entityPool() const;
+    const QString& basePath() const;
 
     bool has(const QString& key) const;
     QVariant require(const QString& key) const;
@@ -36,7 +35,7 @@ private:
     T parseInternal(const QString& key, const QVariant& value) const {
         T result;
         try {
-            parseConfigValue(this, value, &result, ValidationTag());
+            parseConfigValue(*this, value, &result, ValidationTag());
         } catch (...) {
             throwCreationException(key);
         }
@@ -48,7 +47,8 @@ private:
 private:
     const QString& m_id;
     const VariantMap& m_config;
-    FactoryResolver* m_resolver;
+    const QString& m_basePath;
+    const EntityPool* m_entityPool;
 };
 
 #include "entity_parsers.h"

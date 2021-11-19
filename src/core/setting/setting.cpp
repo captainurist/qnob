@@ -2,8 +2,8 @@
 
 #include "setting_backend.h"
 
-Setting::Setting(const QString& id, std::unique_ptr<SettingBackend> backend):
-    Entity(id),
+Setting::Setting(std::unique_ptr<SettingBackend> backend, QObject* parent):
+    Entity(parent),
     m_backend(std::move(backend))
 {
     m_backend->setParent(this);

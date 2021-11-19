@@ -7,8 +7,12 @@
 #include <lib/serialization/serialization_concepts.h>
 #include <util/exception/bad_cast_exception.h>
 #include <util/variant.h>
+#include <util/format.h>
 
 #include "entity_creation_context.h"
+#include "entity_creation_exception.h"
+#include "entity.h"
+#include "entity_pool.h"
 
 class QPixmap;
 
@@ -21,7 +25,7 @@ class QPixmap;
  * \param tag                           Validation tag, `nullptr_t` means no validation.
  */
 template<class T, class ValidationTag>
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, T* to, ValidationTag tag) {
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, T* to, ValidationTag tag) {
     static_assert(false, "Cannot parse type T.");
 }
 
@@ -30,33 +34,36 @@ struct AsPath {};
 
 /* Basic parsers. */
 
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QVariant* to, nullptr_t);
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QString* to, nullptr_t);
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, double* to, nullptr_t);
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, qint64* to, nullptr_t);
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, bool* to, nullptr_t);
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, VariantVector* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QVariant* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QString* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, double* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, qint64* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, bool* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, VariantVector* to, nullptr_t);
 
 /* The only parser with validation so far - validates paths. */
 
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QString* to, AsPath);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QString* to, AsPath);
 
 /* Some custom parsers. */
 
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QPixmap* to, nullptr_t);
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QPoint* to, nullptr_t);
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QSize* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QPixmap* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QPoint* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QSize* to, nullptr_t);
 
 /* Parser for entities. */
 
 template<class DerivedEntity>
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, DerivedEntity** to, nullptr_t)
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, DerivedEntity** to, nullptr_t)
     requires std::is_base_of_v<Entity, DerivedEntity>
 {
     QString id;
     parseConfigValue(ctx, from, &id, nullptr);
 
-    Entity* entity = ctx->resolver()->resolveEntity(id);
+    Entity* entity = ctx.entityPool()->entity(id);
+    if(!entity)
+        xthrow EntityCreationException(ctx.id(), sformat(EntityCreationException::tr("Entity '{}' doesn't exist."), id));
+
     if constexpr (std::is_same_v<DerivedEntity, Entity>) {
         *to = entity;
     } else {
@@ -69,7 +76,7 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, De
 /* Parser for deserializable objects. */
 
 template<class Deserializable> requires deserializable<Deserializable>
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, Deserializable* to, nullptr_t) {
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, Deserializable* to, nullptr_t) {
     QString string;
     parseConfigValue(ctx, from, &string, nullptr);
     deserialize(string, to);
@@ -77,7 +84,7 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, De
 
 /* Parser for lists. */
 template<class List, class ValidationTag>
-void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, List* to, ValidationTag tag)
+void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, List* to, ValidationTag tag)
     requires requires (List a) { a.emplace_back(); }
 {
     VariantVector variantList;

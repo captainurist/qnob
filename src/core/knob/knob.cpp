@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include <core/entity/entity_creation_context.h>
 #include <core/setting/setting.h>
 
 static double clampValue(double value) {
@@ -16,11 +17,12 @@ static double clampValue(double value) {
     return value;
 }
 
-Knob::Knob(const QString& id) :
-    Entity(id)
-{}
-
 Knob::~Knob() {}
+
+void Knob::initialize(const EntityCreationContext& ctx) {
+    setStep(ctx.require<double>(lit("step")));
+    setSetting(ctx.require<Setting*>(lit("target")));
+}
 
 double Knob::step() const {
     return m_step;

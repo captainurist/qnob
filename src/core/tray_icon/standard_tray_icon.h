@@ -11,7 +11,7 @@ class Setting;
 
 class StandardTrayIcon : public Entity {
 public:
-    StandardTrayIcon(const QString& id, Setting* setting, PlatformStandardControl control);
+    StandardTrayIcon(PlatformStandardControl control, Setting* setting, QObject* parent);
     virtual ~StandardTrayIcon();
 
     Setting* setting() const;

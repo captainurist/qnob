@@ -5,8 +5,8 @@
 
 #include <util/debug.h>
 
-Heos::Heos(const QString& id, UpnpDiscoveryEndpoint* endpoint):
-	Entity(id)
+Heos::Heos(UpnpDiscoveryEndpoint* endpoint, QObject* parent):
+	Entity(parent)
 {
 	m_upnpSearchTarget = UpnpSearchTarget::device("schemas-denon-com", "ACT-Denon", "1");
 

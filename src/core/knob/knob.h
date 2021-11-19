@@ -9,8 +9,10 @@ class Setting;
 class Knob : public Entity {
     Q_OBJECT
 public:
-    Knob(const QString& id);
+    using Entity::Entity;
     virtual ~Knob();
+
+    virtual void initialize(const EntityCreationContext& ctx) override;
 
     double step() const;
     void setStep(double step);

@@ -10,8 +10,10 @@ class Setting;
 class TrayIcon : public Entity {
     Q_OBJECT
 public:
-    TrayIcon(const QString& id);
+    TrayIcon(QObject* parent);
     virtual ~TrayIcon();
+
+    virtual void initialize(const EntityCreationContext& ctx) override;
 
     Skin* skin() const;
     void setSkin(Skin* skin);

@@ -2,6 +2,7 @@
 
 #include <QtGui/QPainter>
 
+#include <lib/serializable_types/color.h>
 #include <lib/rollback/painter_rollback.h>
 #include <core/setting/setting_state.h>
 
@@ -10,12 +11,13 @@
 class NumericSkin : public Skin {
     Q_OBJECT
 public:
-    NumericSkin(const QString& id, const QSize& size, const QColor& color, const QString& fontFamily = QString()) :
-        Skin(id),
-        m_size(size),
-        m_color(color),
-        m_fontFamily(fontFamily)
-    {}
+    using Skin::Skin;
+
+    virtual void initialize(const EntityCreationContext& ctx) override {
+        m_size = ctx.requireOr<QSize>(lit("size"), QSize());
+        m_color = ctx.require<QColor>(lit("color"));
+        m_fontFamily = ctx.requireOr<QString>(lit("font"), QString());
+    }
 
     virtual QSize size() const override {
         return m_size;

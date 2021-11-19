@@ -5,6 +5,13 @@
 
 #include <platform/platform.h>
 
+#include <lib/metacall/bound_meta_call.h>
+
+#include <core/entity/entity_creation_context.h>
+#include <core/entity/entity_creation_exception.h>
+#include <core/tray_icon/tray_icon.h>
+#include <core/tray_icon/standard_tray_icon.h>
+
 static QKeyCombination keyFromEvent(QWheelEvent* event) {
     Qt::Key key;
 
@@ -23,11 +30,34 @@ static QKeyCombination keyFromEvent(QWheelEvent* event) {
     return key | event->modifiers();
 }
 
-TrayEvent::TrayEvent(const QString& id) :
-    Entity(id)
-{}
-
 TrayEvent::~TrayEvent() {}
+
+void TrayEvent::initialize(const EntityCreationContext& ctx) {
+    QKeyCombination key = ctx.require<QKeyCombination>(lit("trigger"));
+    Entity* target = ctx.require<Entity*>(lit("target"));
+    Entity* source = ctx.require<Entity*>(lit("source"));
+    QString action = ctx.require<QString>(lit("action"));
+    QVariantList args = ctx.requireOr<QVariantList>(lit("args"), QVariantList());
+
+    if (!isMouseWheel(key.key()))
+        xthrow EntityCreationException(ctx.id(), EntityCreationException::tr("Only mouse wheel with optional modifiers is supported as trigger."));
+
+    QObject* eventSource = nullptr;
+    if (TrayIcon* trayIcon = dynamic_cast<TrayIcon*>(source))
+        eventSource = trayIcon->icon();
+    if (StandardTrayIcon* trayIcon = dynamic_cast<StandardTrayIcon*>(source))
+        eventSource = trayIcon->icon();
+    assert(eventSource); // TODO
+
+    setKey(key);
+    setEventSource(eventSource);
+
+    BoundMetaCall call;
+    call.bind(target, action.toUtf8(), args);
+    QObject::connect(this, &TrayEvent::triggered, target, [=]() mutable { // TODO: not mutable
+        call.invoke();
+    });
+}
 
 void TrayEvent::setEventSource(QObject* eventSource) {
     if (m_eventSource)

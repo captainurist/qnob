@@ -10,6 +10,8 @@
 class SettingBackend : public QObject {
     Q_OBJECT
 public:
+    // TODO: QObject* parent
+
     /**
      * \returns                         Current value, in [0, 1], or NAN if this backend is not yet initialized.
      */

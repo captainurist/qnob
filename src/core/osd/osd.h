@@ -14,8 +14,10 @@ class Setting;
 
 class Osd : public Entity {
 public:
-    Osd(const QString& id);
+    Osd(QObject* parent);
     virtual ~Osd();
+
+    virtual void initialize(const EntityCreationContext& ctx) override;
 
     void show(int showMs, int fadeMs);
     void hide();
