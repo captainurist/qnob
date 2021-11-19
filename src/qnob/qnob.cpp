@@ -121,7 +121,7 @@ int Qnob::runList(const QnobArgs& args) {
     QTextStream stream(stdout);
 
     if (args.list == EntitiesList) {
-        DefaultEntityPool entityPool;
+        DefaultEntityPool entityPool(nullptr);
 
         std::vector<Entity*> entities = entityPool.entities();
         std::ranges::sort(entities, std::less<>(), &Entity::id);
@@ -171,8 +171,8 @@ int Qnob::runService(const QnobArgs& args) {
     QnobConfig config = QnobConfig::loadFromTomlFile(args.configPath);
     QString basePath = QFileInfo(args.configPath).absolutePath();
 
-    DefaultEntityPool entityPool;
-    DefaultEntityFactoryPool factoryPool;
+    DefaultEntityPool entityPool(nullptr);
+    DefaultEntityFactoryPool factoryPool(nullptr);
     EntityPoolBuilder builder(&factoryPool, &entityPool);
     builder.addEntities(basePath, config.records);
 
