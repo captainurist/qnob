@@ -17,7 +17,7 @@ public:
 
     void bind(QObject* m_target, QByteArray method, const QVariantList& args);
 
-    QVariant invoke();
+    QVariant invoke(); // TODO: make const.
 
 private:
     QObject* m_target = nullptr;
