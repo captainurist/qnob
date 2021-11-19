@@ -8,6 +8,7 @@
 #include <core/osd/osd_factory.h>
 #include <core/tray_icon/tray_icon_factory.h>
 #include <core/tray_event/tray_event_factory.h>
+#include <core/win10/win10_factory.h>
 
 class DefaultEntityFactoryPool : public EntityFactoryPool {
 public:
@@ -20,5 +21,6 @@ public:
         registerFactory(std::make_unique<OsdFactory>());
         registerFactory(std::make_unique<TrayIconFactory>());
         registerFactory(std::make_unique<TrayEventFactory>());
+        registerFactory(std::make_unique<Win10Factory>());
     }
 };

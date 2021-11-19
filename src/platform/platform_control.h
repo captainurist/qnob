@@ -11,17 +11,18 @@ public:
     PlatformControl(QObject* parent) : QObject(parent) {}
 
     /**
-     * \returns                         Current geometry of this control.
+     * \returns                         Current geometry of this control, in screen coordinates.
+     *                                  Might return an empty rect in case of an error.
      */
     virtual QRect geometry() const = 0;
 
     /**
-     * \returns                         Whether this control is visible.
+     * \returns                         Whether this control is minimized.
      */
-    virtual bool isVisible() const = 0;
+    virtual bool isMinimized() const = 0;
 
     /**
-     * \param visible                   New visibility for this control.
+     * \param minimized                 New minimized state for this control.
      */
-    virtual void setVisible(bool visible) = 0;
+    virtual void setMinimized(bool minimized) = 0;
 };

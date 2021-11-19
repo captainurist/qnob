@@ -32,6 +32,7 @@ private:
     void updateCurrentToolTip() const;
     QSize getConsoleSize() const;
     void hideConsole() const;
+    std::unique_ptr<PlatformControl> createNativeOsdControl(QObject* parent) const;
 
 private:
     std::unique_ptr<Com> m_com;

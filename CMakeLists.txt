@@ -210,6 +210,11 @@ set(common_srcs
     "src/lib/heos/heos_connection.cpp"
     "src/core/heos/heos.h"
     "src/core/heos/heos.cpp"
+    "src/core/win10/win10.h"
+    "src/core/win10/win10.cpp"
+    "src/platform/win/win_hwnd_control.h"
+    "src/platform/win/win_hwnd_control.cpp"
+    "src/core/win10/win10_factory.cpp"
 )
 
 set(common_libs

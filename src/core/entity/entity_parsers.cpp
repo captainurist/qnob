@@ -30,6 +30,10 @@ void parseConfigValue(const EntityCreationContext*, const QVariant& from, qint64
     parseConfigValueWithVariantCast(from, to);
 }
 
+void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, bool* to, nullptr_t) {
+    parseConfigValueWithVariantCast(from, to);
+}
+
 void parseConfigValue(const EntityCreationContext*, const QVariant& from, VariantVector* to, nullptr_t) {
     parseConfigValueWithVariantCast(from, to);
 }

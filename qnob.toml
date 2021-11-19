@@ -165,8 +165,9 @@ source = "brightness_icon"
 target = "precise_brightness_knob"
 action = "decrease"
 
-#[]
-#type = "hide_win10_volume_osd"
+[win10]
+type = "win10"
+hide_native_osd = true
 
 
 

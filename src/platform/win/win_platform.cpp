@@ -19,6 +19,7 @@
 #include "win_metrics.h"
 #include "win_shared_event_window.h"
 #include "win_tray_icon_control.h"
+#include "win_hwnd_control.h"
 #include "win_guids.h"
 
 WinPlatform::WinPlatform(QObject* parent):
@@ -56,9 +57,12 @@ PlatformMetrics* WinPlatform::metrics() const {
 }
 
 std::unique_ptr<PlatformControl> WinPlatform::createStandardControl(PlatformStandardControl control, QObject* parent) const {
-    if (control == AudioTrayIcon) {
+    switch (control) {
+    case AudioTrayIconControl:
         return std::make_unique<WinTrayIconControl>(GUID_TrayIconVolume, parent);
-    } else {
+    case NativeOsdControl:
+        return createNativeOsdControl(parent);
+    default:
         return nullptr;
     }
 }
@@ -105,6 +109,25 @@ QSize WinPlatform::getConsoleSize() const {
 void WinPlatform::hideConsole() const {
     if (HWND console = GetConsoleWindow(); console != NULL)
         ShowWindow(console, SW_HIDE);
+}
+
+std::unique_ptr<PlatformControl> WinPlatform::createNativeOsdControl(QObject* parent) const {
+    HWND resultWindow = NULL;
+    HWND currentWindow = NULL;
+    size_t count = 0;
+
+    while ((currentWindow = FindWindowExW(NULL, currentWindow, L"NativeHWNDHost", L"")) != NULL) {
+        if (FindWindowExW(currentWindow, NULL, L"DirectUIHWND", L"") != 0) {
+            count++;
+            resultWindow = currentWindow;
+        }
+    }
+
+    if (count == 1) {
+        return std::make_unique<WinHwndControl>(resultWindow, parent);
+    } else {
+        return nullptr;
+    }
 }
 
 Platform* createPlatform() {

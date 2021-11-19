@@ -11,7 +11,8 @@ X_DECLARE_BITSET_FLAGS(PlatformMonitorProperties, PlatformMonitorProperty, Monit
 X_DELARE_OPERATORS_FOR_BITSET_FLAGS(PlatformMonitorProperties)
 
 enum PlatformStandardControl {
-    AudioTrayIcon,
+    AudioTrayIconControl,
+    NativeOsdControl,
     NonStandardControl
 };
 

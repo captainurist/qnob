@@ -1,19 +1,19 @@
 #pragma once
 
-#include <guiddef.h>
+#include <Windows.h>
 
 #include <platform/platform_control.h>
 
-class WinTrayIconControl : public PlatformControl {
+class WinHwndControl : public PlatformControl {
     Q_OBJECT
 public:
-    WinTrayIconControl(const GUID& guid, QObject* parent);
-    virtual ~WinTrayIconControl();
+    WinHwndControl(HWND hwnd, QObject* parent);
+    virtual ~WinHwndControl();
 
     virtual QRect geometry() const override;
     virtual bool isMinimized() const override;
     virtual void setMinimized(bool minimized) override;
 
 private:
-    GUID m_guid;
+    HWND m_hwnd;
 };

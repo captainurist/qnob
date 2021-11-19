@@ -27,10 +27,10 @@ QRect WinTrayIconControl::geometry() const {
     return QRect(QPoint(location.left, location.top), QPoint(location.right, location.bottom));
 }
 
-bool WinTrayIconControl::isVisible() const {
-    return !geometry().isEmpty();
+bool WinTrayIconControl::isMinimized() const {
+    return false;
 }
 
-void WinTrayIconControl::setVisible(bool) {
-    xWarning("Can't control visibility of standard system tray icons.");
+void WinTrayIconControl::setMinimized(bool) {
+    xWarning("Can't control minimized state of tray icons.");
 }

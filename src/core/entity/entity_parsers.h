@@ -25,6 +25,7 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, T*
     static_assert(false, "Cannot parse type T.");
 }
 
+// TODO: validation at separate level, only parsing here!
 struct AsPath {};
 
 /* Basic parsers. */
@@ -33,6 +34,7 @@ void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QV
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, QString* to, nullptr_t);
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, double* to, nullptr_t);
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, qint64* to, nullptr_t);
+void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, bool* to, nullptr_t);
 void parseConfigValue(const EntityCreationContext* ctx, const QVariant& from, VariantVector* to, nullptr_t);
 
 /* The only parser with validation so far - validates paths. */
