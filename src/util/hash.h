@@ -5,15 +5,11 @@
 
 #include <QtCore/QHashFunctions>
 
-namespace std {
+/* It's 2021 and we STILL DON'T HAVE std::hash<std::pair> in STL, how retarded is that? */
 
-    /* It's 2021 and we STILL DON'T HAVE std::hash<std::pair> in STL, how retarded is that? */
-
-    template<class A, class B>
-    struct hash<pair<A, B>> {
-        size_t operator()(const pair<A, B>& value) const {
-            return qHash(value);
-        }
-    };
-
-}
+template<class A, class B>
+struct std::hash<std::pair<A, B>> {
+    size_t operator()(const std::pair<A, B>& value) const {
+        return qHash(value);
+    }
+};

@@ -242,39 +242,36 @@ struct DebugFormatter : EmptySpecFormatter {
 
 } // namespace detail
 
-namespace std {
 
 template<>
-struct formatter<QStringView, wchar_t> : detail::AppendFormatter<QStringView> {};
+struct std::formatter<QStringView, wchar_t> : detail::AppendFormatter<QStringView> {};
 
 template<>
-struct formatter<QString, wchar_t> : detail::AppendFormatter<QString> {};
+struct std::formatter<QString, wchar_t> : detail::AppendFormatter<QString> {};
 
 template<>
-struct formatter<QByteArrayView, wchar_t> : detail::AppendFormatter<QByteArrayView> {};
+struct std::formatter<QByteArrayView, wchar_t> : detail::AppendFormatter<QByteArrayView> {};
 
 template<>
-struct formatter<QByteArray, wchar_t> : detail::AppendFormatter<QByteArray> {};
+struct std::formatter<QByteArray, wchar_t> : detail::AppendFormatter<QByteArray> {};
 
 template<class T> requires
     detail::debug_streamable<T> &&
     std::is_class_v<std::remove_cvref_t<T>>
-struct formatter<T, wchar_t> : detail::DebugFormatter<T> {};
+struct std::formatter<T, wchar_t> : detail::DebugFormatter<T> {};
 
 template<>
-struct formatter<QByteArrayView, char> : detail::AppendFormatter<QByteArrayView> {};
+struct std::formatter<QByteArrayView, char> : detail::AppendFormatter<QByteArrayView> {};
 
 template<>
-struct formatter<QByteArray, char> : detail::AppendFormatter<QByteArray> {};
+struct std::formatter<QByteArray, char> : detail::AppendFormatter<QByteArray> {};
 
 template<class T> requires
     detail::debug_streamable<T> &&
     std::is_class_v<std::remove_cvref_t<T>> &&
     (!std::is_same_v<std::remove_cvref_t<T>, QString>) &&
     (!std::is_same_v<std::remove_cvref_t<T>, QStringView>)
-struct formatter<T, char> : detail::DebugFormatter<T> {};
-
-} // namespace std
+struct std::formatter<T, char> : detail::DebugFormatter<T> {};
 
 
 /**
