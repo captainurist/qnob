@@ -20,6 +20,9 @@ protected:
     virtual void paintEvent(QPaintEvent* event) override;
 
 private:
+    void updateSize();
+
+private:
     Skin* m_skin = nullptr;
     SettingState m_state;
 };

@@ -13,12 +13,6 @@ class NumericSkin : public Skin {
 public:
     using Skin::Skin;
 
-    virtual void initialize(const EntityCreationContext& ctx) override {
-        m_size = ctx.requireOr<QSize>(lit("size"), QSize());
-        m_color = ctx.require<QColor>(lit("color"));
-        m_fontFamily = ctx.requireOr<QString>(lit("font"), QString());
-    }
-
     virtual QSize size() const override {
         return m_size;
     }
@@ -36,6 +30,13 @@ public:
         painter->setFont(font);
 
         painter->drawText(QRect(QPoint(0, 0), size), Qt::AlignCenter, text);
+    }
+
+protected:
+    virtual void loadFromConfig(const EntityCreationContext& ctx) override {
+        m_size = ctx.requireOr<QSize>(lit("size"), QSize());
+        m_color = ctx.require<QColor>(lit("color"));
+        m_fontFamily = ctx.requireOr<QString>(lit("font"), QString());
     }
 
 private:

@@ -8,9 +8,10 @@ public:
     using Entity::Entity;
     virtual ~Win10();
 
-    virtual void initialize(const EntityCreationContext& ctx) override;
-
     Q_INVOKABLE void ensureNativeOsdHidden();
+
+protected:
+    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
 
 private:
     bool m_systemOsdHidden = false;

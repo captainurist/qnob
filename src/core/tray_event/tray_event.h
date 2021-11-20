@@ -9,8 +9,6 @@ public:
     using Entity::Entity;
     virtual ~TrayEvent();
 
-    virtual void initialize(const EntityCreationContext& ctx) override;
-
     void setEventSource(QObject* eventSource);
     QObject* eventSource() const;
 
@@ -21,6 +19,7 @@ signals:
     void triggered();
 
 protected:
+    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
     virtual bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:

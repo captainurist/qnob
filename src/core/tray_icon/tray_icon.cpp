@@ -25,7 +25,7 @@ TrayIcon::~TrayIcon() {
     platform()->wheelEventManager()->unregisterTrayIcon(m_trayIcon.get());
 }
 
-void TrayIcon::initialize(const EntityCreationContext& ctx) {
+void TrayIcon::loadFromConfig(const EntityCreationContext& ctx) {
     setSkin(ctx.require<Skin*>(lit("skin")));
     setSetting(ctx.require<Setting*>(lit("target")));
 }

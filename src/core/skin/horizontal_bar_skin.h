@@ -15,13 +15,6 @@ class HorizontalBarSkin: public Skin {
 public:
     using Skin::Skin;
 
-    virtual void initialize(const EntityCreationContext& ctx) override {
-        m_background = ctx.require<QPixmap>(lit("background"));
-        m_progress = ctx.require<QPixmap>(lit("progress"));
-        m_disabled = ctx.require<QPixmap>(lit("disabled"));
-        m_offset = QPoint(ctx.require<qint64>(lit("x")), ctx.require<qint64>(lit("y")));
-    }
-
     virtual QSize size() const override {
         return m_background.size();
     }
@@ -39,6 +32,14 @@ public:
         } else {
             painter->drawPixmap(0, 0, m_disabled);
         }
+    }
+
+protected:
+    virtual void loadFromConfig(const EntityCreationContext& ctx) override {
+        m_background = ctx.require<QPixmap>(lit("background"));
+        m_progress = ctx.require<QPixmap>(lit("progress"));
+        m_disabled = ctx.require<QPixmap>(lit("disabled"));
+        m_offset = QPoint(ctx.require<qint64>(lit("x")), ctx.require<qint64>(lit("y")));
     }
 
 private:

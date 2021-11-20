@@ -51,6 +51,6 @@ void EntityPoolBuilder::addEntities(const QString& basePath, const VariantMap& r
 
     /* Then initialize them. */
     forEachEntity([&](const EntityCreationContext& ctx) {
-        m_entityPool->entity(ctx.id())->initialize(ctx);
+        m_entityPool->entity(ctx.id())->load(ctx);
     });
 }

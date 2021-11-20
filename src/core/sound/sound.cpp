@@ -18,9 +18,7 @@ Sound::Sound(QObject* parent) :
 
 Sound::~Sound() {}
 
-void Sound::initialize(const EntityCreationContext& ctx) {
-    Entity::initialize(ctx);
-
+void Sound::loadFromConfig(const EntityCreationContext& ctx) {
     QString path = ctx.require<QString, AsPath>(lit("path"));
     Setting* target = ctx.require<Setting*>(lit("target"));
 

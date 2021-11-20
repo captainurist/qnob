@@ -10,11 +10,15 @@ public:
     Entity(QObject* parent);
     virtual ~Entity();
 
+    bool isLoaded() const {
+        return m_loaded;
+    }
+
     /**
      * \param ctx                       Entity initialization context.
      * \throws EntityCreationException
      */
-    virtual void initialize(const EntityCreationContext& ctx); // TODO: rename to load?
+    void load(const EntityCreationContext& ctx);
 
     // TODO: does ID even belong here?
 
@@ -24,6 +28,13 @@ public:
         return m_id;
     }
 
+signals:
+    void loaded();
+
+protected:
+    virtual void loadFromConfig(const EntityCreationContext& ctx);
+
 private:
+    bool m_loaded = false;
     QString m_id;
 };

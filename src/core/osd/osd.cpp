@@ -29,13 +29,15 @@ Osd::Osd(QObject* parent):
     connect(m_fsm.get(), &OsdFsm::started, m_window.get(), &OsdWindow::raise);
 
     connect(qApp, &QGuiApplication::primaryScreenChanged, this, &Osd::updatePrimaryScreen);
+    connect(m_window.get(), &QWindow::widthChanged, this, &Osd::updatePosition);
+    connect(m_window.get(), &QWindow::heightChanged, this, &Osd::updatePosition);
 
     updatePrimaryScreen();
 }
 
 Osd::~Osd() {}
 
-void Osd::initialize(const EntityCreationContext& ctx) {
+void Osd::loadFromConfig(const EntityCreationContext& ctx) {
     setAlignment(ctx.requireOr<Qt::Alignment>(lit("position"), Qt::AlignBottom));
     setOffset(ctx.requireOr<QPoint>(lit("offset"), QPoint(0, 0)));
     setSkin(ctx.require<Skin*>(lit("skin")));
@@ -79,9 +81,8 @@ Skin* Osd::skin() const {
 }
 
 void Osd::setSkin(Skin* skin) {
+    /* Might also change window size, and we'll get notified. */
     m_window->setSkin(skin);
-
-    updatePosition();
 }
 
 Setting* Osd::setting() const {

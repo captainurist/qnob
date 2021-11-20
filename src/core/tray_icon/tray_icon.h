@@ -13,8 +13,6 @@ public:
     TrayIcon(QObject* parent);
     virtual ~TrayIcon();
 
-    virtual void initialize(const EntityCreationContext& ctx) override;
-
     Skin* skin() const;
     void setSkin(Skin* skin);
 
@@ -22,6 +20,9 @@ public:
     void setSetting(Setting* setting);
 
     QObject* icon() const;
+
+protected:
+    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
 
 private:
     void updateIcon();

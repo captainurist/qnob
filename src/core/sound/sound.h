@@ -14,9 +14,10 @@ public:
     Sound(QObject* parent);
     virtual ~Sound();
 
-    virtual void initialize(const EntityCreationContext& ctx) override;
-
     Q_SLOT void play();
+
+protected:
+    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
 
 private:
     QByteArray m_data;

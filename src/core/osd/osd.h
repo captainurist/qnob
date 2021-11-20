@@ -17,8 +17,6 @@ public:
     Osd(QObject* parent);
     virtual ~Osd();
 
-    virtual void initialize(const EntityCreationContext& ctx) override;
-
     void show(int showMs, int fadeMs);
     void hide();
 
@@ -33,6 +31,9 @@ public:
 
     Setting* setting() const;
     void setSetting(Setting* setting);
+
+protected:
+    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
 
 private:
     void updatePosition();

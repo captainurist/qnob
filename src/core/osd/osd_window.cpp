@@ -38,9 +38,15 @@ Skin* OsdWindow::skin() const {
 }
 
 void OsdWindow::setSkin(Skin* skin) {
+    if (m_skin)
+        disconnect(m_skin, nullptr, this, nullptr);
+
     m_skin = skin;
 
-    resize(m_skin ? m_skin->size() : QSize());
+    if (m_skin)
+        connect(m_skin, &Entity::loaded, this, &OsdWindow::updateSize);
+
+    updateSize();
 }
 
 void OsdWindow::paintEvent(QPaintEvent* /*event*/) {
@@ -57,3 +63,6 @@ void OsdWindow::paintEvent(QPaintEvent* /*event*/) {
     painter.end();
 }
 
+void OsdWindow::updateSize() {
+    resize(m_skin ? m_skin->size() : QSize());
+}

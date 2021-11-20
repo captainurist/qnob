@@ -10,7 +10,7 @@ Win10::~Win10() {
             control->setMinimized(false);
 }
 
-void Win10::initialize(const EntityCreationContext& ctx) {
+void Win10::loadFromConfig(const EntityCreationContext& ctx) {
     if (ctx.requireOr<bool>(lit("hide_native_osd"), false)) {
         ensureNativeOsdHidden();
         // TODO: also bind to settings changes!

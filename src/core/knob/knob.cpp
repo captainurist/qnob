@@ -19,7 +19,7 @@ static double clampValue(double value) {
 
 Knob::~Knob() {}
 
-void Knob::initialize(const EntityCreationContext& ctx) {
+void Knob::loadFromConfig(const EntityCreationContext& ctx) {
     setStep(ctx.require<double>(lit("step")));
     setSetting(ctx.require<Setting*>(lit("target")));
 }

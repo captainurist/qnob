@@ -32,7 +32,7 @@ static QKeyCombination keyFromEvent(QWheelEvent* event) {
 
 TrayEvent::~TrayEvent() {}
 
-void TrayEvent::initialize(const EntityCreationContext& ctx) {
+void TrayEvent::loadFromConfig(const EntityCreationContext& ctx) {
     QKeyCombination key = ctx.require<QKeyCombination>(lit("trigger"));
     Entity* target = ctx.require<Entity*>(lit("target"));
     Entity* source = ctx.require<Entity*>(lit("source"));

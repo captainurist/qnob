@@ -9,7 +9,7 @@
 
 Hotkey::~Hotkey() {}
 
-void Hotkey::initialize(const EntityCreationContext& ctx) {
+void Hotkey::loadFromConfig(const EntityCreationContext& ctx) {
     QKeyCombination shortcut = ctx.require<QKeyCombination>(lit("trigger"));
     Entity* target = ctx.require<Entity*>(lit("target"));
     QString action = ctx.require<QString>(lit("action"));
