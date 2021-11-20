@@ -11,8 +11,6 @@
 #include <util/debug.h>
 #include <util/thread/worker_pool.h>
 
-#include <core/entity/entity_pool_builder.h>
-
 #include <lib/command_line/command_line_parser.h>
 #include <lib/command_line/command_line_exception.h>
 #include <lib/logging/logger.h>
@@ -29,7 +27,9 @@
 #include "default_entity_pool.h"
 #include "default_entity_factory_pool.h"
 
-Qnob::Qnob() {
+Qnob::Qnob(QObject* parent) :
+    QObject(parent)
+{
     m_bufferLogger.reset(new BufferLogger());
     m_logFile.reset(new QFile());
     m_fileLogger.reset(new FileLogger(m_logFile.get()));
@@ -171,10 +171,9 @@ int Qnob::runService(const QnobArgs& args) {
     QnobConfig config = QnobConfig::loadFromTomlFile(args.configPath);
     QString basePath = QFileInfo(args.configPath).absolutePath();
 
-    DefaultEntityPool entityPool(nullptr);
-    DefaultEntityFactoryPool factoryPool(nullptr);
-    EntityPoolBuilder builder(&factoryPool, &entityPool);
-    builder.addEntities(basePath, config.records);
+    DefaultEntityPool entityPool(this);
+    DefaultEntityFactoryPool factoryPool(this);
+    entityPool.loadEntities(basePath, &factoryPool, config.records);
 
     /*HeosDiscovery d;
     d.discoverAll();*/
