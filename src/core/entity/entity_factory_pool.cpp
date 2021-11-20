@@ -18,8 +18,6 @@ void EntityFactoryPool::registerFactory(const QString& typeId, const EntityFacto
     m_factoryFunctionByTypeId.emplace(typeId, factoryFunction);
 }
 
-std::unique_ptr<Entity> EntityFactoryPool::createEntity(const QString& typeId, QObject* parent) const {
-    const EntityFactoryFunction* factoryFunction = value_ptr(m_factoryFunctionByTypeId, typeId);
-    return factoryFunction ? (*factoryFunction)(parent) : nullptr;
+const EntityFactoryFunction& EntityFactoryPool::factory(const QString& typeId) const {
+    return value_ref(m_factoryFunctionByTypeId, typeId, m_emptyFactory);
 }
-

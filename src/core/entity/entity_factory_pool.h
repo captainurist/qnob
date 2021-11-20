@@ -9,7 +9,6 @@
 #include <QtCore/QString>
 
 class Entity;
-class EntityPool;
 
 using EntityFactoryFunction = std::function<std::unique_ptr<Entity>(QObject*)>;
 
@@ -34,12 +33,13 @@ public:
     }
 
     /**
-     * \param typeId                    Type id of the entity to create.
-     * \param parent                    Parent object to use for the provided entity.
-     * \returns                         Newly created entity, or `nullptr` if the type wasn't registered with this pool.
+     * \param typeId                    Entity type id.
+     * \returns                         Factory registered for the provided type id, or an empty factory if none
+     *                                  was registered.
      */
-    std::unique_ptr<Entity> createEntity(const QString& typeId, QObject* parent) const;
+    const EntityFactoryFunction& factory(const QString& typeId) const;
 
 private:
     std::unordered_map<QString, EntityFactoryFunction> m_factoryFunctionByTypeId;
+    EntityFactoryFunction m_emptyFactory;
 };

@@ -40,10 +40,11 @@ void EntityPoolBuilder::addEntities(const QString& basePath, const VariantMap& r
             xthrow EntityCreationException(ctx.id(), sformat(EntityCreationException::tr("Entity '{}' already exists."), ctx.id()));
 
         QString type = ctx.require<QString>(lit("type"));
-        std::unique_ptr<Entity> entity = m_factoryPool->createEntity(type, nullptr);
-        if (!entity)
+        const EntityFactoryFunction& factory = m_factoryPool->factory(type);
+        if(!factory)
             xthrow EntityCreationException(ctx.id(), sformat(EntityCreationException::tr("Unknown entity type '{}'."), type));
 
+        std::unique_ptr<Entity> entity = factory(nullptr);
         entity->initializeId(ctx.id());
         m_entityPool->addEntity(std::move(entity));
     });

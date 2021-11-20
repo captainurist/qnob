@@ -14,7 +14,7 @@ public:
      * \param ctx                       Entity initialization context.
      * \throws EntityCreationException
      */
-    virtual void initialize(const EntityCreationContext& ctx);
+    virtual void initialize(const EntityCreationContext& ctx); // TODO: rename to load?
 
     // TODO: does ID even belong here?
 
