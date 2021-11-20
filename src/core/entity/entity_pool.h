@@ -7,7 +7,10 @@
 #include <QtCore/QHashFunctions>
 #include <QtCore/QString>
 
+#include <util/variant.h>
+
 class Entity;
+class EntityFactoryPool;
 
 class EntityPool: public QObject {
     Q_OBJECT
@@ -21,6 +24,8 @@ public:
      * \param entity                    Entity to add.
      */
     void addEntity(std::unique_ptr<Entity> entity);
+
+    void loadEntities(const QString& basePath, const EntityFactoryPool* factoryPool, const std::unordered_map<QString, VariantMap>& configs);
 
     Entity* entity(const QString& id) const;
 

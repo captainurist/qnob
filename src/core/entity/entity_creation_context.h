@@ -7,6 +7,7 @@
 
 class EntityPool;
 
+// TODO: EntityConfigContext
 class EntityCreationContext {
 public:
     EntityCreationContext(const QString& id, const VariantMap& config, const QString& basePath, const EntityPool* entityPool);

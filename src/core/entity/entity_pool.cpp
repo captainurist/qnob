@@ -5,6 +5,9 @@
 #include <util/map_access.h>
 
 #include "entity.h"
+#include "entity_factory_pool.h"
+#include "entity_creation_exception.h"
+#include "entity_creation_context.h"
 
 EntityPool::EntityPool(QObject* parent) :
     QObject(parent)
@@ -19,6 +22,43 @@ void EntityPool::addEntity(std::unique_ptr<Entity> entity) {
 
     entity->setParent(this);
     m_entityById.emplace(entity->id(), std::move(entity));
+}
+
+void EntityPool::loadEntities(const QString& basePath, const EntityFactoryPool* factoryPool, const std::unordered_map<QString, VariantMap>& configs) {
+    if (configs.empty())
+        return;
+
+    if (configs.contains(QString()))
+        xthrow EntityCreationException(QString(), EntityCreationException::tr("Empty string is not a valid entity id."));
+
+    for (auto&& [id, config] : configs)
+        if (entity(id))
+            xthrow EntityCreationException(id, sformat(EntityCreationException::tr("Entity '{}' already exists."), id));
+
+    try {
+        /* Create all entities first. */
+        for (auto&& [id, config] : configs) {
+            EntityCreationContext ctx(id, config, basePath, this);
+
+            QString type = ctx.require<QString>(lit("type"));
+            const EntityFactoryFunction& factory = factoryPool->factory(type);
+            if (!factory)
+                xthrow EntityCreationException(ctx.id(), sformat(EntityCreationException::tr("Unknown entity type '{}'."), type));
+
+            std::unique_ptr<Entity> entity = factory(this);
+            entity->initializeId(id);
+            addEntity(std::move(entity));
+        }
+
+        /* Then load them. */
+        for (auto&& [id, config] : configs)
+            entity(id)->load(EntityCreationContext(id, config, basePath, this));
+    } catch (...) {
+        /* Clean up whatever we've added to this pool. */
+        for (auto&& [id, config] : configs)
+            m_entityById.erase(id);
+        throw;
+    }
 }
 
 Entity* EntityPool::entity(const QString& id) const {

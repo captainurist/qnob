@@ -2,9 +2,11 @@
 
 #include <util/exception/exception.h>
 
+// TODO: #exceptions I18n
+
 struct ConfigLocation {
-    int line;
-    int column;
+    int line = -1;
+    int column = -1;
 };
 
 class ConfigException: public Exception {
@@ -14,6 +16,10 @@ public:
         Exception(message),
         m_location(location)
     {}
+
+    bool hasLocation() const {
+        return m_location.column != -1 && m_location.line != -1;
+    }
 
     const ConfigLocation& location() const {
         return m_location;

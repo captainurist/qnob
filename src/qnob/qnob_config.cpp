@@ -12,7 +12,7 @@ static ConfigLocation location(const toml::node& node) {
     return { node.source().begin.line, node.source().begin.column };
 }
 
-static VariantMap convertTomlTable(const toml::table& table);
+static VariantMap convertTomlTable(const toml::table& table, bool tablesOnly);
 
 static QVariant convertTomlNode(const toml::node& node) {
     switch (node.type()) {
@@ -31,26 +31,32 @@ static QVariant convertTomlNode(const toml::node& node) {
         return variantFromRValue(std::move(result));
     }
     case toml::node_type::table:
-        return variantFromRValue(convertTomlTable(*node.as_table()));
+        return variantFromRValue(convertTomlTable(*node.as_table(), false));
     default:
         xthrow ConfigException(location(node), ConfigException::tr("Expected a value."));
     }
 }
 
-static VariantMap convertTomlTable(const toml::table& table) {
+static VariantMap convertTomlTable(const toml::table& table, bool tablesOnly) {
     VariantMap result;
-    for (const auto& [id, section] : table)
-        result.emplace(QString::fromUtf8(id), convertTomlNode(section));
+    for (const auto& [id, node] : table) {
+        if (tablesOnly && !node.is_table())
+            xthrow ConfigException(location(node), ConfigException::tr("Free-standing values are not supported here."));
+
+        result.emplace(QString::fromUtf8(id), convertTomlNode(node));
+    }
     return result;
 }
+
+// TODO: sformat
 
 QnobConfig QnobConfig::loadFromTomlFile(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        xthrow Exception(ConfigException::tr("Could not open config file '%1'.").arg(path));
+        xthrow ConfigException(ConfigLocation(), ConfigException::tr("Could not open config file '%1'.").arg(path));
 
     if (file.size() > 1024 * 1024 * 1024)
-        xthrow Exception(ConfigException::tr("Config file '%1' is too large (exceeds 1Mb).").arg(path));
+        xthrow ConfigException(ConfigLocation(), ConfigException::tr("Config file '%1' is too large (exceeds 1Mb).").arg(path));
 
     QByteArray bytes = file.readAll();
 
@@ -65,5 +71,10 @@ QnobConfig QnobConfig::loadFromTomlFile(const QString& path) {
         );
     }
 
-    return { convertTomlTable(table) };
+    QnobConfig result;
+    for (auto&& [id, record] : convertTomlTable(table, true)) {
+        assert(record.typeId() == MetaType::VariantMap);
+        result.records.emplace(std::move(id), variantValueRef<VariantMap>(std::move(record)));
+    }
+    return result;
 }

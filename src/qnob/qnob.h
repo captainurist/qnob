@@ -2,17 +2,17 @@
 
 #include <memory>
 
-#include <QtCore/QCoreApplication>
+#include <QtCore/QObject>
 
 class QFile;
 class BufferLogger;
 class FileLogger;
 class QnobArgs;
 
-class Qnob {
-    Q_DECLARE_TR_FUNCTIONS(Qnob)
+class Qnob : public QObject {
+    Q_OBJECT
 public:
-    Qnob();
+    Qnob(QObject* parent);
     ~Qnob();
 
     int run(int argc, char** argv);

@@ -6,7 +6,7 @@
 
 class QnobConfig {
 public:
-    VariantMap records;
+    std::unordered_map<QString, VariantMap> records;
 
     /**
      * Loads a config from a toml file.

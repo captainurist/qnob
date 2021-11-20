@@ -81,3 +81,15 @@ const T& variantValueRef(const QVariant& value) {
     assert(value.typeId() == qMetaTypeId<T>());
     return *static_cast<const T*>(value.data());
 }
+
+template<class T>
+T& variantValueRef(QVariant& value) {
+    assert(value.typeId() == qMetaTypeId<T>());
+    return *static_cast<T*>(value.data());
+}
+
+template<class T>
+T&& variantValueRef(QVariant&& value) {
+    assert(value.typeId() == qMetaTypeId<T>());
+    return std::move(*static_cast<T*>(value.data()));
+}
