@@ -43,8 +43,8 @@ set(common_srcs
     "src/core/app/app.cpp"
     "src/core/app/app.h"
     "src/core/entity/entity.h"
-    "src/core/entity/entity_creation_context.cpp"
-    "src/core/entity/entity_creation_context.h"
+    "src/core/entity/entity_config.cpp"
+    "src/core/entity/entity_config.h"
     "src/core/entity/entity_creation_exception.h"
 
     "src/core/entity/entity_factory_pool.cpp"
@@ -53,8 +53,8 @@ set(common_srcs
     "src/core/entity/entity_parsers.h"
     "src/core/entity/entity_pool.cpp"
     "src/core/entity/entity_pool.h"
-    "src/core/entity/entity_pool_builder.cpp"
-    "src/core/entity/entity_pool_builder.h"
+    
+    
 
     "src/core/knob/knob.cpp"
     "src/core/knob/knob.h"
