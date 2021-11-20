@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include <core/entity/entity_creation_context.h>
+#include <core/entity/entity_config.h>
 #include <core/setting/setting.h>
 
 static double clampValue(double value) {
@@ -19,9 +19,9 @@ static double clampValue(double value) {
 
 Knob::~Knob() {}
 
-void Knob::loadFromConfig(const EntityCreationContext& ctx) {
-    setStep(ctx.require<double>(lit("step")));
-    setSetting(ctx.require<Setting*>(lit("target")));
+void Knob::loadFromConfig(const EntityConfig& cfg) {
+    setStep(cfg.require<double>(lit("step")));
+    setSetting(cfg.require<Setting*>(lit("target")));
 }
 
 double Knob::step() const {

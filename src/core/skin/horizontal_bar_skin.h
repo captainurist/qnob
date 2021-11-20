@@ -6,7 +6,7 @@
 #include <lib/rollback/painter_rollback.h>
 
 #include <core/setting/setting_state.h>
-#include <core/entity/entity_creation_context.h>
+#include <core/entity/entity_config.h>
 
 #include "skin.h"
 
@@ -35,11 +35,11 @@ public:
     }
 
 protected:
-    virtual void loadFromConfig(const EntityCreationContext& ctx) override {
-        m_background = ctx.require<QPixmap>(lit("background"));
-        m_progress = ctx.require<QPixmap>(lit("progress"));
-        m_disabled = ctx.require<QPixmap>(lit("disabled"));
-        m_offset = QPoint(ctx.require<qint64>(lit("x")), ctx.require<qint64>(lit("y")));
+    virtual void loadFromConfig(const EntityConfig& cfg) override {
+        m_background = cfg.require<QPixmap>(lit("background"));
+        m_progress = cfg.require<QPixmap>(lit("progress"));
+        m_disabled = cfg.require<QPixmap>(lit("disabled"));
+        m_offset = QPoint(cfg.require<qint64>(lit("x")), cfg.require<qint64>(lit("y")));
     }
 
 private:

@@ -4,7 +4,6 @@
 #include <lib/upnp/upnp_discovery_endpoint.h>
 
 #include <core/entity/entity_pool.h>
-#include <core/entity/entity_creation_context.h>
 #include <core/app/app.h>
 #include <core/setting/brightness_setting_backend.h>
 #include <core/setting/volume_setting_backend.h>

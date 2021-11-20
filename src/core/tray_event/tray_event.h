@@ -19,7 +19,7 @@ signals:
     void triggered();
 
 protected:
-    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
+    virtual void loadFromConfig(const EntityConfig& cfg) override;
     virtual bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:

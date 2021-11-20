@@ -7,7 +7,7 @@
 #include "entity.h"
 #include "entity_factory_pool.h"
 #include "entity_creation_exception.h"
-#include "entity_creation_context.h"
+#include "entity_config.h"
 
 EntityPool::EntityPool(QObject* parent) :
     QObject(parent)
@@ -38,7 +38,7 @@ void EntityPool::loadEntities(const QString& basePath, const EntityFactoryPool* 
     try {
         /* Create all entities first. */
         for (auto&& [id, config] : configs) {
-            EntityCreationContext ctx(id, config, basePath, this);
+            EntityConfig ctx(id, config, basePath, this);
 
             QString type = ctx.require<QString>(lit("type"));
             const EntityFactoryFunction& factory = factoryPool->factory(type);
@@ -52,7 +52,7 @@ void EntityPool::loadEntities(const QString& basePath, const EntityFactoryPool* 
 
         /* Then load them. */
         for (auto&& [id, config] : configs)
-            entity(id)->load(EntityCreationContext(id, config, basePath, this));
+            entity(id)->load(EntityConfig(id, config, basePath, this));
     } catch (...) {
         /* Clean up whatever we've added to this pool. */
         for (auto&& [id, config] : configs)

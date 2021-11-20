@@ -33,10 +33,10 @@ public:
     }
 
 protected:
-    virtual void loadFromConfig(const EntityCreationContext& ctx) override {
-        m_size = ctx.requireOr<QSize>(lit("size"), QSize());
-        m_color = ctx.require<QColor>(lit("color"));
-        m_fontFamily = ctx.requireOr<QString>(lit("font"), QString());
+    virtual void loadFromConfig(const EntityConfig& cfg) override {
+        m_size = cfg.requireOr<QSize>(lit("size"), QSize());
+        m_color = cfg.require<QColor>(lit("color"));
+        m_fontFamily = cfg.requireOr<QString>(lit("font"), QString());
     }
 
 private:

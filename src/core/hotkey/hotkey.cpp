@@ -5,15 +5,15 @@
 #include <lib/metacall/bound_meta_call.h>
 #include <lib/keys/key_combination.h>
 
-#include <core/entity/entity_creation_context.h>
+#include <core/entity/entity_config.h>
 
 Hotkey::~Hotkey() {}
 
-void Hotkey::loadFromConfig(const EntityCreationContext& ctx) {
-    QKeyCombination shortcut = ctx.require<QKeyCombination>(lit("trigger"));
-    Entity* target = ctx.require<Entity*>(lit("target"));
-    QString action = ctx.require<QString>(lit("action"));
-    QVariantList args = ctx.requireOr<QVariantList>(lit("args"), QVariantList());
+void Hotkey::loadFromConfig(const EntityConfig& cfg) {
+    QKeyCombination shortcut = cfg.require<QKeyCombination>(lit("trigger"));
+    Entity* target = cfg.require<Entity*>(lit("target"));
+    QString action = cfg.require<QString>(lit("action"));
+    QVariantList args = cfg.requireOr<QVariantList>(lit("args"), QVariantList());
 
     m_notifier = platform()->shortcutManager()->createShortcutNotifier(shortcut, this);
     if (m_notifier) {

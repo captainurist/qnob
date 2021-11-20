@@ -5,7 +5,7 @@
 
 #include <core/skin/skin.h>
 #include <core/setting/setting.h>
-#include <core/entity/entity_creation_context.h>
+#include <core/entity/entity_config.h>
 
 #include <platform/platform.h>
 #include <platform/platform_metrics.h>
@@ -25,9 +25,9 @@ TrayIcon::~TrayIcon() {
     platform()->wheelEventManager()->unregisterTrayIcon(m_trayIcon.get());
 }
 
-void TrayIcon::loadFromConfig(const EntityCreationContext& ctx) {
-    setSkin(ctx.require<Skin*>(lit("skin")));
-    setSetting(ctx.require<Setting*>(lit("target")));
+void TrayIcon::loadFromConfig(const EntityConfig& cfg) {
+    setSkin(cfg.require<Skin*>(lit("skin")));
+    setSetting(cfg.require<Setting*>(lit("target")));
 }
 
 Skin* TrayIcon::skin() const {

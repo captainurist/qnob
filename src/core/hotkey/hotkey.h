@@ -13,7 +13,7 @@ public:
     virtual ~Hotkey();
 
 protected:
-    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
+    virtual void loadFromConfig(const EntityConfig& cfg) override;
 
 private:
     std::unique_ptr<PlatformShortcutNotifier> m_notifier;

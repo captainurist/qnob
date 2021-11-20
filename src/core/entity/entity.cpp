@@ -10,13 +10,13 @@ Entity::~Entity() {
     assert(!m_id.isEmpty()); /* initializeId was never called? */
 }
 
-void Entity::load(const EntityCreationContext& ctx) {
-    loadFromConfig(ctx);
+void Entity::load(const EntityConfig& cfg) {
+    loadFromConfig(cfg);
     m_loaded = true;
     emit loaded();
 }
 
-void Entity::loadFromConfig(const EntityCreationContext&) {
+void Entity::loadFromConfig(const EntityConfig&) {
     /* Nothing to do here. */
 }
 

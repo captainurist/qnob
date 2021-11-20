@@ -2,7 +2,7 @@
 
 #include <QtCore/QObject>
 
-class EntityCreationContext;
+class EntityConfig;
 
 class Entity : public QObject {
     Q_OBJECT
@@ -15,10 +15,10 @@ public:
     }
 
     /**
-     * \param ctx                       Entity initialization context.
+     * \param cfg                       Entity config.
      * \throws EntityCreationException
      */
-    void load(const EntityCreationContext& ctx);
+    void load(const EntityConfig& cfg);
 
     // TODO: does ID even belong here?
 
@@ -32,7 +32,7 @@ signals:
     void loaded();
 
 protected:
-    virtual void loadFromConfig(const EntityCreationContext& ctx);
+    virtual void loadFromConfig(const EntityConfig& cfg);
 
 private:
     bool m_loaded = false;

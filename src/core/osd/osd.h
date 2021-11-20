@@ -33,7 +33,7 @@ public:
     void setSetting(Setting* setting);
 
 protected:
-    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
+    virtual void loadFromConfig(const EntityConfig& cfg) override;
 
 private:
     void updatePosition();

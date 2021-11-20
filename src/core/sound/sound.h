@@ -17,7 +17,7 @@ public:
     Q_SLOT void play();
 
 protected:
-    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
+    virtual void loadFromConfig(const EntityConfig& cfg) override;
 
 private:
     QByteArray m_data;

@@ -8,7 +8,7 @@
 
 #include <lib/serializable_types/alignment.h>
 
-#include <core/entity/entity_creation_context.h>
+#include <core/entity/entity_config.h>
 #include <core/setting/setting.h>
 #include <core/skin/skin.h>
 
@@ -37,11 +37,11 @@ Osd::Osd(QObject* parent):
 
 Osd::~Osd() {}
 
-void Osd::loadFromConfig(const EntityCreationContext& ctx) {
-    setAlignment(ctx.requireOr<Qt::Alignment>(lit("position"), Qt::AlignBottom));
-    setOffset(ctx.requireOr<QPoint>(lit("offset"), QPoint(0, 0)));
-    setSkin(ctx.require<Skin*>(lit("skin")));
-    setSetting(ctx.require<Setting*>(lit("target")));
+void Osd::loadFromConfig(const EntityConfig& cfg) {
+    setAlignment(cfg.requireOr<Qt::Alignment>(lit("position"), Qt::AlignBottom));
+    setOffset(cfg.requireOr<QPoint>(lit("offset"), QPoint(0, 0)));
+    setSkin(cfg.require<Skin*>(lit("skin")));
+    setSetting(cfg.require<Setting*>(lit("target")));
 }
 
 void Osd::show(int showMs, int fadeMs) {

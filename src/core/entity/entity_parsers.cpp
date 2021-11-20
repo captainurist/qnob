@@ -14,31 +14,31 @@ static void parseConfigValueWithVariantCast(const QVariant& from, T* to) {
         xthrow BadCastException(from.metaType(), QMetaType::fromType<T>());
 }
 
-void parseConfigValue(const EntityCreationContext&, const QVariant& from, QVariant* to, nullptr_t) {
+void parseConfigValue(const EntityConfig&, const QVariant& from, QVariant* to, nullptr_t) {
     *to = from;
 }
 
-void parseConfigValue(const EntityCreationContext&, const QVariant& from, QString* to, nullptr_t) {
+void parseConfigValue(const EntityConfig&, const QVariant& from, QString* to, nullptr_t) {
     parseConfigValueWithVariantCast(from, to);
 }
 
-void parseConfigValue(const EntityCreationContext&, const QVariant& from, double* to, nullptr_t) {
+void parseConfigValue(const EntityConfig&, const QVariant& from, double* to, nullptr_t) {
     parseConfigValueWithVariantCast(from, to);
 }
 
-void parseConfigValue(const EntityCreationContext&, const QVariant& from, qint64* to, nullptr_t) {
+void parseConfigValue(const EntityConfig&, const QVariant& from, qint64* to, nullptr_t) {
     parseConfigValueWithVariantCast(from, to);
 }
 
-void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, bool* to, nullptr_t) {
+void parseConfigValue(const EntityConfig& ctx, const QVariant& from, bool* to, nullptr_t) {
     parseConfigValueWithVariantCast(from, to);
 }
 
-void parseConfigValue(const EntityCreationContext&, const QVariant& from, VariantVector* to, nullptr_t) {
+void parseConfigValue(const EntityConfig&, const QVariant& from, VariantVector* to, nullptr_t) {
     parseConfigValueWithVariantCast(from, to);
 }
 
-void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QString* to, AsPath) {
+void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QString* to, AsPath) {
     parseConfigValue(ctx, from, to, nullptr);
 
     if (!QFileInfo(*to).isAbsolute()) {
@@ -50,7 +50,7 @@ void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QS
         xthrow BadCastException(BadCastException::tr("'%1' is not a valid file path.").arg(*to));
 }
 
-void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QPixmap* to, nullptr_t) {
+void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QPixmap* to, nullptr_t) {
     QString path;
     parseConfigValue(ctx, from, &path, AsPath());
 
@@ -59,7 +59,7 @@ void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QP
         xthrow BadCastException(BadCastException::tr("'%1' is not a valid image file.").arg(path));
 }
 
-void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QPoint* to, nullptr_t) {
+void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QPoint* to, nullptr_t) {
     std::vector<qint64> list;
     parseConfigValue(ctx, from, &list, nullptr);
 
@@ -69,7 +69,7 @@ void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QP
     *to = QPoint(list[0], list[1]);
 }
 
-void parseConfigValue(const EntityCreationContext& ctx, const QVariant& from, QSize* to, nullptr_t) {
+void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QSize* to, nullptr_t) {
     std::vector<qint64> list;
     parseConfigValue(ctx, from, &list, nullptr);
 

@@ -7,7 +7,7 @@
 
 #include <lib/metacall/bound_meta_call.h>
 
-#include <core/entity/entity_creation_context.h>
+#include <core/entity/entity_config.h>
 #include <core/entity/entity_creation_exception.h>
 #include <core/tray_icon/tray_icon.h>
 #include <core/tray_icon/standard_tray_icon.h>
@@ -32,15 +32,15 @@ static QKeyCombination keyFromEvent(QWheelEvent* event) {
 
 TrayEvent::~TrayEvent() {}
 
-void TrayEvent::loadFromConfig(const EntityCreationContext& ctx) {
-    QKeyCombination key = ctx.require<QKeyCombination>(lit("trigger"));
-    Entity* target = ctx.require<Entity*>(lit("target"));
-    Entity* source = ctx.require<Entity*>(lit("source"));
-    QString action = ctx.require<QString>(lit("action"));
-    QVariantList args = ctx.requireOr<QVariantList>(lit("args"), QVariantList());
+void TrayEvent::loadFromConfig(const EntityConfig& cfg) {
+    QKeyCombination key = cfg.require<QKeyCombination>(lit("trigger"));
+    Entity* target = cfg.require<Entity*>(lit("target"));
+    Entity* source = cfg.require<Entity*>(lit("source"));
+    QString action = cfg.require<QString>(lit("action"));
+    QVariantList args = cfg.requireOr<QVariantList>(lit("args"), QVariantList());
 
     if (!isMouseWheel(key.key()))
-        xthrow EntityCreationException(ctx.id(), EntityCreationException::tr("Only mouse wheel with optional modifiers is supported as trigger."));
+        xthrow EntityCreationException(cfg.id(), EntityCreationException::tr("Only mouse wheel with optional modifiers is supported as trigger."));
 
     QObject* eventSource = nullptr;
     if (TrayIcon* trayIcon = dynamic_cast<TrayIcon*>(source))

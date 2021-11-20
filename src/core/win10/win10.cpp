@@ -2,7 +2,7 @@
 
 #include <platform/platform.h>
 
-#include <core/entity/entity_creation_context.h>
+#include <core/entity/entity_config.h>
 
 Win10::~Win10() {
     if (m_systemOsdHidden)
@@ -10,8 +10,8 @@ Win10::~Win10() {
             control->setMinimized(false);
 }
 
-void Win10::loadFromConfig(const EntityCreationContext& ctx) {
-    if (ctx.requireOr<bool>(lit("hide_native_osd"), false)) {
+void Win10::loadFromConfig(const EntityConfig& cfg) {
+    if (cfg.requireOr<bool>(lit("hide_native_osd"), false)) {
         ensureNativeOsdHidden();
         // TODO: also bind to settings changes!
     }

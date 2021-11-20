@@ -22,7 +22,7 @@ public:
     QObject* icon() const;
 
 protected:
-    virtual void loadFromConfig(const EntityCreationContext& ctx) override;
+    virtual void loadFromConfig(const EntityConfig& cfg) override;
 
 private:
     void updateIcon();

@@ -9,7 +9,7 @@
 
 #include <util/exception/exception.h>
 
-#include <core/entity/entity_creation_context.h>
+#include <core/entity/entity_config.h>
 #include <core/setting/setting.h>
 
 Sound::Sound(QObject* parent) :
@@ -18,9 +18,9 @@ Sound::Sound(QObject* parent) :
 
 Sound::~Sound() {}
 
-void Sound::loadFromConfig(const EntityCreationContext& ctx) {
-    QString path = ctx.require<QString, AsPath>(lit("path"));
-    Setting* target = ctx.require<Setting*>(lit("target"));
+void Sound::loadFromConfig(const EntityConfig& cfg) {
+    QString path = cfg.require<QString, AsPath>(lit("path"));
+    Setting* target = cfg.require<Setting*>(lit("target"));
 
     QObject::connect(target, &Setting::activated, this, &Sound::play);
 
