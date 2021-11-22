@@ -100,8 +100,8 @@ set(common_srcs
     "src/core/hotkey/hotkey.h"
 
 
-    "src/lib/metacall/bound_meta_call.cpp"
-    "src/lib/metacall/bound_meta_call.h"
+    "src/lib/metacall/meta_closure.cpp"
+    "src/lib/metacall/meta_closure.h"
     "src/lib/metacall/meta_method_invoker.cpp"
     "src/lib/metacall/meta_method_invoker.h"
     "src/lib/metacall/meta_object_extension.cpp"
@@ -246,7 +246,7 @@ set(test_srcs
     "src/util/format_ut.cpp"
     "src/util/debug_ut.cpp"
     "src/lib/test/print_functions.h"
-)
+ "src/lib/metacall/meta_closure_ut.cpp" "src/lib/metacall/meta_closure_ut.h")
 
 
 #

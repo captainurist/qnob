@@ -18,11 +18,7 @@ public:
         if (const MetaObjectExtension* result = value_ptr(m_extensionByMetaObject, metaObject))
             return result;
 
-        return &m_extensionByMetaObject.emplace(
-            std::piecewise_construct,
-            std::forward_as_tuple(metaObject),
-            std::forward_as_tuple(metaObject)
-        ).first->second;
+        return &m_extensionByMetaObject.emplace(metaObject, metaObject).first->second;
     }
 
 private:

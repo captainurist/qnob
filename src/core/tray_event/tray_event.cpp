@@ -5,7 +5,7 @@
 
 #include <platform/platform.h>
 
-#include <lib/metacall/bound_meta_call.h>
+#include <lib/metacall/meta_closure.h>
 
 #include <core/entity/entity_config.h>
 #include <core/entity/entity_creation_exception.h>
@@ -52,10 +52,8 @@ void TrayEvent::loadFromConfig(const EntityConfig& cfg) {
     setKey(key);
     setEventSource(eventSource);
 
-    BoundMetaCall call;
-    call.bind(target, action.toUtf8(), args);
-    QObject::connect(this, &TrayEvent::triggered, target, [=]() mutable { // TODO: not mutable
-        call.invoke();
+    QObject::connect(this, &TrayEvent::triggered, target, [closure = MetaClosure(target, action.toUtf8(), args)] {
+        closure.invoke();
     });
 }
 

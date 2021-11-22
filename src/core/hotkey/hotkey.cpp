@@ -2,7 +2,7 @@
 
 #include <platform/platform.h>
 
-#include <lib/metacall/bound_meta_call.h>
+#include <lib/metacall/meta_closure.h>
 #include <lib/keys/key_combination.h>
 
 #include <core/entity/entity_config.h>
@@ -17,11 +17,8 @@ void Hotkey::loadFromConfig(const EntityConfig& cfg) {
 
     m_notifier = platform()->shortcutManager()->createShortcutNotifier(shortcut, this);
     if (m_notifier) {
-        BoundMetaCall call;
-        call.bind(target, action.toUtf8(), args);
-
-        connect(m_notifier.get(), &PlatformShortcutNotifier::activated, this, [=]() mutable { // TODO: not mutable
-            call.invoke();
+        connect(m_notifier.get(), &PlatformShortcutNotifier::activated, target, [closure = MetaClosure(target, action.toUtf8(), args)] {
+            closure.invoke();
         });
     }
 }

@@ -38,15 +38,28 @@ void MetaMethodInvoker::prepareInvocation(const QMetaMethod& method, QVariantLis
     }
 }
 
-QVariant MetaMethodInvoker::invoke(QObject* object, const QMetaMethod& method, CallContext* ctx) {
+QVariant MetaMethodInvoker::invoke(QObject* object, const QMetaMethod& method, const CallContext* ctx) {
+    assert(object);
+    assert(method.isValid());
+    assert(ctx);
+    assert(object->metaObject()->inherits(method.enclosingMetaObject()));
+
     QVariant result;
+    void** args;
+    CallContext tmp; /* std::array doesn't initialize its elements in constructor, so this line is free. */
 
     int returnTypeId = method.returnType();
-    if (method.returnType() != QMetaType::Void) {
+    if (returnTypeId == QMetaType::Void) {
+        /* No return value => no need for a temporary context. */
+        args = const_cast<void**>(ctx->data());
+    } else {
+        /* We have a return value => need a temporary context to store it properly. */
         result = QVariant(QMetaType(returnTypeId));
-        (*ctx)[0] = result.data();
+        tmp = *ctx;
+        tmp[0] = result.data();
+        args = tmp.data();
     }
 
-    object->metaObject()->metacall(object, QMetaObject::InvokeMetaMethod, method.methodIndex(), ctx->data());
+    object->metaObject()->metacall(object, QMetaObject::InvokeMetaMethod, method.methodIndex(), args);
     return result;
 }
