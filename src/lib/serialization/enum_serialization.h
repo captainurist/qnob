@@ -115,6 +115,9 @@ EnumSerializer<T>* serializer();
 /**
  * This macro generates enum serialization functions.
  *
+ * Note that alongside the usual `serialize` / `deserialize` pair this macro also defines `try_serialize` /
+ * `try_deserialize` functions that return `bool` and don't throw.
+ *
  * Usage example:
  * ```
  * X_DEFINE_ENUM_SERIALIZATION_FUNCTIONS(Qt::Key, Qt::CaseInsensitive, {
