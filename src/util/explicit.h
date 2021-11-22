@@ -8,13 +8,13 @@
  * the call site.
  *
  * Example:
- * \code
+ * ```
  * void f(Explicit<int> a);
  *
  * f('a'); // Compilation error.
  * f(1l); // Compilation error.
  * f(1); // OK.
- * \endcode
+ * ```
  */
 template<class T>
 class Explicit {
