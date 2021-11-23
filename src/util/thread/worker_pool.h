@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <unordered_map>
 
 #include <QtCore/QObject>
@@ -45,13 +46,12 @@ public:
     /**
      * Schedules a release of the provided worker object that was previously passed to `run`.
      *
-     * \param worker                    Worker object.
+     * \param worker                    Worker object. Must be previously started in this worker pool with a call to `run`.
      */
     void kill(QObject* worker);
 
     /**
-     * Blocks until all workers are destroyed. Note that if `kill` wasn't called for some of the workers, this method
-     * will block indefinitely.
+     * Kills all workers and blocks until they are actually destroyed.
      */
     void waitForDone();
 
@@ -61,12 +61,15 @@ public:
     static WorkerPool* globalInstance();
 
 private:
-    QThread* reuseThread();
+    std::unique_ptr<QThread> reuseThread();
     void releaseWorker(QObject* worker);
+    void waitForDoneLocked();
+    void killLocked(QObject* worker);
 
 private:
     QMutex m_mutex;
     QWaitCondition m_waitCondition;
-    std::unordered_map<QObject*, QThread*> m_threadByWorker;
-    std::vector<QThread*> m_freeThreads;
+    std::unordered_map<QObject*, std::unique_ptr<QThread>> m_threadByWorker;
+    std::unordered_map<QObject*, std::unique_ptr<QThread>> m_threadByKilledWorker;
+    std::vector<std::unique_ptr<QThread>> m_freeThreads;
 };

@@ -1,7 +1,6 @@
 #include "worker_pool.h"
 
 #include <cassert>
-#include <ranges>
 
 #include <QtCore/QThread>
 
@@ -10,45 +9,61 @@ Q_GLOBAL_STATIC(WorkerPool, g_workerPool)
 WorkerPool::WorkerPool() {}
 
 WorkerPool::~WorkerPool() {
-    for (QObject* worker : std::views::keys(m_threadByWorker))
-        kill(worker);
+    /* Note that we need a mutex here because releaseWorker can be simultaneously called from another thread. */
+    QMutexLocker locker(&m_mutex);
+    waitForDoneLocked();
+    assert(m_threadByKilledWorker.empty() && m_threadByWorker.empty());
 
-    waitForDone();
-
-    for (QThread* thread : m_freeThreads)
+    for (auto&& thread : m_freeThreads)
         thread->exit();
-    for (QThread* thread : m_freeThreads)
+    for (auto&& thread : m_freeThreads)
         thread->wait();
-    m_freeThreads.clear();
-
-    /* QThreads will be destroyed later as they are this object's children. */
+    m_freeThreads.clear(); /* Destroys all thread objects. */
 }
 
 void WorkerPool::run(std::unique_ptr<QObject> worker) {
-    QThread* thread = reuseThread();
+    std::unique_ptr<QThread> thread = reuseThread();
 
     if (!thread) {
-        thread = new QThread();
+        thread = std::make_unique<QThread>();
         thread->setObjectName(lit("WorkerThread"));
         thread->moveToThread(this->thread());
         thread->setParent(this);
         thread->start();
     }
 
-    worker->moveToThread(thread);
     connect(worker.get(), &QObject::destroyed, this, &WorkerPool::releaseWorker, Qt::DirectConnection);
+    worker->moveToThread(thread.get());
 
     QMutexLocker locker(&m_mutex);
-    m_threadByWorker.emplace(worker.release(), thread);
+    m_threadByWorker.emplace(worker.release(), std::move(thread));
 }
 
 void WorkerPool::kill(QObject* worker) {
+    QMutexLocker locker(&m_mutex);
+    killLocked(worker);
+}
+
+void WorkerPool::killLocked(QObject* worker) {
+    assert(!m_mutex.try_lock()); /* Must be called under lock. */
+    assert(m_threadByWorker.contains(worker));
+
     worker->deleteLater();
+    m_threadByKilledWorker.insert(m_threadByWorker.extract(worker));
 }
 
 void WorkerPool::waitForDone() {
     QMutexLocker locker(&m_mutex);
+    waitForDoneLocked();
+}
+
+void WorkerPool::waitForDoneLocked() {
+    assert(!m_mutex.try_lock()); /* Must be called under lock. */
+
     while (!m_threadByWorker.empty())
+        killLocked(m_threadByWorker.begin()->first);
+
+    while (!m_threadByKilledWorker.empty())
         m_waitCondition.wait(&m_mutex);
 }
 
@@ -56,13 +71,13 @@ WorkerPool* WorkerPool::globalInstance() {
     return g_workerPool();
 }
 
-QThread* WorkerPool::reuseThread() {
+std::unique_ptr<QThread> WorkerPool::reuseThread() {
     QMutexLocker locker(&m_mutex);
 
     if (m_freeThreads.empty())
         return nullptr;
 
-    QThread* result = m_freeThreads.back();
+    std::unique_ptr<QThread> result = std::move(m_freeThreads.back());
     m_freeThreads.pop_back();
     return result;
 }
@@ -70,10 +85,8 @@ QThread* WorkerPool::reuseThread() {
 void WorkerPool::releaseWorker(QObject* worker) {
     QMutexLocker locker(&m_mutex);
 
-    assert(m_threadByWorker.contains(worker));
+    assert(m_threadByKilledWorker.contains(worker));
 
-    m_freeThreads.push_back(m_threadByWorker[worker]);
-    m_threadByWorker.erase(worker);
-
+    m_freeThreads.emplace_back(std::move(m_threadByKilledWorker.extract(worker).mapped()));
     m_waitCondition.wakeOne();
 }
