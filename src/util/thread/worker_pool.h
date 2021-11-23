@@ -23,6 +23,11 @@ class QThread;
  * - There's an overhead of creating / destroying system threads when using short-lived workers.
  *
  * This is essentially what worker pool provides - an easy to use abstraction that manages object lifetimes for the user.
+ *
+ * Note that an alternative design would've been a task queue with tasks executed in a thread pool, but this presents
+ * its own set of challenges as it doesn't map that well to the abstractions offered by Qt. E.g. using signals & slots
+ * for task scheduling is going to be challenging - will have to roll out custom `connect` method that would create a
+ * task instead of sending a `QMetaCallEvent`. Doable, will save some threads, but totally not worth it.
  */
 class WorkerPool : public QObject {
     Q_OBJECT
