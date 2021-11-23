@@ -1,11 +1,9 @@
-The Problem
-===========
+# The Problem
 
 Hotkeys don't work when UAC-elevated app (read: pretty much any installer there is) grabs focus. Even tray wheel events stop working.
 
 
-Solution
-========
+# Solution
 
 It's possible to run qnob elevated, but this will trigger an UAC dialog every time. Not the best solution for startup apps. This is the command:
 ```

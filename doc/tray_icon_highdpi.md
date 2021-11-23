@@ -1,11 +1,9 @@
-The Problem
-===========
+# The Problem
 
 We want to update tray icon whenever screen dpi changes so that it's always crisp.
 
 
-Solution
-========
+# Solution
 
 All is fucked in highdpi world on windows.
 

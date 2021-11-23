@@ -1,5 +1,4 @@
-The Problem
-===========
+# The Problem
 
 What we want is to be able to identify the audio icon in the system tray, so that we could then properly process mouse wheel events for it.
 
@@ -7,8 +6,7 @@ Mouse events are processed in the low-level mouse hook, and icon positions are r
 
 
 
-Finding HWND & Icon Id
-=================
+# Finding HWND & Icon Id
 
 [Anvir task manager](http://www.anvir.com/download.htm) can be used to identify the process that the tray icon belongs to. Audio icon is created by explorer.exe.
 
@@ -23,8 +21,8 @@ So the steps are as follows:
 
 
 
-Finding out if Explorer uses GUIDs
-==================================
+# Finding out if Explorer uses GUIDs
+
 `Shell_NotifyIconW` is a very simple function, see [reactos sources](https://doxygen.reactos.org/da/d7b/systray_8cpp_source.html). It basically populates an internal structure, and sends it over to the system tray window via `WM_COPYDATA`.
 
 Option #1:
@@ -40,8 +38,7 @@ Option #2:
 
 
 
-Results
-=======
+# Results
 
 For Win 10.0.18363 audio icon id is `0x0064`, and window class is `ATL:00007FFD51668280` (lol), with empty caption. Guid is `73 AE 20 78 E3 23 29 42 82 C1 E4 1C B6 7D 5B 9C`, and this will be easier to use. 
 
@@ -51,7 +48,6 @@ And apparently GUID can be retreived with [UI Automation](https://docs.microsoft
 
 
 
-Getting Windows Version
-=======================
+# Getting Windows Version
 
 Everything's in [this stackoverflow answer](https://stackoverflow.com/questions/47581146/getting-os-build-version-from-win32-api-c). It's either via `GetProductInfo` call, or from `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion` registry key.

@@ -1,11 +1,9 @@
-The Problem
-===========
+# The Problem
 
 What we want is for the tray icon tooltip to update automatically when we change audio volume.
 
 
-Solution
-========
+# Solution
 
 Tool tip window has `tooltips_class32` window class. So we can find the only tooltip shown on screen via `FindWindowExW` and then checking for `IsWindowVisible`.
 
