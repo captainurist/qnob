@@ -9,9 +9,11 @@ Q_GLOBAL_STATIC(WorkerPool, g_workerPool)
 WorkerPool::WorkerPool() {}
 
 WorkerPool::~WorkerPool() {
-    /* Note that we need a mutex here because releaseWorker can be simultaneously called from another thread. */
-    QMutexLocker locker(&m_mutex);
-    waitForDoneLocked();
+    waitForDone();
+
+    /* At this point there is no need for locks.
+     * All workers are destroyed, and users shouldn't call into an object that's being destroyed. */
+
     assert(m_threadByKilledWorker.empty() && m_threadByWorker.empty());
 
     for (auto&& thread : m_freeThreads)
@@ -54,17 +56,14 @@ void WorkerPool::killLocked(QObject* worker) {
 
 void WorkerPool::waitForDone() {
     QMutexLocker locker(&m_mutex);
-    waitForDoneLocked();
-}
-
-void WorkerPool::waitForDoneLocked() {
-    assert(!m_mutex.try_lock()); /* Must be called under lock. */
 
     while (!m_threadByWorker.empty())
         killLocked(m_threadByWorker.begin()->first);
 
     while (!m_threadByKilledWorker.empty())
         m_waitCondition.wait(&m_mutex);
+
+    assert(m_threadByWorker.empty()); /* Calling run() while we were busy cleaning up? Well, that was sneaky. */
 }
 
 WorkerPool* WorkerPool::globalInstance() {

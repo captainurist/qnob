@@ -63,7 +63,6 @@ public:
 private:
     std::unique_ptr<QThread> reuseThread();
     void releaseWorker(QObject* worker);
-    void waitForDoneLocked();
     void killLocked(QObject* worker);
 
 private:
