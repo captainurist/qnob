@@ -9,6 +9,7 @@
 
 #include <util/format.h>
 #include <util/debug.h>
+#include <util/disable_nested_event_loops.h>
 #include <util/thread/worker_pool.h>
 
 #include <lib/command_line/command_line_parser.h>
@@ -42,6 +43,9 @@ Qnob::~Qnob() {
 int Qnob::run(int argc, char** argv) {
     /* Highdpi implementation in Qt is a mess. Couldn't make it work =(. */
     qputenv("QT_ENABLE_HIGHDPI_SCALING", "0");
+
+    /* Please no nested event loops, we have this in our coding guidelines. */
+    DisableNestedEventLoops dummy;
 
     /* Init logging first. Calls after this one might log! */
     Logger::installGlobalLogger(m_bufferLogger.get());

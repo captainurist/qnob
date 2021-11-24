@@ -197,6 +197,7 @@ set(common_srcs
     "src/core/entity/entity.cpp"
     "src/qnob/default_entity_pool.h"
     )
+     "src/util/disable_nested_event_loops.h"
 
 set(common_libs
     Qt::Core

@@ -24,7 +24,11 @@ To make IntelliSense work with custom-built Qt:
 
 ## Event loops & event processing
 * Don't start nested event loops.
-* Don't do event processing in destructors. Signals are disconnected in `QObject` destructor, so this might lead to calls into partially destroyed objects.
+* Don't do event processing in destructors. Signals are disconnected in `QObject` destructor, so starting an event loop might lead to calls into partially destroyed objects.
+
+Note that these points provide some very important guarantees: 
+* Destructors always finish in a deterministic way.
+* Destructor execution will never be non-deterministically interlaced with code that uses a partially destroyed object. It might happen in a deterministic way, but then it's a bug that should be easy to catch.
 
 ## Naming
 * Use `-Internal` suffix for implementation detail functions that user-facing functions delegate to. E.g. `load` vs `loadInternal`.
