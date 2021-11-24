@@ -7,6 +7,8 @@
 
 #include "format.h"
 
+// TODO: rename log.h / logging.h
+
 template<class WideStringView, class... Args>
 void xMessageOutput(QtMsgType messageType, const std::source_location& location, const char* category, WideStringView pattern, Args&&... args) {
     QString message;
