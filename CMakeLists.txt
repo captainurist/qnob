@@ -198,11 +198,15 @@ set(common_srcs
     "src/platform/win/win_hwnd_control.cpp"
     "src/core/entity/entity.cpp"
     "src/qnob/default_entity_pool.h"
-     "src/util/async/promise.h"
-     
-     "src/lib/telnet/telnet_connection.cpp"
-     "src/util/disable_nested_event_loops.h"
-  "src/util/async/future_state.h" "src/util/async/future_traits.h" "src/util/async/future_result.h"  "src/util/async/future_exception.h")
+    "src/util/async/promise.h"
+    "src/lib/telnet/telnet_connection.cpp"
+    "src/util/disable_nested_event_loops.h"
+    "src/util/async/future_state.h"
+    "src/util/async/future_traits.h"
+    "src/util/async/future_result.h"
+    "src/util/async/future_exception.h"
+    "src/util/async/coroutine.h"
+)
 
 set(common_libs
     Qt::Core
@@ -232,7 +236,10 @@ set(test_srcs
     "src/util/format_ut.cpp"
     "src/util/debug_ut.cpp"
     "src/lib/test/print_functions.h"
- "src/lib/metacall/meta_closure_ut.cpp" "src/lib/metacall/meta_closure_ut.h" "src/util/async/future_ut.cpp")
+    "src/lib/metacall/meta_closure_ut.cpp"
+    "src/lib/metacall/meta_closure_ut.h"
+    "src/util/async/future_ut.cpp"
+)
 
 
 #
