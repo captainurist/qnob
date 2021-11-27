@@ -190,6 +190,7 @@ set(common_srcs
     "src/lib/heos/heos_connection.cpp"
     "src/core/heos/heos.h"
     "src/core/heos/heos.cpp"
+    "src/lib/telnet/telnet_connection.h"
     "src/util/async/future.h"
     "src/core/win10/win10.h"
     "src/core/win10/win10.cpp"
@@ -199,6 +200,7 @@ set(common_srcs
     "src/qnob/default_entity_pool.h"
      "src/util/async/promise.h"
      
+     "src/lib/telnet/telnet_connection.cpp"
      "src/util/disable_nested_event_loops.h"
   "src/util/async/future_state.h" "src/util/async/future_traits.h" "src/util/async/future_result.h"  "src/util/async/future_exception.h")
 
