@@ -44,6 +44,9 @@ void Knob::toggle() {
     if (!m_setting)
         return;
 
+    QEventLoop l;
+    l.exec();
+
     SettingState state = m_setting->state();
     state.enabled = !state.enabled;
     m_setting->setState(state);
