@@ -1,5 +1,6 @@
 #include "heos_connection.h"
 
+#include <QtCore/QCoreApplication>
 #include <QtNetwork/QTcpSocket>
 
 #include <util/debug.h>
