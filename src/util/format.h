@@ -10,7 +10,6 @@
 #include <QtCore/QVarLengthArray>
 #include <QtCore/QDebug>
 
-#include <util/exception/exception.h>
 #include <util/explicit.h>
 
 /* This is a pretty bad hack. We're basically forward-declaring a function from Qt internals. But whatever. */
