@@ -17,7 +17,7 @@ void xMessageOutput(QtMsgType messageType, const std::source_location& location,
         message = sformat(pattern, std::forward<Args>(args)...);
     } catch (std::format_error& e) {
         messageType = QtWarningMsg;
-        message = sformat(L"Could not format pattern \"{}\": {}", pattern, QByteArrayView(e.what()));
+        message = sformat(L"Could not format pattern \"{}\": {}", pattern, QUtf8StringView(e.what()));
     }
 
     qt_message_output(messageType, ctx, message);

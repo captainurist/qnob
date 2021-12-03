@@ -15,10 +15,6 @@ TEST(Format, TestSFormatDebug) {
     EXPECT_EQ(sformat(L"{}", QPoint(10, 99)), lit("QPoint(10,99)"));
 }
 
-TEST(Format, TestSFormatQByteArray) {
-    EXPECT_EQ(sformat(L"{}", QByteArray("\xF0\x9D\x84\x9E")), QString::fromUcs4(U"\x0001D11E"));
-}
-
 TEST(Format, TestSFormatQLatin1String) {
     EXPECT_EQ(sformat(L"{}", QLatin1String("123")), lit("123"));
 }
@@ -26,6 +22,7 @@ TEST(Format, TestSFormatQLatin1String) {
 TEST(Format, TestSFormatQUtf8StringView) {
     EXPECT_EQ(sformat(L"{}", QUtf8StringView("123")), lit("123"));
     EXPECT_EQ(sformat(L"{}", QUtf8StringView("\xd0\x81")), QString::fromUcs4(U"\x00000401"));
+    EXPECT_EQ(sformat(L"{}", QUtf8StringView("\xF0\x9D\x84\x9E")), QString::fromUcs4(U"\x0001D11E"));
 }
 
 TEST(Format, TestBFormat) {

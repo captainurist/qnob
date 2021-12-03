@@ -267,6 +267,13 @@ struct DebugFormatter : EmptySpecFormatter {
     }
 };
 
+struct UnknownEncodingFailureFormatter : EmptySpecFormatter {
+    template <class T, class FormatContext>
+    auto format(const T&, FormatContext&) {
+        static_assert(false, "Formatting bytes into QString is not supported, use QLatin1String / QUtf8StringView to specify encoding explicitly.");
+    }
+};
+
 } // namespace detail
 
 
@@ -284,15 +291,17 @@ struct std::formatter<QUtf8StringView, wchar_t> : detail::AppendFormatter<QUtf8S
 
 // TODO: add utf8 marker?
 template<>
-struct std::formatter<QByteArrayView, wchar_t> : detail::AppendFormatter<QByteArrayView> {};
+struct std::formatter<QByteArrayView, wchar_t> : detail::UnknownEncodingFailureFormatter {};
 
 template<>
-struct std::formatter<QByteArray, wchar_t> : detail::AppendFormatter<QByteArray> {};
+struct std::formatter<QByteArray, wchar_t> : detail::UnknownEncodingFailureFormatter {};
 
 template<class T> requires
     detail::debug_streamable<T> &&
     std::is_class_v<std::remove_cvref_t<T>> &&
-    (!std::is_same_v<std::remove_cvref_t<T>, QAnyStringView>) // TODO
+    (!std::is_same_v<std::remove_cvref_t<T>, QAnyStringView>) && // TODO
+    (!std::is_same_v<std::remove_cvref_t<T>, QByteArray>) &&
+    (!std::is_same_v<std::remove_cvref_t<T>, QByteArrayView>)
 struct std::formatter<T, wchar_t> : detail::DebugFormatter<T> {};
 
 template<>
