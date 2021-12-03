@@ -25,6 +25,10 @@ TEST(Format, TestSFormatQUtf8StringView) {
     EXPECT_EQ(sformat(L"{}", QUtf8StringView("\xF0\x9D\x84\x9E")), QString::fromUcs4(U"\x0001D11E"));
 }
 
+TEST(Format, TestSFormatQByteArray) {
+    // sformat("{}", QByteArray("1")); /* Should not compile! */
+}
+
 TEST(Format, TestBFormat) {
     EXPECT_EQ(bformat(QByteArrayLiteral("123 = {}"), 123), QByteArrayLiteral("123 = 123"));
 }
