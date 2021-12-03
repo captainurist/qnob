@@ -2,9 +2,8 @@
 
 #include <type_traits>
 
-// TODO docs that actually talk about how T is stored
 /**
- * A reference wrapper that provides a functionality akin to `explicit` keyword, but for function parameters. Tagging
+ * Wrapper type that provides a functionality akin to `explicit` keyword, but for function parameters. Tagging
  * a parameter type as `Explicit` disables all implicit conversions and requires to perform an explicit conversion at
  * the call site.
  *
@@ -15,7 +14,15 @@
  * f('a'); // Compilation error.
  * f(1l); // Compilation error.
  * f(1); // OK.
+ *
+ * void g(Explicit<const QByteArray&> s);
+ *
+ * g("1"); // Compilation error.
+ * g(QByteArray("1")); // OK.
  * ```
+ *
+ * \tparam T                            The wrapped type. Can be a reference, in which case a reference will be stored
+ *                                      in the wrapper.
  */
 template<class T>
 class Explicit {
