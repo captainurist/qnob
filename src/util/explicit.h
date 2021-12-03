@@ -36,6 +36,10 @@ public:
         return m_value;
     }
 
+    std::remove_reference_t<T>* operator->() {
+        return &m_value;
+    }
+
 private:
     T m_value;
 };

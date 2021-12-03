@@ -53,7 +53,8 @@ public:
     }
 
     void append(Explicit<char> character) {
-        assert(*character >= 0 && *character <= 0x7f); /* Sane Latin-1 chars. */
+        /* This function is needed for STL formatters (int, float, etc.) to work. */
+        assert(*character >= 0 && *character <= 0x7f); /* Sane Latin-1 chars please. */
 
         m_result.push_back(QLatin1Char(*character));
     }
@@ -66,20 +67,18 @@ public:
         m_result.append(*string);
     }
 
-    void append(Explicit<const QByteArray&> utf8) {
-        appendUft8ToUtf16(*utf8, &m_result);
-    }
-
-    void append(Explicit<QByteArrayView> utf8) {
-        appendUft8ToUtf16(*utf8, &m_result);
-    }
-
-    void append(Explicit<QUtf8StringView> utf8) {
-        appendUft8ToUtf16(*utf8, &m_result);
+    void append(Explicit<QUtf8StringView> string) {
+        appendUft8ToUtf16(*string, &m_result);
     }
 
     void append(Explicit<QLatin1String> string) {
         m_result.append(*string);
+    }
+
+    void append(Explicit<QAnyStringView> string) {
+        string->visit([&](auto view) {
+            append(view);
+        });
     }
 
     template<class T>
@@ -289,7 +288,9 @@ struct std::formatter<QLatin1String, wchar_t> : detail::AppendFormatter<QLatin1S
 template<>
 struct std::formatter<QUtf8StringView, wchar_t> : detail::AppendFormatter<QUtf8StringView> {};
 
-// TODO: add utf8 marker?
+template<>
+struct std::formatter<QAnyStringView, wchar_t> : detail::AppendFormatter<QAnyStringView> {};
+
 template<>
 struct std::formatter<QByteArrayView, wchar_t> : detail::UnknownEncodingFailureFormatter {};
 
@@ -299,7 +300,6 @@ struct std::formatter<QByteArray, wchar_t> : detail::UnknownEncodingFailureForma
 template<class T> requires
     detail::debug_streamable<T> &&
     std::is_class_v<std::remove_cvref_t<T>> &&
-    (!std::is_same_v<std::remove_cvref_t<T>, QAnyStringView>) && // TODO
     (!std::is_same_v<std::remove_cvref_t<T>, QByteArray>) &&
     (!std::is_same_v<std::remove_cvref_t<T>, QByteArrayView>)
 struct std::formatter<T, wchar_t> : detail::DebugFormatter<T> {};
