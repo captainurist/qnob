@@ -54,7 +54,7 @@ void detail::logError(const char* expr, const std::source_location& location) {
         location,
         nullptr,
         L"{} failed: {}",
-        extractFunctionName(expr),
+        QLatin1String(extractFunctionName(expr)),
         lastErrorString
     );
 }
@@ -67,7 +67,7 @@ void detail::logError(HRESULT result, const char* expr, const std::source_locati
         location,
         nullptr,
         L"{} failed with HRESULT={:#0X}",
-        extractFunctionName(expr),
+        QLatin1String(extractFunctionName(expr)),
         static_cast<std::make_unsigned_t<HRESULT>>(result)
     );
 }

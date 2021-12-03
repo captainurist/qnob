@@ -51,5 +51,5 @@ void HeosConnection::handleSocketErrorOccured() {
 }
 
 void HeosConnection::handleSocketBytesAvailable() {
-    xInfo("{}", m_socket->readAll());
+    xInfo("{}", QUtf8StringView(m_socket->readAll()));
 }

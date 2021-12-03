@@ -24,7 +24,7 @@ UpnpDiscoveryEndpoint::~UpnpDiscoveryEndpoint() {
 void UpnpDiscoveryEndpoint::start(QHostAddress address) {
     m_sockets.clear();
 
-    /* Note that it's important to have one socket per network interface because otherwise send tend to fail 
+    /* Note that it's important to have one socket per network interface because otherwise send tend to fail
      * randomly with WSAEHOSTUNREACH. Likely trying to send the request through a disconnected vpn adapter. */
 
     for (QHostAddress address : QNetworkInterface::allAddresses()) {
@@ -100,7 +100,7 @@ void UpnpDiscoveryEndpoint::readPendingDatagrams(QUdpSocket* socket) {
                 line.chop(1);
 
         if (lines.size() == 0 || lines[0] != "HTTP/1.1 200 OK") {
-            xWarning("Invalid UPnP packet from {}:{}:\n{}", datagram.senderAddress().toString(), datagram.senderPort(), datagram.data());
+            xWarning("Invalid UPnP packet from {}:{}:\n{}", datagram.senderAddress().toString(), datagram.senderPort(), QUtf8StringView(datagram.data()));
             continue; /* Skip this datagram altogether. */
         }
 
@@ -111,7 +111,7 @@ void UpnpDiscoveryEndpoint::readPendingDatagrams(QUdpSocket* socket) {
 
             qsizetype pos = line.indexOf(':');
             if (pos == -1) {
-                xWarning("Invalid line in UPnP packet from {}:{}:\n{}", datagram.senderAddress().toString(), datagram.senderPort(), line);
+                xWarning("Invalid line in UPnP packet from {}:{}:\n{}", datagram.senderAddress().toString(), datagram.senderPort(), QUtf8StringView(line));
                 continue; /* Just skip this line. */
             }
 
