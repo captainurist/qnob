@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include <util/format.h>
+
 #include "meta_call_exception.h"
 
 void MetaMethodInvoker::prepareInvocation(const QMetaMethod& method, QVariantList* args, CallContext* ctx) {
@@ -12,7 +14,7 @@ void MetaMethodInvoker::prepareInvocation(const QMetaMethod& method, QVariantLis
         xthrow MetaCallException(
             method.enclosingMetaObject(),
             method.name(),
-            MetaCallException::tr("Argument count mismatch (%1 != %2).").arg(parameterCount).arg(args->size())
+            sformat(MetaCallException::tr("Argument count mismatch ({} != {})."), parameterCount, args->size())
         );
     }
 
@@ -27,10 +29,10 @@ void MetaMethodInvoker::prepareInvocation(const QMetaMethod& method, QVariantLis
             xthrow MetaCallException(
                 method.enclosingMetaObject(),
                 method.name(),
-                MetaCallException::tr("Type mismatch in argument #%1: expected %2, got %3.")
-                    .arg(i + 1)
-                    .arg(QLatin1String(QMetaType(expectedTypeId).name()))
-                    .arg(QLatin1String(arg.typeName()))
+                sformat(MetaCallException::tr("Type mismatch in argument #{}: expected {}, got {}."),
+                    i + 1,
+                    QLatin1String(QMetaType(expectedTypeId).name()),
+                    QLatin1String(arg.typeName()))
             );
         }
 

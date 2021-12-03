@@ -8,6 +8,7 @@
 #include <QtMultimedia/QAudioOutput>
 
 #include <util/exception/exception.h>
+#include <util/format.h>
 
 #include <core/entity/entity_config.h>
 #include <core/setting/setting.h>
@@ -26,7 +27,7 @@ void Sound::loadFromConfig(const EntityConfig& cfg) {
 
     m_audioFile.reset(new QFile(path));
     if (!m_audioFile->open(QFile::ReadOnly))
-        xthrow Exception(Exception::tr("Could not open sound file '%1'").arg(path));
+        xthrow Exception(sformat(Exception::tr("Could not open sound file '{}'"), path));
     // TODO: IoException above? First figure out what to do with exceptions in general. I18n, subclassing etc.
 
     m_player.reset(new QMediaPlayer());

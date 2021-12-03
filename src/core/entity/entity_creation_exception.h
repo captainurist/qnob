@@ -1,6 +1,7 @@
 #pragma once
 
 #include <util/exception/exception.h>
+#include <util/format.h>
 
 class EntityCreationException : public Exception {
     Q_DECLARE_TR_FUNCTIONS(EntityCreationException)
@@ -16,7 +17,7 @@ public:
 
 private:
     QString fullMessage(const QString& id, const QString& message) {
-        return tr("Failed to create entity '%1': %2").arg(id).arg(message);
+        return sformat(tr("Failed to create entity '{}': {}"), id, message);
     }
 
 private:

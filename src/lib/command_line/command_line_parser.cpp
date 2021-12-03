@@ -6,6 +6,8 @@
 #include <QtCore/QCommandLineParser>
 #include <QtCore/QTextStream>
 
+#include <util/format.h>
+
 #include "command_line_exception.h"
 
 static QString optionName(const CommandLineOption& option) {
@@ -106,7 +108,7 @@ void CommandLineParser::parse(const QStringList& commandLine) {
             QString name = optionName(option);
 
             if (option.required && !parser.isSet(name))
-                xthrow CommandLineException(CommandLineException::tr("Required option '%1' is not provided.").arg(name));
+                xthrow CommandLineException(sformat(CommandLineException::tr("Required option '{}' is not provided."), name));
 
             QStringList values = parser.values(name);
             if (values.isEmpty() && !option.defaultValue.isEmpty())
@@ -118,7 +120,7 @@ void CommandLineParser::parse(const QStringList& commandLine) {
                 try {
                     option.handler(value);
                 } catch (...) {
-                    xthrow CommandLineException(CommandLineException::tr("Could not parse value for option '%1'.").arg(name));
+                    xthrow CommandLineException(sformat(CommandLineException::tr("Could not parse value for option '{}'."), name));
                 }
             }
         }
@@ -181,7 +183,7 @@ void CommandLineParser::printSections(QTextStream& stream, const CommandLineHelp
             QString description = option.description;
             if (options.printDefaults && !option.defaultValue.isEmpty()) {
                 description += description.endsWith(QLatin1Char('.')) ? lit(" ") : lit(". ");
-                description += tr("Default is '%1'.").arg(option.defaultValue);
+                description += sformat(tr("Default is '{}'."), option.defaultValue);
             }
             QStringList lines = wrapText(description, options.maxLineLength - options.indent - headerLength - options.spacing);
             if (lines.isEmpty())

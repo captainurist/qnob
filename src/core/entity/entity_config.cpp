@@ -2,6 +2,7 @@
 
 #include <core/entity/entity_creation_exception.h>
 #include <util/map_access.h>
+#include <util/format.h>
 
 EntityConfig::EntityConfig(const QString& id, const VariantMap& config, const QString& basePath, const EntityPool* entityPool):
     m_id(id),
@@ -29,7 +30,7 @@ bool EntityConfig::has(const QString& key) const {
 QVariant EntityConfig::require(const QString& key) const {
     QVariant result = requireOr(key, QVariant());
     if (result.isNull())
-        xthrow EntityCreationException(id(), EntityCreationException::tr("Required parameter '%1' is not defined.").arg(key));
+        xthrow EntityCreationException(id(), sformat(EntityCreationException::tr("Required parameter '{}' is not defined."), key));
     return result;
 }
 
@@ -40,6 +41,6 @@ QVariant EntityConfig::requireOr(const QString& key, const QVariant& defaultValu
 void EntityConfig::throwCreationException(const QString& key) const {
     xthrow EntityCreationException(
         id(),
-        EntityCreationException::tr("Parameter '%1' has invalid value.").arg(key)
+        sformat(EntityCreationException::tr("Parameter '{}' has invalid value."), key)
     );
 }

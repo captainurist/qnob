@@ -47,7 +47,7 @@ void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QString* to
     }
 
     if (!QFileInfo::exists(*to))
-        xthrow BadCastException(BadCastException::tr("'%1' is not a valid file path.").arg(*to));
+        xthrow BadCastException(sformat(BadCastException::tr("'{}' is not a valid file path."), *to));
 }
 
 void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QPixmap* to, nullptr_t) {
@@ -56,7 +56,7 @@ void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QPixmap* to
 
     *to = QPixmap(path);
     if (to->isNull())
-        xthrow BadCastException(BadCastException::tr("'%1' is not a valid image file.").arg(path));
+        xthrow BadCastException(sformat(BadCastException::tr("'{}' is not a valid image file."), path));
 }
 
 void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QPoint* to, nullptr_t) {
@@ -64,7 +64,7 @@ void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QPoint* to,
     parseConfigValue(ctx, from, &list, nullptr);
 
     if (list.size() != 2)
-        xthrow BadCastException(BadCastException::tr("2D point must contain exactly 2 coordinates."));
+        xthrow BadCastException(BadCastException::tr("2D point must have exactly 2 coordinates."));
 
     *to = QPoint(list[0], list[1]);
 }
@@ -74,7 +74,7 @@ void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QSize* to, 
     parseConfigValue(ctx, from, &list, nullptr);
 
     if (list.size() != 2)
-        xthrow BadCastException(BadCastException::tr("2D size must contain exactly 2 coordinates."));
+        xthrow BadCastException(BadCastException::tr("2D size must have exactly 2 coordinates."));
 
     *to = QSize(list[0], list[1]);
 }
