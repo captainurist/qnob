@@ -10,10 +10,11 @@ class QDebug;
 
 // TODO: do we even need i18n in #exceptions?
 // TODO: and actually most of the fields in derived classes are also not needed...
+// TODO: and messages should include trailing dots imo
 
 /**
  * Custom exception that supports source location & QString-based exception messages.
- * Base class for all qnob exceptions.
+ * Base class for all exceptions.
  */
 class Exception : public std::exception {
     Q_DECLARE_TR_FUNCTIONS(Exception)
