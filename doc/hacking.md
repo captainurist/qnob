@@ -10,17 +10,17 @@ To make IntelliSense work with custom-built Qt:
 
 
 # Code Style
+## Using QObject
+* Declare constructors for `QObject`-derived classes that take `QObject* parent` as the last argument. Do not default parent to `nullptr`!
+* Always pass said parent explicitly.
+* Use `QObject` parent-child system for `QObject` ownership. It makes `moveToThread` work.
+
 ## Using unique_ptr
 * Use `std::unique_ptr` instead of `QScopedPointer`.
 * Use `std::make_unique` for allocations. There should be no need to call `new`.
 * Store owned `QObject`s in `std::unique_ptr` fields. This gives fine control over destruction order.
 * If a function allocates, it should return `std::unique_ptr`.
-* If a function takes ownership of a passed object, it should take `std::unique_ptr`.
-
-## Using QObject
-* Declare constructors for `QObject`-derived classes that take `QObject* parent` as the last argument. Do not default parent to `nullptr`!
-* Always pass said parent explicitly.
-* Use `QObject` parent-child system for `QObject` ownership. It makes `moveToThread` work.
+* If a function takes ownership of a passed object, it should take `std::unique_ptr`, and call `QObject::setParent`.
 
 ## Event loops & event processing
 * Don't start nested event loops.

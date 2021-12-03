@@ -4,7 +4,8 @@
 
 #include <lib/monitor/monitor_manager.h>
 
-BrightnessSettingBackend::BrightnessSettingBackend(MonitorManager* monitorManager):
+BrightnessSettingBackend::BrightnessSettingBackend(MonitorManager* monitorManager, QObject* parent) :
+    SettingBackend(parent),
     m_monitorManager(monitorManager)
 {
     connect(m_monitorManager, &MonitorManager::monitorsChanged, this, &BrightnessSettingBackend::handleMonitorsChanged);

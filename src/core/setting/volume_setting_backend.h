@@ -5,7 +5,7 @@
 class VolumeSettingBackend : public SettingBackend {
     Q_OBJECT
 public:
-    VolumeSettingBackend();
+    VolumeSettingBackend(QObject* parent);
     virtual ~VolumeSettingBackend();
 
     virtual double value() const override;

@@ -4,12 +4,13 @@
 
 #include <platform/platform.h>
 
-VolumeSettingBackend::VolumeSettingBackend() {
+VolumeSettingBackend::VolumeSettingBackend(QObject* parent) :
+    SettingBackend(parent)
+{
     connect(platform()->volumeControl(), &PlatformVolumeControl::changedExternally, this, &SettingBackend::changedExternally);
 }
 
-VolumeSettingBackend::~VolumeSettingBackend()
-{}
+VolumeSettingBackend::~VolumeSettingBackend() {}
 
 double VolumeSettingBackend::value() const {
     return platform()->volumeControl()->volume();

@@ -9,7 +9,7 @@ class MonitorManager;
 class BrightnessSettingBackend : public SettingBackend {
     Q_OBJECT
 public:
-    BrightnessSettingBackend(MonitorManager* monitorManager);
+    BrightnessSettingBackend(MonitorManager* monitorManager, QObject* parent);
     virtual ~BrightnessSettingBackend();
 
     virtual double value() const override;

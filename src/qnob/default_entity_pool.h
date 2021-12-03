@@ -21,8 +21,8 @@ public:
         m_upnpEndpoint.reset(new UpnpDiscoveryEndpoint(this));
         m_upnpEndpoint->start();
 
-        std::unique_ptr<Setting> volume = std::make_unique<Setting>(std::make_unique<VolumeSettingBackend>(), this);
-        addUninitializedEntity(lit("brightness"), std::make_unique<Setting>(std::make_unique<BrightnessSettingBackend>(m_monitorManager.get()), this));
+        std::unique_ptr<Setting> volume = std::make_unique<Setting>(std::make_unique<VolumeSettingBackend>(nullptr), this);
+        addUninitializedEntity(lit("brightness"), std::make_unique<Setting>(std::make_unique<BrightnessSettingBackend>(m_monitorManager.get(), nullptr), this));
         addUninitializedEntity(lit("app"), std::make_unique<App>(this));
         addUninitializedEntity(lit("volume_icon"), std::make_unique<StandardTrayIcon>(AudioTrayIconControl, volume.get(), this));
         addUninitializedEntity(lit("heos"), std::make_unique<Heos>(m_upnpEndpoint.get(), this));
