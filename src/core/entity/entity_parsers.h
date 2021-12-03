@@ -38,7 +38,7 @@ void parseConfigValue(const EntityConfig& ctx, const QVariant& from, QString* to
 void parseConfigValue(const EntityConfig& ctx, const QVariant& from, double* to, nullptr_t);
 void parseConfigValue(const EntityConfig& ctx, const QVariant& from, qint64* to, nullptr_t);
 void parseConfigValue(const EntityConfig& ctx, const QVariant& from, bool* to, nullptr_t);
-void parseConfigValue(const EntityConfig& ctx, const QVariant& from, VariantVector* to, nullptr_t);
+void parseConfigValue(const EntityConfig& ctx, const QVariant& from, VariantList* to, nullptr_t);
 
 /* The only parser with validation so far - validates paths. */
 
@@ -86,7 +86,7 @@ template<class List, class ValidationTag>
 void parseConfigValue(const EntityConfig& ctx, const QVariant& from, List* to, ValidationTag tag)
     requires requires (List a) { a.emplace_back(); }
 {
-    VariantVector variantList;
+    VariantList variantList;
     parseConfigValue(ctx, from, &variantList, nullptr);
 
     to->clear();

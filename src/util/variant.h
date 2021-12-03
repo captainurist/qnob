@@ -10,7 +10,7 @@
 /* QVariantList/Map/Hash use Qt containers, which are not STL compatible in a lot of weird ways.
  * So we need our own containers. */
 
-using VariantVector = std::vector<QVariant>; // TODO: List, not Vector!
+using VariantList = std::vector<QVariant>;
 using VariantMap = std::map<QString, QVariant>;
 using VariantHash = std::unordered_map<QString, QVariant>;
 
@@ -19,13 +19,13 @@ using VariantHash = std::unordered_map<QString, QVariant>;
 
 namespace MetaType {
     enum {
-        VariantVector = QMetaType::User - 1,
+        VariantList = QMetaType::User - 1,
         VariantMap = QMetaType::User - 2,
         VariantHash = QMetaType::User - 3
     };
 }
 
-Q_DECLARE_BUILTIN_METATYPE("VariantVector", MetaType::VariantVector, VariantVector)
+Q_DECLARE_BUILTIN_METATYPE("VariantList", MetaType::VariantList, VariantList)
 Q_DECLARE_BUILTIN_METATYPE("VariantMap", MetaType::VariantMap, VariantMap)
 Q_DECLARE_BUILTIN_METATYPE("VariantHash", MetaType::VariantHash, VariantHash)
 

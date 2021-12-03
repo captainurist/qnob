@@ -26,7 +26,7 @@ static QVariant convertTomlNode(const toml::node& node) {
     case toml::node_type::boolean:
         return QVariant::fromValue<bool>(node.as_boolean()->get());
     case toml::node_type::array: {
-        VariantVector result;
+        VariantList result;
         for (const toml::node& element : *node.as_array())
             result.push_back(convertTomlNode(element));
         return variantFromRValue(std::move(result));

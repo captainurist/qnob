@@ -34,7 +34,7 @@ void parseConfigValue(const EntityConfig& ctx, const QVariant& from, bool* to, n
     parseConfigValueWithVariantCast(from, to);
 }
 
-void parseConfigValue(const EntityConfig&, const QVariant& from, VariantVector* to, nullptr_t) {
+void parseConfigValue(const EntityConfig&, const QVariant& from, VariantList* to, nullptr_t) {
     parseConfigValueWithVariantCast(from, to);
 }
 
