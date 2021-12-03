@@ -26,7 +26,12 @@ public:
      */
     void registerFactory(const QString& typeId, const EntityFactoryFunction& factoryFunction);
 
-    // TODO: docs
+    /**
+     * Registers an entity factory that simply allocates an entity of the provided type.
+     *
+     * \param typeId                    Entity type id.
+     * \tparam EntityClass              Entity type.
+     */
     template<class EntityClass>
     void registerSimpleFactory(const QString& typeId) {
         registerFactory(typeId, [](QObject* parent) { return std::make_unique<EntityClass>(parent); });
