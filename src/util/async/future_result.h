@@ -9,8 +9,6 @@ template<class T>
 class FutureState;
 }
 
-// TODO: interface can be improved. clear on move!
-
 template<class T>
 class FutureResult {
     using State = detail::FutureState<T>;

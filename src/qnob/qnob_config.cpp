@@ -49,8 +49,6 @@ static VariantMap convertTomlTable(const toml::table& table, bool tablesOnly) {
     return result;
 }
 
-// TODO: sformat
-
 QnobConfig QnobConfig::loadFromTomlFile(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
