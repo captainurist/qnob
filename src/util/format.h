@@ -58,12 +58,28 @@ public:
         m_result.push_back(QLatin1Char(*character));
     }
 
-    void append(QStringView string) {
-        m_result.append(string);
+    void append(Explicit<const QString&> string) {
+        m_result.append(*string);
     }
 
-    void append(QByteArrayView utf8) {
-        appendUft8ToUtf16(utf8, &m_result);
+    void append(Explicit<QStringView> string) {
+        m_result.append(*string);
+    }
+
+    void append(Explicit<const QByteArray&> utf8) {
+        appendUft8ToUtf16(*utf8, &m_result);
+    }
+
+    void append(Explicit<QByteArrayView> utf8) {
+        appendUft8ToUtf16(*utf8, &m_result);
+    }
+
+    void append(Explicit<QUtf8StringView> utf8) {
+        appendUft8ToUtf16(*utf8, &m_result);
+    }
+
+    void append(Explicit<QLatin1String> string) {
+        m_result.append(*string);
     }
 
     template<class T>
@@ -90,8 +106,20 @@ public:
         m_result.push_back(*character);
     }
 
-    void append(QByteArrayView string) {
-        m_result.append(string);
+    void append(Explicit<const QByteArray&> string) {
+        m_result.append(*string);
+    }
+
+    void append(Explicit<QByteArrayView> string) {
+        m_result.append(*string);
+    }
+
+    void append(Explicit<QUtf8StringView> string) {
+        m_result.append(*string);
+    }
+
+    void append(Explicit<QLatin1String> string) {
+        m_result.append(*string);
     }
 
     template<class T>
@@ -249,6 +277,13 @@ template<>
 struct std::formatter<QString, wchar_t> : detail::AppendFormatter<QString> {};
 
 template<>
+struct std::formatter<QLatin1String, wchar_t> : detail::AppendFormatter<QLatin1String> {};
+
+template<>
+struct std::formatter<QUtf8StringView, wchar_t> : detail::AppendFormatter<QUtf8StringView> {};
+
+// TODO: add utf8 marker?
+template<>
 struct std::formatter<QByteArrayView, wchar_t> : detail::AppendFormatter<QByteArrayView> {};
 
 template<>
@@ -256,7 +291,8 @@ struct std::formatter<QByteArray, wchar_t> : detail::AppendFormatter<QByteArray>
 
 template<class T> requires
     detail::debug_streamable<T> &&
-    std::is_class_v<std::remove_cvref_t<T>>
+    std::is_class_v<std::remove_cvref_t<T>> &&
+    (!std::is_same_v<std::remove_cvref_t<T>, QAnyStringView>) // TODO
 struct std::formatter<T, wchar_t> : detail::DebugFormatter<T> {};
 
 template<>
@@ -265,11 +301,18 @@ struct std::formatter<QByteArrayView, char> : detail::AppendFormatter<QByteArray
 template<>
 struct std::formatter<QByteArray, char> : detail::AppendFormatter<QByteArray> {};
 
+template<>
+struct std::formatter<QLatin1String, char> : detail::AppendFormatter<QByteArray> {};
+
+template<>
+struct std::formatter<QUtf8StringView, char> : detail::AppendFormatter<QUtf8StringView> {};
+
 template<class T> requires
     detail::debug_streamable<T> &&
     std::is_class_v<std::remove_cvref_t<T>> &&
     (!std::is_same_v<std::remove_cvref_t<T>, QString>) &&
-    (!std::is_same_v<std::remove_cvref_t<T>, QStringView>)
+    (!std::is_same_v<std::remove_cvref_t<T>, QStringView>) &&
+    (!std::is_same_v<std::remove_cvref_t<T>, QAnyStringView>)
 struct std::formatter<T, char> : detail::DebugFormatter<T> {};
 
 
