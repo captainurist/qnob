@@ -11,6 +11,7 @@ class QDebug;
 // TODO: do we even need i18n in #exceptions?
 // TODO: and actually most of the fields in derived classes are also not needed...
 // TODO: and messages should include trailing dots imo
+// TODO: also need a sane syntax. Better than xthrow DerivedException(sformat(DerivedException::tr("Well that escalated {}"), quickly)).
 
 /**
  * Custom exception that supports source location & QString-based exception messages.
