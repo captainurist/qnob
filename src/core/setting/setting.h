@@ -14,7 +14,7 @@ public:
     Setting(std::unique_ptr<SettingBackend> backend, QObject* parent);
     virtual ~Setting();
 
-    bool isInitialized() const; // TODO: isStarted
+    bool isInitialized() const; // TODO: isStarted?
 
     SettingState state() const;
     void setState(const SettingState& state);
