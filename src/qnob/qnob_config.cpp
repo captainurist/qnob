@@ -5,6 +5,7 @@
 #include <toml++/toml.h>
 
 #include <util/map_access.h>
+#include <util/format.h>
 
 #include "config_exception.h"
 
@@ -53,10 +54,10 @@ static VariantMap convertTomlTable(const toml::table& table, bool tablesOnly) {
 QnobConfig QnobConfig::loadFromTomlFile(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        xthrow ConfigException(ConfigLocation(), ConfigException::tr("Could not open config file '%1'.").arg(path));
+        xthrow ConfigException(ConfigLocation(), sformat(ConfigException::tr("Could not open config file '{}'."), path));
 
     if (file.size() > 1024 * 1024 * 1024)
-        xthrow ConfigException(ConfigLocation(), ConfigException::tr("Config file '%1' is too large (exceeds 1Mb).").arg(path));
+        xthrow ConfigException(ConfigLocation(), sformat(ConfigException::tr("Config file '{}' is too large (exceeds 1Mb)."), path));
 
     QByteArray bytes = file.readAll();
 
@@ -67,7 +68,7 @@ QnobConfig QnobConfig::loadFromTomlFile(const QString& path) {
         std::string_view description = e.description();
         xthrow ConfigException(
             { e.source().begin.line, e.source().begin.column },
-            ConfigException::tr("Toml parse error: %1.").arg(QString::fromLatin1(description.data(), description.size()))
+            sformat(ConfigException::tr("Toml parse error: {}."), QLatin1String(description.data(), description.size()))
         );
     }
 

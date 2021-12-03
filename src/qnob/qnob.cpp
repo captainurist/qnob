@@ -144,7 +144,7 @@ int Qnob::runList(const QnobArgs& args) {
         QStringList keyStrings;
         for (QKeyCombination key : keys)
             if (!ignoredKeys.contains(key))
-                keyStrings.push_back(lit("'%1'").arg(serialized(key)));
+                keyStrings.push_back(sformat(L"'{}'", serialized(key)));
         keyStrings.sort(Qt::CaseInsensitive);
 
         stream << tr("Available keys:") << Qt::endl;
@@ -169,7 +169,7 @@ int Qnob::runService(const QnobArgs& args) {
     m_bufferLogger->flush(m_fileLogger.get());
     Logger::installGlobalLogger(m_fileLogger.get());
     if (!logFileOk)
-        xthrow Exception(Exception::tr("Could not open log file '%1'.").arg(args.logPath));
+        xthrow Exception(sformat(Exception::tr("Could not open log file '{}'."), args.logPath));
 
     /* Read config & populate entity pool. */
     QnobConfig config = QnobConfig::loadFromTomlFile(args.configPath);

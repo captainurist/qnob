@@ -9,6 +9,7 @@
 #include <QtGui/QWindow>
 
 #include <util/debug.h>
+#include <util/format.h>
 
 #include "win_monitor.h"
 #include "win_error.h"
@@ -137,7 +138,7 @@ std::vector< std::unique_ptr<PlatformMonitor>> WinMonitorManager::enumerateMonit
             if (deviceId.isEmpty()) {
                 /* Just generate a random deviceId so that all the machinery down the line still works.
                  * In theory, we should never get here. */
-                deviceId = lit("DISPLAY\\%1\\{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}").arg(QUuid::createUuid().toString());
+                deviceId = sformat(L"DISPLAY\\{}\\{{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}}", QUuid::createUuid().toString());
 
                 xWarning(
                     "Could not get device id for monitor \"{}\" (hPhysicalMonitor = {}), using \"{}\" intead",
