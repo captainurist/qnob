@@ -40,16 +40,12 @@ public:
      * \param chainMode                 Chain mode, pass `DontChain` so that the current exception is not automatically
      *                                  assigned as a cause for this exception.
      */
-    Exception(const QString& message, ChainMode chainMode = AutoChain) {
-        m_message = message;
-        m_utf8Message = message.toUtf8();
-        if (chainMode == AutoChain)
-            m_cause = std::current_exception();
-    }
+    Exception(const QString& message, ChainMode chainMode = AutoChain);
 
-    virtual char const* what() const override {
-        return m_utf8Message.data();
-    }
+    /**
+     * \returns                         Exception message, encoded in UTF-8.
+     */
+    virtual char const* what() const override;
 
     /**
      * Note that this method is not virtual, and this is intentional. Otherwise `what()` becomes messy.

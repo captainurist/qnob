@@ -58,6 +58,18 @@ static void printException(QDebug& stream, const Exception& e, bool printThread)
     }
 }
 
+Exception::Exception(const QString& message, ChainMode chainMode) {
+    m_message = message;
+    m_utf8Message = message.toUtf8();
+    if (chainMode == AutoChain)
+        m_cause = std::current_exception();
+}
+
+char const* Exception::what() const {
+    return m_utf8Message.data();
+}
+
+
 QDebug operator<<(QDebug stream, const Exception& e) {
     QDebugStateSaver saver(stream);
     stream.noquote().nospace();
