@@ -3,7 +3,7 @@
 #include "exception.h"
 
 class BadCastException : public Exception {
-    Q_DECLARE_TR_FUNCTIONS(BadCastException)
+    X_DECLARE_TR_FUNCTIONS(BadCastException)
 public:
     BadCastException(const QString& message);
     BadCastException(const std::type_info& from, const std::type_info& to);

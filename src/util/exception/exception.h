@@ -4,9 +4,8 @@
 #include <source_location>
 
 #include <QtCore/QString>
-#include <QtCore/QCoreApplication>
 
-// TODO: fwd for Q_DECLARE_TR_FUNCTIONS
+#include <util/fwd/tr_functions.h>
 
 class QDebug;
 
@@ -20,7 +19,7 @@ class QDebug;
  * Base class for all exceptions.
  */
 class Exception : public std::exception {
-    Q_DECLARE_TR_FUNCTIONS(Exception)
+    X_DECLARE_TR_FUNCTIONS(Exception)
 public:
     enum ChainMode {
         DontChain = 0,

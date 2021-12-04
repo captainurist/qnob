@@ -3,7 +3,8 @@
 #include <vector>
 
 #include <QtCore/QString>
-#include <QtCore/QCoreApplication> /* For Q_DECLARE_TR_FUNCTIONS. */
+
+#include <util/fwd/tr_functions.h>
 
 #include "command_line_section.h"
 #include "command_line_option_builder.h"
@@ -12,7 +13,7 @@
 class QTextStream;
 
 class CommandLineParser {
-    Q_DECLARE_TR_FUNCTIONS(CommandLineParser);
+    X_DECLARE_TR_FUNCTIONS(CommandLineParser);
 public:
     CommandLineParser() {}
 

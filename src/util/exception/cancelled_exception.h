@@ -7,7 +7,7 @@
  * nothing to write
  */
 class CancelledException : public Exception {
-    Q_DECLARE_TR_FUNCTIONS(CancelledException)
+    X_DECLARE_TR_FUNCTIONS(CancelledException)
 public:
     CancelledException();
     CancelledException(const QString& message);

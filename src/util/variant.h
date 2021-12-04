@@ -5,7 +5,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QMetaType>
 
-#include "stl_fwd.h"
+#include <util/fwd/stl.h>
 
 /* QVariantList/Map/Hash use Qt containers, which are not STL compatible in a lot of weird ways.
  * So we need our own containers. */

@@ -219,7 +219,7 @@ set(common_srcs
     "src/util/async/future_traits.h"
     "src/util/async/future_result.h"
     "src/util/async/future_exception.h"
- "src/util/exception/cancelled_exception.h" "src/util/exception/cancelled_exception.cpp")
+ "src/util/exception/cancelled_exception.h" "src/util/exception/cancelled_exception.cpp" "src/util/fwd/tr_functions.h" "src/util/fwd/tr_functions.cpp")
 
 set(common_includes
     3rdparty/tomlplusplus/include

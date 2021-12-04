@@ -4,7 +4,7 @@
 #include <util/format.h>
 
 class EntityCreationException : public Exception {
-    Q_DECLARE_TR_FUNCTIONS(EntityCreationException)
+    X_DECLARE_TR_FUNCTIONS(EntityCreationException)
 public:
     EntityCreationException(const QString& id, const QString& message) :
         Exception(fullMessage(id, message)),

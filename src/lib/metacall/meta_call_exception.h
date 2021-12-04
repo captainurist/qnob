@@ -1,14 +1,14 @@
 #pragma once
 
-#include <QtCore/QMetaObject>
-
 #include <util/exception/exception.h>
 
 // TODO: we need better exception messages here. Provide method name in message!
-// yeah, when we get to exception i18n.
+// yeah, when we get to exception i18n. #exceptions
+
+class QMetaObject;
 
 class MetaCallException : public Exception {
-    Q_DECLARE_TR_FUNCTIONS(MetaCallException)
+    X_DECLARE_TR_FUNCTIONS(MetaCallException)
 public:
     MetaCallException(const QMetaObject* type, const QByteArray& method, const QString& message) :
         Exception(message),

@@ -6,7 +6,7 @@
 
 class QnobCommandLineParser : public CommandLineParser {
     using base_type = CommandLineParser;
-    Q_DECLARE_TR_FUNCTIONS(QnobCommandLineParser);
+    X_DECLARE_TR_FUNCTIONS(QnobCommandLineParser);
 public:
     QnobCommandLineParser() {
         QStringList listValues;
