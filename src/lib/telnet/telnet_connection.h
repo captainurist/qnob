@@ -1,9 +1,12 @@
 #pragma once
 
 #include <memory>
-#include <vector>
+#include <deque>
 
 #include <QtCore/QObject>
+
+#include <util/async/future.h>
+#include <util/async/promise.h>
 
 class QTcpSocket;
 class QHostAddress;
@@ -14,11 +17,11 @@ public:
     TelnetConnection(QObject* parent);
     virtual ~TelnetConnection();
 
-    //Future<void> start(const QHostAddress& address, qint16 port);
+    Future<void> start(const QHostAddress& address, qint16 port);
 
     void stop();
 
-    //Future<QByteArray> sendCommand(QByteArrayView command);
+    Future<QByteArray> sendCommand(QByteArrayView command);
 
 private:
     void handleSocketConnected();
@@ -27,6 +30,6 @@ private:
 
 private:
     std::unique_ptr<QTcpSocket> m_socket;
-    //std::unique_ptr<Promise<void>> m_connectPromise;
-    //std::vector<Promise<QByteArray>> m_commandPromiseQueue;
+    std::unique_ptr<Promise<void>> m_connectPromise;
+    std::deque<Promise<QByteArray>> m_commandPromiseQueue;
 };
