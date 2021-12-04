@@ -219,7 +219,6 @@ set(common_srcs
     "src/util/async/future_traits.h"
     "src/util/async/future_result.h"
     "src/util/async/future_exception.h"
-    "src/util/async/coroutine.h"
 )
 
 set(common_includes
