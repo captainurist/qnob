@@ -9,14 +9,17 @@
 template<class T>
 class Promise {
     static constexpr bool is_void_promise = std::is_same_v<T, void>;
-    using State = detail::FutureState<std::conditional_t<is_void_promise, std::monostate, T>>;
+    using State = detail::FutureState<T>;
+    using result_type = typename State::result_type;
 public:
     Promise():
         m_state(std::make_shared<State>())
     {}
 
-    Promise(const Promise&) = delete;
     Promise(Promise&&) = default;
+    Promise(const Promise&) = delete;
+    Promise& operator=(Promise&&) = default;
+    Promise& operator=(const Promise&) = delete;
 
     ~Promise() {
         assert(!m_state); /* We got a broken promise, and in this implementation that's a hard error. */
@@ -28,14 +31,14 @@ public:
         return Future<T>(m_state);
     }
 
-    void set_value(T&& result) requires !is_void_promise{
+    void set_value(result_type&& result) requires !is_void_promise {
         auto state = take_state();
         state->finish_with_value(std::move(state), std::move(result));
     }
 
     void set_value() requires is_void_promise {
         auto state = take_state();
-        state->finish_with_value(std::move(state), std::monostate());
+        state->finish_with_value(std::move(state), result_type());
     }
 
     void set_error(std::exception_ptr error) {

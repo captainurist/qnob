@@ -65,7 +65,8 @@ class Promise;
 template<class T>
 class Future {
     static constexpr bool is_void_future = std::is_same_v<T, void>;
-    using State = detail::FutureState<std::conditional_t<is_void_future, std::monostate, T>>;
+    using State = detail::FutureState<T>;
+    using result_type = typename State::result_type;
 public:
     /**
      * Constructs an invalid future.
@@ -73,6 +74,8 @@ public:
     Future() = default;
     Future(Future&&) = default;
     Future(const Future&) = delete;
+    Future& operator=(Future&&) = default;
+    Future& operator=(const Future&) = delete;
 
     Future(std::shared_ptr<State> state) :
         m_state(std::move(state))
@@ -148,7 +151,11 @@ public:
      * \throws                          If the computation ended with an error.
      */
     T get() {
-        return take_state()->get();
+        if constexpr (is_void_future) {
+            take_state()->get();
+        } else {
+            return take_state()->get();
+        }
     }
 
     /**

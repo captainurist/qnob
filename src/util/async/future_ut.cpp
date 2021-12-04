@@ -4,17 +4,10 @@
 #include <QtCore/QEventLoop>
 #include <QtCore/QCoreApplication>
 
+#include <lib/test/test_application.h>
+
 #include "future.h"
 #include "promise.h"
-
-int argc = 1;
-char arg0[4] = "arg";
-char* argv[2] = { arg0, nullptr };
-
-class GTestCoreApplication : public QCoreApplication {
-public:
-    GTestCoreApplication() : QCoreApplication(argc, argv) {}
-};
 
 struct Counters {
     int copied = 0;
@@ -23,7 +16,7 @@ struct Counters {
 
 class Counting {
 public:
-    Counting(Counters* counters): 
+    Counting(Counters* counters):
         m_counters(counters)
     {}
 
@@ -58,6 +51,13 @@ TEST(Future, TestPassError) {
     EXPECT_THROW(future.get(), int);
 }
 
+TEST(Future, TestVoid) {
+    Promise<void> promise;
+    Future<void> future = promise.future();
+    promise.set_value();
+    EXPECT_NO_THROW(future.get());
+}
+
 TEST(Future, TestPassValueDetached) {
     Counters counters;
     Counting counting(&counters);
@@ -70,16 +70,16 @@ TEST(Future, TestPassValueDetached) {
 
         promise.set_value(std::move(counting));
     } /* And same for promise. */
-    
+
     EXPECT_EQ(counters.copied, 0);
     EXPECT_EQ(counters.moved, 0);
 }
 
-TEST(Future, TestQObjectChain) {
+TEST(Future, TestQObjectIntChain) {
     Promise<int> promise;
 
     QObject o1, o2, o3;
-    GTestCoreApplication app;
+    TestApplication<QCoreApplication> app;
 
     auto inc = [](int value) { return value + 1; };
 
@@ -89,4 +89,49 @@ TEST(Future, TestQObjectChain) {
     app.exec();
 
     EXPECT_EQ(chain.get(), 3);
+}
+
+TEST(Future, TestQObjectVoidChain) {
+    Promise<void> promise;
+
+    QObject o1, o2, o3;
+    TestApplication<QCoreApplication> app;
+
+    size_t counter = 0;
+    auto inc = [&] { counter++; };
+
+    Future<void> chain = promise.future().then(&o1, inc).then(&o2, inc).then(&o3, inc).then(&app, [&] { app.exit(); });
+    promise.set_value();
+
+    app.exec();
+
+    EXPECT_EQ(counter, 3);
+    EXPECT_NO_THROW(chain.get());
+}
+
+TEST(Future, TestQObjectDestruction) {
+    Promise<void> promise;
+    FutureResult<void> ret;
+
+    std::unique_ptr<QObject> o1 = std::make_unique<QObject>();
+    std::unique_ptr<QObject> o2 = std::make_unique<QObject>();
+    std::unique_ptr<QObject> o3 = std::make_unique<QObject>();
+    TestApplication<QCoreApplication> app;
+
+    size_t counter = 0;
+    auto inc = [&] { counter++; };
+
+    Future<void> chain = promise.future().
+        then(o1.get(), inc).
+        then(o2.get(), [&] { o3.reset(); }).
+        then(o3.get(), inc).
+        then(&app, [&](FutureResult<void> result) { ret = std::move(result); app.exit(); });
+    promise.set_value();
+
+    app.exec();
+
+    EXPECT_EQ(counter, 1);
+    EXPECT_TRUE(ret.has_error());
+    EXPECT_FALSE(ret.has_value());
+    EXPECT_THROW(ret.get(), FutureContextException);
 }

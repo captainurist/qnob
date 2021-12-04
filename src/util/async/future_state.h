@@ -14,20 +14,18 @@
 
 namespace detail {
 
-template<class T>
-using maybe_monostate_t = std::conditional_t<std::is_same_v<T, void>, std::monostate, T>;
-
 template<class ResultType, bool useStopToken, class Callback, class... Args>
-ResultType invoke_future_callback(Callback&& callback, std::stop_token* token, Args&&... args) {
+std::conditional_t<std::is_same_v<ResultType, void>, std::monostate, ResultType>
+invoke_future_callback(Callback&& callback, std::stop_token* token, Args&&... args) {
     if constexpr (useStopToken) {
-        if constexpr (std::is_same_v<ResultType, std::monostate>) {
+        if constexpr (std::is_same_v<ResultType, void>) {
             std::invoke(std::forward<Callback>(callback), std::forward<Args>(args)..., std::move(*token));
             return std::monostate();
         } else {
             return std::invoke(std::forward<Callback>(callback), std::forward<Args>(args)..., std::move(*token));
         }
     } else {
-        if constexpr (std::is_same_v<ResultType, std::monostate>) {
+        if constexpr (std::is_same_v<ResultType, void>) {
             std::invoke(std::forward<Callback>(callback), std::forward<Args>(args)...);
             return std::monostate();
         } else {
@@ -117,9 +115,9 @@ protected:
     mutable QMutex m_mutex;
     std::variant<std::monostate, callback_type, QWaitCondition, std::monostate> m_continuation;
 
-    /* The rest of the state is for cancellation support for all the different use cases. 
-     * It is possible to type-erase everything here, but it's not really worth it at the moment. 
-     * 
+    /* The rest of the state is for cancellation support for all the different use cases.
+     * It is possible to type-erase everything here, but it's not really worth it at the moment.
+     *
      * Cancellation flag is a separate field because we cannot touch the continuation in `cancel_async`. */
 
     bool m_cancelled = false;
@@ -131,8 +129,8 @@ protected:
 
 template<class T>
 class FutureState: public FutureStateBase {
-    static_assert(!std::is_same_v<T, void>, "Void must be handled at the interface level, FutureState works with std::monostate instead.");
 public:
+    using result_type = std::conditional_t<std::is_same_v<T, void>, std::monostate, T>;
     using self_ptr = std::shared_ptr<FutureState<T>>;
 
     enum State {
@@ -166,7 +164,7 @@ public:
         }
     }
 
-    T get() {
+    result_type get() {
         QMutexLocker locker(&m_mutex);
 
         assert(continuation() == UnknownContinuation);
@@ -219,7 +217,7 @@ public:
         return target;
     }
 
-    void finish_with_value(self_ptr&& self, T&& value) {
+    void finish_with_value(self_ptr&& self, result_type&& value) {
         finish_with_value_or_error(std::move(self), &value, std::exception_ptr());
     }
 
@@ -298,7 +296,7 @@ public:
                         finish_with_value(std::move(self), invoke_future_callback<SourceResult, useToken>(std::forward<Callback>(callback), &token));
                     }
                 } catch (...) {
-                    finish_with_error(std::move(self), std::current_exception()); 
+                    finish_with_error(std::move(self), std::current_exception());
                 }
             }
         } else {
@@ -340,7 +338,7 @@ public:
         return std::get<ReadyWithError>(std::move(m_data));
     }
 
-    T&& take_value() {
+    result_type&& take_value() {
         assert(ready_state() == ReadyWithValue);
 
         return std::get<ReadyWithValue>(std::move(m_data));
@@ -353,12 +351,12 @@ private:
         return static_cast<State>(m_data.index());
     }
 
-    void finish_with_value_or_error(self_ptr&& self, T* value, std::exception_ptr error) {
+    void finish_with_value_or_error(self_ptr&& self, result_type* value, std::exception_ptr error) {
         QMutexLocker locker(&m_mutex);
         finish_with_value_or_error_locked(std::move(self), value, error);
     }
 
-    void finish_with_value_or_error_locked(self_ptr&& self, T* value, std::exception_ptr error) {
+    void finish_with_value_or_error_locked(self_ptr&& self, result_type* value, std::exception_ptr error) {
         assert(static_cast<bool>(value) ^ static_cast<bool>(error)); /* Only one must be set. */
         assert(!m_mutex.try_lock());
         assert(state() == Running);
@@ -400,14 +398,14 @@ private:
 
         if (state() != Running)
             return;
-        
+
         m_continuation.emplace<WaitConditionContinuation>();
         while (state() == Running)
             std::get<WaitConditionContinuation>(m_continuation).wait(&m_mutex);
     }
 
 private:
-    std::variant<std::monostate, T, std::exception_ptr> m_data;
+    std::variant<std::monostate, result_type, std::exception_ptr> m_data;
 };
 
 }

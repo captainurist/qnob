@@ -7,6 +7,6 @@
 class FutureContextException : public Exception {
 public:
     FutureContextException() :
-        Exception(QString()) 
+        Exception(QString())
     {}
 };
