@@ -6,6 +6,8 @@
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
 
+// TODO: fwd for Q_DECLARE_TR_FUNCTIONS
+
 class QDebug;
 
 // TODO: do we even need i18n in #exceptions?
