@@ -272,7 +272,7 @@ set(test_srcs
     "src/lib/metacall/meta_closure_ut.cpp"
     "src/lib/metacall/meta_closure_ut.h"
     "src/util/async/future_ut.cpp"
-)
+ "src/lib/test/test_application.h")
 
 add_executable(qnob_test ${test_srcs})
 init_target(qnob_test)
