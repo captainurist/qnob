@@ -33,6 +33,20 @@ function(init_target target)
 endfunction()
 
 
+add_subdirectory(3rdparty/googletest)
+init_target(gtest)
+init_target(gtest_main)
+
+
+set(QCORO_BUILD_EXAMPLES OFF CACHE BOOL "Build examples") # We don't need QCoro examples
+add_subdirectory(3rdparty/qcoro)
+init_target(QCoroCore)
+init_target(QCoroNetwork)
+
+
+#
+# Set up common lib
+#
 set(common_srcs
     "src/qnob/config_exception.h"
     "src/qnob/qnob_args.h"
@@ -208,7 +222,16 @@ set(common_srcs
     "src/util/async/coroutine.h"
 )
 
-set(common_libs
+set(common_includes
+    3rdparty/tomlplusplus/include
+    src
+)
+
+add_library(qnob_common ${common_srcs})
+init_target(qnob_common)
+target_include_directories(qnob_common PUBLIC ${common_includes})
+
+target_link_libraries(qnob_common
     Qt::Core
     Qt::Gui
     Qt::Widgets
@@ -218,18 +241,29 @@ set(common_libs
     ole32
     user32
     shcore
+    QCoro
+    QCoroCore
+    QCoroNetwork
 )
 
-set(common_includes
-    3rdparty/tomlplusplus/include
-    src
-)
 
+#
+# Set up qnob executable
+#
 set(qnob_srcs
     "src/main.cpp"
     "qnob.qrc"
 )
 
+add_executable(qnob ${qnob_srcs})
+init_target(qnob)
+target_link_libraries(qnob qnob_common)
+set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE false) # Qnob is a console app
+
+
+#
+# Set up tests
+#
 set(test_srcs
     "src/lib/keys/key_combination_ut.cpp"
     "src/util/exception/exception_ut.cpp"
@@ -241,37 +275,13 @@ set(test_srcs
     "src/util/async/future_ut.cpp"
 )
 
-
-#
-# Set up common lib
-#
-add_library(qnob_common ${common_srcs})
-init_target(qnob_common)
-target_include_directories(qnob_common PUBLIC ${common_includes})
-
-
-#
-# Set up qnob executable
-#
-add_executable(qnob ${qnob_srcs})
-init_target(qnob)
-target_link_libraries(qnob qnob_common ${common_libs})
-set_property(TARGET qnob PROPERTY WIN32_EXECUTABLE false) # Qnob is a console app
-
-
-#
-# Set up tests
-#
-enable_testing()
-add_subdirectory(3rdparty/googletest)
-init_target(gtest)
-init_target(gtest_main)
-
 add_executable(qnob_test ${test_srcs})
 init_target(qnob_test)
 target_include_directories(qnob_test PRIVATE 3rdparty/googletest/googletest/include)
-target_link_libraries(qnob_test qnob_common gtest_main ${common_libs})
+target_link_libraries(qnob_test qnob_common gtest_main)
 
+
+enable_testing()
 add_test(NAME qnob_test COMMAND qnob_test)
 
 
