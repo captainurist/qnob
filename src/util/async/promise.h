@@ -6,6 +6,15 @@
 
 #include "future_state.h"
 
+/**
+ * Callee-facing class.
+ *
+ * Note that there is no cancellation API here, and this is by design. If we were to allow cancellations on the promise
+ * side, then we'd need an API to query whether the computation was canceled on the future side, and this just
+ * unnecessarily complicates everything.
+ *
+ * Use exceptions if you need to signal cancellation.
+ */
 template<class T>
 class Promise {
     static constexpr bool is_void_promise = std::is_same_v<T, void>;
