@@ -223,7 +223,7 @@ set(common_srcs
     "src/util/thread/package.h"
     "src/util/thread/worker_pool.cpp"
     "src/util/thread/worker_pool.h"
-)
+ )
 
 set(common_includes
     3rdparty/tomlplusplus/include

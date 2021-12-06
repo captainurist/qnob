@@ -11,6 +11,18 @@
 class QTcpSocket;
 class QHostAddress;
 
+// TODO: nah, this doesn't work. This is not a telnel client. Telnet is not a request-reply protocol, there can be
+// prompts on connection. At its core it's just a streaming protocol with control chars on top.
+// SO this is then a chunked tcp connection, not a telnet connection =(.
+
+// TODO: don't send next command before receiving a full reply to the previous one?
+
+// handler:
+//    void reset();
+//    QVariant handleChunk(QByteArrayView chunk); -> can throw!
+//    QVariant handleTimeout(); -> can throw!
+//
+
 class TelnetConnection : public QObject {
     Q_OBJECT
 public:
@@ -21,15 +33,22 @@ public:
 
     void stop();
 
-    Future<QByteArray> sendCommand(QByteArrayView command);
+    Future<QByteArray> sendCommand(const QByteArray& payload);
 
 private:
     void handleSocketConnected();
     void handleSocketErrorOccured();
     void handleSocketBytesAvailable();
 
+    void flushCommand(const QByteArray& payload);
+
 private:
+    struct Command {
+        Promise<QByteArray> promise;
+        QByteArray payload;
+    };
+
     std::unique_ptr<QTcpSocket> m_socket;
     std::unique_ptr<Promise<void>> m_connectPromise;
-    std::deque<Promise<QByteArray>> m_commandPromiseQueue;
+    std::deque<Command> m_commandQueue;
 };

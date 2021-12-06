@@ -13,7 +13,7 @@ TelnetConnection::TelnetConnection(QObject* parent):
 TelnetConnection::~TelnetConnection() {}
 
 Future<void> TelnetConnection::start(const QHostAddress& address, qint16 port) {
-    // TODO: cleanup old state!
+    stop();
 
     m_socket = std::make_unique<QTcpSocket>(this);
     m_connectPromise = std::make_unique<Promise<void>>();
@@ -34,24 +34,34 @@ void TelnetConnection::stop() {
         m_connectPromise->set_error(std::make_exception_ptr(CancelledException()));
         m_connectPromise.reset();
     }
+
+    for (Command& command : m_commandQueue)
+        command.promise.set_error(std::make_exception_ptr(CancelledException()));
+    m_commandQueue.clear();
 }
 
-Future<QByteArray> TelnetConnection::sendCommand(QByteArrayView command) {
+Future<QByteArray> TelnetConnection::sendCommand(const QByteArray& payload) {
     assert(m_socket); /* Must call start() first. */
 
-    Promise<QByteArray> promise;
+    Command& command = m_commandQueue.emplace_back();
+    command.payload = payload;
+
+    // TODO: We're not handling 0xff bytes properly here. Gotta duplicate them.
 
     switch (m_socket->state()) {
     case QAbstractSocket::UnconnectedState:
         /* Error has occurred. */
-        //promise.setException(std::make_exception_ptr(Exception(lit("error"))));
-        return promise.future();
+        command.promise.set_error(std::make_exception_ptr(Exception(lit("error")))); // TODO
+        return command.promise.future();
 
     case QAbstractSocket::HostLookupState:
     case QAbstractSocket::ConnectingState:
         /* Gotta wait before we can send the data. */
+        return command.promise.future();
 
     case QAbstractSocket::ConnectedState:
+        flushCommand(payload);
+        return command.promise.future();
 
     case QAbstractSocket::BoundState:
     case QAbstractSocket::ListeningState:
@@ -61,26 +71,35 @@ Future<QByteArray> TelnetConnection::sendCommand(QByteArrayView command) {
         assert(false);
         return Future<QByteArray>();
     }
-
 }
 
 void TelnetConnection::handleSocketConnected() {
-    //assert(m_connectPromise && m_connectPromise->valid());
+    assert(m_connectPromise);
 
     m_connectPromise->set_value();
     m_connectPromise.reset();
+
+    for (Command& command : m_commandQueue)
+        flushCommand(command.payload);
 }
 
 void TelnetConnection::handleSocketErrorOccured() {
     if (m_connectPromise) {
-        //m_connectPromise->(std::make_exception_ptr(Exception(lit("error"))));
-
+        m_connectPromise->set_error(std::make_exception_ptr(Exception(lit("error")))); // TODO: IoException
+        m_connectPromise.reset();
     }
 
-    //m_connectPromise.reset();
-    //m_socket.reset();
+    for (Command& command : m_commandQueue)
+        command.promise.set_error(std::make_exception_ptr(Exception(lit("error")))); // TODO: IoException
+    m_commandQueue.clear();
 }
 
 void TelnetConnection::handleSocketBytesAvailable() {
+    if (!m_socket->canReadLine())
+        return; /* I bet this is not super efficient */
+}
 
+void TelnetConnection::flushCommand(const QByteArray& payload) {
+    m_socket->write(payload);
+    m_socket->flush();
 }
