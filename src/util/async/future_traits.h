@@ -9,7 +9,7 @@ namespace detail {
 enum FutureArgType {
     ValueFutureArg,
     ErrorFutureArg,
-    ComboFutureArg,
+    ReadyFutureArg,
     VoidFutureArg
 };
 
@@ -44,7 +44,7 @@ template<class Callback, class T> requires std::is_invocable_v<Callback, FutureR
 struct future_traits<Callback, T> {
     using result_type = std::invoke_result_t<Callback, FutureResult<T>>;
 
-    static constexpr FutureArgType arg = ComboFutureArg;
+    static constexpr FutureArgType arg = ReadyFutureArg;
     static constexpr bool uses_token = false;
 };
 

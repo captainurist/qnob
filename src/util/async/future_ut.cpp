@@ -135,3 +135,5 @@ TEST(Future, TestQObjectDestruction) {
     EXPECT_FALSE(ret.has_value());
     EXPECT_THROW(ret.get(), FutureContextException);
 }
+
+// TODO: cancellation token tests

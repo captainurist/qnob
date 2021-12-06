@@ -5,6 +5,7 @@
 #include <type_traits>
 
 #include <QtCore/QFuture>
+#include <QtCore/QObject>
 
 #include "future_state.h"
 #include "future_traits.h"
@@ -34,10 +35,9 @@ class Promise;
  * The problem here is that not all futures even have the execution context - think about ready future. This is why
  * implementors have to jump through hoops as Qt does with `QtFuture::Launch::Sync`, which starts the continuation in
  * the remote execution context if there is one, or right inside the call to `then` if there is none. This is OK when
- * STL pulls this trick with `std::stop_callback`, but it's totally totally not OK in case of long-running computations.
- * See for yourself:
- * 1. The want to run a chain of continuations in the same execution context is absolutely normal.
- * 2. The future API contains an inherent race that actually makes #1 impossible no matter how hard you try.
+ * STL pulls this trick with `std::stop_callback`, but it's totally not OK in case of long-running computations.
+ * The want to run a chain of continuations in the same execution context is absolutely normal. The future API however
+ * contains an inherent race that actually makes this impossible no matter how hard you try.
  *
  * The race is that the remote computation can complete before we've attached a continuation. It's possible to fix this
  * by locking on the promise end until it becomes clear what the caller wants to do with the future, but this breaks
@@ -55,7 +55,7 @@ class Promise;
  * - Seamless support for coroutines.
  *
  * As you see, chaining several continuations to be run in the same execution context is not supported, and this is a
- * direction for future work. A separate class is needed for that, something like `Computation<T>`, that could then be
+ * direction for future work. A separate class is needed for this, something like `Computation<T>`, that could then be
  * used like this:
  * \code
  * // async returns a Computation<T>
@@ -80,7 +80,7 @@ public:
     Future(std::shared_ptr<State> state) :
         m_state(std::move(state))
     {
-        assert(valid()); /* Data must be valid. */
+        assert(valid()); /* State must be valid. */
     }
 
     /**
@@ -99,7 +99,7 @@ public:
      *
      * \param future                    Future to adapt.
      */
-    Future(QFuture<T>&& future);
+    Future(QFuture<T>&& future); // TODO
 
     /**
      * \returns                         Whether this future is valid.
@@ -179,7 +179,6 @@ public:
      *   with an exception, the continuation will be skipped.
      * - Nothing. Same as above, but the value will be discarded.
      * - `ReadyFuture<T>`. This can be handy if you want to do exception handling in the continuation.
-     * - `ReadyFuture<void>`. Same as above, but the value will be discarded.
      * - `std::stop_token` as the 2nd argument. This is a way to communicate cancellations to the running operation,
      *   or to get cancellation notifications via `std::stop_callback`.
      *
@@ -205,7 +204,7 @@ public:
      * \param f                         Continuation functor.
      */
     template<class Function>
-    Future<T> catch_error(Function&& f);
+    Future<T> catch_error(Function&& f); // TODO
 
 private:
     std::shared_ptr<State> take_state() {

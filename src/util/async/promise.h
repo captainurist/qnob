@@ -7,13 +7,15 @@
 #include "future_state.h"
 
 /**
- * Callee-facing class.
+ * Callee-facing part of the promise/future interface.
  *
- * Note that there is no cancellation API here, and this is by design. If we were to allow cancellations on the promise
- * side, then we'd need an API to query whether the computation was canceled on the future side, and this just
- * unnecessarily complicates everything.
+ * Like `std::future`, the value can be set only once. Unlike `std::future`, setting the value multiple times results
+ * in undefined behavior. Not setting any value is also undefined behavior, thus we don't have a `broken_promise`
+ * equivalent.
  *
- * Use exceptions if you need to signal cancellation.
+ * There is no cancellation API on the promise side, and this is by design. If we were to allow cancellations here,
+ * then we'd need an API on the future side to query whether the computation was canceled, and this unnecessarily
+ * complicates everything. Use exceptions if you need to signal cancellation.
  */
 template<class T>
 class Promise {
@@ -31,7 +33,7 @@ public:
     Promise& operator=(const Promise&) = delete;
 
     ~Promise() {
-        assert(!m_state); /* We got a broken promise, and in this implementation that's a hard error. */
+        assert(!m_state); /* We got a broken promise, and in this implementation that's undefined behavior. */
     }
 
     Future<T> future() const {
