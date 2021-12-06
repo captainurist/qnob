@@ -65,7 +65,7 @@ Future<QByteArray> TelnetConnection::sendCommand(QByteArrayView command) {
 }
 
 void TelnetConnection::handleSocketConnected() {
-    assert(m_connectPromise && m_connectPromise->valid());
+    //assert(m_connectPromise && m_connectPromise->valid());
 
     m_connectPromise->set_value();
     m_connectPromise.reset();
