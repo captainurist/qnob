@@ -16,9 +16,11 @@
 * **DONE**. Make qnob back into a console app. Add an option to hide console at startup. Whoever cares about console blinking can start qnob with CreateProcess(CREATE_NO_WINDOW).
 * **DONE**. Split cmake file into a single library and several binaries. So that you don't have to rebuild everything when building tests.
 * **DONE**. Switch over to QtMultimedia.
+* Move qnob-specific code to core. Monitor lib definitely belongs in there.
 * Mouse wheel over tray icon events don't work with a touchpad.
 * Monitor controls don't work with a laptop monitor.
 * HEOS controls. Input, volume.
+* +Talk hotkey for microsoft teams / google meet.
 * Duck typing in factories (through qt metacalls).
 * Lua script entity, with access to globals.
 * Generic knob with acceleration (like in win10) and finer details at 0.
