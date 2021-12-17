@@ -22,8 +22,9 @@ static QRect QRectFromRECT(const RECT& rect) {
 static void sendSyntheticWheelEvent(QObject* target, const QRect& globalGeometry, const RAWMOUSE& mouseInput, const POINT& cursorPos) {
     int delta = static_cast<SHORT>(mouseInput.usButtonData);
 
-    /* I should probably use GetAsyncKeyState here, but GetKeyState also works, and I have no idea why.
-     * I'm keeping GetKeyState. */
+    /* Using GetKeyState here instead of GetAsyncKeyState because this is consistent with how the rest of the message
+     * processing works. If a sync function returns true this basically means that the corresponding key press message
+     * was delivered, and this is what we need here. */
     Qt::KeyboardModifiers mods;
     if (GetKeyState(VK_SHIFT) < 0)
         mods |= Qt::ShiftModifier;
