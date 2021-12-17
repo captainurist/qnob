@@ -16,8 +16,3 @@ enum PlatformStandardControl {
     NonStandardControl
 };
 
-enum PlatformFunction {
-    GetConsoleSize,
-    WinUpdateCurrentToolTip,
-    WinHideConsole,
-};

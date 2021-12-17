@@ -10,6 +10,7 @@
 #include "platform_shortcut_manager.h"
 #include "platform_control.h"
 #include "platform_metrics.h"
+#include "platform_functions.h"
 
 /**
  * Platform abstraction class.
@@ -51,20 +52,16 @@ public:
     virtual PlatformMetrics* metrics() const = 0;
 
     /**
+     * \returns                         Platform functions object.
+     */
+    virtual PlatformFunctions* functions() const = 0;
+
+    /**
      * \param control                   Standard control.
      * \returns                         Platform control object for the provided standard control.
      *                                  Might return `nullptr` if the requested standard control doesn't exist.
      */
     virtual std::unique_ptr<PlatformControl> createStandardControl(PlatformStandardControl control, QObject* parent) const = 0;
-
-    /**
-     * Runs a platform-specific function.
-     *
-     * \param function                  Platform function to run.
-     * \param arg0                      First argument, if any. Argument type mismatches result in assertions.
-     * \returns                         Result, if any.
-     */
-    virtual QVariant execute(PlatformFunction function, QVariant arg0 = QVariant()) = 0;
 };
 
 /**

@@ -39,7 +39,7 @@ void StandardTrayIcon::handleSettingChange() {
          * It takes some time for updates to get delivered to explorer.exe, so we have to use a timer here.
          * Maybe a better solution exists. */
 
-        auto update = [] { platform()->execute(WinUpdateCurrentToolTip); };
+        auto update = [] { platform()->functions()->winUpdateCurrentToolTip(); };
         QTimer::singleShot(10ms, this, update);
         QTimer::singleShot(50ms, this, update);
     }

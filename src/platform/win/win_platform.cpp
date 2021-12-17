@@ -1,14 +1,6 @@
 #include "win_platform.h"
 
 #include <Windows.h>
-#include <CommCtrl.h>
-#include <io.h>
-#include <fcntl.h>
-
-#include <cassert>
-
-#include <QtCore/QThread>
-#include <QtCore/QVariant>
 
 #include "com.h"
 #include "win_error.h"
@@ -17,6 +9,7 @@
 #include "win_shortcut_manager.h"
 #include "win_wheel_event_manager.h"
 #include "win_metrics.h"
+#include "win_functions.h"
 #include "win_shared_event_window.h"
 #include "win_tray_icon_control.h"
 #include "win_hwnd_control.h"
@@ -32,6 +25,7 @@ WinPlatform::WinPlatform(QObject* parent):
     m_shortcutManager.reset(new WinShortcutManager(m_eventWindow.get(), this));
     m_wheelEventManager.reset(new WinWheelEventManager(m_eventWindow.get(), this));
     m_metrics.reset(new WinMetrics(m_eventWindow.get(), this));
+    m_functions.reset(new WinFunctions(this));
 }
 
 WinPlatform::~WinPlatform() {}
@@ -56,6 +50,10 @@ PlatformMetrics* WinPlatform::metrics() const {
     return m_metrics.get();
 }
 
+PlatformFunctions* WinPlatform::functions() const {
+    return m_functions.get();
+}
+
 std::unique_ptr<PlatformControl> WinPlatform::createStandardControl(PlatformStandardControl control, QObject* parent) const {
     switch (control) {
     case AudioTrayIconControl:
@@ -67,54 +65,12 @@ std::unique_ptr<PlatformControl> WinPlatform::createStandardControl(PlatformStan
     }
 }
 
-QVariant WinPlatform::execute(PlatformFunction function, QVariant arg0) {
-    switch (function) {
-    case GetConsoleSize:
-        if (QSize size = getConsoleSize(); size.isValid())
-            return size;
-        return QVariant();
-    case WinUpdateCurrentToolTip:
-        updateCurrentToolTip();
-        return QVariant();
-    case WinHideConsole:
-        hideConsole();
-        return QVariant();
-    default:
-        assert(false);
-        return QVariant();
-    }
-}
-
-void WinPlatform::updateCurrentToolTip() const {
-    HWND hwnd = NULL;
-
-    while (hwnd = FindWindowExW(NULL, hwnd, L"tooltips_class32", NULL)) {
-        if (!IsWindowVisible(hwnd))
-            continue;
-
-        PostMessageW(hwnd, TTM_UPDATE, 0, 0);
-        return;
-    }
-}
-
-QSize WinPlatform::getConsoleSize() const {
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    if (apicall(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))) {
-        return QSize(csbi.srWindow.Right - csbi.srWindow.Left + 1, csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
-    } else {
-        return QSize();
-    }
-}
-
-void WinPlatform::hideConsole() const {
-    if (HWND console = GetConsoleWindow(); console != NULL)
-        ShowWindow(console, SW_HIDE);
-}
-
 std::unique_ptr<PlatformControl> WinPlatform::createNativeOsdControl(QObject* parent) const {
     HWND resultWindow = NULL;
     HWND currentWindow = NULL;
     size_t count = 0;
+
+    // TODO: maybe also check that it's owned by explorer.exe?
 
     while ((currentWindow = FindWindowExW(NULL, currentWindow, L"NativeHWNDHost", L"")) != NULL) {
         if (FindWindowExW(currentWindow, NULL, L"DirectUIHWND", L"") != 0) {

@@ -7,12 +7,13 @@
 class QThread;
 
 class Com;
+class WinSharedEventWindow;
 class WinVolumeControl;
 class WinMonitorManager;
 class WinShortcutManager;
 class WinWheelEventManager;
 class WinMetrics;
-class WinSharedEventWindow;
+class WinFunctions;
 
 class WinPlatform: public Platform {
     Q_OBJECT
@@ -25,13 +26,10 @@ public:
     virtual PlatformShortcutManager* shortcutManager() const override;
     virtual PlatformWheelEventManager* wheelEventManager() const override;
     virtual PlatformMetrics* metrics() const override;
+    virtual PlatformFunctions* functions() const override;
     virtual std::unique_ptr<PlatformControl> createStandardControl(PlatformStandardControl control, QObject* parent) const override;
-    virtual QVariant execute(PlatformFunction function, QVariant arg0) override;
 
 private:
-    void updateCurrentToolTip() const;
-    QSize getConsoleSize() const;
-    void hideConsole() const;
     std::unique_ptr<PlatformControl> createNativeOsdControl(QObject* parent) const;
 
 private:
@@ -42,6 +40,6 @@ private:
     std::unique_ptr<WinShortcutManager> m_shortcutManager;
     std::unique_ptr<WinWheelEventManager> m_wheelEventManager;
     std::unique_ptr<WinMetrics> m_metrics;
-    bool m_ownsConsole = false;
+    std::unique_ptr<WinFunctions> m_functions;
 };
 

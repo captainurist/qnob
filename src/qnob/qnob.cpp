@@ -79,7 +79,7 @@ int Qnob::run(int argc, char** argv) {
 
 int Qnob::run(const QnobArgs& args) {
     if (args.hideConsole)
-        platform()->execute(WinHideConsole);
+        platform()->functions()->winHideConsole();
 
     switch (args.mode) {
     case ServiceMode:
@@ -101,7 +101,7 @@ int Qnob::runHelp() {
     stream << Qt::endl;
 
     size_t consoleWidth = 80;
-    if (QSize consoleSize = platform()->execute(GetConsoleSize).toSize(); consoleSize.isValid())
+    if (QSize consoleSize = platform()->functions()->consoleSize(); consoleSize.isValid())
         consoleWidth = std::max(consoleSize.width(), 40);
 
     CommandLineHelpOptions options;

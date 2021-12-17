@@ -10,7 +10,5 @@ void App::exit() {
 }
 
 void App::debugAction() {
-    platform()->execute(WinUpdateCurrentToolTip);
-
     xDebug("Debug action");
 }
