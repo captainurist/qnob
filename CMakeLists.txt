@@ -225,7 +225,10 @@ set(common_srcs
     "src/util/thread/worker_pool.h"
     "src/core/keyboard/keyboard.h"
     "src/core/keyboard/keyboard.cpp"
- "src/platform/platform_functions.h" "src/platform/win/win_functions.h" "src/platform/win/win_functions.cpp")
+    "src/platform/platform_functions.h"
+    "src/platform/win/win_functions.h"
+    "src/platform/win/win_functions.cpp"
+)
 
 set(common_includes
     3rdparty/tomlplusplus/include
