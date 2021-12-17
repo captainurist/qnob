@@ -3,6 +3,7 @@
 #include <Windows.h>
 
 #include <QtCore/QScopeGuard>
+#include <QtCore/QDir>
 
 #include <util/debug.h>
 
@@ -90,7 +91,7 @@ std::unique_ptr<PlatformControl> WinPlatform::createNativeOsdControl(QObject* pa
         if (!apicall(QueryFullProcessImageNameW(*process, 0, path, &size)))
             continue;
 
-        QString normalizedPath = QString::fromWCharArray(path).toLower().replace(QLatin1Char('\\'), QLatin1Char('/'));
+        QString normalizedPath = QDir::fromNativeSeparators(QString::fromWCharArray(path).toLower());
         if (!normalizedPath.endsWith(lit("/explorer.exe")))
             continue;
 
