@@ -9,6 +9,7 @@
 #include <core/setting/volume_setting_backend.h>
 #include <core/setting/setting.h>
 #include <core/tray_icon/standard_tray_icon.h>
+#include <core/keyboard/keyboard.h>
 #include <core/heos/heos.h>
 
 class MonitorManager;
@@ -27,6 +28,7 @@ public:
         addUninitializedEntity(lit("volume_icon"), std::make_unique<StandardTrayIcon>(AudioTrayIconControl, volume.get(), this));
         addUninitializedEntity(lit("heos"), std::make_unique<Heos>(m_upnpEndpoint.get(), this));
         addUninitializedEntity(lit("volume"), std::move(volume));
+        addUninitializedEntity(lit("keyboard"), std::make_unique<Keyboard>(this));
     }
 
     ~DefaultEntityPool() {

@@ -169,8 +169,10 @@ action = "decrease"
 type = "win10"
 hide_native_osd = true
 
-
-
-
-
+[emdash_hotkey]
+type = "hotkey"
+trigger = "Ctrl+Alt+-"
+target = "keyboard"
+action = "type"
+args = ["—"]
 

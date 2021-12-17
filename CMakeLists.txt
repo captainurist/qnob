@@ -223,6 +223,8 @@ set(common_srcs
     "src/util/thread/package.h"
     "src/util/thread/worker_pool.cpp"
     "src/util/thread/worker_pool.h"
+    "src/core/keyboard/keyboard.h"
+    "src/core/keyboard/keyboard.cpp"
  "src/platform/platform_functions.h" "src/platform/win/win_functions.h" "src/platform/win/win_functions.cpp")
 
 set(common_includes

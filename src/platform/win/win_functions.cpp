@@ -3,7 +3,24 @@
 #include <Windows.h>
 #include <CommCtrl.h>
 
+#include <util/debug.h>
+
 #include "win_error.h"
+
+static INPUT makeKeyInput(WORD key, DWORD flags = 0) {
+    INPUT result;
+    memset(&result, 0, sizeof(result));
+    result.type = INPUT_KEYBOARD;
+    result.ki.dwFlags = flags;
+
+    if (flags & KEYEVENTF_UNICODE) {
+        result.ki.wScan = key;
+    } else {
+        result.ki.wVk = key;
+    }
+
+    return result;
+}
 
 WinFunctions::WinFunctions(QObject* parent) :
     PlatformFunctions(parent)
@@ -19,7 +36,19 @@ QSize WinFunctions::consoleSize() const {
 }
 
 void WinFunctions::sendInput(const QString& text) const {
-    // TODO
+    if (text.isEmpty())
+        return;
+
+    QVarLengthArray<INPUT, 32> buffer;
+    for (QChar c: text) {
+        buffer.push_back(makeKeyInput(c.unicode(), KEYEVENTF_UNICODE));
+        buffer.push_back(makeKeyInput(c.unicode(), KEYEVENTF_UNICODE | KEYEVENTF_KEYUP));
+    }
+
+    apicall(
+        SendInput(buffer.size(), buffer.data(), sizeof(INPUT)),
+        [&](auto count) { return count == buffer.size(); }
+    );
 }
 
 void WinFunctions::winUpdateCurrentToolTip() const {
