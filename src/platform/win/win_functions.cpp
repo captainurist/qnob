@@ -58,7 +58,7 @@ void WinFunctions::winUpdateCurrentToolTip() const {
         if (!IsWindowVisible(hwnd))
             continue;
 
-        PostMessageW(hwnd, TTM_UPDATE, 0, 0);
+        apicall(PostMessageW(hwnd, TTM_UPDATE, 0, 0));
         return;
     }
 }
