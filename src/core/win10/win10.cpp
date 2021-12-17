@@ -15,6 +15,9 @@ void Win10::loadFromConfig(const EntityConfig& cfg) {
         ensureNativeOsdHidden();
         // TODO: also bind to settings changes!
     }
+
+    if (cfg.requireOr<bool>(lit("hide_console"), false))
+        platform()->functions()->winHideConsole();
 }
 
 void Win10::ensureNativeOsdHidden() {

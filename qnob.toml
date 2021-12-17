@@ -168,6 +168,7 @@ action = "decrease"
 [win10]
 type = "win10"
 hide_native_osd = true
+hide_console = true
 
 [emdash_hotkey]
 type = "hotkey"
