@@ -4,6 +4,7 @@
 #include <winerror.h>
 
 #include <source_location>
+#include <optional>
 
 #include <QtCore/QString>
 
@@ -26,17 +27,23 @@ Q_ALWAYS_INLINE bool handleCall(HRESULT result, const char* expr, const std::sou
     return SUCCEEDED(result);
 }
 
-Q_ALWAYS_INLINE HHOOK handleCall(HHOOK result, const char* expr, const std::source_location& location) {
-    if (!result)
+Q_ALWAYS_INLINE std::optional<HANDLE> handleCall(HANDLE result, const char* expr, const std::source_location& location) {
+    if (result != NULL && result != INVALID_HANDLE_VALUE) {
+        return result;
+    } else {
         logError(expr, location);
-    return result;
+        return std::nullopt;
+    }
 }
 
-template<class T, class SuccessCheck>
-Q_ALWAYS_INLINE T handleCall(T result, const char* expr, const std::source_location& location, SuccessCheck&& check) {
-    if (!check(result))
+template<class T, class IsValid>
+Q_ALWAYS_INLINE std::optional<T> handleCall(T result, const char* expr, const std::source_location& location, IsValid&& isValid) {
+    if (isValid(result)) {
+        return result;
+    } else {
         logError(expr, location);
-    return result;
+        return std::nullopt;
+    }
 }
 
 }

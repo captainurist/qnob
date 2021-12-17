@@ -2,6 +2,10 @@
 
 #include <Windows.h>
 
+#include <QtCore/QScopeGuard>
+
+#include <util/debug.h>
+
 #include "com.h"
 #include "win_error.h"
 #include "win_volume_control.h"
@@ -70,16 +74,34 @@ std::unique_ptr<PlatformControl> WinPlatform::createNativeOsdControl(QObject* pa
     HWND currentWindow = NULL;
     size_t count = 0;
 
-    // TODO: maybe also check that it's owned by explorer.exe?
-
     while ((currentWindow = FindWindowExW(NULL, currentWindow, L"NativeHWNDHost", L"")) != NULL) {
-        if (FindWindowExW(currentWindow, NULL, L"DirectUIHWND", L"") != 0) {
-            count++;
-            resultWindow = currentWindow;
-        }
+        if (FindWindowExW(currentWindow, NULL, L"DirectUIHWND", L"") == 0)
+            continue; /* Doesn't have the child window that we need. */
+
+        DWORD pid;
+        DWORD threadId = GetWindowThreadProcessId(currentWindow, &pid);
+        std::optional<HANDLE> process = apicall(OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid));
+        if (!process)
+            continue;
+        auto cleanup = QScopeGuard([&] { apicall(CloseHandle(*process)); });
+
+        WCHAR path[MAX_PATH];
+        DWORD size = MAX_PATH;
+        if (!apicall(QueryFullProcessImageNameW(*process, 0, path, &size)))
+            continue;
+
+        QString normalizedPath = QString::fromWCharArray(path).toLower().replace(QLatin1Char('\\'), QLatin1Char('/'));
+        if (!normalizedPath.endsWith(lit("/explorer.exe")))
+            continue;
+
+        count++;
+        resultWindow = currentWindow;
     }
 
-    if (count == 1) {
+    if (count > 1) {
+        xWarning("Something's off, found {} native OSD controls", count);
+        return nullptr;
+    } else if (count == 1) {
         return std::make_unique<WinHwndControl>(resultWindow, parent);
     } else {
         return nullptr;
