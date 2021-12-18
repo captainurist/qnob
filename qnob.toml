@@ -168,11 +168,11 @@ action = "decrease"
 [win10]
 type = "win10"
 hide_native_osd = true
-hide_console = true
+#hide_console = true
 
 [emdash_hotkey]
 type = "hotkey"
-trigger = "Ctrl+Alt+-"
+trigger = "f13"
 target = "keyboard"
 action = "type"
 args = ["—"]
