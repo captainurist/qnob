@@ -2,6 +2,8 @@
 
 #include <core/entity/entity.h>
 
+// TODO: rename to just "win"
+
 class Win10 : public Entity {
     Q_OBJECT
 public:
