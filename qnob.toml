@@ -40,13 +40,13 @@ action = "toggle"
 
 [brightness_up_hotkey]
 type = "hotkey"
-trigger = "Ctrl+Shift+Up"
+trigger = "f15"
 target = "brightness_knob"
 action = "increase"
 
 [brightness_down_hotkey]
 type = "hotkey"
-trigger = "Ctrl+Shift+Down"
+trigger = "f14"
 target = "brightness_knob"
 action = "decrease"
 
