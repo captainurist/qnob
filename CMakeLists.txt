@@ -138,8 +138,6 @@ set(common_srcs
     "src/lib/serialization/serialization_exceptions.cpp"
     "src/lib/serialization/serialization_exceptions.h"
     "src/lib/serialization/serialization_fwd.h"
-    "src/lib/telnet/telnet_connection.cpp"
-    "src/lib/telnet/telnet_connection.h"
     "src/lib/upnp/upnp_discovery.cpp"
     "src/lib/upnp/upnp_discovery.h"
     "src/lib/upnp/upnp_discovery_endpoint.cpp"
@@ -228,7 +226,7 @@ set(common_srcs
     "src/platform/platform_functions.h"
     "src/platform/win/win_functions.h"
     "src/platform/win/win_functions.cpp"
-)
+ "src/lib/heos/streaming_connection.h" "src/lib/heos/streaming_connection.cpp")
 
 set(common_includes
     3rdparty/tomlplusplus/include

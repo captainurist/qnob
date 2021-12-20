@@ -1,4 +1,4 @@
-#include "telnet_connection.h"
+#include "streaming_connection.h"
 
 #include <cassert>
 
@@ -6,28 +6,28 @@
 
 #include <util/exception/cancelled_exception.h>
 
-TelnetConnection::TelnetConnection(QObject* parent):
-    QObject(parent)
+StreamingConnection::StreamingConnection(QObject* parent) :
+    QObject(parent) 
 {}
 
-TelnetConnection::~TelnetConnection() {}
+StreamingConnection::~StreamingConnection() {}
 
-Future<void> TelnetConnection::start(const QHostAddress& address, qint16 port) {
+Future<void> StreamingConnection::start(const QHostAddress& address, qint16 port) {
     stop();
 
     m_socket = std::make_unique<QTcpSocket>(this);
     m_connectPromise = std::make_unique<Promise<void>>();
-
-    connect(m_socket.get(), &QTcpSocket::connected, this, &TelnetConnection::handleSocketConnected);
-    connect(m_socket.get(), &QTcpSocket::errorOccurred, this, &TelnetConnection::handleSocketErrorOccured);
-    connect(m_socket.get(), &QTcpSocket::readyRead, this, &TelnetConnection::handleSocketBytesAvailable);
+    
+    connect(m_socket.get(), &QTcpSocket::connected, this, &StreamingConnection::handleSocketConnected);
+    connect(m_socket.get(), &QTcpSocket::errorOccurred, this, &StreamingConnection::handleSocketErrorOccured);
+    connect(m_socket.get(), &QTcpSocket::readyRead, this, &StreamingConnection::handleSocketBytesAvailable);
 
     m_socket->connectToHost(address, port);
 
     return m_connectPromise->future();
 }
 
-void TelnetConnection::stop() {
+void StreamingConnection::stop() {
     m_socket.reset();
 
     if (m_connectPromise) {
@@ -40,7 +40,7 @@ void TelnetConnection::stop() {
     m_commandQueue.clear();
 }
 
-Future<QByteArray> TelnetConnection::sendCommand(const QByteArray& payload) {
+Future<QByteArray> StreamingConnection::send(const QByteArray& payload) {
     assert(m_socket); /* Must call start() first. */
 
     Command& command = m_commandQueue.emplace_back();
@@ -73,7 +73,7 @@ Future<QByteArray> TelnetConnection::sendCommand(const QByteArray& payload) {
     }
 }
 
-void TelnetConnection::handleSocketConnected() {
+void StreamingConnection::handleSocketConnected() {
     assert(m_connectPromise);
 
     m_connectPromise->set_value();
@@ -83,7 +83,7 @@ void TelnetConnection::handleSocketConnected() {
         flushCommand(command.payload);
 }
 
-void TelnetConnection::handleSocketErrorOccured() {
+void StreamingConnection::handleSocketErrorOccured() {
     if (m_connectPromise) {
         m_connectPromise->set_error(std::make_exception_ptr(Exception(lit("error")))); // TODO: IoException
         m_connectPromise.reset();
@@ -94,12 +94,12 @@ void TelnetConnection::handleSocketErrorOccured() {
     m_commandQueue.clear();
 }
 
-void TelnetConnection::handleSocketBytesAvailable() {
+void StreamingConnection::handleSocketBytesAvailable() {
     if (!m_socket->canReadLine())
         return; /* I bet this is not super efficient */
 }
 
-void TelnetConnection::flushCommand(const QByteArray& payload) {
+void StreamingConnection::flushCommand(const QByteArray& payload) {
     m_socket->write(payload);
     m_socket->flush();
 }
