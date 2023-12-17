@@ -28,7 +28,7 @@ struct AsPath {};
  */
 template<class T, class ValidationTag>
 void parseConfigValue(const EntityConfig& ctx, const QVariant& from, T* to, ValidationTag tag) {
-    static_assert(false, "Cannot parse type T.");
+    static_assert(std::is_same_v<T, T>, "Cannot parse type T.");
 }
 
 /* Basic parsers. */
