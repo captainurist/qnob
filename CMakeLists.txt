@@ -14,7 +14,7 @@ find_package(Qt6 COMPONENTS Core Gui Widgets Multimedia REQUIRED)
 function(init_target target)
     if (MSVC)
         target_compile_options(${target} PRIVATE /FC) # Full path of source code file in diagnostics
-        set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Link statically with CRT
+        # set_property(TARGET ${target} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Link statically with CRT
         target_compile_definitions(${target} PRIVATE NOMINMAX) # Please no min/max macros in Windows.h
         target_compile_options(${target} PRIVATE "/Zc:__cplusplus") # Fill in __cplusplus macro correctly
         target_compile_options(${target} PRIVATE "/Zc:preprocessor") # Use a standard-complying preprocessor
@@ -287,8 +287,7 @@ init_target(qnob_test)
 target_include_directories(qnob_test PRIVATE 3rdparty/googletest/googletest/include)
 target_link_libraries(qnob_test qnob_common gtest_main)
 
-
-enable_testing()
-add_test(NAME qnob_test COMMAND qnob_test)
-
-
+add_custom_target(run_qnob_test
+        COMMAND qnob_test
+        DEPENDS qnob_test
+        USES_TERMINAL)
